@@ -1,0 +1,77 @@
+{
+  "name": "cryptopt",
+  "version": "1.0.0",
+  "description": "generates high performance ASM from JSON-specified Arithmetic",
+  "main": "dist/Cryptopt.js",
+  "cpu": [
+    "x64"
+  ],
+  "os": [
+    "linux"
+  ],
+  "repository": {
+    "type": "git",
+    "homepage": "https://github.com/0xADE1AIDE/CryptOpt.git"
+  },
+  "author": "joel.kuepper@adelaide.edu.au",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/0xADE1AIDE/MeasureSuite#readme",
+  "scripts": {
+    "pretest": "$npm_execpath run compile",
+    "test": "npx jest",
+    "test-debug": "node --inspect-brk=12345 ./node_modules/.bin/jest",
+    "test-rib": "npx jest --runInBand",
+    "install": "$npm_execpath run compile",
+    "compile": "tsc -p ."
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "printWidth": 110
+  },
+  "dependencies": {
+    "fs-extra": "^10.1.0",
+    "lodash": "^4.17.21",
+    "measuresuite": "file:./MeasureSuite",
+    "simple-statistics": "^7.7.5",
+    "ts-node": "^10.8.2",
+    "tsc-hooks": "1.1.2-beta.2",
+    "tsconfig-paths": "^4.0.0",
+    "typescript": "^4.7.4",
+    "yargs": "^17.5.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/jest": "^28.1.4",
+    "@types/lodash": "^4.14.182",
+    "@types/node": "^18.0.3",
+    "@types/yargs": "^17.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.2",
+    "prettier": "^2.7.1",
+    "ts-jest": "^28.0.5"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1",
+      "^@bcb/(.*)$": "<rootDir>/bitcoin-core-bridge/$1",
+      "^@fb/(.*)$": "<rootDir>/fiat-bridge/$1",
+      "^@bb/(.*)$": "<rootDir>/bssl-bridge/$1"
+    },
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.ts"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "tests/test-helpers.ts",
+      "tests/fiat-curves/.*-add.ts",
+      "tests/fiat-curves/.*-sub.ts"
+    ],
+    "verbose": true
+  }
+}
