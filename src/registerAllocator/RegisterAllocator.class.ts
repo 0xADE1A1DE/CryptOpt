@@ -552,8 +552,6 @@ export class RegisterAllocator {
       // if first in needs to be in out (e.g. for sub)
       if (caf(AllocationFlags.IN_0_AS_OUT_REGISTER)) {
         // get names from in[0] and current out-name
-        if (allocationReq.oReg[0].startsWith("out")) {
-        }
         if (matchArg(allocationReq.in[0])) {
           // e.g.: x4 = arg[0]
           oReg.push(this.loadMemoryToReg(inAllocations[0], allocationReq.oReg[0], "movzx") as Register);
@@ -1186,7 +1184,10 @@ export class RegisterAllocator {
       if (typeof this._allocations[arg] === "undefined") {
         const { groups } = matchArg(arg) as RegExpMatchArray;
 
-        const { base, offset } = groups!;
+        if (!groups) {
+          throw new Error("must have matched an Arg");
+        }
+        const { base, offset } = groups;
         const baseAllocation = this._allocations[base];
         if (!baseAllocation) {
           throw new Error(`${base} must be somewhere but cant be found in allocations. Aborting`);

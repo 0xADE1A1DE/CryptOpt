@@ -71,7 +71,7 @@ export class Optimiser {
     }
     console.log("Mutationalita");
     switch (choice) {
-      case CHOICE.PERMUTE:
+      case CHOICE.PERMUTE: {
         Model.mutatePermutation();
         this.revertFunction = () => {
           this.numRevert.permutation++;
@@ -79,7 +79,8 @@ export class Optimiser {
         };
         this.numMut.permutation++;
         break;
-      case CHOICE.DECISION:
+      }
+      case CHOICE.DECISION: {
         const hasHappend = Model.mutateDecision();
         if (!hasHappend) {
           // this is the case, if there is no hot decisions.
@@ -93,6 +94,7 @@ export class Optimiser {
         };
 
         this.numMut.decision++;
+      }
     }
   }
 

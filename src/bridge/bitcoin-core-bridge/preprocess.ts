@@ -29,11 +29,12 @@ export class BCBPreprocessor {
 
   public preprocessRaw(raw: Readonly<raw_T>): Fiat.FiatFunction {
     console.log(`BCB: preprocessRaw'ing ${raw.operation}`);
-    let { args, returns, body } = this.fixArguments(raw);
+    const fixed = this.fixArguments(raw);
+    let body = fixed.body;
 
     const grouped = groupBy(raw.body, "operation");
 
-    if (!["getelementptr", "store", "load"].every((k) => grouped.hasOwnProperty(k))) {
+    if (!["getelementptr", "store", "load"].every((k) => k in grouped)) {
       throw new Error("not all required keys are available. tsnh.");
     }
     const { stores, loads } = this.reduceStoreAndLoads(
@@ -84,7 +85,11 @@ export class BCBPreprocessor {
     delete grouped.trunc;
     delete grouped.icmp;
 
-    body = body.concat(stores as any, loads as any, otherInstrs as any);
+    body = body.concat(
+      stores as unknown as Fiat.DynArgument[],
+      loads as unknown as Fiat.DynArgument[],
+      otherInstrs as unknown as Fiat.DynArgument[],
+    );
 
     body = zextR(body);
 
@@ -95,9 +100,9 @@ export class BCBPreprocessor {
     );
     return {
       operation: raw.operation,
-      arguments: args,
-      returns,
-      body: body as any,
+      arguments: fixed.args,
+      returns: fixed.returns,
+      body: body,
     };
   }
 
@@ -279,7 +284,8 @@ export class BCBPreprocessor {
         name: ["x0"],
         datatype: "u64",
         operation: "=",
-        arguments: ["out1"] as any,
+        // sort of an workaround / hack
+        arguments: ["out1"] as unknown as Fiat.Argument[],
       });
     }
     return {

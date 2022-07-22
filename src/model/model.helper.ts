@@ -90,7 +90,7 @@ export function createDependencyRelation(
         if (
           // If it is a xD (== has a Parent node), find how the current arg to calc n is calculated itself (to find out how many limbs arg has)
           // Iff that parent node is a !u128, it is either producing [xN] or [xN, xN]
-          nodes[lookupMap.get(arg)!] /*parent node*/?.datatype !== "u128" ||
+          nodes[lookupMap.get(arg) as number] /*parent node*/?.datatype !== "u128" ||
           isImm(arg) || // or if arg is an immediate value
           // or if it is an readonly-mem
           isReadOnlyMemory(arg)

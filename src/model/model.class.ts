@@ -299,11 +299,11 @@ export class Model {
     const candidate = Model._nodes[candidateIdx];
 
     // get a random decison (as in decison group like "chose an arg", or "choose a flag") and save that in _key
-    const _keys = Object.keys(candidate.decisions);
+    const keys = Object.keys(candidate.decisions);
 
-    const _key = (_keys.length == 1
-      ? _keys[0]
-      : _keys[Paul.chooseBetween(_keys.length)]) as unknown as DECISION_IDENTIFIER;
+    const key = (keys.length == 1
+      ? keys[0]
+      : keys[Paul.chooseBetween(keys.length)]) as unknown as DECISION_IDENTIFIER;
 
     const a = {
       [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: "AR",
@@ -314,10 +314,16 @@ export class Model {
       [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: "MU",
     } as { [c in DECISION_IDENTIFIER]: string };
 
-    Model.decisionStats = `D[${a[_key]}/${cands}/${from}]`;
+    Model.decisionStats = `D[${a[key]}/${cands}/${from}]`;
 
+    const dec = candidate.decisions[key];
+    if (!dec) {
+      throw new Error(`must have decisions! for key ${key}`);
+    }
     // setting new random choice
-    let [choice, alternatives] = candidate.decisions[_key] as [number, any[]];
+    let choice = dec[0];
+    const alternatives = dec[1];
+
     if (alternatives.length == 2) {
       // shortcut if len == 2, then just choose the other one
       choice ^= 1;
@@ -333,12 +339,9 @@ export class Model {
     }
 
     // and set new choice
-    console.log(
-      `mutated DECISION ${candidate.name.join("--")}[${_key}]:${
-        (candidate.decisions[_key] as [number, any[]])[0]
-      } to: ${choice}`,
-    );
-    (candidate.decisions[_key] as [number, any[]])[0] = choice;
+    console.log(`mutated DECISION ${candidate.name.join("--")}[${key}]:${dec[0]} to: ${choice}`);
+    // TS hack with the ??; we woulnt be here if the decisionss at _key are undefined
+    (candidate.decisions[key] ?? [0])[0] = choice;
 
     return true;
   }
@@ -364,7 +367,7 @@ export class Model {
    * has always Dependents: argN[x], callersave's
    * never has dependanats: TEMP_VARNAME.
    * Rest, as in the graph.
-   * @param shall be the limb. so not x100, if x100 is a u128
+   * @param varname shall be the limb. so not x100, if x100 is a u128
    */
   public static hasDependants(varname: string, namely?: Set<string>): boolean {
     if (varname === TEMP_VARNAME) {

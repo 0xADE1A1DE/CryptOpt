@@ -128,7 +128,10 @@ function add128(c: CryptOpt.StringInstruction): asm[] {
       return acc;
     }
     // there is only one hi-limb
-    const hi = [ahi, bhi].find((h) => h !== "0x0")!;
+    const hi = [ahi, bhi].find((h) => h !== "0x0");
+    if (!hi) {
+      throw new Error("Corrupt flow. Either A or B should be 0x0 at this point.");
+    }
 
     const cHi: CryptOpt.StringInstruction = {
       name: [ohi],

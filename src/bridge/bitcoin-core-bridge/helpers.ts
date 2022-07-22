@@ -26,6 +26,7 @@ export function getArguments(s: string): argMatch {
             if (key == "pointers" && g?.type.startsWith("%struct")) {
               g.type = g.type.replaceAll("%struct", "struct");
             }
+            /* eslint-disable @typescript-eslint/no-explicit-any */
             acc[key as keyof argMatch].push(Object.assign({}, g as any)); // skip type checking here.
           }
         });

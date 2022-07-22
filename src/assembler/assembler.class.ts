@@ -36,14 +36,15 @@ export class Assembler {
     let curOp: CryptOpt.StringInstruction | null = null;
     while ((curOp = Model.nextOperation())) {
       try {
-        let s0, ins, s1;
+        let s0, s1;
+
         if (debug) {
           const opString = `\n; ${curOp.name.join("--")}=${curOp.arguments.join(curOp.operation)}`;
           fs.appendFileSync(CUR_ASM, opString + "\n");
           output.push(opString);
           s0 = JSON.stringify(omit(curOp, "decisionsHot", "decisions"));
         }
-        ins = getInstruction(curOp);
+        const ins = getInstruction(curOp);
         if (debug) {
           s1 = JSON.stringify(omit(curOp, "decisionsHot", "decisions"));
           if (s0 !== s1) {

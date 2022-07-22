@@ -23,11 +23,11 @@ export class Paul {
       throw new Error(
         `TSNH; shouldnt happen because all appropriate decision should have been initalised e.g. for add, there must be a chosen choise for which flag to use. Check addDecisionProperty-function. ${decisionKey}, ${
           d[decisionKey]
-        }, ${JSON.stringify(Paul.getInstance()._currentInstruction!)}`,
+        }, ${JSON.stringify(Paul.getInstance()._currentInstruction)}`,
       );
     }
 
-    Paul.getInstance()._currentInstruction!.decisionsHot.push(decisionKey);
+    Paul.getInstance()._currentInstruction?.decisionsHot.push(decisionKey);
 
     const idx = decision[0];
     const possibilitiesOfThatSavedDecision = decision[1] as unknown as T[];
@@ -44,7 +44,9 @@ export class Paul {
       // otherwise its a task for the debugger;
       // and to keep going we return arr[0], cuz i cant care less.
       if (typeof element === "string" && typeof arr[0] === "string") {
-        const idxx = arr.map((a) => delimbify(a as unknown as CryptOpt.Varname)).indexOf(element as any);
+        const idxx = arr
+          .map((a) => delimbify(a as unknown as CryptOpt.Varname))
+          .indexOf(element as `x${number}`); // this can be any type. must not necessaryly be xNN, but for typescripts sake.
         if (idxx !== -1) {
           return arr[idxx];
         }

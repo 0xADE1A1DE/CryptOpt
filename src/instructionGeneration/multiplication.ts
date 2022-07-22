@@ -77,7 +77,7 @@ function mulx64(ra: RegisterAllocator, c: CryptOpt.StringInstruction): asm[] {
     ra.declareFlagState(Flags.CF, FlagState.KILLED);
     ra.declareFlagState(Flags.OF, FlagState.KILLED);
     const [resLoR] = allocation.oReg;
-    const [_, arg1R] = allocation.in;
+    const [, arg1R] = allocation.in;
     return [
       ...ra.pres,
       isSqr
@@ -136,7 +136,11 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringInstruction): a
       return [a];
     }
     // just a regular u128
-    if (limbify(a)[1]! in allocs) {
+    const hi = limbify(a)[1];
+    if (!hi) {
+      throw new Error("a u128 must have an 'hi' lib here");
+    }
+    if (hi in allocs) {
       // x10 => [x10_0,x10_1]
       return limbify(a);
     }
@@ -157,8 +161,11 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringInstruction): a
 
   //u64^2: square
   if (isU64_U64 && a_limbs[0] == b_limbs[0]) {
+    if (!u64hiVarname) {
+      throw new Error("Must have an hiVarname if we square a u64");
+    }
     const allocation = ra.allocate({
-      oReg: [u64loVarname, u64hiVarname!],
+      oReg: [u64loVarname, u64hiVarname],
       in: a_limbs,
       allocationFlags: AllocationFlags.ONE_IN_MUST_BE_IN_RDX,
     });
@@ -173,8 +180,11 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringInstruction): a
 
   // u64*u64
   if (isU64_U64) {
+    if (!u64hiVarname) {
+      throw new Error("Must have an hiVarname if we mul u64*u64");
+    }
     const allocation = ra.allocate({
-      oReg: [u64loVarname, u64hiVarname!],
+      oReg: [u64loVarname, u64hiVarname],
       in: [...a_limbs, ...b_limbs],
       allocationFlags:
         AllocationFlags.DONT_USE_IN_REGS_AS_OUT |
@@ -197,8 +207,11 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringInstruction): a
   const [u64_limb] = a_limbs.length > b_limbs.length ? b_limbs : a_limbs;
   const [u128_lo, u128_hi] = a_limbs.length > b_limbs.length ? a_limbs : b_limbs;
 
+  if (!u64hiVarname) {
+    throw new Error("Must have an hiVarname if mul u128*u64");
+  }
   const allocation = ra.allocate({
-    oReg: [TEMP_VARNAME, u64loVarname, u64hiVarname!],
+    oReg: [TEMP_VARNAME, u64loVarname, u64hiVarname],
     in: [u64_limb, u128_lo, u128_hi],
     allocationFlags:
       AllocationFlags.DONT_USE_IN_REGS_AS_OUT |
@@ -208,10 +221,10 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringInstruction): a
   });
   ra.declare128(c.name[0]);
 
-  let [u64_store, blo_store, bhi_store] = allocation.in;
+  const u64_store = allocation.in[0];
+  let [, blo_store, bhi_store] = allocation.in;
 
   if (typeof blo_store === "undefined" || typeof bhi_store === "undefined") {
-    const b = ra.pres;
     throw new Error(u128_hi + " or " + u128_lo + "  not all allocated, which they sure should. TSNH.");
   }
 

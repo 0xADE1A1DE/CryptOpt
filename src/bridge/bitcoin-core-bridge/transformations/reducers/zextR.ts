@@ -12,7 +12,7 @@ export function zextR(body: FiatDynArgWCryptoptOperations[]): Fiat.DynArgument[]
     otherOp,
   }
 
-  const r = groupBy(body, ({ operation, datatype }) =>
+  const r = groupBy(body, ({ operation }) =>
     // the check for the datatype is to not include i1->64bit in the reducers
     // operation === "zext" && datatype === "u128" ? E.zextOpt : E.otherOp,
     operation === "zext" ? E.zextOpt : E.otherOp,

@@ -117,7 +117,7 @@ function addDecisionProperty(arg: Fiat.Argument): CryptOpt.Argument {
   }) as CryptOpt.DynArgument;
 
   switch (result.operation) {
-    case "*":
+    case "*": {
       const immFactor = arg.arguments[1];
       if (!isDynArgument(immFactor) && immFactor in IMM_MUL_DI_MAP) {
         const choices = IMM_MUL_DI_MAP[immFactor as CryptOpt.HexConstant];
@@ -127,8 +127,9 @@ function addDecisionProperty(arg: Fiat.Argument): CryptOpt.Argument {
         ];
       }
       break;
+    }
     case "+":
-    case "addcarryx":
+    case "addcarryx": {
       result.decisions[DECISION_IDENTIFIER.DI_FLAG] = [Paul.chooseBetween(2), [Flags.CF, Flags.OF]];
       result.decisions[DECISION_IDENTIFIER.DI_HANDLE_FLAGS_KK] = [
         Paul.chooseBetween(3), // the length is the lengh of the choises
@@ -139,7 +140,8 @@ function addDecisionProperty(arg: Fiat.Argument): CryptOpt.Argument {
         [C_DI_IMM.ZERO, C_DI_IMM.NEG_1],
       ];
       break;
-    case "&":
+    }
+    case "&": {
       const constantToAndWith = arg.arguments[1];
       if (!isDynArgument(constantToAndWith) && LSB_MAPPING[constantToAndWith])
         // only add this decision if we can actually use BZHI. Sometimes the constant is of the form /0xf+0+/, where bzhi doesnt work.
@@ -148,6 +150,7 @@ function addDecisionProperty(arg: Fiat.Argument): CryptOpt.Argument {
           [C_DI_INSTRUCTION_AND.C_AND, C_DI_INSTRUCTION_AND.C_BZHI],
         ];
       break;
+    }
   }
 
   return result;
@@ -279,8 +282,8 @@ function fillDatatypeFromParameters(arg: Fiat.Argument): Fiat.Argument {
   if (isConstArgument(arg)) {
     return arg;
   }
-  if (arg.datatype === "(auto)" && isNotNoU(arg.parameters?.size)) {
-    if (arg.parameters!.size !== 64) {
+  if (arg.datatype === "(auto)" && isNotNoU(arg.parameters)) {
+    if (arg.parameters.size !== 64) {
       throw new Error("unsupported size.");
     }
     arg.datatype = "u64";

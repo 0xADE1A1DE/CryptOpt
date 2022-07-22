@@ -11,7 +11,7 @@ import { getByteRegFromQwReg, isByteRegister, limbifyImm, limbify, matchXD, matc
 
 export function bitwiseOp(c: CryptOpt.StringInstruction): asm[] {
   switch (c.operation) {
-    case "&":
+    case "&": {
       const decision = c.decisions[DECISION_IDENTIFIER.DI_INSTRUCTION_AND];
       if (!decision) {
         // if there is no decision, which may be the case for AND-s with imms, which are not bzhi-able 'fallback' to AND
@@ -52,6 +52,7 @@ export function bitwiseOp(c: CryptOpt.StringInstruction): asm[] {
         default:
           throw new Error("TSNH. Choice is neither and nor bzhi.");
       }
+    }
     case "^":
       return xor(c);
     case "|":
@@ -103,7 +104,7 @@ function and(_c: CryptOpt.StringInstruction): asm[] {
   }
 
   // since IN_0 is in out we can skip the first one
-  const [_, ...remainingArgs] = allocation.in;
+  const [, ...remainingArgs] = allocation.in;
   return [
     ...ra.pres,
     ...remainingArgs.map(
@@ -237,7 +238,7 @@ function or(c: CryptOpt.StringInstruction): asm[] {
   ra.declareFlagState(Flags.OF, FlagState.ZERO);
 
   // since IN_0 is in out we can skip the first one
-  const [_, ...remainingArgs] = allocation.in;
+  const [, ...remainingArgs] = allocation.in;
 
   const oreg64 = allocation.oReg[0];
   const oreg8 = getByteRegFromQwReg(oreg64);
@@ -285,7 +286,7 @@ function xor(c: CryptOpt.StringInstruction): asm[] {
   }
 
   // since IN_0 is in out we can skip the first one
-  const [_, ...remainingArgs] = allocation.in;
+  const [, ...remainingArgs] = allocation.in;
   return [
     ...ra.pres,
     ...remainingArgs.map(

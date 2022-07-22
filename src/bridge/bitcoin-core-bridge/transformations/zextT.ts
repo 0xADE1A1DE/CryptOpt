@@ -8,7 +8,6 @@ export function transformZext(input: SSA): CryptOpt.DynArgument {
     throw new Error("unsupported operation while transform zext.");
   }
   const { scalars, casts } = getArguments(input.arguments);
-  const ty = casts[0].type;
 
   let outType: CryptOpt.Datatype_T;
   if (casts[0].type === "i128") {

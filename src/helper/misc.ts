@@ -337,8 +337,11 @@ export function limbifyImm<T extends CryptOpt.ArgumentWithStringArguments["argum
     throw new Error(` >${i}< is negative and bigger than IMM_64_BIT_IMM, we don't know what to to.`);
   }
   // else positive and long
-  const { hi, lo } = /0x(?<hi>\w{1,16})(?<lo>\w{16})$/.exec(i)?.groups! as { hi: string; lo: string };
-  return [`0x${lo}`, `0x${hi}`] as [CryptOpt.HexConstant, CryptOpt.HexConstant];
+  const groups = /0x(?<hi>\w{1,16})(?<lo>\w{16})$/.exec(i)?.groups;
+  if (!groups) {
+    throw new Error("Invalid immediate number.");
+  }
+  return [`0x${groups.lo}`, `0x${groups.hi}`] as [CryptOpt.HexConstant, CryptOpt.HexConstant];
 }
 
 export function makeU64NameLimbs<T extends CryptOpt.ArgumentWithStringNames>(node: T) {

@@ -19,7 +19,6 @@ export function mul_imm_shlx(c: CryptOpt.StringInstruction): asm[] {
       return mul_x_shlx(c, "0x3");
     case "0x10":
       return mul_x_shlx(c, "0x4");
-    case "0x2":
 
     default:
       throw new Error("unsupported immediate value");

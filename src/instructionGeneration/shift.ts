@@ -60,13 +60,16 @@ export function shiftRight(c: CryptOpt.StringInstruction): asm[] {
     }
 
     const outs = limbify(c.name);
-    const ins = limbify(c.arguments[0]);
     const shiftWidth = c.arguments[1];
+    const ins = limbify(c.arguments[0]);
 
+    if (!ins[1]) {
+      throw new Error("must have two in-limbs at this point");
+    }
     if (Number(shiftWidth) == 64) {
       const { oReg } = ra.allocate({
         oReg: outs,
-        in: [ins[1]!],
+        in: [ins[1]],
         allocationFlags: AllocationFlags.IN_0_AS_OUT_REGISTER,
       });
       ra.declare128(c.name[0]);
@@ -81,8 +84,11 @@ export function shiftRight(c: CryptOpt.StringInstruction): asm[] {
         `mov ${oReg[1]}, 0x0; hi ${outs[1]}<- 0; `,
       ];
     } else {
+      if (!outs[1]) {
+        throw new Error("must have two out-limbs at this point");
+      }
       // olo is in oReg[0]
-      const ins1 = ra.backupIfVarHasDependencies(ins[1]!, outs[1]!);
+      const ins1 = ra.backupIfVarHasDependencies(ins[1], outs[1]);
       const { oReg } = ra.allocate({
         oReg: [outs[0]],
         in: [ins[0]],
@@ -148,7 +154,10 @@ export function shiftRightDouble(c: CryptOpt.StringInstruction): asm[] {
 
         shiftWidth = c.arguments[1];
         inVarname = inLimbs[0];
-        fillFromVarname = inLimbs[1]!;
+        if (!inLimbs[1]) {
+          throw new Error("must have two in-limbs at this point");
+        }
+        fillFromVarname = inLimbs[1];
 
         const { asm, allocation } = _shrd(outlimbs, inVarname, fillFromVarname, shiftWidth);
         // now we need to make the high limb sar'ed
