@@ -2,7 +2,7 @@
   "name": "cryptopt",
   "version": "1.0.0",
   "description": "generates high performance ASM from JSON-specified Arithmetic",
-  "main": "dist/Cryptopt.js",
+  "main": "dist/CryptOpt.js",
   "cpu": [
     "x64"
   ],
@@ -21,6 +21,8 @@
     "test": "npx jest",
     "test-debug": "node --inspect-brk=12345 ./node_modules/.bin/jest",
     "test-rib": "npx jest --runInBand",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "preinstall": "cd MeasureSuite && $npm_execpath install",
     "install": "$npm_execpath run compile",
     "compile": "tsc -p ."
@@ -72,5 +74,30 @@
       "tests/fiat-curves/.*-sub.ts"
     ],
     "verbose": true
+  },
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier"
+    ],
+    "ignorePatterns": [
+      "*.js",
+      "dist",
+      "coverage"
+    ],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": [
+        1,
+        {
+          "argsIgnorePattern": "^_"
+        }
+      ]
+    }
   }
 }
