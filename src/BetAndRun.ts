@@ -93,7 +93,7 @@ console.log(
 );
 const finalConvergences = [] as string[];
 const times: CryptoptGlobals["time"] = { validate: 0, generateCryptopt: 0, generateFiat: 0 };
-let longestDataRow: number = -1;
+let longestDataRow = -1;
 //        V-------------Change this number, If you want to redo the last one of 40ish percent or whatever multiple times...
 const confirmationRuns = 1;
 

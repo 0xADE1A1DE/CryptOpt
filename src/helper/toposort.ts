@@ -6,7 +6,7 @@ import { Paul } from "@/paul";
 export function toposort(_nodes: Readonly<Readonly<CryptOpt.StringInstruction>[]>): number[] {
   _nodes.forEach(assertStringNames);
   _nodes.forEach(assertStringArguments);
-  let nodes = _nodes as CryptOpt.StringInstruction[];
+  const nodes = _nodes as CryptOpt.StringInstruction[];
   const sorted = [] as number[];
   let l = 0;
 

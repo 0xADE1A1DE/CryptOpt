@@ -38,7 +38,7 @@ export function mul_lea(c: CryptOpt.StringInstruction, hex: CryptOpt.HexConstant
   const resR = allocation.oReg[0];
   const [arg0R] = allocation.in;
 
-  let res = ra.pres;
+  const res = ra.pres;
   switch (hex) {
     case "0x2":
       res.push(`lea ${resR}, [${arg0R} + ${arg0R}]; ${c.name[0]} <- ${factor} * 2 `);
@@ -85,7 +85,7 @@ export function mul_tmp_lea(c: CryptOpt.StringInstruction, hex: CryptOpt.HexCons
 
   const [tmp, resR] = allocation.oReg;
   const arg0R = allocation.in[0];
-  let res = ra.pres;
+  const res = ra.pres;
   switch (hex) {
     case "0x13":
       res.push(

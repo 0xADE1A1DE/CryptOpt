@@ -121,7 +121,7 @@ export class BCBPreprocessor {
     // if yes, extract the arg B and offset n and replace all occurrence of X with B[n]
     const resolveElementPtr = (needle: string): string => {
       const elementPointer = grouped.getelementptr.find(({ name }) => name[0] == needle);
-      let offset: string = "0"; // the '2' in the example x5=x1+2
+      let offset = "0"; // the '2' in the example x5=x1+2
 
       if (elementPointer) {
         const { pointers, imm } = getArguments(elementPointer.arguments);

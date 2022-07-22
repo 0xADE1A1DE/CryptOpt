@@ -83,7 +83,7 @@ export class ManualBridge implements Bridge {
     if (!force && existsSync(filename)) {
       return methodname;
     }
-    let cc = ccOverwrite ?? CC; // this is being used for the x-val, where in one session of the FiatBridge, the CC chagnes
+    const cc = ccOverwrite ?? CC; // this is being used for the x-val, where in one session of the FiatBridge, the CC chagnes
 
     // write the c-code to a tmp file
     // const tmpDir = mkdtempSync(join(tmpdir(), "cryptopt-"));

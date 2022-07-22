@@ -218,7 +218,6 @@ export class RegisterAllocator {
         // else, choose one which is just right now not being used.
         const candidates = allocs.filter((varname) => !clobs.includes(varname));
         if (candidates.length == 0) {
-          debugger;
           throw new Error("wow.. no candidates which are not clobbed.");
         }
         spareVariableName = Model.chooseSpillValue(candidates);
@@ -374,7 +373,6 @@ export class RegisterAllocator {
         // in any other case we need the readVar in a register.
         const reg = this.loadVarToReg(readVariable, "movzx");
         if (!isRegister(reg)) {
-          debugger;
           throw new Error("TSNH. arg/out should always be u64, esp. after movzx'ing it");
         }
 
@@ -555,7 +553,6 @@ export class RegisterAllocator {
       if (caf(AllocationFlags.IN_0_AS_OUT_REGISTER)) {
         // get names from in[0] and current out-name
         if (allocationReq.oReg[0].startsWith("out")) {
-          debugger;
         }
         if (matchArg(allocationReq.in[0])) {
           // e.g.: x4 = arg[0]
@@ -661,7 +658,6 @@ export class RegisterAllocator {
         };
         return store;
       }
-      debugger;
       throw new Error(
         `TSNH. there is no allocation for ${inVarname}. Maybe it has never been calculated (i.e. has been in 'name:[${inVarname},...])`,
       );
@@ -759,7 +755,6 @@ export class RegisterAllocator {
       theChosenOne = args.splice(names.indexOf(chosenName), 1)[0];
     } else {
       theChosenOne = Paul.pick(args);
-      debugger;
       console.warn(`choice of ${theChosenOne} will not be saved.`);
     }
 
@@ -795,9 +790,6 @@ export class RegisterAllocator {
       ?.map(([key]) => key);
     if (findings.length === 1) {
       return findings[0];
-    }
-    if (findings.length > 0) {
-      debugger;
     }
     if (findings.length !== 0 || throwIfNotFound) {
       throw new Error(

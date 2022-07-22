@@ -70,7 +70,7 @@ export class FiatBridge {
       return JSON.parse(readFileSync(jsonCacheFilename).toString());
     }
 
-    let command = `${cmd} | jq -s .[0] | tee ${jsonCacheFilename}`;
+    const command = `${cmd} | jq -s .[0] | tee ${jsonCacheFilename}`;
     console.log(`executing cmd to generate fiat: ${command}`);
 
     const r = FiatBridge.readlocal

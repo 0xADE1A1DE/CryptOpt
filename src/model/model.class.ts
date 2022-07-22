@@ -126,7 +126,7 @@ export class Model {
     return JSON.stringify(Model._order);
   }
 
-  private static _currentInstIdx: number = -1;
+  private static _currentInstIdx = -1;
 
   // this is for spill decisions
   private _currentReadOrderIsValid = false;
@@ -379,7 +379,7 @@ export class Model {
     const dependants = Model._neededBy.get(varname);
     // all of those need the value from varname
     // if all of those are already computed, varname can be overwritten
-    let result: boolean = false;
+    let result = false;
     dependants?.forEach((dep) => {
       namely?.add(dep);
 

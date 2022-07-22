@@ -148,7 +148,7 @@ export class Paul {
     }
 
     const randn_bm = (min: number, max: number, skew: number): number => {
-      var u = 0,
+      let u = 0,
         v = 0;
       Paul.updateState();
       while (u === 0) u = (Paul.getInstance()._state * 2) / Number.MAX_SAFE_INTEGER; //Converting [0,1) to (0,1)
