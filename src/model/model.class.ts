@@ -1,14 +1,23 @@
-import { CURVE_T } from "@types";
 import fs from "fs";
 import { cloneDeep } from "lodash";
 
-import { bl,cy,rd,re,TEMP_VARNAME } from "@/helper";
-import { toposort } from "@/helper";
-import { assertStringArguments, isCallerSave, limbify, matchArg, matchArgPrefix } from "@/helper";
+import {
+  assertStringArguments,
+  bl,
+  cy,
+  isCallerSave,
+  limbify,
+  matchArg,
+  matchArgPrefix,
+  rd,
+  re,
+  TEMP_VARNAME,
+  toposort,
+} from "@/helper";
 import globals from "@/helper/globals";
 import { BIAS, Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import { CryptOpt, DECISION_IDENTIFIER } from "@/types";
+import { CryptOpt, CURVE_T, DECISION_IDENTIFIER } from "@/types";
 
 import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "./model.helper";
 

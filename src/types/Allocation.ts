@@ -1,4 +1,4 @@
-import { ByteRegister, Flags, imm,mem,Register } from "@types";
+import { ByteRegister, Flags, imm, mem, Register } from "@/types";
 
 export interface AllocationReq {
   oReg: string[];

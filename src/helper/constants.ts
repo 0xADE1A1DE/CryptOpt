@@ -1,4 +1,5 @@
-import { C_DI_MULTIPLICATION_IMM, CryptOpt, Flags, Register } from "@types";
+import { C_DI_MULTIPLICATION_IMM, CryptOpt, Flags, Register } from "@/types";
+
 export const COMPILERS = ["gcc", "clang"];
 
 export const ARG_PREFIX = "arg"; // prefix as in arg1[3]

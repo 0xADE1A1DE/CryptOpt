@@ -9,6 +9,7 @@ import {
 } from "@/types";
 
 import { BIAS, sha1Hash } from ".";
+
 export class Paul {
   // https://en.wikipedia.org/wiki/Paul_the_Octopus
 

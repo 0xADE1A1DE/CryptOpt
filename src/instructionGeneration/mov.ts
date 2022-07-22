@@ -1,10 +1,8 @@
-import { isFlag, matchArg, toMem } from "@/helper";
-import { SETX } from "@/helper";
+import { isFlag, matchArg, SETX, toMem } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import { AllocationFlags } from "@/types";
 
-import { CryptOpt } from "../types";
-import { asm,Flags,Register } from "../types";
+import { asm, CryptOpt, Flags, Register } from "../types";
 
 export function mov(c: CryptOpt.StringInstruction): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 1) {

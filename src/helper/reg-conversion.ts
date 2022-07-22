@@ -1,4 +1,4 @@
-import { ByteRegister, DwordRegister, Register } from "@types";
+import { ByteRegister, DwordRegister, Register } from "@/types";
 
 export function getByteRegFromQwReg(reg: Register): ByteRegister {
   const mapping: { [reg in Register]: ByteRegister } = {

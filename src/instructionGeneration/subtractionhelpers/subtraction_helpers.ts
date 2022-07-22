@@ -1,4 +1,4 @@
-import { isFlag,TEMP_VARNAME } from "@/helper";
+import { isFlag, TEMP_VARNAME } from "@/helper";
 import {
   asm,
   imm,
@@ -10,6 +10,7 @@ import {
 } from "@/types";
 
 import { fr__f_rm_rmi, fr__rm_rm_rmi } from "./fr__rfm_rm_rmi";
+
 export { fr__frm_rmi } from "./fr__frm_rmi";
 
 export function fr__rfm_rm_rmi(

@@ -1,4 +1,4 @@
-import type { MeasureResult } from "@types";
+import type { MeasureResult } from "@/types";
 
 export type numTripel = [cyclesA: number, cyclesB: number, cyclesC: number];
 

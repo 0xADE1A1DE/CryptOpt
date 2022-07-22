@@ -19,13 +19,13 @@ import {
   SHA256SUMS,
 } from ".";
 import fiat from "./all_fiat_array";
+
 const { CC, CFLAGS } = env;
 const cacheDir = path.resolve(__dirname, ".cache");
 
 export class FiatBridge {
-  //decides, if we need to read local c / libs / jsons or if we can generate them on the fly
+  // decides, if we need to read local c / libs / jsons or if we can generate them on the fly
   private static get readlocal(): boolean {
-    // sort of deprecated I think
     const type = os.type();
     return type === "Darwin" || (type == "Linux" && os.release().startsWith("3"));
   }

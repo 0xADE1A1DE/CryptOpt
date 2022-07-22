@@ -1,7 +1,7 @@
 import { assertStringNames } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import { asm,CryptOpt } from "@/types";
+import { asm, CryptOpt } from "@/types";
 
 import {
   add,

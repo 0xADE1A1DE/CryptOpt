@@ -5,7 +5,7 @@ import { sanityCheckAllocations, writeasm } from "@/helper";
 import { getInstruction } from "@/instructionGeneration";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm,CryptOpt } from "@/types";
+import type { asm, CryptOpt } from "@/types";
 
 const debug = false;
 const CUR_ASM = "/tmp/curasm.asm";

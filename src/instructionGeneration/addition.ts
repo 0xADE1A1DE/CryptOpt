@@ -1,9 +1,8 @@
-import { TEMP_VARNAME } from "@/helper";
-import { delimbify, isFlag, isImm, isU1, limbify, matchArg } from "@/helper";
+import { delimbify, isFlag, isImm, isU1, limbify, TEMP_VARNAME } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm,CryptOpt } from "@/types";
+import type { asm, CryptOpt } from "@/types";
 import {
   U1Allocation,
   U1FlagAllocation,

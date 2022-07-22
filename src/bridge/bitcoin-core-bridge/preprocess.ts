@@ -4,7 +4,7 @@ import { matchArgPrefix } from "@/helper";
 import type { CryptOpt, Fiat } from "@/types";
 
 import { getArguments, isStructPointer } from "./helpers";
-import type { raw_T,SSA,structDef_T,StructName } from "./raw.type";
+import type { raw_T, SSA, structDef_T, StructName } from "./raw.type";
 import {
   transformAdd,
   transformAnd,

@@ -1,24 +1,21 @@
-import { AnalyseResult, CHOICE, FUNCTIONS, MeasureResult } from "@types";
 import { execSync } from "child_process";
+import Measuresuite from "measuresuite";
 import os from "os";
 import path from "path";
 
 import { Assembler } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
 import { ERRORS } from "@/errors";
-import { LOG_EVERY, PRINT_EVERY } from "@/helper";
-import { analyseMeasureResult } from "@/helper";
-import { toggleFUNCTIONS, writeasm } from "@/helper";
-import { env } from "@/helper";
+import { analyseMeasureResult, env, LOG_EVERY, PRINT_EVERY, toggleFUNCTIONS, writeasm } from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
+import { AnalyseResult, CHOICE, FUNCTIONS } from "@/types";
 
 import { genStatusLine, shouldProof } from "./optimiser.helper";
 import { init } from "./optimiser.helper.class";
-const { CC, CFLAGS } = env;
 
-import Measuresuite from "measuresuite";
+const { CC, CFLAGS } = env;
 let choice: CHOICE;
 
 export class Optimiser {

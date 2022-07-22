@@ -1,12 +1,18 @@
 import { cloneDeep } from "lodash";
 
-import { IMM_64_BIT_IMM, LSB_MAPPING } from "@/helper";
-import { getByteRegFromQwReg, isByteRegister, limbify, limbifyImm, matchIMM, matchXD } from "@/helper";
+import {
+  getByteRegFromQwReg,
+  IMM_64_BIT_IMM,
+  limbify,
+  limbifyImm,
+  LSB_MAPPING,
+  matchIMM,
+  matchXD,
+} from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm,CryptOpt } from "@/types";
-import { AllocationFlags, FlagState } from "@/types";
-import { C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Flags } from "@/types";
+import type { asm, CryptOpt } from "@/types";
+import { AllocationFlags, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Flags, FlagState } from "@/types";
 
 export function bitwiseOp(c: CryptOpt.StringInstruction): asm[] {
   switch (c.operation) {

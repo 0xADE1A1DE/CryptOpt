@@ -1,6 +1,7 @@
 import type { CryptOpt } from "@/types";
 
 import type { PT, StructName } from "./raw.type";
+
 export type argMatch = {
   casts: Array<{ type: `i${number}` }>;
   pointers: Array<{ type: PT; id: `x${number}` }>;

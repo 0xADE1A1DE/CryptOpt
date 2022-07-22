@@ -2,14 +2,24 @@
 // this is the Population based apporoch.
 // Basically a wrapper script around CryptOpt.{j,t}s
 
-import type { CryptoptGlobals } from "@types";
 import { exec, execFileSync } from "child_process";
 import fs from "fs";
 import os from "os";
 
-import { cy, gn, PRINT_EVERY, rd, re } from "@/helper";
-import { env,generateResultsPath,generateStateFileName,parsedArgs,SI } from "@/helper";
+import {
+  cy,
+  env,
+  generateResultsPath,
+  generateStateFileName,
+  gn,
+  parsedArgs,
+  PRINT_EVERY,
+  rd,
+  re,
+  SI,
+} from "@/helper";
 import { sha1Hash } from "@/paul";
+import type { CryptoptGlobals } from "@/types";
 
 const { populatio, populatioratio, seed, curve, method, bridge, evals } = parsedArgs;
 

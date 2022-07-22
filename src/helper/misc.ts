@@ -1,3 +1,8 @@
+import fs from "fs";
+import { cloneDeep } from "lodash";
+
+import { Paul } from "@/paul";
+import { RegisterAllocator } from "@/registerAllocator";
 import {
   Allocation,
   asm,
@@ -10,12 +15,7 @@ import {
   Register,
   U1Allocation,
   U64Allocation,
-} from "@types";
-import fs from "fs";
-import { cloneDeep } from "lodash";
-
-import { Paul } from "@/paul";
-import { RegisterAllocator } from "@/registerAllocator";
+} from "@/types";
 
 import { getQwRegFromByteReg } from ".";
 import {

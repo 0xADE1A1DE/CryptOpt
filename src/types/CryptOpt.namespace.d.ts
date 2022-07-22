@@ -1,6 +1,5 @@
-import { C_DI_HANDLE_FLAGS_KK, C_DI_MULTIPLICATION_IMM, DECISION_IDENTIFIER, Flags } from "@types";
-
 import { Fiat } from "@/bridge/fiat-bridge";
+import { C_DI_HANDLE_FLAGS_KK, C_DI_MULTIPLICATION_IMM, DECISION_IDENTIFIER, Flags } from "@/types";
 
 export namespace CryptOpt {
   export type Operation_T =

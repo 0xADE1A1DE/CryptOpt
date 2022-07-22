@@ -1,38 +1,13 @@
-function assertValueAllocation(a: Allocation): asserts a is ValueAllocation | PointerAllocation {
-  if (a.datatype === "u128") {
-    throw new Error(
-      `given allocation has datatype u128., which is not allowed for a ValueAllocation. Assertion failed. ${a}`,
-    );
-  }
-}
-import { asm,ByteRegister,C_DI_IMM,CryptOpt,Flags, imm,mem,Register } from "@types";
-import {
-  Allocation,
-  AllocationFlags,
-  AllocationReq,
-  AllocationRes,
-  Allocations,
-  FlagState,
-  PointerAllocation,
-  RegisterAllocation,
-  U1FlagAllocation,
-  ValueAllocation,
-} from "@types";
 import { uniq } from "lodash";
 
 import {
   CALLER_SAVE_PREFIX,
   CALLER_SAVE_REGISTERS,
   CALLING_CONVENTION_REGISTER_ORDER,
-  IMM_VAL_PREFIX,
-  LSB_MAPPING,
-  SETX,
-  TEMP_VARNAME,
-} from "@/helper";
-import {
   delimbify,
   getByteRegFromQwReg,
   getQwRegFromByteReg,
+  IMM_VAL_PREFIX,
   isByteRegister,
   isCallerSave,
   isFlag,
@@ -45,19 +20,50 @@ import {
   isXD,
   limbify,
   limbifyImm,
+  LSB_MAPPING,
   matchArg,
   matchArgPrefix,
   matchMem,
   matchXD,
   setToString,
+  SETX,
+  TEMP_VARNAME,
   toImm,
   toMem,
   zx,
 } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
+import {
+  Allocation,
+  AllocationFlags,
+  AllocationReq,
+  AllocationRes,
+  Allocations,
+  asm,
+  ByteRegister,
+  C_DI_IMM,
+  CryptOpt,
+  Flags,
+  FlagState,
+  imm,
+  mem,
+  PointerAllocation,
+  Register,
+  RegisterAllocation,
+  U1FlagAllocation,
+  ValueAllocation,
+} from "@/types";
 
 import { populateClobbers } from "./RegisterAllocator.helper";
+
+function assertValueAllocation(a: Allocation): asserts a is ValueAllocation | PointerAllocation {
+  if (a.datatype === "u128") {
+    throw new Error(
+      `given allocation has datatype u128., which is not allowed for a ValueAllocation. Assertion failed. ${a}`,
+    );
+  }
+}
 
 // produce<T extends ProduceConditions, U extends { [key in keyof T]: any }>(conditions: T, input: any): Promise<U> | U
 export class RegisterAllocator {

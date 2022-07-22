@@ -11,6 +11,7 @@ import {
   U1RegisterAllocation,
   U64RegisterAllocation,
 } from "@/types";
+
 const getRa = () => RegisterAllocator.getInstance();
 
 export function r__r_r(out: string, r0: RegisterAllocation, r1: RegisterAllocation): asm[] {

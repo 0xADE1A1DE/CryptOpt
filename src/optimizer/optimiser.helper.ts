@@ -1,9 +1,8 @@
-import { CHOICE } from "@types";
-
-import { SI } from "@/helper";
-import { bl, cy, gn, pu, rd, re, yl } from "@/helper";
+import { bl, cy, gn, pu, rd, re, SI, yl } from "@/helper";
 import { Model } from "@/model";
 import type { AnalyseResult } from "@/types";
+import { CHOICE } from "@/types";
+
 export function genStatusLine(a: {
   writeout: boolean;
   logComment: string;

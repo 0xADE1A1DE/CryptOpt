@@ -1,12 +1,13 @@
+import { defaults, zip } from "lodash";
+import * as Stats from "simple-statistics";
+
 import type {
   AnalyseMeasureResultOptions,
   AnalyseResult,
   MeasureResult,
   numTripel,
   QuickStats,
-} from "@types";
-import { defaults, zip } from "lodash";
-import * as Stats from "simple-statistics";
+} from "@/types";
 
 /**
  * @param result - the result to analyse

@@ -1,8 +1,7 @@
 import { RegisterAllocator } from "@/registerAllocator";
 import { AllocationFlags } from "@/types";
 
-import { CryptOpt } from "../types";
-import { asm } from "../types";
+import { asm, CryptOpt } from "../types";
 
 export function limb(c: CryptOpt.StringInstruction): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 2) {
