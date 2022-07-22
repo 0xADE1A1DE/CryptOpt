@@ -14,24 +14,24 @@
     }
   },
   "include": [
-    ".",
-    "./bridge/fiat-bridge/unsaturated_solinas",
-    "./bridge/fiat-bridge/word_by_word_montgomery",
-    "./bridge/fiat-bridge/fiat.c",
-    "./bridge/fiat-bridge/fiat.h",
-    "./bridge/bitcoin-core-bridge/Makefile",
-    "./bridge/bitcoin-core-bridge/llvm2cryptopt.sed",
-    "./bridge/bitcoin-core-bridge/*.h",
-    "./bridge/bitcoin-core-bridge/*.c",
-    "./bridge/bitcoin-core-bridge/*.json"
+    "./src",
+    "./src/bridge/fiat-bridge/unsaturated_solinas",
+    "./src/bridge/fiat-bridge/word_by_word_montgomery",
+    "./src/bridge/fiat-bridge/fiat.c",
+    "./src/bridge/fiat-bridge/fiat.h",
+    "./src/bridge/bitcoin-core-bridge/Makefile",
+    "./src/bridge/bitcoin-core-bridge/llvm2cryptopt.sed",
+    "./src/bridge/bitcoin-core-bridge/*.h",
+    "./src/bridge/bitcoin-core-bridge/*.c",
+    "./src/bridge/bitcoin-core-bridge/*.json"
   ],
   "exclude": ["./node_modules", "dist"],
   "ts-node": {
     "transpileOnly": true
   },
   "filePermissions": {
-    "./dist/generate_asm.js": "0700",
-    "./dist/populatio-dicentur.js": "0700"
+    "./dist/CryptOpt.js": "0700",
+    "./dist/BetAndRun.js": "0700"
   },
   "hooks": ["copy-files", "file-permissions"]
 }
