@@ -6,7 +6,7 @@ import { FiatBridge } from "@/bridge/fiat-bridge";
 import { Paul } from "@/paul";
 import globals from "@/helper/globals";
 import { Assembler } from "@/assembler";
-import { CHOICE, FUNCTIONS, AnalyseResult } from "@types";
+import { CHOICE, FUNCTIONS, AnalyseResult, MeasureResult } from "@types";
 import { ERRORS } from "@/errors";
 import { Model } from "@/model";
 import { PRINT_EVERY, LOG_EVERY } from "@/helper";
@@ -18,7 +18,7 @@ import { writeasm, toggleFUNCTIONS } from "@/helper";
 import { env } from "@/helper";
 const { CC, CFLAGS } = env;
 
-import Measuresuite from "@/MeasureSuite";
+import Measuresuite from "measuresuite";
 let choice: CHOICE;
 
 export class Optimiser {
