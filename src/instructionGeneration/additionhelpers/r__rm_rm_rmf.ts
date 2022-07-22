@@ -51,9 +51,6 @@ function r__r_r_rm(
   r1: RegisterAllocation,
   cin: U1RegisterAllocation | U1MemoryAllocation,
 ): asm[] {
-  if (isU1(r0)) {
-    debugger;
-  }
   const ra = RegisterAllocator.getInstance();
   const fs = ra.flagState();
   // TOOD: what about r1?
@@ -157,9 +154,6 @@ export function r__m_m_f(
   r1: MemoryAllocation,
   cin: U1FlagAllocation,
 ): asm[] {
-  if (isU1(r1) || isU1(r0)) {
-    debugger;
-  }
   const [r, m] = RegisterAllocator.getInstance().moveOneMemoryToRegister([r0, r1]);
   return r__r_m_f(out, r as U64RegisterAllocation, m, cin);
 }
@@ -170,9 +164,6 @@ export function r__m_m_r(
   r1: MemoryAllocation,
   cin: U1RegisterAllocation,
 ): asm[] {
-  if (isU1(r1) || isU1(r0)) {
-    debugger;
-  }
   const [r, m] = RegisterAllocator.getInstance().moveOneMemoryToRegister([r0, r1]);
   return r__r_m_r(out, r as U64RegisterAllocation, m, cin);
 }
@@ -183,9 +174,6 @@ export function r__m_m_m(
   r1: MemoryAllocation,
   cin: U1MemoryAllocation,
 ): asm[] {
-  if (isU1(r1) || isU1(r0)) {
-    debugger;
-  }
   const [r, m] = RegisterAllocator.getInstance().moveOneMemoryToRegister([r0, r1]);
   return r__r_m_m(out, r as U64RegisterAllocation, m, cin);
 }
@@ -196,9 +184,6 @@ function r__r_rm_f(
   r1: MemoryAllocation | RegisterAllocation,
   cin: U1FlagAllocation,
 ): asm[] {
-  if (isU1(r0)) {
-    debugger;
-  }
   const ra = RegisterAllocator.getInstance();
   let r1store = r1.store;
   if (isU1(r1)) {

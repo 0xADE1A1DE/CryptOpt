@@ -23,7 +23,6 @@ process.on("exit", (exitcode: number) => {
   if (exitcode == 0) {
     process.stdout.write(`\nDone Success.${cy}${new Date().toISOString()}${re}`);
   } else {
-    debugger;
     process.stderr.write(`\nDone with code: ${exitcode}\n`);
   }
   Model.persist(stateFileName);

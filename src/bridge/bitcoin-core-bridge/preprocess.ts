@@ -153,7 +153,6 @@ export class BCBPreprocessor {
       // because I know, currently all getelementptr s are from input, I don't bother checking recursively
       const es2 = currentBody.find(({ name }) => name[0] == needle);
       if (es2?.arguments.length !== 1 || typeof es2.arguments[0] !== "string") {
-        debugger;
         throw Error(
           `could not find expected base with one argument. TSNH.${JSON.stringify({ es2, needle })}`,
         );

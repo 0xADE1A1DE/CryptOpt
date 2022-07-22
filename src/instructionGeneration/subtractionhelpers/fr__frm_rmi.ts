@@ -9,7 +9,6 @@ export function fr__frm_rmi(
   arg1: imm | U64Allocation | U1Allocation,
 ): asm[] {
   if (isFlag(arg0.store)) {
-    debugger;
     throw new Error("am i handling that correctly?");
   }
   const ra = RegisterAllocator.getInstance();

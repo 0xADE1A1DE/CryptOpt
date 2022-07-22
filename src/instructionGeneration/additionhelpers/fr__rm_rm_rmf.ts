@@ -319,7 +319,6 @@ function fr__r_rm_rm(
     } else {
       // must be u1 in memory then
       if (isFlag(r1.store)) {
-        debugger;
         throw new Error(`${r1.store} is not a mem. and since I am in fr__r_rm_rm but r1 is a flag`);
       }
       r1store = ra.moveOneMemoryToRegister([r1], "movzx")[0].store;

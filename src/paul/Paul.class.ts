@@ -132,7 +132,6 @@ export class Paul {
    */
   public static chooseBetween(end: number, start = 0, bias = BIAS.UNIFORM): number {
     if (end == start) {
-      debugger;
       throw new Error("\n\nrly?");
     }
     if (end == start + 1) {

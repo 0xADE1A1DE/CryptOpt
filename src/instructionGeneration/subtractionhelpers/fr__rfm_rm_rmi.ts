@@ -73,7 +73,6 @@ function fr__CF_rm_rmi(
       // we need to move it to a reg before
       arg1 = ra.loadImmToReg64(arg1);
       if (isByteRegister(reg)) {
-        debugger;
         throw new Error("Double check, if thats a valid substration from a byte reg.");
       }
     }

@@ -89,7 +89,6 @@ function reduceStaticCast(arg: Fiat.Argument): Fiat.Argument {
   }
   // if its an top-level cast(i.e. x1 = static_cast(arg[0])), reduce up by merging op and args.
   if (!isDynArgument(child)) {
-    debugger;
     throw new Error(
       "unsupported, to reduce cast, when the cast is only from a string to another _NAMED_ variable. C style would be u1 x=(u1)y;",
     );

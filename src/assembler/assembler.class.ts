@@ -69,7 +69,6 @@ export class Assembler {
             .join("\n") + `while doing ${JSON.stringify(curOp, undefined, 2)}`,
           `${resultspath}/lastFail.asm`,
         );
-        debugger;
         throw e;
       }
     }

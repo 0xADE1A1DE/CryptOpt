@@ -188,7 +188,7 @@ fs.writeFileSync(
 
 // process.stdout.write(`Done optimising. Exe'ing ${cy}${gpFile}${re}.`);
 process.stdout.write(" Gen Pdf...");
-const d = (chunk: Buffer | string | any) => {
+const d = (chunk: Buffer | string) => {
   const str = chunk.toString();
   if (
     !str.includes("line 22: ") &&

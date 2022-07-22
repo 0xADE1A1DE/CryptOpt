@@ -212,7 +212,6 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringInstruction): a
 
   if (typeof blo_store === "undefined" || typeof bhi_store === "undefined") {
     const b = ra.pres;
-    debugger;
     throw new Error(u128_hi + " or " + u128_lo + "  not all allocated, which they sure should. TSNH.");
   }
 
