@@ -1,4 +1,4 @@
-import { delimbify, isNotNoU } from "@/helper";
+import { delimbify, isNotNoU } from "@/helper/lamdas";
 import {
   C_DI_HANDLE_FLAGS_KK,
   C_DI_INSTRUCTION_AND,
@@ -8,7 +8,9 @@ import {
   Flags,
 } from "@/types";
 
-import { BIAS, sha1Hash } from ".";
+import { BIAS } from "./Paul.enum";
+import {  sha1Hash } from "./Paul.helper";
+
 
 export class Paul {
   // https://en.wikipedia.org/wiki/Paul_the_Octopus

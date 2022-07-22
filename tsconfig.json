@@ -2,7 +2,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "target": "ES2021",
-    "module": "CommonJS",
+    "module": "esnext",
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "noImplicitAny": true,

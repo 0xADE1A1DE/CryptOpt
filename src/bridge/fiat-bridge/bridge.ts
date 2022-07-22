@@ -7,18 +7,18 @@ import path from "path";
 import { env } from "@/helper";
 import { sha256Hash } from "@/paul";
 
+import fiat from "./all_fiat_array";
 import {
   AVAILABLE_CURVES,
   AVAILABLE_METHODS,
-  BINS,
   CURVE_DETAILS,
   CURVE_T,
-  Fiat,
   METHOD_DETAILS,
   METHOD_T,
   SHA256SUMS,
-} from ".";
-import fiat from "./all_fiat_array";
+} from "./constants";
+import { BINS } from "./enums";
+import { Fiat } from "./fiat.namespace";
 
 const { CC, CFLAGS } = env;
 const cacheDir = path.resolve(__dirname, ".cache");

@@ -1,4 +1,4 @@
-import { BINS } from ".";
+import { BINS } from "./enums";
 
 // TODO: the bounds property should be parsed from the json-output when using
 export const PRIMES = {

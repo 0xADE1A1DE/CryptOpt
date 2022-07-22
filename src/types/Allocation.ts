@@ -1,4 +1,6 @@
-import { ByteRegister, Flags, imm, mem, Register } from "@/types";
+import { Flags } from "./Misc.enum";
+import { ByteRegister,Register } from "./Registers.enum";
+import { imm,mem } from "./Storage.type";
 
 export interface AllocationReq {
   oReg: string[];

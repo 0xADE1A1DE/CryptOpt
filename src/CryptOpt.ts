@@ -1,4 +1,3 @@
-#!/usr/bin/env -S node -r "ts-node/register/transpile-only" -r "tsconfig-paths/register"
 import os from "os";
 
 import { cy, env, generateResultsPath, generateStateFileName, parsedArgs, re, SI } from "@/helper";

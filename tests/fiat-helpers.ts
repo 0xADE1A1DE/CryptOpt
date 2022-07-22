@@ -313,7 +313,7 @@ describe("preprocessFunction", () => {
     expect(result[0].arguments).toStrictEqual(["x2", "x2"]);
     expect(result[0].operation).toBe("*");
     expect(result[0].datatype).toBe("u64");
-    expect(result[0].decisions.di_choose_arg![1]).toStrictEqual(["x2", "x2"]);
+    expect(result[0].decisions.di_choose_arg?.[1]).toStrictEqual(["x2", "x2"]);
 
     expect(result[1].operation).toBe("=");
     expect(result[2].operation).toBe("=");
@@ -323,22 +323,22 @@ describe("preprocessFunction", () => {
     expect(result[4].arguments).toStrictEqual(["arg1[5]", "0x2"]);
     expect(result[4].operation).toBe("*");
     expect(result[4].datatype).toBe("u64");
-    expect(result[4].decisions.di_choose_arg![1]).toStrictEqual(["arg1[5]", "0x2"]);
-    expect(result[4].decisions.di_mult_imm![1]).toStrictEqual(["c_imul", "c_shl", "c_shlx", "c_lea"]);
+    expect(result[4].decisions.di_choose_arg?.[1]).toStrictEqual(["arg1[5]", "0x2"]);
+    expect(result[4].decisions.di_mult_imm?.[1]).toStrictEqual(["c_imul", "c_shl", "c_shlx", "c_lea"]);
 
     expect(result[5].name).toStrictEqual(["x2"]);
     expect(result[5].arguments).toStrictEqual(["arg1[8]", "0x2"]);
     expect(result[5].operation).toBe("*");
     expect(result[5].datatype).toBe("u64");
-    expect(result[5].decisions.di_choose_arg![1]).toStrictEqual(["arg1[8]", "0x2"]);
-    expect(result[5].decisions.di_mult_imm![1]).toStrictEqual(["c_imul", "c_shl", "c_shlx", "c_lea"]);
+    expect(result[5].decisions.di_choose_arg?.[1]).toStrictEqual(["arg1[8]", "0x2"]);
+    expect(result[5].decisions.di_mult_imm?.[1]).toStrictEqual(["c_imul", "c_shl", "c_shlx", "c_lea"]);
 
     expect(result[6].name).toStrictEqual(["x10001"]);
     // most important test here
     expect(result[6].arguments).toStrictEqual(["arg1[8]", "0x4"]);
     expect(result[6].operation).toBe("*");
     expect(result[6].datatype).toBe("u64");
-    expect(result[6].decisions.di_choose_arg![1]).toStrictEqual(["arg1[8]", "0x4"]);
-    expect(result[6].decisions.di_mult_imm![1]).toStrictEqual(["c_imul", "c_shl", "c_shlx", "c_lea"]);
+    expect(result[6].decisions.di_choose_arg?.[1]).toStrictEqual(["arg1[8]", "0x4"]);
+    expect(result[6].decisions.di_mult_imm?.[1]).toStrictEqual(["c_imul", "c_shl", "c_shlx", "c_lea"]);
   });
 });

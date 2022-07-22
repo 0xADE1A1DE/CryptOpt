@@ -1,6 +1,8 @@
-import { assertStringArguments, assertStringNames, matchXD } from "@/helper";
 import { Paul } from "@/paul";
 import type { CryptOpt } from "@/types";
+
+import { assertStringArguments, assertStringNames, matchXD } from "./lamdas";
+
 
 export function toposort(_nodes: Readonly<Readonly<CryptOpt.StringInstruction>[]>): number[] {
   _nodes.forEach(assertStringNames);

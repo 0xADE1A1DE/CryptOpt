@@ -33,17 +33,3 @@ export enum C_DI_IMM {
   ZERO = "0x0",
   NEG_1 = "-0x1",
 }
-
-export enum Flags {
-  OF = "OF",
-  CF = "CF",
-}
-
-export enum FUNCTIONS {
-  F_A = "function_A",
-  F_B = "function_B",
-}
-export enum CHOICE {
-  PERMUTE = " P",
-  DECISION = "D ",
-}

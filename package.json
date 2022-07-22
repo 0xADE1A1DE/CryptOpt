@@ -22,10 +22,11 @@
     "test-debug": "node --inspect-brk=12345 ./node_modules/.bin/jest",
     "test-rib": "npx jest --runInBand",
     "lint": "eslint .",
-    "lh": "eslint --help",
     "lint-fix": "eslint . --fix",
     "preinstall": "cd ./modules/MeasureSuite && $npm_execpath install",
-    "postinstall": "tsc -p ."
+    "postinstall": "$npm_execpath run compile",
+    "compile": "tsc -p .",
+    "pack": "rollup --config rollup.config.ts"
   },
   "prettier": {
     "trailingComma": "all",
@@ -43,6 +44,7 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.3",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^28.1.4",
     "@types/lodash": "^4.14.182",
@@ -57,7 +59,9 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^28.1.2",
     "prettier": "^2.7.1",
-    "ts-jest": "^28.0.5"
+    "rollup": "^2.77.0",
+    "ts-jest": "^28.0.5",
+    "tslib": "^2.4.0"
   },
   "jest": {
     "moduleNameMapper": {
@@ -66,7 +70,7 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "testMatch": [
-      "./tests/**/*.ts"
+      "**/tests/**/*.ts"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
@@ -122,4 +126,3 @@
     ]
   }
 }
-

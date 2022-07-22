@@ -1,4 +1,5 @@
-import { BINS, PRIMES } from ".";
+import { BINS } from "./enums"
+import { PRIMES } from "./primes";
 
 export type CURVE_T = typeof AVAILABLE_CURVES[number];
 export type METHOD_T = typeof AVAILABLE_METHODS[number];

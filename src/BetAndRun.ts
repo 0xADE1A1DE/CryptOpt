@@ -1,4 +1,3 @@
-#!/usr/bin/env -S node -r "ts-node/register/transpile-only" -r "tsconfig-paths/register"
 // this is the Population based apporoch.
 // Basically a wrapper script around CryptOpt.{j,t}s
 

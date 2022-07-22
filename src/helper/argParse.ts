@@ -1,8 +1,8 @@
 import yargs from "yargs";
 
-import { BRIDGES } from "@/bridge";
-import { AVAILABLE_METHODS as BITCOIN_CORE_METHODS } from "@/bridge/bitcoin-core-bridge";
-import { AVAILABLE_CURVES, AVAILABLE_METHODS as FIAT_METHODS } from "@/bridge/fiat-bridge";
+import { AVAILABLE_METHODS as BITCOIN_CORE_METHODS } from "@/bridge/bitcoin-core-bridge/constants";
+import { BRIDGES } from "@/bridge/constants";
+import { AVAILABLE_CURVES, AVAILABLE_METHODS as FIAT_METHODS } from "@/bridge/fiat-bridge/constants";
 import { errorOut, ERRORS } from "@/errors";
 
 export const parsedArgs = yargs

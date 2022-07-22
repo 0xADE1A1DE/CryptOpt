@@ -2,8 +2,7 @@
 // grep operation -r *.json |tr -s '[[:space:]]' |  cut -d":" -f 3 | sed -e 's/,/|/' |sort |uniq
 import { groupBy } from "lodash";
 
-import { assertStringArguments, assertStringNames, isNotNoU, isXD, matchArg, matchIMM } from "@/helper";
-import { Paul } from "@/paul";
+import { Paul } from "@/paul/Paul.class";
 import {
   C_DI_HANDLE_FLAGS_KK,
   C_DI_IMM,
@@ -21,6 +20,7 @@ import {
   TEMP_VAR_END_NUM,
   TEMP_VAR_START_NUM,
 } from "./constants";
+import { assertStringArguments, assertStringNames, isNotNoU, isXD, matchArg,matchIMM } from "./lamdas";
 
 function isConstArgument(ins: Fiat.Argument): ins is Fiat.ConstArgument {
   return typeof ins === "string";
