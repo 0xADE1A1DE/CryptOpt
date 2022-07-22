@@ -1,2 +1,2 @@
-export * from "./constants";
 export * from "./bridge.interface";
+export * from "./constants";

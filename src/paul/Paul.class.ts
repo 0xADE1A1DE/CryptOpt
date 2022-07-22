@@ -1,14 +1,14 @@
-import { BIAS, sha1Hash } from ".";
-
 import { delimbify, isNotNoU } from "@/helper";
 import {
-  CryptOpt,
   C_DI_HANDLE_FLAGS_KK,
-  C_DI_MULTIPLICATION_IMM,
   C_DI_INSTRUCTION_AND,
+  C_DI_MULTIPLICATION_IMM,
+  CryptOpt,
   DECISION_IDENTIFIER,
   Flags,
 } from "@/types";
+
+import { BIAS, sha1Hash } from ".";
 export class Paul {
   // https://en.wikipedia.org/wiki/Paul_the_Octopus
 

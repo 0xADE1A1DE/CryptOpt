@@ -1,4 +1,8 @@
-import { asm, CryptOpt } from "@/types";
+import { assertStringNames } from "@/helper";
+import { Paul } from "@/paul";
+import { RegisterAllocator } from "@/registerAllocator";
+import { asm,CryptOpt } from "@/types";
+
 import {
   add,
   bitwiseOp,
@@ -16,9 +20,6 @@ import {
   sub,
   zext,
 } from ".";
-import { RegisterAllocator } from "@/registerAllocator";
-import { Paul } from "@/paul";
-import { assertStringNames } from "@/helper";
 
 export const getInstruction = (c: CryptOpt.StringInstruction): asm[] => {
   assertStringNames(c);

@@ -1,12 +1,12 @@
-import { TEMP_VARNAME, isFlag } from "@/helper";
+import { isFlag,TEMP_VARNAME } from "@/helper";
 import {
+  asm,
+  imm,
   U1Allocation,
   U1FlagAllocation,
   U1MemoryAllocation,
   U1RegisterAllocation,
   U64Allocation,
-  asm,
-  imm,
 } from "@/types";
 
 import { fr__f_rm_rmi, fr__rm_rm_rmi } from "./fr__rfm_rm_rmi";

@@ -1,4 +1,4 @@
 export * from "./imul";
-export * from "./shlx";
-export * from "./shl";
 export * from "./lea";
+export * from "./shl";
+export * from "./shlx";

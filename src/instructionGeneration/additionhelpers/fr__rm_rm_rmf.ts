@@ -1,7 +1,13 @@
+import { ADX, isByteRegister, isFlag, isMem, isU1, SETX, toggleFlag, toImm, zx } from "@/helper";
+import { Model } from "@/model";
+import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import {
+  asm,
+  Flags,
   FlagState,
   MemoryAllocation,
+  Register,
   RegisterAllocation,
   U1Allocation,
   U1FlagAllocation,
@@ -9,14 +15,7 @@ import {
   U1RegisterAllocation,
   U64Allocation,
   U64RegisterAllocation,
-  asm,
-  Flags,
-  Register,
 } from "@/types";
-import { ADX, SETX, isByteRegister, isMem, isU1, isFlag, toImm, toggleFlag, zx } from "@/helper";
-
-import { Paul } from "@/paul";
-import { Model } from "@/model";
 
 export function fr_rm_f_f(cout: string, out: string, arg0: U64Allocation): asm[] {
   const ra = RegisterAllocator.getInstance();

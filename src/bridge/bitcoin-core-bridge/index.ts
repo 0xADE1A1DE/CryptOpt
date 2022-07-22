@@ -1,16 +1,15 @@
 import { execSync } from "child_process";
+import { existsSync, readFileSync } from "fs";
 import { groupBy } from "lodash";
-import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 
-import { AVAILABLE_METHODS, METHOD_T, METHOD_DETAILS } from "./constants";
-import { BCBPreprocessor } from "./preprocess";
-
-import type { raw_T, structDef_T } from "./raw.type";
-
-import type { Bridge, CryptOpt } from "@/types";
-import { env, preprocessFunction } from "@/helper";
 import { ERRORS } from "@/errors";
+import { env, preprocessFunction } from "@/helper";
+import type { Bridge, CryptOpt } from "@/types";
+
+import { AVAILABLE_METHODS, METHOD_DETAILS, METHOD_T } from "./constants";
+import { BCBPreprocessor } from "./preprocess";
+import type { raw_T, structDef_T } from "./raw.type";
 
 const createExecOpts = () => {
   const c = {

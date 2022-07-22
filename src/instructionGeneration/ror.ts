@@ -1,5 +1,6 @@
-import { CryptOpt } from "../types";
 import { RegisterAllocator } from "@/registerAllocator";
+
+import { CryptOpt } from "../types";
 import { asm } from "../types";
 
 export function ror(c: CryptOpt.StringInstruction): asm[] {

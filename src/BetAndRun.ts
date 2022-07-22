@@ -1,16 +1,15 @@
 #!/usr/bin/env -S node -r "ts-node/register/transpile-only" -r "tsconfig-paths/register"
 // this is the Population based apporoch.
-// Basically a wrapper script around generate_asm.js
-// Y the name tho => https://translate.yandex.com/?lang=la-en&text=populatio-dicentur
-//
+// Basically a wrapper script around CryptOpt.{j,t}s
+
+import type { CryptoptGlobals } from "@types";
+import { exec, execFileSync } from "child_process";
 import fs from "fs";
 import os from "os";
-import { execFileSync, exec } from "child_process";
-import type { CryptoptGlobals } from "@types";
 
+import { cy, gn, PRINT_EVERY, rd, re } from "@/helper";
+import { env,generateResultsPath,generateStateFileName,parsedArgs,SI } from "@/helper";
 import { sha1Hash } from "@/paul";
-import { PRINT_EVERY, cy, re, gn, rd } from "@/helper";
-import { SI, env, parsedArgs, generateResultsPath, generateStateFileName } from "@/helper";
 
 const { populatio, populatioratio, seed, curve, method, bridge, evals } = parsedArgs;
 

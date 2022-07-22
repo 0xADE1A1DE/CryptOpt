@@ -1,6 +1,7 @@
 import type { CryptOpt } from "@/types";
-import type { SSA } from "../raw.type";
+
 import { getArguments } from "../helpers";
+import type { SSA } from "../raw.type";
 
 export function transformTrunc(input: Readonly<SSA>): CryptOpt.DynArgument {
   if (input.operation !== "trunc") {

@@ -1,11 +1,13 @@
-import { Paul } from "@/paul";
 import type { CryptOpt } from "@types";
+
 import { limbify, matchIMM } from "@/helper";
+import { TEMP_VARNAME } from "@/helper";
+import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import { AllocationFlags, FlagState } from "@/types";
-import { C_DI_MULTIPLICATION_IMM, DECISION_IDENTIFIER, asm, Register, Flags } from "../types";
-import { TEMP_VARNAME } from "@/helper";
-import { mul_imm_shl, mul_imm_shlx, mul_imm_lea, mul_imm_imul } from "./multiplicationHelpers";
+
+import { asm,C_DI_MULTIPLICATION_IMM,DECISION_IDENTIFIER,Flags,Register } from "../types";
+import { mul_imm_imul, mul_imm_lea, mul_imm_shl, mul_imm_shlx } from "./multiplicationHelpers";
 
 export function mul(c: CryptOpt.StringInstruction): asm[] {
   // assumes, that the operands are max 64bit

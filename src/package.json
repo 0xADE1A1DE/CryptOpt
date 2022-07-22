@@ -22,6 +22,7 @@
     "test-debug": "node --inspect-brk=12345 ./node_modules/.bin/jest",
     "test-rib": "npx jest --runInBand",
     "lint": "eslint .",
+    "lh": "eslint --help",
     "lint-fix": "eslint . --fix",
     "preinstall": "cd MeasureSuite && $npm_execpath install",
     "install": "$npm_execpath run compile",
@@ -32,6 +33,7 @@
     "printWidth": 110
   },
   "dependencies": {
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "fs-extra": "^10.1.0",
     "lodash": "^4.17.21",
     "measuresuite": "file:./MeasureSuite",
@@ -52,6 +54,7 @@
     "@typescript-eslint/parser": "^5.30.5",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^28.1.2",
     "prettier": "^2.7.1",
@@ -79,6 +82,8 @@
     "root": true,
     "parser": "@typescript-eslint/parser",
     "plugins": [
+      "simple-import-sort",
+      "import",
       "@typescript-eslint"
     ],
     "extends": [
@@ -92,12 +97,30 @@
       "coverage"
     ],
     "rules": {
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
+      "import/first": "error",
+      "import/newline-after-import": "error",
+      "import/no-duplicates": "error",
       "@typescript-eslint/no-unused-vars": [
         1,
         {
           "argsIgnorePattern": "^_"
         }
       ]
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.ts"
+        ],
+        "rules": {
+          "simple-import-sort/imports": [
+            "error",
+            {}
+          ]
+        }
+      }
+    ]
   }
 }

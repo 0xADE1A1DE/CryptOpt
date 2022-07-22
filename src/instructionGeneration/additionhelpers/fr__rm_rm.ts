@@ -1,15 +1,15 @@
+import { ADX, isU1 } from "@/helper";
+import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import {
+  asm,
   C_DI_HANDLE_FLAGS_KK,
-  FlagState,
   Flags,
+  FlagState,
   MemoryAllocation,
   RegisterAllocation,
   U64RegisterAllocation,
-  asm,
 } from "@/types";
-import { Paul } from "@/paul";
-import { ADX, isU1 } from "@/helper";
 
 export function fr__r_r(cout: string, out: string, r0: RegisterAllocation, r1: RegisterAllocation): asm[] {
   return fr__rm_r(cout, out, r0, r1);

@@ -1,6 +1,7 @@
 export * from "./addition";
 export * from "./bitwiseOps";
 export * from "./cmp";
+export * from "./InstructionGenerator";
 export * from "./limb";
 export * from "./mov";
 export * from "./multiplication";
@@ -9,4 +10,3 @@ export * from "./ror";
 export * from "./shift";
 export * from "./subtraction";
 export * from "./zext";
-export * from "./InstructionGenerator";

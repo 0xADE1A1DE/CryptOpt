@@ -15,6 +15,7 @@
 
 import { isByteRegister, isFlag, isMem, isRegister } from "@/helper";
 import {
+  asm,
   MemoryAllocation,
   RegisterAllocation,
   U1Allocation,
@@ -24,32 +25,32 @@ import {
   U64Allocation,
   U64RegisterAllocation,
   ValueAllocation,
-  asm,
 } from "@/types";
-import { fr__r_r, fr__r_m, fr__m_m } from "./fr__rm_rm";
+
+import { fr__m_m, fr__r_m, fr__r_r } from "./fr__rm_rm";
 import {
-  r__r_r_f,
-  r__r_r_r,
-  r__r_r_m,
-  r__r_m_f,
-  r__r_m_r,
-  r__r_m_m,
-  r__m_m_f,
-  r__m_m_r,
-  r__m_m_m,
-} from "./r__rm_rm_rmf";
-import {
-  fr__r_r_f,
-  fr__r_r_r,
-  fr__r_r_m,
-  fr__r_m_f,
-  fr__r_m_r,
-  fr__r_m_m,
   fr__m_m_f,
-  fr__m_m_r,
   fr__m_m_m,
+  fr__m_m_r,
+  fr__r_m_f,
+  fr__r_m_m,
+  fr__r_m_r,
+  fr__r_r_f,
+  fr__r_r_m,
+  fr__r_r_r,
 } from "./fr__rm_rm_rmf";
-import { r__r_r, r__r_m, r__r_f, r__m_m, r__m_f, r__f_f } from "./r__rmf_rmf";
+import {
+  r__m_m_f,
+  r__m_m_m,
+  r__m_m_r,
+  r__r_m_f,
+  r__r_m_m,
+  r__r_m_r,
+  r__r_r_f,
+  r__r_r_m,
+  r__r_r_r,
+} from "./r__rm_rm_rmf";
+import { r__f_f, r__m_f, r__m_m, r__r_f, r__r_m, r__r_r } from "./r__rmf_rmf";
 
 export function fr__rm_rm(cout: string, out: string, arg0: ValueAllocation, arg1: ValueAllocation): asm[] {
   if (isFlag(arg0.store) || isFlag(arg1.store)) {

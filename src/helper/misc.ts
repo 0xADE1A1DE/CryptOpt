@@ -1,19 +1,23 @@
-import { cloneDeep } from "lodash";
-import fs from "fs";
-
 import {
   Allocation,
+  asm,
   ByteRegister,
   CryptOpt,
-  FUNCTIONS,
   Flags,
+  FUNCTIONS,
+  imm,
+  mem,
   Register,
   U1Allocation,
   U64Allocation,
-  asm,
-  imm,
-  mem,
 } from "@types";
+import fs from "fs";
+import { cloneDeep } from "lodash";
+
+import { Paul } from "@/paul";
+import { RegisterAllocator } from "@/registerAllocator";
+
+import { getQwRegFromByteReg } from ".";
 import {
   ARG_PREFIX,
   ARG_PREFIX_REGEX,
@@ -26,10 +30,6 @@ import {
   OUT_PREFIX,
   XD_REGEX,
 } from "./constants";
-
-import { getQwRegFromByteReg } from ".";
-import { Paul } from "@/paul";
-import { RegisterAllocator } from "@/registerAllocator";
 
 // splits strings at _ and writes numbers as base16
 export function toImm(val: string | number): imm {

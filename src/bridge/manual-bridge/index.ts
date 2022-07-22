@@ -1,8 +1,8 @@
-import { execSync } from "child_process";
-import { readFileSync, existsSync } from "fs";
-
-import { preprocessFunction, env, matchArg } from "@/helper";
 import { Bridge, CryptOpt } from "@types";
+import { execSync } from "child_process";
+import { existsSync, readFileSync } from "fs";
+
+import { env, matchArg, preprocessFunction } from "@/helper";
 
 const { CC, CFLAGS } = env;
 

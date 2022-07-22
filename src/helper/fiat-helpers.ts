@@ -2,8 +2,18 @@
 // grep operation -r *.json |tr -s '[[:space:]]' |  cut -d":" -f 3 | sed -e 's/,/|/' |sort |uniq
 import { groupBy } from "lodash";
 
-import { matchArg, matchIMM, assertStringArguments, assertStringNames, isNotNoU, isXD } from "@/helper";
+import { assertStringArguments, assertStringNames, isNotNoU, isXD, matchArg, matchIMM } from "@/helper";
 import { Paul } from "@/paul";
+import {
+  C_DI_HANDLE_FLAGS_KK,
+  C_DI_IMM,
+  C_DI_INSTRUCTION_AND,
+  CryptOpt,
+  DECISION_IDENTIFIER,
+  Fiat,
+  Flags,
+} from "@/types";
+
 import {
   CHAINABLE_OPS,
   IMM_MUL_DI_MAP,
@@ -11,15 +21,6 @@ import {
   TEMP_VAR_END_NUM,
   TEMP_VAR_START_NUM,
 } from "./constants";
-import {
-  Fiat,
-  CryptOpt,
-  Flags,
-  C_DI_HANDLE_FLAGS_KK,
-  C_DI_INSTRUCTION_AND,
-  DECISION_IDENTIFIER,
-  C_DI_IMM,
-} from "@/types";
 
 function isConstArgument(ins: Fiat.Argument): ins is Fiat.ConstArgument {
   return typeof ins === "string";

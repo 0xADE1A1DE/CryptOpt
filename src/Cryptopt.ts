@@ -1,11 +1,10 @@
 #!/usr/bin/env -S node -r "ts-node/register/transpile-only" -r "tsconfig-paths/register"
 import os from "os";
 
-import { shouldProof, Optimiser } from "@/optimizer";
-import { parsedArgs, re, cy } from "@/helper";
-import { Paul } from "@/paul";
+import { cy,env,generateResultsPath,generateStateFileName,parsedArgs,re,SI } from "@/helper";
 import { Model } from "@/model";
-import { env, SI, generateResultsPath, generateStateFileName } from "@/helper";
+import { Optimiser, shouldProof } from "@/optimizer";
+import { Paul } from "@/paul";
 
 const { CC, CFLAGS } = env;
 

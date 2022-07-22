@@ -1,16 +1,16 @@
+import { ADX, isByteRegister, isU1, zx } from "@/helper";
+import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
 import {
-  U1FlagAllocation,
-  U1RegisterAllocation,
-  RegisterAllocation,
-  MemoryAllocation,
-  U64RegisterAllocation,
-  FlagState,
   asm,
   Flags,
+  FlagState,
+  MemoryAllocation,
+  RegisterAllocation,
+  U1FlagAllocation,
+  U1RegisterAllocation,
+  U64RegisterAllocation,
 } from "@/types";
-import { Model } from "@/model";
-import { ADX, isByteRegister, isU1, zx } from "@/helper";
 const getRa = () => RegisterAllocator.getInstance();
 
 export function r__r_r(out: string, r0: RegisterAllocation, r1: RegisterAllocation): asm[] {

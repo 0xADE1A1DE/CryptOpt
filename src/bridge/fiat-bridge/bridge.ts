@@ -1,8 +1,11 @@
 import { execSync } from "child_process";
+import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, readFileSync } from "fs";
 import { ensureDirSync } from "fs-extra";
-import { readFileSync, existsSync, accessSync, chmodSync, constants as FS_CONSTANTS } from "fs";
 import os from "os";
 import path from "path";
+
+import { env } from "@/helper";
+import { sha256Hash } from "@/paul";
 
 import {
   AVAILABLE_CURVES,
@@ -16,9 +19,6 @@ import {
   SHA256SUMS,
 } from ".";
 import fiat from "./all_fiat_array";
-
-import { env } from "@/helper";
-import { sha256Hash } from "@/paul";
 const { CC, CFLAGS } = env;
 const cacheDir = path.resolve(__dirname, ".cache");
 

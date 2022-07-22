@@ -1,9 +1,10 @@
 import { groupBy } from "lodash";
 
-import type { StructName, SSA, raw_T, structDef_T } from "./raw.type";
-import type { Fiat, CryptOpt } from "@/types";
+import { matchArgPrefix } from "@/helper";
+import type { CryptOpt, Fiat } from "@/types";
 
-import { isStructPointer, getArguments } from "./helpers";
+import { getArguments, isStructPointer } from "./helpers";
+import type { raw_T,SSA,structDef_T,StructName } from "./raw.type";
 import {
   transformAdd,
   transformAnd,
@@ -12,13 +13,12 @@ import {
   transformLshr,
   transformMul,
   transformOr,
-  transformXor,
   transformShl,
   transformTrunc,
+  transformXor,
   transformZext,
 } from "./transformations";
 import { zextR } from "./transformations/reducers";
-import { matchArgPrefix } from "@/helper";
 // type fixedArgs = Omit<raw_T, "arguments"> & { arguments: Fiat.FuncArgument };
 
 type A = Fiat.FiatFunction["arguments"][number];

@@ -1,7 +1,7 @@
 import type { CryptOpt } from "@/types";
-import { SSA } from "../raw.type";
 
-import { getScalarsAndImmMappedAsConstArg, getArguments } from "../helpers";
+import { getArguments, getScalarsAndImmMappedAsConstArg } from "../helpers";
+import { SSA } from "../raw.type";
 
 export const transformAshr = shr;
 export const transformLshr = shr;

@@ -1,8 +1,8 @@
 import { defaults } from "lodash";
 
-import { AllocationFlags, FlagState, AllocationRes, asm, Flags, CryptOpt } from "@/types";
+import { limbify, matchIMM, matchXD } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import { limbify, matchXD, matchIMM } from "@/helper";
+import { AllocationFlags, AllocationRes, asm,CryptOpt,Flags, FlagState } from "@/types";
 
 // assumes, that arg[2] is always val_imm
 export function shiftLeft(c: CryptOpt.StringInstruction): asm[] {

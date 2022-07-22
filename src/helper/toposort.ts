@@ -1,6 +1,6 @@
 import type { CryptOpt } from "@types";
 
-import { matchXD, assertStringNames, assertStringArguments } from "@/helper";
+import { assertStringArguments, assertStringNames, matchXD } from "@/helper";
 import { Paul } from "@/paul";
 
 export function toposort(_nodes: Readonly<Readonly<CryptOpt.StringInstruction>[]>): number[] {

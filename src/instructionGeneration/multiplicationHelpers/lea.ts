@@ -1,6 +1,6 @@
+import { isImm,TEMP_VARNAME } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import { asm, CryptOpt, AllocationFlags } from "@/types";
-import { isImm, TEMP_VARNAME } from "@/helper";
+import { AllocationFlags, asm,CryptOpt } from "@/types";
 
 export function mul_imm_lea(c: CryptOpt.StringInstruction): asm[] {
   const ra = RegisterAllocator.getInstance();

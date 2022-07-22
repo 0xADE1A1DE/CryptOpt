@@ -1,21 +1,21 @@
+import { AnalyseResult, CHOICE, FUNCTIONS, MeasureResult } from "@types";
+import { execSync } from "child_process";
 import os from "os";
 import path from "path";
-import { execSync } from "child_process";
 
-import { FiatBridge } from "@/bridge/fiat-bridge";
-import { Paul } from "@/paul";
-import globals from "@/helper/globals";
 import { Assembler } from "@/assembler";
-import { CHOICE, FUNCTIONS, AnalyseResult, MeasureResult } from "@types";
+import { FiatBridge } from "@/bridge/fiat-bridge";
 import { ERRORS } from "@/errors";
-import { Model } from "@/model";
-import { PRINT_EVERY, LOG_EVERY } from "@/helper";
+import { LOG_EVERY, PRINT_EVERY } from "@/helper";
 import { analyseMeasureResult } from "@/helper";
-import { init } from "./optimiser.helper.class";
-import { shouldProof, genStatusLine } from "./optimiser.helper";
-import { writeasm, toggleFUNCTIONS } from "@/helper";
-
+import { toggleFUNCTIONS, writeasm } from "@/helper";
 import { env } from "@/helper";
+import globals from "@/helper/globals";
+import { Model } from "@/model";
+import { Paul } from "@/paul";
+
+import { genStatusLine, shouldProof } from "./optimiser.helper";
+import { init } from "./optimiser.helper.class";
 const { CC, CFLAGS } = env;
 
 import Measuresuite from "measuresuite";

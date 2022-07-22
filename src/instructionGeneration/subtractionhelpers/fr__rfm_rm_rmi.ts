@@ -1,17 +1,17 @@
+import { isByteRegister } from "@/helper";
+import { RegisterAllocator } from "@/registerAllocator";
 import {
-  U64Allocation,
+  asm,
+  Flags,
   FlagState,
+  imm,
+  MemoryAllocation,
+  RegisterAllocation,
   U1FlagAllocation,
   U1MemoryAllocation,
   U1RegisterAllocation,
-  MemoryAllocation,
-  RegisterAllocation,
-  asm,
-  Flags,
-  imm,
+  U64Allocation,
 } from "@/types";
-import { isByteRegister } from "@/helper";
-import { RegisterAllocator } from "@/registerAllocator";
 
 // checks f==CF then maps to fr__f_rm_i
 export function fr__f_rm_rmi(

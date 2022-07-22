@@ -1,6 +1,7 @@
+import { RegisterAllocator } from "@/registerAllocator";
+
 import type { CryptOpt } from "../types";
 import type { asm } from "../types";
-import { RegisterAllocator } from "@/registerAllocator";
 
 export function zext(c: CryptOpt.StringInstruction): asm[] {
   const ra = RegisterAllocator.getInstance();

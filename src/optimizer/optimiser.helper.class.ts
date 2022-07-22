@@ -1,18 +1,19 @@
 import Measuresuite from "measuresuite";
-import {
-  FiatBridge,
-  CURVE_T,
-  METHOD_T,
-  CURVE_DETAILS,
-  AVAILABLE_METHODS as AVAILABLE_FIAT_METHODS,
-} from "@/bridge/fiat-bridge";
+
+import { BRIDGES } from "@/bridge";
 import BitcoinCoreBridge, {
   AVAILABLE_METHODS as AVAILABLE_BITCOIN_METHODS,
 } from "@/bridge/bitcoin-core-bridge";
+import {
+  AVAILABLE_METHODS as AVAILABLE_FIAT_METHODS,
+  CURVE_DETAILS,
+  CURVE_T,
+  FiatBridge,
+  METHOD_T,
+} from "@/bridge/fiat-bridge";
 import { ManualBridge } from "@/bridge/manual-bridge";
 import { preprocessFunction } from "@/helper";
 import { Model } from "@/model";
-import { BRIDGES } from "@/bridge";
 
 const genLibcheckfunctionsSuff = (args: { seed: number; curve: string; method?: string }) =>
   `s${args.seed}-p${process.pid}-c${args.curve}${args.method ? "-m" : ""}${args.method ?? ""}`;

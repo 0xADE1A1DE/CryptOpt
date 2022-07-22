@@ -1,9 +1,9 @@
-import type { CryptOpt, asm } from "@/types";
-import { Flags } from "@/types";
-import { RegisterAllocator } from "@/registerAllocator";
-import { AllocationFlags, FlagState } from "@/types";
 import { llvm2CC } from "@/helper";
-import { isImm, isByteRegister } from "@/helper";
+import { isByteRegister, isImm } from "@/helper";
+import { RegisterAllocator } from "@/registerAllocator";
+import type { asm,CryptOpt } from "@/types";
+import { Flags } from "@/types";
+import { AllocationFlags, FlagState } from "@/types";
 
 export function cmp(c: CryptOpt.StringInstruction): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 3) {

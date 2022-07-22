@@ -1,15 +1,16 @@
-import { cloneDeep } from "lodash";
-import fs from "fs";
-
-import { CryptOpt, DECISION_IDENTIFIER } from "@/types";
 import { CURVE_T } from "@types";
-import { TEMP_VARNAME, cy, re, bl, rd } from "@/helper";
-import { BIAS, Paul } from "@/paul";
+import fs from "fs";
+import { cloneDeep } from "lodash";
+
+import { bl,cy,rd,re,TEMP_VARNAME } from "@/helper";
 import { toposort } from "@/helper";
+import { assertStringArguments, isCallerSave, limbify, matchArg, matchArgPrefix } from "@/helper";
 import globals from "@/helper/globals";
-import { limbify, matchArgPrefix, matchArg, isCallerSave, assertStringArguments } from "@/helper";
-import { isADependentOnB, nodeLookupMap, createDependencyRelation } from "./model.helper";
+import { BIAS, Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
+import { CryptOpt, DECISION_IDENTIFIER } from "@/types";
+
+import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "./model.helper";
 
 type methodParam = CryptOpt.Function["arguments"][number] | CryptOpt.Function["returns"][number];
 export class Model {

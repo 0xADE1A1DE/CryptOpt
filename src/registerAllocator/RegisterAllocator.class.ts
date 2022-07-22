@@ -5,23 +5,32 @@ function assertValueAllocation(a: Allocation): asserts a is ValueAllocation | Po
     );
   }
 }
+import { asm,ByteRegister,C_DI_IMM,CryptOpt,Flags, imm,mem,Register } from "@types";
+import {
+  Allocation,
+  AllocationFlags,
+  AllocationReq,
+  AllocationRes,
+  Allocations,
+  FlagState,
+  PointerAllocation,
+  RegisterAllocation,
+  U1FlagAllocation,
+  ValueAllocation,
+} from "@types";
 import { uniq } from "lodash";
 
-import { CryptOpt, Flags, ByteRegister, Register, asm, imm, mem, C_DI_IMM } from "@types";
-import { Paul } from "@/paul";
-import { populateClobbers } from "./RegisterAllocator.helper";
-
-import { Model } from "@/model";
 import {
-  CALLING_CONVENTION_REGISTER_ORDER,
-  CALLER_SAVE_REGISTERS,
-  IMM_VAL_PREFIX,
-  TEMP_VARNAME,
-  SETX,
-  LSB_MAPPING,
   CALLER_SAVE_PREFIX,
+  CALLER_SAVE_REGISTERS,
+  CALLING_CONVENTION_REGISTER_ORDER,
+  IMM_VAL_PREFIX,
+  LSB_MAPPING,
+  SETX,
+  TEMP_VARNAME,
 } from "@/helper";
 import {
+  delimbify,
   getByteRegFromQwReg,
   getQwRegFromByteReg,
   isByteRegister,
@@ -33,31 +42,22 @@ import {
   isRegister,
   isU1,
   isU64,
+  isXD,
+  limbify,
+  limbifyImm,
   matchArg,
   matchArgPrefix,
   matchMem,
   matchXD,
-  isXD,
   setToString,
   toImm,
   toMem,
   zx,
-  limbify,
-  limbifyImm,
-  delimbify,
 } from "@/helper";
-import {
-  Allocations,
-  FlagState,
-  AllocationReq,
-  AllocationRes,
-  AllocationFlags,
-  Allocation,
-  RegisterAllocation,
-  ValueAllocation,
-  PointerAllocation,
-  U1FlagAllocation,
-} from "@types";
+import { Model } from "@/model";
+import { Paul } from "@/paul";
+
+import { populateClobbers } from "./RegisterAllocator.helper";
 
 // produce<T extends ProduceConditions, U extends { [key in keyof T]: any }>(conditions: T, input: any): Promise<U> | U
 export class RegisterAllocator {

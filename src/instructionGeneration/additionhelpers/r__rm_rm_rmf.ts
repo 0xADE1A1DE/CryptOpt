@@ -1,19 +1,19 @@
+import { ADX, isByteRegister, isMem, isU1, SETX, zx } from "@/helper";
+import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
 import {
-  U1FlagAllocation,
-  U1RegisterAllocation,
-  U1MemoryAllocation,
-  U64RegisterAllocation,
-  FlagState,
-  U64Allocation,
-  RegisterAllocation,
-  MemoryAllocation,
   asm,
   Flags,
+  FlagState,
+  MemoryAllocation,
   Register,
+  RegisterAllocation,
+  U1FlagAllocation,
+  U1MemoryAllocation,
+  U1RegisterAllocation,
+  U64Allocation,
+  U64RegisterAllocation,
 } from "@/types";
-import { Model } from "@/model";
-import { ADX, SETX, isByteRegister, isMem, isU1, zx } from "@/helper";
 
 export function r_rm_f_f(out: string, arg0: U64Allocation): asm[] {
   // spill OF to a reg; then adc that to r/m.

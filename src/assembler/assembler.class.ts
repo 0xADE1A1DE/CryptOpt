@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import { omit } from "lodash";
 
-import type { asm, CryptOpt } from "@/types";
+import { sanityCheckAllocations, writeasm } from "@/helper";
+import { getInstruction } from "@/instructionGeneration";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
-import { getInstruction } from "@/instructionGeneration";
-import { writeasm, sanityCheckAllocations } from "@/helper";
+import type { asm,CryptOpt } from "@/types";
 
 const debug = false;
 const CUR_ASM = "/tmp/curasm.asm";
