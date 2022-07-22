@@ -21,6 +21,7 @@
     "test": "npx jest",
     "test-debug": "node --inspect-brk=12345 ./node_modules/.bin/jest",
     "test-rib": "npx jest --runInBand",
+    "preinstall": "cd MeasureSuite && $npm_execpath install",
     "install": "$npm_execpath run compile",
     "compile": "tsc -p ."
   },
@@ -57,9 +58,7 @@
   "jest": {
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/$1",
-      "^@bcb/(.*)$": "<rootDir>/bitcoin-core-bridge/$1",
-      "^@fb/(.*)$": "<rootDir>/fiat-bridge/$1",
-      "^@bb/(.*)$": "<rootDir>/bssl-bridge/$1"
+      "^@types/(.*)$": "<rootDir>/types/$1"
     },
     "preset": "ts-jest",
     "testEnvironment": "node",
