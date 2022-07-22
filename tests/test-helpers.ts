@@ -1,40 +1,36 @@
 import { mkdtempSync } from "fs";
 import { tmpdir as osTmpdir } from "os";
-import { join as pathJoin } from "path";
-import { basename } from "path";
-import type { CryptOpt, Append } from "@/types";
+import { basename, join as pathJoin } from "path";
+
+import type { CryptOpt } from "@/types";
 
 export function getTestArgs(filename: string): {
   evals: 1;
   seed: 1;
   cyclegoal: 100;
   logComment: "";
-  skipMix: false;
   skipProof: true;
   curve: string;
   method: string;
   silent: false;
   bridge?: string;
-  append: Append;
 } {
-  const match = basename(filename).match(/(?<curve>.*)-(?<method>.*).ts/);
+  const groups = basename(filename).match(/(?<curve>.*)-(?<method>.*).ts/)?.groups;
 
-  if (!match) {
+  if (!groups) {
     throw new Error("filename not matching.");
   }
-  const { curve, method } = match.groups!;
+  const { curve, method } = groups;
 
   return {
     evals: 1,
     seed: 1,
     cyclegoal: 100,
     logComment: "",
-    skipMix: false,
     skipProof: true,
     curve,
     method,
     silent: false,
-    append: "",
   };
 }
 export function getTestResultsPath(): string {

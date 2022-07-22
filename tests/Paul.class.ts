@@ -1,5 +1,4 @@
-import Paul from "@/Paul.class";
-import { BIAS } from "@/Paul.class";
+import { BIAS, Paul } from "@/paul";
 import { CryptOpt } from "@/types";
 
 describe("Paul", () => {

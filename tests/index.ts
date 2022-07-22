@@ -1,6 +1,6 @@
-import { Optimiser } from "../optimiser.class";
+import { Optimiser } from "@/optimizer";
+
 import { getTestResultsPath } from "./test-helpers";
-import type { Append } from "@/types";
 
 const args: {
   evals: number;
@@ -10,11 +10,9 @@ const args: {
   cyclegoal: number;
   readState?: string; // filename
   logComment: string;
-  skipMix: boolean;
   skipProof: boolean;
   silent: boolean;
   bridge?: string;
-  append: Append;
 } = {
   evals: 1,
   seed: 1,
@@ -22,10 +20,8 @@ const args: {
   method: "",
   cyclegoal: 100,
   logComment: "",
-  skipMix: false,
   silent: false,
   skipProof: true,
-  append: "",
 };
 
 describe("full tests fiat", () => {

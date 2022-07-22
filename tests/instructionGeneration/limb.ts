@@ -1,7 +1,6 @@
-import type { CryptOpt } from "@/types";
-import { AllocationReq, Allocations, AllocationFlags } from "@/Allocation.types";
-import { Flags, Register } from "@/types";
 import { limb } from "@/instructionGeneration/limb";
+import type { CryptOpt } from "@/types";
+import { AllocationFlags, AllocationReq, Allocations, Flags, Register } from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();

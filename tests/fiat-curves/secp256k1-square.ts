@@ -1,4 +1,4 @@
-import { Optimiser } from "@/optimiser.class";
+import { Optimiser } from "@/optimizer";
 import { nothing, getTestArgs, getTestResultsPath } from "../test-helpers";
 import { rm } from "fs";
 

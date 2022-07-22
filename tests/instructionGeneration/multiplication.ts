@@ -1,6 +1,5 @@
-import { Register, asm } from "../../types";
-import { mulx } from "../../instructionGeneration/multiplication";
-import { Allocations, AllocationReq, AllocationRes, AllocationFlags } from "../../Allocation.types";
+import { mulx } from "@/instructionGeneration/multiplication";
+import { AllocationFlags, AllocationReq, AllocationRes, Allocations, asm, Register } from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();

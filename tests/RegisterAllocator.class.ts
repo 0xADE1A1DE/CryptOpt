@@ -1,12 +1,11 @@
-import { RegisterAllocator } from "@/RegisterAllocator.class";
-import type { ByteRegister, CryptOpt } from "@/types";
-import { Flags, Register } from "@/types";
-import { Model } from "@/model.class";
-import Paul from "@/Paul.class";
-import { isRegister, isByteRegister, isMem, limbify, limbifyImm } from "@/helpers";
+import { isByteRegister, isMem, isRegister, limbify, limbifyImm } from "@/helper";
+import { Model } from "@/model";
+import { Paul } from "@/paul";
+import { RegisterAllocator } from "@/registerAllocator";
+import type { ByteRegister, CryptOpt, ValueAllocation } from "@/types";
+import { AllocationFlags, Flags, FlagState, Register } from "@/types";
+
 import { nothing } from "./test-helpers";
-import { AllocationFlags, FlagState } from "@/Allocation.types";
-import type { ValueAllocation } from "@/Allocation.types";
 
 const mockLog = jest.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = jest.spyOn(console, "error").mockImplementation(nothing);
@@ -17,7 +16,6 @@ afterAll(() => {
 });
 describe("RegisterAllocator:", () => {
   Model.init({
-    skipMix: true,
     json: {
       operation: "fiat_curve25519_carry_mul",
       arguments: [
@@ -140,7 +138,7 @@ describe("RegisterAllocator:", () => {
     it("should backup from, if it has dependencies", () => {
       // assuming arg[0] is u64
       ra.allocate({ oReg: ["x11"], in: [] });
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs["x11"]).toBeTruthy();
       expect(allocs["x21"]).toBeFalsy();
       expect(() => ra.zext("x11", "x21")).not.toThrow();
@@ -581,7 +579,7 @@ describe("RegisterAllocator:", () => {
         arg1: { datatype: "u64", store: "rsi" },
       };
 
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("arg1");
 
       expect(allocs).not.toHaveProperty("x3");
@@ -594,7 +592,7 @@ describe("RegisterAllocator:", () => {
         x5: { datatype: "u64", store: "rax" },
       };
 
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("arg1");
       expect(allocs).not.toHaveProperty("x3");
       expect(allocs).toHaveProperty("x5");
@@ -605,7 +603,7 @@ describe("RegisterAllocator:", () => {
         arg1: { datatype: "u64", store: "rsi" },
       };
 
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("arg1");
       expect(() => ra.lazyMov("arg1[2]", "x5")).toThrowError();
     });
@@ -616,7 +614,7 @@ describe("RegisterAllocator:", () => {
         x1: { datatype: "u64", store: "[ rsp + 0x08 ]" },
       };
 
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("x1");
       const r = ra.loadVarToReg("x1");
       expect(ra.pres.pop()).toMatch(RegExp(`mov ${r}, \\[ rsp \\+ 0x08 \\]; .*`));
@@ -626,7 +624,7 @@ describe("RegisterAllocator:", () => {
         x1: { datatype: "u1", store: "[ rsp + 0x08 ]" },
       };
 
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("x1");
       const r = ra.loadVarToReg("x1");
       expect(ra.pres.pop()).toMatch(RegExp(`mov ${r}, byte \\[ rsp \\+ 0x08 \\]; .*`));
@@ -636,7 +634,7 @@ describe("RegisterAllocator:", () => {
         x1: { datatype: "u1", store: "[ rsp + 0x08 ]" },
       };
 
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("x1");
       const r = ra.loadVarToReg("x1", "movzx");
       expect(ra.pres.pop()).toMatch(RegExp(`movzx ${r}, byte \\[ rsp \\+ 0x08 \\]; .*`));
@@ -646,7 +644,7 @@ describe("RegisterAllocator:", () => {
         x1: { datatype: "u64", store: "[ rsp + 0x08 ]" },
       };
 
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("x1");
       const r = ra.loadVarToReg("x1");
       expect(ra.pres.pop()).toMatch(RegExp(`mov ${r}, \\[ rsp \\+ 0x08 \\];.*`));
@@ -656,7 +654,7 @@ describe("RegisterAllocator:", () => {
         x1: { datatype: "u64", store: "rax" },
       };
 
-      let allocs = ra.getCurrentAllocations();
+      const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("x1");
       const r = ra.loadVarToReg("x1");
       expect(ra.pres).toHaveLength(0);

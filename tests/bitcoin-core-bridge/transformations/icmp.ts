@@ -1,5 +1,5 @@
-import { SSA } from "@bcb/raw.type";
-import { transformIcmp } from "@bcb/transformations";
+import { SSA } from "@/bridge/bitcoin-core-bridge/raw.type";
+import { transformIcmp } from "@/bridge/bitcoin-core-bridge/transformations";
 
 describe("bitcoinCoreBridge:transformations", () => {
   it("transformICMP:ult VAR/vAr", () => {

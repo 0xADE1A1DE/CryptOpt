@@ -10,11 +10,13 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
   "include": [
-    "./src",
+    "./",
     "./src/bridge/fiat-bridge/unsaturated_solinas",
     "./src/bridge/fiat-bridge/word_by_word_montgomery",
     "./src/bridge/fiat-bridge/fiat.c",
@@ -25,7 +27,10 @@
     "./src/bridge/bitcoin-core-bridge/*.c",
     "./src/bridge/bitcoin-core-bridge/*.json"
   ],
-  "exclude": ["./node_modules", "dist"],
+  "exclude": [
+    "./node_modules",
+    "dist"
+  ],
   "ts-node": {
     "transpileOnly": true
   },
@@ -33,6 +38,8 @@
     "./dist/CryptOpt.js": "0700",
     "./dist/BetAndRun.js": "0700"
   },
-  "hooks": ["copy-files", "file-permissions"]
+  "hooks": [
+    "copy-files",
+    "file-permissions"
+  ]
 }
-

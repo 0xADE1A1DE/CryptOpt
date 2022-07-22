@@ -1,5 +1,5 @@
-import { zextR } from "@bcb/transformations/reducers/zextR";
-import type { FiatDynArgWCryptoptOperations } from "@bcb/transformations/reducers/zextR";
+import type { FiatDynArgWCryptoptOperations } from "@/bridge/bitcoin-core-bridge/transformations/reducers/zextR";
+import { zextR } from "@/bridge/bitcoin-core-bridge/transformations/reducers/zextR";
 
 describe("zextR", () => {
   const body: FiatDynArgWCryptoptOperations[] = [

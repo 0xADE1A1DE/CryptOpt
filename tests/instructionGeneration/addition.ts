@@ -1,7 +1,13 @@
-import type { CryptOpt } from "@/types";
 import { add } from "@/instructionGeneration/addition";
-import { FlagState, Allocations, MemoryAllocation, RegisterAllocation } from "@/Allocation.types";
-import { C_DI_HANDLE_FLAGS_KK, Flags } from "@/types";
+import type { CryptOpt } from "@/types";
+import {
+  Allocations,
+  C_DI_HANDLE_FLAGS_KK,
+  Flags,
+  FlagState,
+  MemoryAllocation,
+  RegisterAllocation,
+} from "@/types";
 
 // this not consistent in within itself (multiple vars in one single reg).
 // Certain vars but is only used certain test

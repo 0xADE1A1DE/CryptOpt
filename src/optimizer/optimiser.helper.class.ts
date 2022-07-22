@@ -1,8 +1,9 @@
 import Measuresuite from "measuresuite";
 
 import { BRIDGES } from "@/bridge";
-import BitcoinCoreBridge, {
+import {
   AVAILABLE_METHODS as AVAILABLE_BITCOIN_METHODS,
+  BitcoinCoreBridge,
 } from "@/bridge/bitcoin-core-bridge";
 import {
   AVAILABLE_METHODS as AVAILABLE_FIAT_METHODS,

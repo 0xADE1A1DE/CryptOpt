@@ -1,9 +1,18 @@
-import { DECISION_IDENTIFIER, CryptOpt, Register, asm, Flags } from "@/types";
-import Paul from "@/Paul.class";
-
-import { IMM_MUL_DI_MAP } from "@/constants";
+import { IMM_MUL_DI_MAP } from "@/helper";
 import { mul } from "@/instructionGeneration/multiplication";
-import { Allocations, AllocationReq, AllocationRes, AllocationFlags, FlagState } from "@/Allocation.types";
+import { Paul } from "@/paul";
+import {
+  AllocationFlags,
+  AllocationReq,
+  AllocationRes,
+  Allocations,
+  asm,
+  CryptOpt,
+  DECISION_IDENTIFIER,
+  Flags,
+  FlagState,
+  Register,
+} from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();

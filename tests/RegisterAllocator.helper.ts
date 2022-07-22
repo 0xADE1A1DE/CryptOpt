@@ -1,6 +1,5 @@
-import { AllocationReq } from "@/Allocation.types";
-
-import { populateClobbers } from "@/RegisterAllocator.helper";
+import { populateClobbers } from "@/registerAllocator";
+import { AllocationReq } from "@/types";
 
 describe("RegisterAllocator.helper", () => {
   describe("RegisterAllocator.helper:populateClobbers", () => {

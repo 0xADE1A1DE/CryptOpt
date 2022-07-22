@@ -1,5 +1,5 @@
-import { SSA } from "@bcb/raw.type";
-import { transformShl } from "@bcb/transformations";
+import { SSA } from "@/bridge/bitcoin-core-bridge/raw.type";
+import { transformShl } from "@/bridge/bitcoin-core-bridge/transformations";
 
 describe("bitcoinCoreBridge:transformations", () => {
   describe("transformShl", () => {

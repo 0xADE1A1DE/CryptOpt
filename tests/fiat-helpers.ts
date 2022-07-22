@@ -1,6 +1,6 @@
+import fiat from "@/bridge/fiat-bridge/all_fiat_array";
+import { preprocessFunction } from "@/helper";
 import { Fiat } from "@/types";
-import { preprocessFunction } from "@/fiat-helpers";
-import fiat from "@fb/all_fiat_array";
 
 const boilerplate = {
   operation: "secp256k1_fe_mul_inner",

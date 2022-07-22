@@ -1,9 +1,9 @@
-import type { CryptOpt } from "@/types";
-import { AllocationReq, FlagState, Allocations, AllocationFlags } from "@/Allocation.types";
-import { Register, Flags } from "@/types";
 import { defaults } from "lodash";
+
+import { llvm2CC } from "@/helper";
 import { cmp } from "@/instructionGeneration/cmp";
-import { llvm2CC } from "@/constants";
+import type { CryptOpt } from "@/types";
+import { AllocationFlags, AllocationReq, Allocations, Flags, FlagState, Register } from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();

@@ -1,9 +1,17 @@
-import type { CryptOpt } from "@/types";
-import { AllocationReq, Allocations, AllocationFlags } from "@/Allocation.types";
-import { C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, ByteRegister, Register } from "@/types";
-import { LSB_MAPPING } from "@/constants";
+import { LSB_MAPPING } from "@/helper";
 import { bitwiseOp } from "@/instructionGeneration/bitwiseOps";
-import Paul from "@/Paul.class";
+import { Paul } from "@/paul";
+import type { CryptOpt } from "@/types";
+import {
+  AllocationFlags,
+  AllocationReq,
+  Allocations,
+  ByteRegister,
+  C_DI_INSTRUCTION_AND,
+  DECISION_IDENTIFIER,
+  Register,
+} from "@/types";
+
 let paulChooseAndSpy: jest.SpyInstance;
 
 beforeAll(() => {

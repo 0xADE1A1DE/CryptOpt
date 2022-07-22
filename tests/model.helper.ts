@@ -1,5 +1,7 @@
-import { nodeLookupMap, isADependentOnB, createDependencyRelation } from "@/model.helper";
+import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "@/model";
+
 import { createModelHelpers } from "./test-helpers";
+
 describe("model.helpers", () => {
   const { nodes } = createModelHelpers();
   describe("nodeLookupMap", () => {

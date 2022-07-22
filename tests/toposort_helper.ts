@@ -1,5 +1,5 @@
-import type { Fiat } from "@/fiat-bridge/fiat.types";
-import { preprocessFunction } from "@/fiat-helpers";
+import { preprocessFunction } from "@/helper";
+import type { Fiat } from "@/types";
 
 const body = [
   {

@@ -1,4 +1,8 @@
-import { isStructPointer, getArguments, getScalarsAndImmMappedAsConstArg } from "@bcb/helpers";
+import {
+  getArguments,
+  getScalarsAndImmMappedAsConstArg,
+  isStructPointer,
+} from "@/bridge/bitcoin-core-bridge/helpers";
 
 describe("bitcoinCoreBridge:helpers", () => {
   describe("getArguments", () => {

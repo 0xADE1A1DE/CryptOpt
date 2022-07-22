@@ -1,7 +1,7 @@
+import { shiftLeft, shiftRight, shiftRightDouble } from "@/instructionGeneration/shift";
 import type { CryptOpt } from "@/types";
-import { AllocationReq, Allocations, AllocationFlags } from "@/Allocation.types";
-import { Register } from "@/types";
-import { shiftRightDouble, shiftLeft, shiftRight } from "../../instructionGeneration/shift";
+import { AllocationFlags, AllocationReq, Allocations, Register } from "@/types";
+
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();
 const declare128 = jest.fn();

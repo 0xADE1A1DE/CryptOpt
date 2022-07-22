@@ -1,8 +1,7 @@
-import { toposort } from "@/toposort";
-import BCBBridge from "@bcb/index";
-import { matchXD } from "@/helpers";
+import { BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
+import { matchXD, toposort } from "@/helper";
+
 import { createModelHelpers } from "./test-helpers";
-import { createDependencyRelation, nodeLookupMap } from "@/model.helper";
 import { fiat_curve25519_carry_square } from "./toposort_helper";
 
 describe("toposort", () => {
@@ -51,7 +50,7 @@ describe("toposort", () => {
     });
   });
   describe("should make correct order for secp256k1-reduce", () => {
-    const f = new BCBBridge().getCryptOptFunction("reduce");
+    const f = new BitcoinCoreBridge().getCryptOptFunction("reduce");
     const nodes = f.body;
 
     const order = toposort(nodes);

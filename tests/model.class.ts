@@ -1,12 +1,12 @@
-import { Model } from "@/model.class";
+import { Model } from "@/model";
+import { Paul } from "@/paul";
+
 import { createModelHelpers } from "./test-helpers";
-import Paul from "@/Paul.class";
 
 describe("Model.class", () => {
   const body = createModelHelpers().nodes;
   Model.init({
     curve: "mock",
-    skipMix: true,
     json: {
       operation: "mul",
       arguments: [
