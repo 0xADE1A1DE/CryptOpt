@@ -1,14 +1,13 @@
 import { cloneDeep } from "lodash";
 import fs from "fs";
 
-import { CryptOpt, DECISION_IDENTIFIER } from "./types";
-import { CURVE_T } from "./fiat-bridge";
-import { TEMP_VARNAME, cy, re, bl, rd } from "./constants";
-import { Paul } from "@/paul";";
-import { BIAS } from "@/Paul.class";
-import { toposort } from "./toposort";
-import globals from "@/globals";
-import { limbify, matchArgPrefix, matchArg, isCallerSave, assertStringArguments } from "./helpers";
+import { CryptOpt, DECISION_IDENTIFIER } from "@/types";
+import { CURVE_T } from "@types";
+import { TEMP_VARNAME, cy, re, bl, rd } from "@/helper";
+import { BIAS, Paul } from "@/paul";
+import { toposort } from "@/helper";
+import globals from "@/helper/globals";
+import { limbify, matchArgPrefix, matchArg, isCallerSave, assertStringArguments } from "@/helper";
 import { isADependentOnB, nodeLookupMap, createDependencyRelation } from "./model.helper";
 import { RegisterAllocator } from "@/registerAllocator";
 
@@ -79,7 +78,7 @@ export class Model {
     m.backupbody();
   }
 
-  public static init(options: { curve: CURVE_T; json: CryptOpt.Function; skipMix: boolean }): void {
+  public static init(options: { curve: CURVE_T; json: CryptOpt.Function }): void {
     Model._methodParameters = options.json.returns;
     Model._methodParameters = Model._methodParameters.concat(options.json.arguments);
 

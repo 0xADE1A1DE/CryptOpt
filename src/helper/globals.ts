@@ -1,4 +1,4 @@
-import type { CryptoptGlobals } from "./types";
+import type { CryptoptGlobals } from "@types";
 const globals: CryptoptGlobals = {
   currentRatio: Infinity,
   convergence: [] as string[], // numbers, but .toFixed(4)

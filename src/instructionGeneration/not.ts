@@ -1,7 +1,5 @@
-import { CryptOpt } from "../types";
+import { CryptOpt, AllocationFlags, asm } from "@/types";
 import { RegisterAllocator } from "@/registerAllocator";
-import { AllocationFlags } from "../Allocation.types";
-import { asm } from "../types";
 
 export function not(c: CryptOpt.StringInstruction): asm[] {
   const ra = RegisterAllocator.getInstance();

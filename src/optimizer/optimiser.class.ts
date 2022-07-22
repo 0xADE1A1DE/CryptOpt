@@ -1,26 +1,24 @@
-import fs from "fs";
 import os from "os";
 import path from "path";
 import { execSync } from "child_process";
 
-import FiatBridge from "./fiat-bridge";
-import { Paul } from "@/paul";";
-import globals from "@/globals";
-import { Assembler } from "./assembler.class";
-import { CHOICE, FUNCTIONS } from "./types";
-import type { Append } from "./types";
+import { FiatBridge } from "@/bridge/fiat-bridge";
+import { Paul } from "@/paul";
+import globals from "@/helper/globals";
+import { Assembler } from "@/assembler";
+import { CHOICE, FUNCTIONS, AnalyseResult } from "@types";
 import { ERRORS } from "@/errors";
 import { Model } from "@/model";
-import { PRINT_EVERY, LOG_EVERY } from "./constants";
-import { analyseMeasureResult, AnalyseResult } from "./analyse";
+import { PRINT_EVERY, LOG_EVERY } from "@/helper";
+import { analyseMeasureResult } from "@/helper";
 import { init } from "./optimiser.helper.class";
 import { shouldProof, genStatusLine } from "./optimiser.helper";
-import { writeasm, toggleFUNCTIONS } from "./helpers";
+import { writeasm, toggleFUNCTIONS } from "@/helper";
 
-import env from "./envHelper";
+import { env } from "@/helper";
 const { CC, CFLAGS } = env;
 
-import Measuresuite from "measuresuite";
+import Measuresuite from "@/MeasureSuite";
 let choice: CHOICE;
 
 export class Optimiser {
@@ -36,11 +34,9 @@ export class Optimiser {
       cyclegoal: number;
       readState?: string; // filename
       logComment: string;
-      skipMix: boolean;
       skipProof: boolean;
       silent: boolean;
       bridge?: string;
-      append: Append;
     },
   ) {
     this.measuresuite = init(args);
@@ -191,7 +187,7 @@ export class Optimiser {
       }
 
       console.log("assembling");
-      const { code, stacklength } = Assembler.assemble(this.resultspath, this.args.append);
+      const { code, stacklength } = Assembler.assemble(this.resultspath);
 
       console.log("now we have the current string in the object, filtering");
       const filteredInstructions = code.filter((line) => line && !line.startsWith(";") && line !== "\n");

@@ -3,19 +3,18 @@ import { groupBy } from "lodash";
 import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 
-import { AVAILABLE_METHODS, METHOD_T, METHOD_DETAILS } from "@bcb/constants";
-import { BCBPreprocessor } from "@bcb/preprocess";
+import { AVAILABLE_METHODS, METHOD_T, METHOD_DETAILS } from "./constants";
+import { BCBPreprocessor } from "./preprocess";
 
 import type { raw_T, structDef_T } from "./raw.type";
 
 import type { Bridge, CryptOpt } from "@/types";
-import { preprocessFunction } from "@/fiat-helpers";
+import { env, preprocessFunction } from "@/helper";
 import { ERRORS } from "@/errors";
-import envHelper from "@/envHelper";
 
 const createExecOpts = () => {
   const c = {
-    env: envHelper,
+    env,
     cwd: __dirname,
   };
   c.env.CFLAGS = `-DUSE_ASM_X86_64 ${c.env.CFLAGS}`;

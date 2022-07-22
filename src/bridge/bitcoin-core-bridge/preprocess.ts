@@ -1,8 +1,7 @@
 import { groupBy } from "lodash";
 
 import type { StructName, SSA, raw_T, structDef_T } from "./raw.type";
-import type { CryptOpt } from "@/types";
-import type { Fiat } from "@fb/fiat.types";
+import type { Fiat, CryptOpt } from "@/types";
 
 import { isStructPointer, getArguments } from "./helpers";
 import {
@@ -19,7 +18,7 @@ import {
   transformZext,
 } from "./transformations";
 import { zextR } from "./transformations/reducers";
-import { matchArgPrefix } from "@/helpers";
+import { matchArgPrefix } from "@/helper";
 // type fixedArgs = Omit<raw_T, "arguments"> & { arguments: Fiat.FuncArgument };
 
 type A = Fiat.FiatFunction["arguments"][number];

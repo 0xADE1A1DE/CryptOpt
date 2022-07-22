@@ -1,16 +1,12 @@
 #!/usr/bin/env -S node -r "ts-node/register/transpile-only" -r "tsconfig-paths/register"
 import os from "os";
 
-import { Optimiser } from "./optimiser.class";
-import { re, cy } from "./constants";
-import { Paul } from "@/paul";";
+import { shouldProof, Optimiser } from "@/optimizer";
+import { parsedArgs, re, cy } from "@/helper";
+import { Paul } from "@/paul";
 import { Model } from "@/model";
-import { parsedArgs } from "./argParse";
-import { generateResultsPath, generateStateFileName } from "./path.helper";
+import { env, SI, generateResultsPath, generateStateFileName } from "@/helper";
 
-import env from "./envHelper";
-import { SI } from "./helpers";
-import { shouldProof } from "./optimiser.helper";
 const { CC, CFLAGS } = env;
 
 Paul.seed = parsedArgs.seed as number;
@@ -49,7 +45,6 @@ process.stdout.write(
   [
     `Start`,
     `on brg-curve-method >>${cy}${parsedArgs.bridge}-${parsedArgs.curve}-${parsedArgs.method}${re}<<`,
-    `>>${cy}${parsedArgs.skipMix ? "without" : "with"} mixing${re} nodes<<`,
     `>>${cy}${shouldProof(parsedArgs) ? "with" : "without"} proofing${re} correct<<`,
     `appending >>${cy}${parsedArgs.append}${re}<<`,
     `on cpu >>${cy}${os.cpus()[0].model}${re}<<`,

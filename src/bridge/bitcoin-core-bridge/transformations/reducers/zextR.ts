@@ -1,4 +1,4 @@
-import type { Fiat } from "@fb/fiat.types";
+import type { Fiat } from "@types";
 import { groupBy } from "lodash";
 
 export type FiatDynArgWCryptoptOperations = Omit<Fiat.DynArgument, "operation"> & {

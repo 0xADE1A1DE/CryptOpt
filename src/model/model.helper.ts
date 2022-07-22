@@ -1,5 +1,5 @@
-import { CryptOpt } from "./types";
-import { limbifyImm, isImm, isReadOnlyMemory, makeU64NameLimbs, limbify } from "./helpers";
+import { CryptOpt } from "@types";
+import { limbifyImm, isImm, isReadOnlyMemory, makeU64NameLimbs, limbify } from "@/helper";
 export type Node = CryptOpt.StringInstruction;
 export type Nodes = Node[];
 

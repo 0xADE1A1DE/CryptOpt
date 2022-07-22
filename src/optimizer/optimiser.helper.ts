@@ -1,7 +1,7 @@
-import { SI } from "./helpers";
-import { rd, gn, yl, bl, pu, cy, re } from "./constants";
-import type { AnalyseResult } from "./analyse";
-import { CHOICE } from "./types";
+import { SI } from "@/helper";
+import { rd, gn, yl, bl, pu, cy, re } from "@/helper";
+import type { AnalyseResult } from "@/types";
+import { CHOICE } from "@types";
 import { Model } from "@/model";
 export function genStatusLine(a: {
   writeout: boolean;

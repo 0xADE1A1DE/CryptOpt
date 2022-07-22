@@ -1,5 +1,5 @@
 import type { CryptOpt } from "@/types";
-import { llvm2CC } from "@/constants";
+import { llvm2CC } from "@/helper";
 import { SSA } from "../raw.type";
 
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";

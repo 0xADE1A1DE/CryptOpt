@@ -2,7 +2,7 @@ import { cloneDeep } from "lodash";
 
 import type { asm, CryptOpt } from "@/types";
 
-import { Paul } from "@/paul";";
+import { Paul } from "@/paul";
 import { AllocationFlags, FlagState } from "@/types";
 import { Flags, DECISION_IDENTIFIER, C_DI_INSTRUCTION_AND } from "@/types";
 import { LSB_MAPPING, IMM_64_BIT_IMM } from "@/helper";

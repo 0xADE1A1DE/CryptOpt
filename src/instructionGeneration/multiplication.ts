@@ -1,5 +1,5 @@
-import { Paul } from "@/paul";";
-import { CryptOpt } from "../types";
+import { Paul } from "@/paul";
+import type { CryptOpt } from "@types";
 import { limbify, matchIMM } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import { AllocationFlags, FlagState } from "@/types";

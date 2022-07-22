@@ -1,21 +1,7 @@
-import type { CryptOpt } from "@/types";
-import fs from "fs";
+import type { CryptOpt } from "@types";
 
 import { matchXD, assertStringNames, assertStringArguments } from "@/helper";
 import { Paul } from "@/paul";
-
-export function toposort3(nodes: Readonly<Readonly<CryptOpt.StringInstruction>[]>): number[] {
-  const readSorted = fs
-    .readFileSync("/tmp/nodes.sorted")
-    .toString()
-    .split("\n")
-    .filter((n) => n)
-    .map((line) => {
-      const name = line.split("=")[0].trim();
-      return nodes.findIndex((n) => n.name[0] === name);
-    });
-  return readSorted;
-}
 
 export function toposort(_nodes: Readonly<Readonly<CryptOpt.StringInstruction>[]>): number[] {
   _nodes.forEach(assertStringNames);

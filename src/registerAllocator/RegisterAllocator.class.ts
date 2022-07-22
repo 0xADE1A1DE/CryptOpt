@@ -7,9 +7,9 @@ function assertValueAllocation(a: Allocation): asserts a is ValueAllocation | Po
 }
 import { uniq } from "lodash";
 
-import { CryptOpt, Flags, ByteRegister, Register, asm, imm, mem, C_DI_IMM } from "./types";
-import { Paul } from "@/paul";";
-import { populateClobbers } from "@/RegisterAllocator.helper";
+import { CryptOpt, Flags, ByteRegister, Register, asm, imm, mem, C_DI_IMM } from "@types";
+import { Paul } from "@/paul";
+import { populateClobbers } from "./RegisterAllocator.helper";
 
 import { Model } from "@/model";
 import {
@@ -20,7 +20,7 @@ import {
   SETX,
   LSB_MAPPING,
   CALLER_SAVE_PREFIX,
-} from "./constants";
+} from "@/helper";
 import {
   getByteRegFromQwReg,
   getQwRegFromByteReg,
@@ -45,7 +45,7 @@ import {
   limbify,
   limbifyImm,
   delimbify,
-} from "./helpers";
+} from "@/helper";
 import {
   Allocations,
   FlagState,
@@ -53,12 +53,11 @@ import {
   AllocationRes,
   AllocationFlags,
   Allocation,
-  MemoryAllocation,
   RegisterAllocation,
   ValueAllocation,
   PointerAllocation,
   U1FlagAllocation,
-} from "./Allocation.types";
+} from "@types";
 
 // produce<T extends ProduceConditions, U extends { [key in keyof T]: any }>(conditions: T, input: any): Promise<U> | U
 export class RegisterAllocator {

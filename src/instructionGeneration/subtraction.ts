@@ -1,8 +1,6 @@
-import { CryptOpt } from "../types";
-import { isImm, toImm } from "../helpers";
+import { U1Allocation, U64Allocation, ValueAllocation, asm, imm, CryptOpt } from "@/types";
+import { isImm, toImm } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import { U1Allocation, U64Allocation, ValueAllocation } from "../Allocation.types";
-import { asm, imm } from "../types";
 import { fr__frm_rmi, fr__rfm_rm_rmi, f__rfm_rm_rmi } from "./subtractionhelpers/subtraction_helpers";
 
 export function sub(c: CryptOpt.StringInstruction): asm[] {

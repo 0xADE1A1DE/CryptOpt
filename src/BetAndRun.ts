@@ -6,14 +6,11 @@
 import fs from "fs";
 import os from "os";
 import { execFileSync, exec } from "child_process";
-import type { CryptoptGlobals } from "./types";
+import type { CryptoptGlobals } from "@types";
 
-import { SI } from "./lamdas";
-import { sha1Hash } from "./Paul.helper";
-import { parsedArgs } from "./argParse";
-import { PRINT_EVERY, cy, re, gn, rd } from "./constants";
-import { generateResultsPath, generateStateFileName } from "./path.helper";
-import env from "./envHelper";
+import { sha1Hash } from "@/paul";
+import { PRINT_EVERY, cy, re, gn, rd } from "@/helper";
+import { SI, env, parsedArgs, generateResultsPath, generateStateFileName } from "@/helper";
 
 const { populatio, populatioratio, seed, curve, method, bridge, evals } = parsedArgs;
 
@@ -28,9 +25,7 @@ const allocatedToPopulation = offspringEvals * populatio; // total for populatio
 const constantArgs = ["curve", "method", "cyclegoal", "bridge", "append"]
   .map((k) => `--${k} ${parsedArgs[k] ?? ""}`)
   .concat(
-    ...["silent", "skipMix", "skipProof"].map((booleanFlag) =>
-      parsedArgs[booleanFlag] ? `--${booleanFlag}` : "",
-    ),
+    ...["silent", "skipProof"].map((booleanFlag) => (parsedArgs[booleanFlag] ? `--${booleanFlag}` : "")),
   );
 
 if (offspringEvals < 1) {

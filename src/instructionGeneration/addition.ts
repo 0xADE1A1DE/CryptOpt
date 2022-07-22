@@ -1,4 +1,4 @@
-import { Paul } from "@/paul";";
+import { Paul } from "@/paul";
 import type { asm, CryptOpt } from "@/types";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";

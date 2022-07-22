@@ -1,6 +1,6 @@
 import type { CryptOpt } from "@/types";
-import type { SSA } from "@/bitcoin-core-bridge/raw.type";
-import { getArguments } from "@/bitcoin-core-bridge/helpers";
+import type { SSA } from "../raw.type";
+import { getArguments } from "../helpers";
 
 export function transformTrunc(input: Readonly<SSA>): CryptOpt.DynArgument {
   if (input.operation !== "trunc") {

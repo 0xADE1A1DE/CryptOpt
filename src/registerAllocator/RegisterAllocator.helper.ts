@@ -1,6 +1,5 @@
-import { CryptOpt } from "@/types";
-import { AllocationReq } from "./Allocation.types";
-import { delimbify, limbify, limbifyImm } from "./helpers";
+import { AllocationReq, CryptOpt } from "@/types";
+import { delimbify, limbify, limbifyImm } from "@/helper";
 
 export function populateClobbers(clobs: Set<string>, req: AllocationReq): void {
   // As AllocationReq is not typed yet, lets type assert here.

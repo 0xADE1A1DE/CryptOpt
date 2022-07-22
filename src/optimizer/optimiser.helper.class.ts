@@ -1,17 +1,18 @@
 import Measuresuite from "measuresuite";
-import FiatBridge, {
+import {
+  FiatBridge,
   CURVE_T,
   METHOD_T,
   CURVE_DETAILS,
   AVAILABLE_METHODS as AVAILABLE_FIAT_METHODS,
-} from "./fiat-bridge";
-import BsslBridge, { AVAILABLE_METHODS as AVAILABLE_BSSL_METHODS } from "./bssl-bridge";
-import KeccakBridge, { AVAILABLE_METHODS as AVAILABLE_KECCAK_METHODS } from "./keccak-bridge";
-import BitcoinCoreBridge, { AVAILABLE_METHODS as AVAILABLE_BITCOIN_METHODS } from "./bitcoin-core-bridge";
-import ManualBridge from "./manual-bridge";
-import { preprocessFunction } from "./fiat-helpers";
+} from "@/bridge/fiat-bridge";
+import BitcoinCoreBridge, {
+  AVAILABLE_METHODS as AVAILABLE_BITCOIN_METHODS,
+} from "@/bridge/bitcoin-core-bridge";
+import { ManualBridge } from "@/bridge/manual-bridge";
+import { preprocessFunction } from "@/helper";
 import { Model } from "@/model";
-import { BRIDGES } from "./bridge";
+import { BRIDGES } from "@/bridge";
 
 const genLibcheckfunctionsSuff = (args: { seed: number; curve: string; method?: string }) =>
   `s${args.seed}-p${process.pid}-c${args.curve}${args.method ? "-m" : ""}${args.method ?? ""}`;
@@ -19,7 +20,6 @@ type neededArgs = {
   seed: number;
   curve: CURVE_T;
   method: METHOD_T;
-  skipMix: boolean;
   bridge?: typeof BRIDGES[number];
   jsonFile?: string;
   cFile?: string;
@@ -32,20 +32,6 @@ type ret = {
   bounds: string[];
   symbolname: string;
 };
-function initBssl(args: neededArgs): ret {
-  Model.init({
-    curve: args.curve,
-    skipMix: args.skipMix,
-    json: BsslBridge.getFiatFunction(),
-  });
-  Measuresuite.libcheckfunctionssuffix = genLibcheckfunctionsSuff(args);
-  const symbolname = BsslBridge.machinecode(args.method, Measuresuite.libcheckfunctionsFilename);
-  const chunksize = 16; // only for reading the chunk breaks atm. see MS code
-  const argwidth = BsslBridge.argwidth(args.curve);
-  const argnumin = BsslBridge.argnumin(args.method);
-  const argnumout = BsslBridge.argnumout(args.method);
-  return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds: [] };
-}
 
 function initFiat(args: neededArgs): ret {
   const fiat = FiatBridge.getFiatFunction(args.curve, args.method);
@@ -53,7 +39,6 @@ function initFiat(args: neededArgs): ret {
   console.log(`fiat body.len: ${fiat.body.length} + after${json.body.length}`);
   Model.init({
     curve: args.curve,
-    skipMix: args.skipMix,
     json,
   });
   Measuresuite.libcheckfunctionssuffix = genLibcheckfunctionsSuff(args);
@@ -71,7 +56,6 @@ function initBitcoinCore(args: neededArgs): ret {
   const bitcoinCoreBridge = new BitcoinCoreBridge();
   Model.init({
     curve: args.curve,
-    skipMix: args.skipMix,
     json: bitcoinCoreBridge.getCryptOptFunction(args.method),
   });
   Measuresuite.libcheckfunctionssuffix = genLibcheckfunctionsSuff(args);
@@ -85,22 +69,6 @@ function initBitcoinCore(args: neededArgs): ret {
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
-function initKeccak(args: neededArgs): ret {
-  // keccak
-  Model.init({
-    curve: "",
-    skipMix: args.skipMix,
-    json: KeccakBridge.getFiatFunction(args.method),
-  });
-  Measuresuite.libcheckfunctionssuffix = genLibcheckfunctionsSuff(args);
-  const symbolname = KeccakBridge.machinecode(args.method, Measuresuite.libcheckfunctionsFilename);
-  const chunksize = 16; // only for reading the chunk breaks atm. see MS code
-  const argwidth = KeccakBridge.argwidth(args.method);
-  const argnumin = KeccakBridge.argnumin(args.method);
-  const argnumout = KeccakBridge.argnumout(args.method);
-  return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds: [] };
-}
-
 function initManual(args: neededArgs): ret {
   if (!args.jsonFile || !args.cFile) {
     throw new Error(
@@ -111,7 +79,6 @@ function initManual(args: neededArgs): ret {
   // manual
   Model.init({
     curve: "",
-    skipMix: args.skipMix,
     json: bridge.getCryptOptFunction(),
   });
   Measuresuite.libcheckfunctionssuffix = genLibcheckfunctionsSuff(args);
@@ -144,8 +111,6 @@ export function init(args: neededArgs): Measuresuite {
     [bridge: string]: { availableMethods: string[]; gen: (args: neededArgs) => ret };
   } = {
     fiat: { availableMethods: AVAILABLE_FIAT_METHODS, gen: initFiat },
-    bssl: { availableMethods: AVAILABLE_BSSL_METHODS, gen: initBssl },
-    keccak: { availableMethods: AVAILABLE_KECCAK_METHODS, gen: initKeccak },
     manual: { availableMethods: [], gen: initManual },
     "bitcoin-core": { availableMethods: AVAILABLE_BITCOIN_METHODS, gen: initBitcoinCore },
   };
