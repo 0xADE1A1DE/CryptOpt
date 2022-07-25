@@ -7,14 +7,27 @@ const output = {
   dir: "dist",
   format: "cjs",
 };
+const external = [
+  "child_process",
+  "crypto",
+  "fs-extra",
+  "fs",
+  "fs",
+  "lodash",
+  "measuresuite",
+  "os",
+  "path",
+  "simple-statistics",
+  "yargs",
+]
 export default [{
   input: "src/CryptOpt.ts",
-  output,
+  output, external,
   plugins: [typescript()],
 },
 {
   input: "src/BetAndRun.ts",
-  output,
+  output, external,
   plugins: [typescript(),
   copy({
     targets: [

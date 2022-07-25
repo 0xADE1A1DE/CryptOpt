@@ -1,5 +1,4 @@
 import { BINS } from "./enums";
-import { PRIMES } from "./primes";
 
 export type CURVE_T = typeof AVAILABLE_CURVES[number];
 export type METHOD_T = typeof AVAILABLE_METHODS[number];
@@ -16,7 +15,7 @@ export const AVAILABLE_CURVES = [
   "p521",
   "poly1305",
   "secp256k1",
-].concat(...Object.keys(PRIMES));
+];
 export const AVAILABLE_METHODS = ["square", "mul", "add", "sub"];
 
 export const METHOD_DETAILS: {
@@ -61,7 +60,7 @@ export const CURVE_DETAILS: {
     binary: BINS;
     bounds: string[];
   };
-} = Object.assign(PRIMES, {
+} = {
   curve25519: {
     argwidth: 5,
     bitwidth: 64,
@@ -165,4 +164,4 @@ export const CURVE_DETAILS: {
     binary: BINS.wbw_montgomery,
     bounds: ["0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff"],
   },
-});
+};

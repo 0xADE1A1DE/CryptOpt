@@ -38,10 +38,10 @@ clean() {
   rm -rf ./dist
 }
 
-if ! test -x "${NODE}" || ! which node; then
+if ! test -x "${NODE}" || ! which node >/dev/null; then
   download_node
 fi
 
-if ! test -e "${BUILT_CRYPTOPT}"; then
+if [[ "$*" =~ "-f" ]] || ! test -e "${BUILT_CRYPTOPT}"; then
   build_cryptopt
 fi

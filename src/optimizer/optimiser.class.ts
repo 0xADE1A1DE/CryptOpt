@@ -33,7 +33,7 @@ export class Optimiser {
       readState?: string; // filename
       logComment: string;
       skipProof: boolean;
-      silent: boolean;
+      verbose: boolean;
       bridge?: string;
     },
   ) {
@@ -116,13 +116,11 @@ export class Optimiser {
         `; ratio ${ratioString}`,
         `; seed ${Paul.initialSeed} `,
         `; CC / CFLAGS ${CC} / ${CFLAGS} `,
-        `; time needed: ${elapsed} ms / ${evaluation_number} evals=> ${
-          elapsed / Number(evaluation_number)
+        `; time needed: ${elapsed} ms / ${evaluation_number} evals=> ${elapsed / Number(evaluation_number)
         }ms/eval`,
         `; Time spent for assembling and measureing (initial batch_size=${batchSize}, initial num_batches=${numBatches}): ${accumulatedTimeSpentByMeasuring} ms`,
         `; number of used evaluations: ${evaluation_number}`,
-        `; Ratio (time for assembling + measure)/(total runtime for ${evaluation_number} evals): ${
-          accumulatedTimeSpentByMeasuring / elapsed
+        `; Ratio (time for assembling + measure)/(total runtime for ${evaluation_number} evals): ${accumulatedTimeSpentByMeasuring / elapsed
         }`,
         ...["permutation", "decision"].map(
           (key) =>
@@ -195,7 +193,7 @@ export class Optimiser {
 
       // and depening on the silent-opt use filtered or the verbose ones for the string
       this.asmStrings[currentNameOfTheFunctionThatHasTheMutation] = (
-        this.args.silent ? filteredInstructions : code
+        !this.args.verbose ? filteredInstructions : code
       ).join("\n");
       // check if this was the first round
 

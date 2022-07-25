@@ -1,8 +1,9 @@
 ## install
 
 
-To build Measuresuite and CryptOpt run `./build.sh`
+To build Measuresuite and CryptOpt run `./build.sh`, to force Cryptopt-Rebuild `./build.sh -f`
 
 ## Run
 
-`./run.sh`
+To see the available options run:
+`./single.sh --help`

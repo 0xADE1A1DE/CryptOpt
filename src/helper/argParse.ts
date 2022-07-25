@@ -1,3 +1,4 @@
+import { uniq } from "lodash";
 import yargs from "yargs";
 
 import { AVAILABLE_METHODS as BITCOIN_CORE_METHODS } from "@/bridge/bitcoin-core-bridge/constants";
@@ -8,9 +9,7 @@ import { errorOut, ERRORS } from "@/errors";
 export const parsedArgs = yargs
   .option("curve", {
     alias: "c",
-    describe: `Curve to optimise a method on. Must be secp256k1, if @param method is one of ${BITCOIN_CORE_METHODS.join(
-      ", ",
-    )}.`,
+    describe: `Curve to optimise a method on. Must be secp256k1, if @param bridge is 'bitcoin-core'.`,
     choices: AVAILABLE_CURVES,
     default: "curve25519",
     type: "string",
@@ -18,14 +17,14 @@ export const parsedArgs = yargs
   .option("method", {
     alias: "m",
     describe: "Method to optimise on.",
-    choices: FIAT_METHODS.concat(BITCOIN_CORE_METHODS),
+    choices: uniq(FIAT_METHODS.concat(BITCOIN_CORE_METHODS)),
     default: "square",
     type: "string",
   })
   .option("bridge", {
     alias: "b",
     describe: `The specified method will be searched in this order: ${BRIDGES}. If there is ambiguities, the choice of bridge can be specified. Then, the method is only searched in respective bridge. (Errors out, if not found.)\nIf --bridge gets assigned 'manual', one must specify --cFile and --jsonFile.`,
-    choices: [""].concat(BRIDGES),
+    choices: BRIDGES,
     default: "",
     type: "string",
   })
@@ -40,9 +39,9 @@ export const parsedArgs = yargs
     default: "",
     type: "string",
   })
-  .option("silent", {
-    alias: "s",
-    describe: "will omit console.log's. Will only print the progress to standard out.",
+  .option("verbose", {
+    alias: "v",
+    describe: "print debug info.",
     default: false,
     boolean: true,
   })

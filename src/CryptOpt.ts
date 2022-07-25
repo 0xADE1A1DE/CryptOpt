@@ -9,7 +9,7 @@ const { CC, CFLAGS } = env;
 
 Paul.seed = parsedArgs.seed as number;
 
-if (parsedArgs.silent) {
+if (!parsedArgs.verbose) {
   console.log = () => {
     // intentionally empty
   };
@@ -43,7 +43,6 @@ process.stdout.write(
     `Start`,
     `on brg-curve-method >>${cy}${parsedArgs.bridge}-${parsedArgs.curve}-${parsedArgs.method}${re}<<`,
     `>>${cy}${shouldProof(parsedArgs) ? "with" : "without"} proofing${re} correct<<`,
-    `appending >>${cy}${parsedArgs.append}${re}<<`,
     `on cpu >>${cy}${os.cpus()[0].model}${re}<<`,
     `writing results to>>${cy}${resultspath}${re}<<`,
     `with seed >>${cy}${parsedArgs.seed}${re}<<`,
