@@ -15,7 +15,7 @@
   },
   "author": "joel.kuepper@adelaide.edu.au",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/0xADE1AIDE/MeasureSuite#readme",
+  "homepage": "https://github.com/0xADE1AIDE/CryptOpt#readme",
   "scripts": {
     "pretest": "$npm_execpath run compile",
     "test": "npx jest",
