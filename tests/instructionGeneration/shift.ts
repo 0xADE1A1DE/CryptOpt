@@ -1,6 +1,6 @@
+import { AllocationFlags, Register } from "@/enums";
 import { shiftLeft, shiftRight, shiftRightDouble } from "@/instructionGeneration/shift";
-import type { CryptOpt } from "@/types";
-import { AllocationFlags, AllocationReq, Allocations, Register } from "@/types";
+import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();
@@ -14,10 +14,14 @@ jest.mock("@/RegisterAllocator.class.ts", () => {
           allocate,
           getCurrentAllocations,
           backupIfVarHasDependencies,
-          declareFlagState: () => {},
+          declareFlagState: () => {
+            /**intentionally empty */
+          },
           pres: [],
           declare128,
-          initNewInstruction: () => {},
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
         };
       },
     },

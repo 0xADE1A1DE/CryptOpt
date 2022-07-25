@@ -1,16 +1,8 @@
+import { AllocationFlags, ByteRegister, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Register } from "@/enums";
 import { LSB_MAPPING } from "@/helper";
 import { bitwiseOp } from "@/instructionGeneration/bitwiseOps";
 import { Paul } from "@/paul";
-import type { CryptOpt } from "@/types";
-import {
-  AllocationFlags,
-  AllocationReq,
-  Allocations,
-  ByteRegister,
-  C_DI_INSTRUCTION_AND,
-  DECISION_IDENTIFIER,
-  Register,
-} from "@/types";
+import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
 let paulChooseAndSpy: jest.SpyInstance;
 
@@ -36,10 +28,14 @@ jest.mock("@/RegisterAllocator.class.ts", () => {
         return {
           allocate,
           getCurrentAllocations,
-          declareFlagState: () => {},
+          declareFlagState: () => {
+            /**intentionally empty */
+          },
           pres: [],
           declare128,
-          initNewInstruction: () => {},
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
           zext,
           declareDatatypeForVar,
         };

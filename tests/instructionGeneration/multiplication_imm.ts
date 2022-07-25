@@ -1,18 +1,8 @@
+import { AllocationFlags, DECISION_IDENTIFIER, Flags, FlagState, Register } from "@/enums";
 import { IMM_MUL_DI_MAP } from "@/helper";
 import { mul } from "@/instructionGeneration/multiplication";
 import { Paul } from "@/paul";
-import {
-  AllocationFlags,
-  AllocationReq,
-  AllocationRes,
-  Allocations,
-  asm,
-  CryptOpt,
-  DECISION_IDENTIFIER,
-  Flags,
-  FlagState,
-  Register,
-} from "@/types";
+import type { AllocationReq, AllocationRes, Allocations, asm, CryptOpt } from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();
@@ -31,7 +21,9 @@ jest.mock("@/RegisterAllocator.class.ts", () => {
           getCurrentAllocations,
           declareFlagState,
           pres: [],
-          initNewInstruction: () => {},
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
         };
       },
     },

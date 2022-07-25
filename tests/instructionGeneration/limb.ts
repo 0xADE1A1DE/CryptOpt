@@ -1,6 +1,6 @@
+import { AllocationFlags, Flags, Register } from "@/enums";
 import { limb } from "@/instructionGeneration/limb";
-import type { CryptOpt } from "@/types";
-import { AllocationFlags, AllocationReq, Allocations, Flags, Register } from "@/types";
+import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();
@@ -14,9 +14,13 @@ jest.mock("@/RegisterAllocator.class.ts", () => {
           allocate,
           lazyMov,
           getCurrentAllocations,
-          declareFlagState: () => {},
+          declareFlagState: () => {
+            /**intentionally empty */
+          },
           pres: [],
-          initNewInstruction: () => {},
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
         };
       },
     },

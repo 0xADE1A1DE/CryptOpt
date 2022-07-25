@@ -1,5 +1,5 @@
+import { Register } from "@/enums";
 import { zext } from "@/instructionGeneration/zext";
-import { Register } from "@/types";
 
 const ra_zext = jest.fn();
 const backupIfVarHasDependencies = jest.fn();
@@ -10,7 +10,9 @@ jest.mock("@/RegisterAllocator.class.ts", () => {
       getInstance: () => {
         return {
           pres: [],
-          initNewInstruction: () => {},
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
           zext: ra_zext,
           backupIfVarHasDependencies,
         };

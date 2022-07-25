@@ -1,9 +1,9 @@
+import { AllocationFlags, ByteRegister, Flags, FlagState, Register } from "@/enums";
 import { isByteRegister, isMem, isRegister, limbify, limbifyImm } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { ByteRegister, CryptOpt, ValueAllocation } from "@/types";
-import { AllocationFlags, Flags, FlagState, Register } from "@/types";
+import type { CryptOpt, ValueAllocation } from "@/types";
 
 import { nothing } from "./test-helpers";
 

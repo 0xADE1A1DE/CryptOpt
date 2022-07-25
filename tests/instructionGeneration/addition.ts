@@ -1,13 +1,6 @@
+import { C_DI_HANDLE_FLAGS_KK, Flags, FlagState } from "@/enums";
 import { add } from "@/instructionGeneration/addition";
-import type { CryptOpt } from "@/types";
-import {
-  Allocations,
-  C_DI_HANDLE_FLAGS_KK,
-  Flags,
-  FlagState,
-  MemoryAllocation,
-  RegisterAllocation,
-} from "@/types";
+import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation } from "@/types";
 
 // this not consistent in within itself (multiple vars in one single reg).
 // Certain vars but is only used certain test
@@ -75,12 +68,15 @@ jest.mock("@/RegisterAllocator.class.ts", () => {
           allocate,
           backupIfStoreHasDependencies,
           declare128: jest.fn().mockImplementation((name: string) => (allocs[name] = { datatype: "u128" })),
-          declareFlagState: () => {},
-          declareVarForFlag,
+          declareFlagState: () => {
+            /**intentionally empty */
+          },
           flagState,
           flagStateString: () => `flagstatestring`,
           getCurrentAllocations,
-          initNewInstruction: () => {},
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
           loadImmToReg64: jest.fn().mockImplementation((name: string) => {
             if (name in allocs) return allocs[name].store;
             else throw { name, allocs };

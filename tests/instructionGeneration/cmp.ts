@@ -1,9 +1,9 @@
 import { defaults } from "lodash";
 
+import { AllocationFlags, Flags, FlagState, Register } from "@/enums";
 import { llvm2CC } from "@/helper";
 import { cmp } from "@/instructionGeneration/cmp";
-import type { CryptOpt } from "@/types";
-import { AllocationFlags, AllocationReq, Allocations, Flags, FlagState, Register } from "@/types";
+import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();
@@ -18,7 +18,9 @@ jest.mock("@/RegisterAllocator.class.ts", () => {
         return {
           allocate,
           getCurrentAllocations,
-          initNewInstruction: () => {},
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
           declareFlagState,
           declareVarForFlag,
           pres: [],

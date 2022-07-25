@@ -1,5 +1,5 @@
 import { BIAS, Paul } from "@/paul";
-import { CryptOpt } from "@/types";
+import type { CryptOpt } from "@/types";
 
 describe("Paul", () => {
   describe("Paul:choose<T>", () => {

@@ -1,5 +1,6 @@
+import { AllocationFlags, Register } from "@/enums";
 import { mulx } from "@/instructionGeneration/multiplication";
-import { AllocationFlags, AllocationReq, AllocationRes, Allocations, asm, Register } from "@/types";
+import type { AllocationReq, AllocationRes, Allocations, asm } from "@/types";
 
 const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();
@@ -16,7 +17,9 @@ jest.mock("@/RegisterAllocator.class.ts", () => {
           getCurrentAllocations,
           declareFlagState,
           pres: [],
-          initNewInstruction: () => {},
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
         };
       },
     },

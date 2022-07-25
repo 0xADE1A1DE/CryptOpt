@@ -12,7 +12,7 @@ export function getTestArgs(filename: string): {
   skipProof: true;
   curve: string;
   method: string;
-  silent: false;
+  verbose: false;
   bridge?: string;
 } {
   const groups = basename(filename).match(/(?<curve>.*)-(?<method>.*).ts/)?.groups;
@@ -30,7 +30,7 @@ export function getTestArgs(filename: string): {
     skipProof: true,
     curve,
     method,
-    silent: false,
+    verbose: false,
   };
 }
 export function getTestResultsPath(): string {
@@ -45,7 +45,7 @@ export function createModelHelpers(): {
   nodes: CryptOpt.StringInstruction[];
 } {
   // special dev-'friendly'-way to specify nodes, sepcified in rex
-  const rex = /^(?<datatype>u\d+) (?<names>[xout\[\]_,0-9]+) = (?<operation>[\S]+) (?<args>[^/\n]+)/;
+  const rex = /^(?<datatype>u\d+) (?<names>[xout[]_,0-9]+) = (?<operation>[\S]+) (?<args>[^/\n]+)/;
   const rawNodes = [
     "u64 x1 = = arg1[0]",
     "u64 x2 = = arg1[1]",
