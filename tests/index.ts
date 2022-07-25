@@ -54,8 +54,7 @@ describe("full tests fiat", () => {
         getTestResultsPath(),
         Object.assign({}, args, { curve: "INVALIDCURVE", method: "square" }),
       );
-    }).toThrow(
-      `Cannot destructure property 'binary' of 'constants_1.CURVE_DETAILS[curve]' as it is undefined.`,
+    }).toThrow(/Cannot destructure property 'binary' of '.*' as it is undefined./
     );
   });
 
