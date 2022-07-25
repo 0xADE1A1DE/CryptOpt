@@ -1,5 +1,6 @@
-import type { Fiat } from "@/bridge/fiat-bridge/fiat.namespace";
 import { C_DI_HANDLE_FLAGS_KK, C_DI_MULTIPLICATION_IMM, DECISION_IDENTIFIER, Flags } from "@/enums";
+
+import { Fiat } from "./fiat.namespace";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CryptOpt {

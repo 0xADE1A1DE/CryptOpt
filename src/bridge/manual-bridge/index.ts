@@ -2,7 +2,9 @@ import { execSync } from "child_process";
 import { existsSync, readFileSync } from "fs";
 
 import { env, matchArg, preprocessFunction } from "@/helper";
-import  type { Bridge, CryptOpt } from "@/types";
+import  type {  CryptOpt } from "@/types";
+
+import { Bridge } from "../bridge.interface";
 
 const { CC, CFLAGS } = env;
 
