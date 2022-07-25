@@ -2,15 +2,9 @@
 // grep operation -r *.json |tr -s '[[:space:]]' |  cut -d":" -f 3 | sed -e 's/,/|/' |sort |uniq
 import { groupBy } from "lodash";
 
-import {
-  C_DI_HANDLE_FLAGS_KK,
-  C_DI_IMM,
-  C_DI_INSTRUCTION_AND,
-  DECISION_IDENTIFIER,
-  Flags,
-} from "@/enums";
+import { C_DI_HANDLE_FLAGS_KK, C_DI_IMM, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Flags } from "@/enums";
 import { Paul } from "@/paul/Paul.class";
-import type {  CryptOpt, Fiat,} from "@/types";
+import type { CryptOpt, Fiat } from "@/types";
 
 import {
   CHAINABLE_OPS,
@@ -19,7 +13,7 @@ import {
   TEMP_VAR_END_NUM,
   TEMP_VAR_START_NUM,
 } from "./constants";
-import { assertStringArguments, assertStringNames, isNotNoU, isXD, matchArg,matchIMM } from "./lamdas";
+import { assertStringArguments, assertStringNames, isNotNoU, isXD, matchArg, matchIMM } from "./lamdas";
 
 function isConstArgument(ins: Fiat.Argument): ins is Fiat.ConstArgument {
   return typeof ins === "string";

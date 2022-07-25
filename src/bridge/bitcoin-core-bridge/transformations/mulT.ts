@@ -1,7 +1,7 @@
 import type { CryptOpt } from "@/types";
 
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";
-import  type{ SSA } from "../raw.type";
+import type { SSA } from "../raw.type";
 
 export function transformMul(input: SSA): CryptOpt.DynArgument {
   if (input.operation !== "mul") {

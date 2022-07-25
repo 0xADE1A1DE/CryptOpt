@@ -1,20 +1,7 @@
 import fs from "fs";
 
-import {
-  ByteRegister,
-  Flags,
-  FUNCTIONS,
-  Register,
-} from "@/enums";
-import type {
-  Allocation,
-  asm,
-  CryptOpt,
-  imm,
-  mem,
-  U1Allocation,
-  U64Allocation,
-} from "@/types";
+import { ByteRegister, Flags, FUNCTIONS, Register } from "@/enums";
+import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation } from "@/types";
 
 import {
   ARG_PREFIX,
@@ -29,7 +16,6 @@ import {
   XD_REGEX,
 } from "./constants";
 import { getQwRegFromByteReg } from "./reg-conversion";
-
 
 //Lamdas means here just helper functions, which dont need any imports.
 // so don't specify any imports there. Put those into ./helpers.ts

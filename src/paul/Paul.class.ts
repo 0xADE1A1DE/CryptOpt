@@ -9,8 +9,7 @@ import { delimbify, isNotNoU } from "@/helper/lamdas";
 import type { CryptOpt } from "@/types";
 
 import { BIAS } from "./Paul.enum";
-import {  sha1Hash } from "./Paul.helper";
-
+import { sha1Hash } from "./Paul.helper";
 
 export class Paul {
   // https://en.wikipedia.org/wiki/Paul_the_Octopus

@@ -3,11 +3,9 @@ import { cloneDeep } from "lodash";
 import { Flags, Register } from "@/enums";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type {
-  CryptOpt,
-} from "@/types";
+import type { CryptOpt } from "@/types";
 
-import { isByteRegister, isFlag,  isRegister, matchArg,  } from "./lamdas";
+import { isByteRegister, isFlag, isRegister, matchArg } from "./lamdas";
 import { getQwRegFromByteReg } from "./reg-conversion";
 
 /**

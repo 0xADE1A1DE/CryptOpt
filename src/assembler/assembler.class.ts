@@ -4,10 +4,8 @@ import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-
 export class Assembler {
-  
-  public static assemble(resultspath: string): { stacklength: number; code: asm[] } {    
+  public static assemble(resultspath: string): { stacklength: number; code: asm[] } {
     console.log("initializing RA.");
     const ra = RegisterAllocator.reset();
 
@@ -19,9 +17,8 @@ export class Assembler {
     let curOp: CryptOpt.StringInstruction | null = null;
     while ((curOp = Model.nextOperation())) {
       try {
-
         const ins = getInstruction(curOp);
-        
+
         output.push(...ins);
         sanityCheckAllocations(curOp);
       } catch (e) {

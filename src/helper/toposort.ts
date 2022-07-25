@@ -3,7 +3,6 @@ import type { CryptOpt } from "@/types";
 
 import { assertStringArguments, assertStringNames, matchXD } from "./lamdas";
 
-
 export function toposort(_nodes: Readonly<Readonly<CryptOpt.StringInstruction>[]>): number[] {
   _nodes.forEach(assertStringNames);
   _nodes.forEach(assertStringArguments);

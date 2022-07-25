@@ -1,11 +1,11 @@
 // rollup.config.js
-import typescript from '@rollup/plugin-typescript';
+import typescript from "@rollup/plugin-typescript";
 
 export default {
-  input: 'src/CryptOpt.ts',
+  input: "src/CryptOpt.ts",
   output: {
-    dir: 'dist',
-    format: 'cjs'
+    dir: "dist",
+    format: "cjs",
   },
-  plugins: [typescript()]
+  plugins: [typescript()],
 };

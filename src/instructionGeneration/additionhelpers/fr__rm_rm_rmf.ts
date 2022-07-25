@@ -3,7 +3,7 @@ import { ADX, isByteRegister, isFlag, isMem, isU1, SETX, toggleFlag, toImm, zx }
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import  type {
+import type {
   asm,
   MemoryAllocation,
   RegisterAllocation,

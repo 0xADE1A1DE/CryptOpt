@@ -1,4 +1,4 @@
-import { Flags, FlagState,Register } from "@/enums";
+import { Flags, FlagState, Register } from "@/enums";
 import { ADX, isByteRegister, isMem, isU1, SETX, zx } from "@/helper";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";

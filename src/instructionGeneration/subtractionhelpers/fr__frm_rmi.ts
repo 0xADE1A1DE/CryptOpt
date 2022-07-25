@@ -1,7 +1,7 @@
-import {  Flags, FlagState} from "@/enums";
+import { Flags, FlagState } from "@/enums";
 import { isByteRegister, isFlag, isImm, isU1 } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm,  imm, U1Allocation, U64Allocation } from "@/types";
+import type { asm, imm, U1Allocation, U64Allocation } from "@/types";
 
 export function fr__frm_rmi(
   cout: string,

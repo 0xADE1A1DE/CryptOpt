@@ -1,6 +1,6 @@
-import { AllocationFlags,ByteRegister,Flags,Register } from "@/enums";
+import { AllocationFlags, ByteRegister, Flags, Register } from "@/enums";
 
-import type { imm,mem } from "./Storage.type";
+import type { imm, mem } from "./Storage.type";
 
 export interface AllocationReq {
   oReg: string[];
@@ -54,4 +54,3 @@ export type ValueAllocation = U1Allocation | U8Allocation | U64Allocation;
 // probably add auto as store mem as well
 export type Allocation = ValueAllocation | PointerAllocation | U128Allocation;
 export type Allocations = { [key: string]: Allocation };
-

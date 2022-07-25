@@ -3,7 +3,6 @@ import { isImm, TEMP_VARNAME } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-
 export function mul_imm_lea(c: CryptOpt.StringInstruction): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);

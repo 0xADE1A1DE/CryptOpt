@@ -1,4 +1,4 @@
-import  type{ CryptOpt } from "@/types";
+import type { CryptOpt } from "@/types";
 
 export interface Bridge {
   getCryptOptFunction(method: string): CryptOpt.Function;

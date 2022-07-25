@@ -1,4 +1,4 @@
-import { AllocationFlags, } from "@/enums";
+import { AllocationFlags } from "@/enums";
 import { isImm } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";

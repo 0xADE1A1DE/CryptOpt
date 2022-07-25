@@ -1,7 +1,7 @@
 /**
  * Those are the allocationFlags which need to be passed to the RegisterAllocator
  */
- export enum AllocationFlags {
+export enum AllocationFlags {
   NONE = 0,
   DONT_USE_IN_REGS_AS_OUT = 1 << 0,
 

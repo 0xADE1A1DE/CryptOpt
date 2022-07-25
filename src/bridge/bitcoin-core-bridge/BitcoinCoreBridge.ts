@@ -5,7 +5,7 @@ import { resolve } from "path";
 
 import { ERRORS } from "@/errors";
 import { env, preprocessFunction } from "@/helper";
-import type {  CryptOpt } from "@/types";
+import type { CryptOpt } from "@/types";
 
 import { Bridge } from "../bridge.interface";
 import { AVAILABLE_METHODS, METHOD_DETAILS, METHOD_T } from "./constants";

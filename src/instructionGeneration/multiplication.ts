@@ -1,4 +1,11 @@
-import { AllocationFlags, C_DI_MULTIPLICATION_IMM, DECISION_IDENTIFIER, Flags,FlagState ,Register, } from "@/enums";
+import {
+  AllocationFlags,
+  C_DI_MULTIPLICATION_IMM,
+  DECISION_IDENTIFIER,
+  Flags,
+  FlagState,
+  Register,
+} from "@/enums";
 import { limbify, matchIMM, TEMP_VARNAME } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";

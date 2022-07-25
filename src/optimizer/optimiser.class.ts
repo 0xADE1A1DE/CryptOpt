@@ -5,13 +5,13 @@ import path from "path";
 
 import { Assembler } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
-import {CHOICE, FUNCTIONS} from "@/enums"
+import { CHOICE, FUNCTIONS } from "@/enums";
 import { ERRORS } from "@/errors";
 import { analyseMeasureResult, env, LOG_EVERY, PRINT_EVERY, toggleFUNCTIONS, writeasm } from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
-import type { AnalyseResult,  } from "@/types";
+import type { AnalyseResult } from "@/types";
 
 import { genStatusLine, shouldProof } from "./optimiser.helper";
 import { init } from "./optimiser.helper.class";
