@@ -17,7 +17,7 @@
     }
   },
   "include": [
-    "./src",
+    "./",
     "./src/bridge/fiat-bridge/fiat.c",
     "./src/bridge/fiat-bridge/fiat.h",
     "./src/bridge/bitcoin-core-bridge/Makefile",
