@@ -47,14 +47,14 @@ export const parsedArgs = yargs
     boolean: true,
   })
   .option("seed", {
-    describe: "Seed to base the randomness on.",
-    default: 1,
+    describe: "Seed to base the randomness on. Defaults to the current time's milliseconds.",
+    default: new Date().getMilliseconds(),
     number: true,
   })
   .option("populatio", {
     describe:
       "This setting is only used when BetAndRun.ts is being called. It describes, how many seeds should be derived from the initial @param seed. For each of those seeds a part (refer to @param populatioratio) of the total @params evaluations will be used to find best seeds. For the best one, the rest of budget will be used to optimzie.",
-    default: 80,
+    default: 10,
     number: true,
     min: 1,
   })
@@ -81,7 +81,7 @@ export const parsedArgs = yargs
   .option("logComment", {
     describe: "May provide a hint of any kind to be printed on the status line",
     string: true,
-    default: "",
+    default: "---",
   })
   .option("cyclegoal", {
     describe:
@@ -93,7 +93,7 @@ export const parsedArgs = yargs
     alias: "e",
     describe:
       "How many evaluations (=mutations) to execute. The higher this number the longer it'll take, but and the better the result will be. Multiplier 'k', 'M', 'T' and factors are allowed like '0.4M'; also 1e3 (1000) or 4e9 (4M) are allowed",
-    default: "1k",
+    default: "10k",
     coerce: (evals: number | string) => {
       const attemptcast = Number(evals);
       if (!isNaN(attemptcast)) {

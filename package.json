@@ -17,15 +17,11 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/0xADE1AIDE/CryptOpt#readme",
   "scripts": {
-    "pretest": "$npm_execpath run compile",
     "test": "npx jest",
     "test-debug": "node --inspect-brk=12345 ./node_modules/.bin/jest",
     "test-rib": "npx jest --runInBand",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "preinstall": "cd ./modules/MeasureSuite && $npm_execpath install",
-    "postinstall": "$npm_execpath run pack",
-    "compile": "tsc -p .",
     "pack": "rollup --config rollup.config.ts"
   },
   "prettier": {
