@@ -24,7 +24,7 @@
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "preinstall": "cd ./modules/MeasureSuite && $npm_execpath install",
-    "postinstall": "$npm_execpath run compile",
+    "postinstall": "$npm_execpath run pack",
     "compile": "tsc -p .",
     "pack": "rollup --config rollup.config.ts"
   },
@@ -60,6 +60,8 @@
     "jest": "^28.1.2",
     "prettier": "^2.7.1",
     "rollup": "^2.77.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-shell": "^1.0.8",
     "ts-jest": "^28.0.5",
     "tslib": "^2.4.0"
   },
