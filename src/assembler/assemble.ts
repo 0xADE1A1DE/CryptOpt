@@ -1,12 +1,14 @@
 import {  writeasm } from "@/helper";
-import { sanityCheckAllocations } from "./assembler.helper";
 import { getInstruction } from "@/instructionGeneration/InstructionGenerator";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export class Assembler {
-  public static assemble(resultspath: string): { stacklength: number; code: asm[] } {
+import { sanityCheckAllocations } from "./assembler.helper";
+
+
+
+export function assemble(resultspath: string): { stacklength: number; code: asm[] } {
     console.log("initializing RA.");
     const ra = RegisterAllocator.reset();
 
@@ -44,4 +46,4 @@ export class Assembler {
 
     return { code: pre.concat(output).concat(post), stacklength };
   }
-}
+

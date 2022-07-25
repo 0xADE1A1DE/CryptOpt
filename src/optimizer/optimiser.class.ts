@@ -3,7 +3,7 @@ import Measuresuite from "measuresuite";
 import os from "os";
 import path from "path";
 
-import { Assembler } from "@/assembler";
+import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
 import { CHOICE, FUNCTIONS } from "@/enums";
 import { ERRORS } from "@/errors";
@@ -187,7 +187,7 @@ export class Optimiser {
       }
 
       console.log("assembling");
-      const { code, stacklength } = Assembler.assemble(this.resultspath);
+      const { code, stacklength } = assemble(this.resultspath);
 
       console.log("now we have the current string in the object, filtering");
       const filteredInstructions = code.filter((line) => line && !line.startsWith(";") && line !== "\n");

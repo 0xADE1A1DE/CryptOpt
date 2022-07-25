@@ -1,1 +1,1 @@
-export * from "./assembler.class";
+export * from "./assemble";
