@@ -5,10 +5,13 @@ import {
   CALLER_SAVE_PREFIX,
   CALLER_SAVE_REGISTERS,
   CALLING_CONVENTION_REGISTER_ORDER,
-  delimbify,
-  getByteRegFromQwReg,
-  getQwRegFromByteReg,
   IMM_VAL_PREFIX,
+  LSB_MAPPING,
+  SETX,
+  TEMP_VARNAME,
+} from "@/helper/constants";
+import {
+  delimbify,
   isByteRegister,
   isCallerSave,
   isFlag,
@@ -21,18 +24,16 @@ import {
   isXD,
   limbify,
   limbifyImm,
-  LSB_MAPPING,
   matchArg,
   matchArgPrefix,
   matchMem,
   matchXD,
   setToString,
-  SETX,
-  TEMP_VARNAME,
   toImm,
   toMem,
   zx,
-} from "@/helper";
+} from "@/helper/lamdas";
+import { getByteRegFromQwReg, getQwRegFromByteReg } from "@/helper/reg-conversion";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import type {

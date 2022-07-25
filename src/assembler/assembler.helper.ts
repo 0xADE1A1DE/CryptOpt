@@ -3,7 +3,6 @@ import { getQwRegFromByteReg, isByteRegister, isFlag, isRegister, matchArg } fro
 import { RegisterAllocator } from "@/registerAllocator";
 import type { CryptOpt } from "@/types";
 
-
 /**
  * This function will get the Register allocator and check, whether for any register, the
  *  same byte register is allocated as well. If so, itll throw.

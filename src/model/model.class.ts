@@ -171,12 +171,12 @@ export class Model {
     const f = candidates.filter(isCallerSave);
     if (f.length > 0) {
       const choice = f[0];
-    
+
       return choice;
     }
     if (candidates.length === 1) {
       const choice = candidates[0];
-     
+
       return choice;
     }
     const map = candidates.reduce((map, candidate) => {
@@ -190,7 +190,7 @@ export class Model {
     });
 
     const choice = lastRead[0];
-   
+
     return choice;
   }
 

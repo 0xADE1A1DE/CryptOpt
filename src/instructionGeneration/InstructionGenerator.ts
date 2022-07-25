@@ -1,4 +1,3 @@
-
 import { assertStringNames } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
@@ -8,11 +7,11 @@ import { add } from "./addition";
 import { bitwiseOp } from "./bitwiseOps";
 import { cmp } from "./cmp";
 import { limb } from "./limb";
-import { conditionalMovZNZ,mov } from "./mov";
+import { conditionalMovZNZ, mov } from "./mov";
 import { mul, mulx } from "./multiplication";
 import { not } from "./not";
 import { ror } from "./ror";
-import { shiftLeft, shiftRight,shiftRightDouble } from "./shift";
+import { shiftLeft, shiftRight, shiftRightDouble } from "./shift";
 import { sub } from "./subtraction";
 import { zext } from "./zext";
 
