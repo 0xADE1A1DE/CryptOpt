@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "target": "ES2021",
-    "module": "es6",
+    "module": "ES2022",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
@@ -18,8 +18,6 @@
   },
   "include": [
     "./src",
-    "./src/bridge/fiat-bridge/unsaturated_solinas",
-    "./src/bridge/fiat-bridge/word_by_word_montgomery",
     "./src/bridge/fiat-bridge/fiat.c",
     "./src/bridge/fiat-bridge/fiat.h",
     "./src/bridge/bitcoin-core-bridge/Makefile",
@@ -30,17 +28,9 @@
   ],
   "exclude": [
     "./node_modules",
-    "dist"
+    "./dist"
   ],
   "ts-node": {
     "transpileOnly": true
-  },
-  "filePermissions": {
-    "./dist/CryptOpt.js": "0700",
-    "./dist/BetAndRun.js": "0700"
-  },
-  "hooks": [
-    "copy-files",
-    "file-permissions"
-  ]
+  }
 }

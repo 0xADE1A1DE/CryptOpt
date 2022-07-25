@@ -37,10 +37,6 @@
     "lodash": "^4.17.21",
     "measuresuite": "file:./modules/MeasureSuite",
     "simple-statistics": "^7.7.5",
-    "ts-node": "^10.8.2",
-    "tsc-hooks": "1.1.2-beta.2",
-    "tsconfig-paths": "^4.0.0",
-    "typescript": "^4.7.4",
     "yargs": "^17.5.1"
   },
   "devDependencies": {
@@ -63,7 +59,8 @@
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-shell": "^1.0.8",
     "ts-jest": "^28.0.5",
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.4"
   },
   "jest": {
     "moduleNameMapper": {
