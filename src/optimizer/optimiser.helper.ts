@@ -1,7 +1,7 @@
+import { CHOICE } from "@/enums";
 import { bl, cy, gn, pu, rd, re, SI, yl } from "@/helper";
 import { Model } from "@/model";
 import type { AnalyseResult } from "@/types";
-import { CHOICE } from "@/types";
 
 export function genStatusLine(a: {
   writeout: boolean;

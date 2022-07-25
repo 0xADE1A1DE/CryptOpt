@@ -1,5 +1,6 @@
 import { uniq } from "lodash";
 
+import { AllocationFlags, ByteRegister, C_DI_IMM,Flags, FlagState, Register } from "@/enums";
 import {
   CALLER_SAVE_PREFIX,
   CALLER_SAVE_REGISTERS,
@@ -34,26 +35,8 @@ import {
 } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
-import {
-  Allocation,
-  AllocationFlags,
-  AllocationReq,
-  AllocationRes,
-  Allocations,
-  asm,
-  ByteRegister,
-  C_DI_IMM,
-  CryptOpt,
-  Flags,
-  FlagState,
-  imm,
-  mem,
-  PointerAllocation,
-  Register,
-  RegisterAllocation,
-  U1FlagAllocation,
-  ValueAllocation,
-} from "@/types";
+import type { Allocation, AllocationReq, AllocationRes, 
+  Allocations, asm, CryptOpt,imm, mem, PointerAllocation, RegisterAllocation, U1FlagAllocation, ValueAllocation } from "@/types";
 
 import { populateClobbers } from "./RegisterAllocator.helper";
 

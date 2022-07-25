@@ -2,16 +2,15 @@
 // grep operation -r *.json |tr -s '[[:space:]]' |  cut -d":" -f 3 | sed -e 's/,/|/' |sort |uniq
 import { groupBy } from "lodash";
 
-import { Paul } from "@/paul/Paul.class";
 import {
   C_DI_HANDLE_FLAGS_KK,
   C_DI_IMM,
   C_DI_INSTRUCTION_AND,
-  CryptOpt,
   DECISION_IDENTIFIER,
-  Fiat,
   Flags,
-} from "@/types";
+} from "@/enums";
+import { Paul } from "@/paul/Paul.class";
+import type {  CryptOpt, Fiat,} from "@/types";
 
 import {
   CHAINABLE_OPS,

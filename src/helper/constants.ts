@@ -1,4 +1,5 @@
-import { C_DI_MULTIPLICATION_IMM, CryptOpt, Flags, Register } from "@/types";
+import  { C_DI_MULTIPLICATION_IMM,  Flags, Register } from "@/enums";
+import type {  CryptOpt } from "@/types";
 
 export const COMPILERS = ["gcc", "clang"];
 

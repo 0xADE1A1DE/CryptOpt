@@ -1,7 +1,7 @@
 import type { CryptOpt } from "@/types";
 
 import { getArguments } from "../helpers";
-import { SSA } from "../raw.type";
+import type { SSA } from "../raw.type";
 
 export function transformAdd(input: SSA): CryptOpt.DynArgument {
   if (input.operation !== "add") {

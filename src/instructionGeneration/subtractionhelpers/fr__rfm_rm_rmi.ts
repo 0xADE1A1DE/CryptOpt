@@ -1,9 +1,8 @@
+import { Flags, FlagState } from "@/enums";
 import { isByteRegister } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import {
+import type {
   asm,
-  Flags,
-  FlagState,
   imm,
   MemoryAllocation,
   RegisterAllocation,

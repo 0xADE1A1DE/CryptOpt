@@ -1,11 +1,10 @@
 import { cloneDeep } from "lodash";
 
+import { Flags, Register } from "@/enums";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import {
+import type {
   CryptOpt,
-  Flags,
-  Register,
 } from "@/types";
 
 import { isByteRegister, isFlag,  isRegister, matchArg,  } from "./lamdas";

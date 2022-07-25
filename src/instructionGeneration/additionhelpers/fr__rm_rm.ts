@@ -1,11 +1,10 @@
+  
+  import { C_DI_HANDLE_FLAGS_KK,Flags, FlagState } from "@/enums";
 import { ADX, isU1 } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import {
+import type {
   asm,
-  C_DI_HANDLE_FLAGS_KK,
-  Flags,
-  FlagState,
   MemoryAllocation,
   RegisterAllocation,
   U64RegisterAllocation,

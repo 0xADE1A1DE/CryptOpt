@@ -1,5 +1,6 @@
 import { cloneDeep } from "lodash";
 
+import { AllocationFlags, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Flags, FlagState } from "@/enums";
 import {
   getByteRegFromQwReg,
   IMM_64_BIT_IMM,
@@ -12,7 +13,6 @@ import {
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
-import { AllocationFlags, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Flags, FlagState } from "@/types";
 
 export function bitwiseOp(c: CryptOpt.StringInstruction): asm[] {
   switch (c.operation) {

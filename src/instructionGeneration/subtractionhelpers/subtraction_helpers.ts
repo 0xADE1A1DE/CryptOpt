@@ -1,5 +1,5 @@
 import { isFlag, TEMP_VARNAME } from "@/helper";
-import {
+import type {
   asm,
   imm,
   U1Allocation,

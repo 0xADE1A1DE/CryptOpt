@@ -2,7 +2,7 @@ import { llvm2CC } from "@/helper";
 import type { CryptOpt } from "@/types";
 
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";
-import { SSA } from "../raw.type";
+import type { SSA } from "../raw.type";
 
 export function transformIcmp(input: SSA): CryptOpt.DynArgument {
   if (input.operation !== "icmp") {

@@ -2,15 +2,13 @@ import { delimbify, isFlag, isImm, isU1, limbify, TEMP_VARNAME } from "@/helper"
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
-import {
+import type { asm, CryptOpt,
   U1Allocation,
   U1FlagAllocation,
   U1MemoryAllocation,
   U1RegisterAllocation,
   U64Allocation,
-  ValueAllocation,
-} from "@/types";
+  ValueAllocation,} from "@/types";
 
 import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_rm_rmf, r__rmf_rmf, r_rm_f_f } from "./additionhelpers";
 

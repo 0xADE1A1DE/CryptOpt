@@ -1,10 +1,9 @@
+import { AllocationFlags, C_DI_MULTIPLICATION_IMM, DECISION_IDENTIFIER, Flags,FlagState ,Register, } from "@/enums";
 import { limbify, matchIMM, TEMP_VARNAME } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { CryptOpt } from "@/types";
-import { AllocationFlags, FlagState } from "@/types";
+import type { asm, CryptOpt } from "@/types";
 
-import { asm, C_DI_MULTIPLICATION_IMM, DECISION_IDENTIFIER, Flags, Register } from "../types";
 import { mul_imm_imul, mul_imm_lea, mul_imm_shl, mul_imm_shlx } from "./multiplicationHelpers";
 
 export function mul(c: CryptOpt.StringInstruction): asm[] {

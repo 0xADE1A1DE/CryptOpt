@@ -1,30 +1,13 @@
-import * as fs from "fs";
-import { omit } from "lodash";
-
 import { sanityCheckAllocations, writeasm } from "@/helper";
 import { getInstruction } from "@/instructionGeneration";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-const debug = false;
-const CUR_ASM = "/tmp/curasm.asm";
-const CUR_MODEL = "/tmp/curmodel.json";
 
 export class Assembler {
-  private static init(): void {
-    const model_string = JSON.stringify(Model.nodesInTopologicalOrder);
-    if (debug) {
-      fs.writeFileSync(CUR_MODEL, model_string);
-    }
-    if (debug && fs.existsSync(CUR_ASM)) {
-      // fs.renameSync(CUR_ASM, CUR_ASM + Date.now() + ".asm");
-      fs.unlinkSync(CUR_ASM);
-    }
-  }
-  public static assemble(resultspath: string): { stacklength: number; code: asm[] } {
-    console.log("initializing Assembler.");
-    Assembler.init();
+  
+  public static assemble(resultspath: string): { stacklength: number; code: asm[] } {    
     console.log("initializing RA.");
     const ra = RegisterAllocator.reset();
 
@@ -36,23 +19,9 @@ export class Assembler {
     let curOp: CryptOpt.StringInstruction | null = null;
     while ((curOp = Model.nextOperation())) {
       try {
-        let s0, s1;
 
-        if (debug) {
-          const opString = `\n; ${curOp.name.join("--")}=${curOp.arguments.join(curOp.operation)}`;
-          fs.appendFileSync(CUR_ASM, opString + "\n");
-          output.push(opString);
-          s0 = JSON.stringify(omit(curOp, "decisionsHot", "decisions"));
-        }
         const ins = getInstruction(curOp);
-        if (debug) {
-          s1 = JSON.stringify(omit(curOp, "decisionsHot", "decisions"));
-          if (s0 !== s1) {
-            console.error("shall be tha same", s0, s1);
-            throw new Error();
-          }
-          fs.appendFileSync(CUR_ASM, ins.join("\n") + "\n");
-        }
+        
         output.push(...ins);
         sanityCheckAllocations(curOp);
       } catch (e) {

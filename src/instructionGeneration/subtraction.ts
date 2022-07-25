@@ -1,6 +1,6 @@
 import { isImm, toImm } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import { asm, CryptOpt, imm, U1Allocation, U64Allocation, ValueAllocation } from "@/types";
+import type { asm, CryptOpt, imm, U1Allocation, U64Allocation, ValueAllocation } from "@/types";
 
 import { f__rfm_rm_rmi, fr__frm_rmi, fr__rfm_rm_rmi } from "./subtractionhelpers/subtraction_helpers";
 

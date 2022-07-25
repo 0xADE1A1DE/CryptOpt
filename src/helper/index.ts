@@ -5,6 +5,6 @@ export * from "./env";
 export * from "./fiat-helpers";
 export * from "./lamdas";
 export * from "./misc";
-export * from "./path.helper";
+export * from "./path";
 export * from "./reg-conversion";
 export * from "./toposort";

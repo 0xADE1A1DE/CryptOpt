@@ -6,6 +6,7 @@ import path from "path";
 
 import { env } from "@/helper";
 import { sha256Hash } from "@/paul";
+import type { Fiat } from "@/types";
 
 import fiat from "./all_fiat_array";
 import {
@@ -18,7 +19,6 @@ import {
   SHA256SUMS,
 } from "./constants";
 import { BINS } from "./enums";
-import { Fiat } from "./fiat.namespace";
 
 const { CC, CFLAGS } = env;
 const cacheDir = path.resolve(__dirname, ".cache");

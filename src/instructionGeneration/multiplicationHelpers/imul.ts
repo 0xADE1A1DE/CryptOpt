@@ -1,5 +1,6 @@
+import { AllocationFlags, Flags, FlagState } from "@/enums";
 import { RegisterAllocator } from "@/registerAllocator";
-import { AllocationFlags, asm, CryptOpt, Flags, FlagState } from "@/types";
+import type { asm, CryptOpt } from "@/types";
 
 export function mul_imm_imul(c: CryptOpt.StringInstruction): asm[] {
   const ra = RegisterAllocator.getInstance();

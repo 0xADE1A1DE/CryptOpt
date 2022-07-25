@@ -1,12 +1,12 @@
-import { delimbify, isNotNoU } from "@/helper/lamdas";
 import {
   C_DI_HANDLE_FLAGS_KK,
   C_DI_INSTRUCTION_AND,
   C_DI_MULTIPLICATION_IMM,
-  CryptOpt,
   DECISION_IDENTIFIER,
   Flags,
-} from "@/types";
+} from "@/enums";
+import { delimbify, isNotNoU } from "@/helper/lamdas";
+import type { CryptOpt } from "@/types";
 
 import { BIAS } from "./Paul.enum";
 import {  sha1Hash } from "./Paul.helper";

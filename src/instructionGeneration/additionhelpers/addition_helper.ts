@@ -14,7 +14,7 @@
  */
 
 import { isByteRegister, isFlag, isMem, isRegister } from "@/helper";
-import {
+import type {
   asm,
   MemoryAllocation,
   RegisterAllocation,

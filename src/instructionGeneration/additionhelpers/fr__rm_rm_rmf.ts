@@ -1,13 +1,11 @@
+import { Flags, FlagState, Register } from "@/enums";
 import { ADX, isByteRegister, isFlag, isMem, isU1, SETX, toggleFlag, toImm, zx } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import {
+import  type {
   asm,
-  Flags,
-  FlagState,
   MemoryAllocation,
-  Register,
   RegisterAllocation,
   U1Allocation,
   U1FlagAllocation,

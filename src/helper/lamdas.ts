@@ -1,15 +1,17 @@
 import fs from "fs";
 
 import {
-  Allocation,
-  asm,
   ByteRegister,
-  CryptOpt,
   Flags,
   FUNCTIONS,
+  Register,
+} from "@/enums";
+import type {
+  Allocation,
+  asm,
+  CryptOpt,
   imm,
   mem,
-  Register,
   U1Allocation,
   U64Allocation,
 } from "@/types";

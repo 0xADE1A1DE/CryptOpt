@@ -1,6 +1,8 @@
 import fs from "fs";
 import { cloneDeep } from "lodash";
 
+import { CURVE_T } from "@/bridge/fiat-bridge/constants";
+import { DECISION_IDENTIFIER } from "@/enums";
 import {
   assertStringArguments,
   bl,
@@ -17,7 +19,7 @@ import {
 import globals from "@/helper/globals";
 import { BIAS, Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import { CryptOpt, CURVE_T, DECISION_IDENTIFIER } from "@/types";
+import type { CryptOpt } from "@/types";
 
 import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "./model.helper";
 
