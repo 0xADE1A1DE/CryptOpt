@@ -1,25 +1,20 @@
+
 import { assertStringNames } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-import {
-  add,
-  bitwiseOp,
-  cmp,
-  conditionalMovZNZ,
-  limb,
-  mov,
-  mul,
-  mulx,
-  not,
-  ror,
-  shiftLeft,
-  shiftRight,
-  shiftRightDouble,
-  sub,
-  zext,
-} from ".";
+import { add } from "./addition";
+import { bitwiseOp } from "./bitwiseOps";
+import { cmp } from "./cmp";
+import { limb } from "./limb";
+import { conditionalMovZNZ,mov } from "./mov";
+import { mul, mulx } from "./multiplication";
+import { not } from "./not";
+import { ror } from "./ror";
+import { shiftLeft, shiftRight,shiftRightDouble } from "./shift";
+import { sub } from "./subtraction";
+import { zext } from "./zext";
 
 export const getInstruction = (c: CryptOpt.StringInstruction): asm[] => {
   assertStringNames(c);

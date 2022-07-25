@@ -1,5 +1,5 @@
 import { sanityCheckAllocations, writeasm } from "@/helper";
-import { getInstruction } from "@/instructionGeneration";
+import { getInstruction } from "@/instructionGeneration/InstructionGenerator";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
