@@ -55,6 +55,7 @@ const flagState = jest.fn();
 const spillFlag = jest.fn();
 const addToPreInstructions = jest.fn();
 const addToClobbers = jest.fn();
+const declareVarForFlag = jest.fn();
 
 const backupIfStoreHasDependencies = jest.fn();
 jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
@@ -70,6 +71,7 @@ jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
           declareFlagState: () => {
             /**intentionally empty */
           },
+          declareVarForFlag,
           flagState,
           flagStateString: () => `flagstatestring`,
           getCurrentAllocations,

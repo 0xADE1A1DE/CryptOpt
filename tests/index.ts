@@ -11,7 +11,7 @@ const args: {
   readState?: string; // filename
   logComment: string;
   skipProof: boolean;
-  silent: boolean;
+  verbose: boolean;
   bridge?: string;
 } = {
   evals: 1,
@@ -20,7 +20,7 @@ const args: {
   method: "",
   cyclegoal: 100,
   logComment: "",
-  silent: false,
+  verbose: false,
   skipProof: true,
 };
 
