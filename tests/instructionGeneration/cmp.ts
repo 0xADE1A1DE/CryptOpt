@@ -11,7 +11,7 @@ const setCC = jest.fn();
 const declareFlagState = jest.fn();
 const declareVarForFlag = jest.fn();
 
-jest.mock("@/RegisterAllocator.class.ts", () => {
+jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

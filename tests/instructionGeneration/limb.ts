@@ -6,7 +6,7 @@ const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();
 const lazyMov = jest.fn();
 
-jest.mock("@/RegisterAllocator.class.ts", () => {
+jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

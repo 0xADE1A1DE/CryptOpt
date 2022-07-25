@@ -4,7 +4,7 @@ import { zext } from "@/instructionGeneration/zext";
 const ra_zext = jest.fn();
 const backupIfVarHasDependencies = jest.fn();
 
-jest.mock("@/RegisterAllocator.class.ts", () => {
+jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

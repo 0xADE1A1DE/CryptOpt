@@ -21,7 +21,7 @@ const declare128 = jest.fn();
 const zext = jest.fn();
 const declareDatatypeForVar = jest.fn();
 
-jest.mock("@/RegisterAllocator.class.ts", () => {
+jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

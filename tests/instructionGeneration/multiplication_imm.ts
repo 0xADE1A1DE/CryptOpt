@@ -10,7 +10,7 @@ const declare128 = jest.fn();
 const declareFlagState = jest.fn();
 const flagStateString = jest.fn(() => ";flagStateString");
 
-jest.mock("@/RegisterAllocator.class.ts", () => {
+jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

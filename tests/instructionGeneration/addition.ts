@@ -55,10 +55,9 @@ const flagState = jest.fn();
 const spillFlag = jest.fn();
 const addToPreInstructions = jest.fn();
 const addToClobbers = jest.fn();
-const declareVarForFlag = jest.fn();
 
 const backupIfStoreHasDependencies = jest.fn();
-jest.mock("@/RegisterAllocator.class.ts", () => {
+jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {
@@ -100,10 +99,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-        ({
-          [Flags.CF]: FlagState.KILLED,
-          [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+      ({
+        [Flags.CF]: FlagState.KILLED,
+        [Flags.OF]: FlagState.KILLED,
+      } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -136,10 +135,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-        ({
-          [Flags.CF]: FlagState.KILLED,
-          [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+      ({
+        [Flags.CF]: FlagState.KILLED,
+        [Flags.OF]: FlagState.KILLED,
+      } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -169,10 +168,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-        ({
-          [Flags.CF]: FlagState.KILLED,
-          [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+      ({
+        [Flags.CF]: FlagState.KILLED,
+        [Flags.OF]: FlagState.KILLED,
+      } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -205,10 +204,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-        ({
-          [Flags.CF]: FlagState.KILLED,
-          [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+      ({
+        [Flags.CF]: FlagState.KILLED,
+        [Flags.OF]: FlagState.KILLED,
+      } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -248,10 +247,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-        ({
-          [Flags.CF]: FlagState.KILLED,
-          [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+      ({
+        [Flags.CF]: FlagState.KILLED,
+        [Flags.OF]: FlagState.KILLED,
+      } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -283,10 +282,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-        ({
-          [Flags.CF]: FlagState.KILLED,
-          [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+      ({
+        [Flags.CF]: FlagState.KILLED,
+        [Flags.OF]: FlagState.KILLED,
+      } as { [f in Flags]: FlagState }),
     );
     // getVarnameFromStore()
 

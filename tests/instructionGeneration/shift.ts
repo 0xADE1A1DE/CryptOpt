@@ -6,7 +6,8 @@ const allocate = jest.fn();
 const getCurrentAllocations = jest.fn();
 const declare128 = jest.fn();
 const backupIfVarHasDependencies = jest.fn();
-jest.mock("@/RegisterAllocator.class.ts", () => {
+
+jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {
