@@ -1,4 +1,5 @@
-import { sanityCheckAllocations, writeasm } from "@/helper";
+import {  writeasm } from "@/helper";
+import { sanityCheckAllocations } from "./assembler.helper";
 import { getInstruction } from "@/instructionGeneration/InstructionGenerator";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";

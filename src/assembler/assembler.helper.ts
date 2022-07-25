@@ -1,28 +1,8 @@
-import { cloneDeep } from "lodash";
-
 import { Flags, Register } from "@/enums";
-import { Paul } from "@/paul";
+import { getQwRegFromByteReg, isByteRegister, isFlag, isRegister, matchArg } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { CryptOpt } from "@/types";
 
-import { isByteRegister, isFlag, isRegister, matchArg } from "./lamdas";
-import { getQwRegFromByteReg } from "./reg-conversion";
-
-/**
- * will make a deep copy of @param nodes,
- * @returns a new Array with a mixed order
- * @param _elements input array to shuffle
- */
-export function mix<T>(_elements: T[]): T[] {
-  const elements = cloneDeep(_elements) as T[];
-  const len = elements.length;
-  const res = new Array(len);
-  for (let i = 0; i < len; i++) {
-    const c = Paul.pick(elements);
-    res[i] = c;
-  }
-  return res;
-}
 
 /**
  * This function will get the Register allocator and check, whether for any register, the
