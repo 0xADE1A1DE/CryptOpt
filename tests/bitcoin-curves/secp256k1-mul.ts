@@ -1,6 +1,8 @@
-import { Optimiser } from "@/optimizer";
-import { nothing, getTestArgs, getTestResultsPath } from "../test-helpers";
 import { rm } from "fs";
+
+import { Optimiser } from "@/optimizer";
+
+import { getTestArgs, getTestResultsPath, nothing } from "../test-helpers";
 
 const mockLog = jest.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = jest.spyOn(console, "error").mockImplementation(nothing);
@@ -30,7 +32,7 @@ it("optimise", (done) => {
 });
 
 afterAll(() => {
-  rm(resultpath, { recursive: true, force: true }, () => {});
+  rm(resultpath, { recursive: true, force: true }, () => { });
   mockLog.mockRestore();
   mockErr.mockRestore();
   spyExit.mockRestore();
