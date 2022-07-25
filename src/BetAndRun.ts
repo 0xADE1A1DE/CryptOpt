@@ -41,7 +41,8 @@ if (offspringEvals < 1) {
 
 if (evals <= allocatedToPopulation) {
   console.error(
-    `Wrong parameters. All the evaluations are being used for the population. Decrease Ratio or decrease Populatio. Observe, that this holds: Populatioratio * populatio < 1. Instead its ${populatioratio} * ${populatio} (= ${populatioratio * populatio
+    `Wrong parameters. All the evaluations are being used for the population. Decrease Ratio or decrease Populatio. Observe, that this holds: Populatioratio * populatio < 1. Instead its ${populatioratio} * ${populatio} (= ${
+      populatioratio * populatio
     }) < 1.`,
   );
   process.exit(12);
@@ -58,13 +59,12 @@ for (let i = 0; i < populatio; i++) {
 // using seeds to generate states i.e. statefiles
 for (let i = 0; i < derivedSeeds.length; i++) {
   const ds = derivedSeeds[i];
-  const args =
-    [CRYPTOPT_JS].concat(...constantArgs)
-      .concat(`--seed ${ds}`, `--evals ${offspringEvals}`, `--logComment ${i}-${populatio}`)
-      .flatMap((m) => m.split(" "));
+  const args = [CRYPTOPT_JS]
+    .concat(...constantArgs)
+    .concat(`--seed ${ds}`, `--evals ${offspringEvals}`, `--logComment ${i}-${populatio}`)
+    .flatMap((m) => m.split(" "));
   // console.log(`derivedSeed: ${ds}, starting ${lc}, for ${offspringEvals} evals`);
   spawnSync("node", args, { stdio: "inherit" });
-
 }
 
 const statefiles = derivedSeeds.map((ds) =>
@@ -110,7 +110,8 @@ const finalStateFile = generateStateFileName({
   bridge,
 });
 
-const args = [CRYPTOPT_JS].concat(...constantArgs)
+const args = [CRYPTOPT_JS]
+  .concat(...constantArgs)
   .concat(
     `--seed ${seed}`,
     //yes, the seed will be ignored, but is needed for creating the final state file correctly
@@ -133,7 +134,6 @@ if ("time" in parsed) {
 const convergence = parsed.convergence;
 finalConvergences.push(convergence.join(" "));
 longestDataRow = Math.max(longestDataRow, convergence.length);
-
 
 // MEASUREMENT STUFF DONE.
 
