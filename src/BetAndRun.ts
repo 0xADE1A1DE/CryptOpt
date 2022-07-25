@@ -1,7 +1,6 @@
 // this is the Population based apporoch.
 // Basically a wrapper script around CryptOpt.{j,t}s
-
-import { exec, execFileSync } from "child_process";
+import { exec, spawnSync } from "child_process";
 import fs from "fs";
 import os from "os";
 
@@ -25,12 +24,12 @@ const { populatio, populatioratio, seed, curve, method, bridge, evals } = parsed
 if (populatioratio === 0) {
   process.exit(12);
 }
-
+const CRYPTOPT_JS = `${__dirname}/CryptOpt.js`;
 const resPath = generateResultsPath({ curve, method, bridge });
 const offspringEvals = evals * populatioratio; // each of the offspring
 const allocatedToPopulation = offspringEvals * populatio; // total for population
 
-const constantArgs = ["curve", "method", "cyclegoal", "bridge", "append"]
+const constantArgs = ["curve", "method", "cyclegoal", "bridge"]
   .map((k) => `--${k} ${parsedArgs[k] ?? ""}`)
   .concat(
     ...["silent", "skipProof"].map((booleanFlag) => (parsedArgs[booleanFlag] ? `--${booleanFlag}` : "")),
@@ -42,8 +41,7 @@ if (offspringEvals < 1) {
 
 if (evals <= allocatedToPopulation) {
   console.error(
-    `Wrong parameters. All the evaluations are being used for the population. Decrease Ratio or decrease Populatio. Observe, that this holds: Populatioratio * populatio < 1. Instead its ${populatioratio} * ${populatio} (= ${
-      populatioratio * populatio
+    `Wrong parameters. All the evaluations are being used for the population. Decrease Ratio or decrease Populatio. Observe, that this holds: Populatioratio * populatio < 1. Instead its ${populatioratio} * ${populatio} (= ${populatioratio * populatio
     }) < 1.`,
   );
   process.exit(12);
@@ -60,11 +58,13 @@ for (let i = 0; i < populatio; i++) {
 // using seeds to generate states i.e. statefiles
 for (let i = 0; i < derivedSeeds.length; i++) {
   const ds = derivedSeeds[i];
-  const args = constantArgs
-    .concat(`--seed ${ds}`, `--evals ${offspringEvals}`, `--logComment ${i}-${populatio}`)
-    .flatMap((m) => m.split(" "));
+  const args =
+    [CRYPTOPT_JS].concat(...constantArgs)
+      .concat(`--seed ${ds}`, `--evals ${offspringEvals}`, `--logComment ${i}-${populatio}`)
+      .flatMap((m) => m.split(" "));
   // console.log(`derivedSeed: ${ds}, starting ${lc}, for ${offspringEvals} evals`);
-  execFileSync(`${__dirname}/generate_asm.js`, args, { stdio: "inherit" });
+  spawnSync("node", args, { stdio: "inherit" });
+
 }
 
 const statefiles = derivedSeeds.map((ds) =>
@@ -102,42 +102,38 @@ console.log(
 const finalConvergences = [] as string[];
 const times: CryptoptGlobals["time"] = { validate: 0, generateCryptopt: 0, generateFiat: 0 };
 let longestDataRow = -1;
-//        V-------------Change this number, If you want to redo the last one of 40ish percent or whatever multiple times...
-const confirmationRuns = 1;
 
-for (let i = 0; i < confirmationRuns; i++) {
-  const seed_i = seed + i;
-  const finalStateFile = generateStateFileName({
-    curve,
-    method,
-    seed: seed_i, // from the last sha1Hash.
-    bridge,
-  });
+const finalStateFile = generateStateFileName({
+  curve,
+  method,
+  seed, // from the last sha1Hash.
+  bridge,
+});
 
-  const args = constantArgs
-    .concat(
-      `--seed ${seed_i}`,
-      //yes, the seed will be ignored, but is needed for creating the final state file correctly
-      `--evals ${evals - allocatedToPopulation}`,
-      `--readState ${bestStateFileYet}`,
-      `--logComment ${populatio}-${populatio}`,
-    )
-    .flatMap((m) => m.split(" "));
-  execFileSync(`${__dirname}/generate_asm.js`, args, { stdio: "inherit" });
+const args = [CRYPTOPT_JS].concat(...constantArgs)
+  .concat(
+    `--seed ${seed}`,
+    //yes, the seed will be ignored, but is needed for creating the final state file correctly
+    `--evals ${evals - allocatedToPopulation}`,
+    `--readState ${bestStateFileYet}`,
+    `--logComment ${populatio}-${populatio}`,
+  )
+  .flatMap((m) => m.split(" "));
+spawnSync("node", args, { stdio: "inherit" });
 
-  const parsed = JSON.parse(fs.readFileSync(finalStateFile).toString()) as CryptoptGlobals;
+const parsed = JSON.parse(fs.readFileSync(finalStateFile).toString()) as CryptoptGlobals;
 
-  if ("time" in parsed) {
-    const { validate, generateCryptopt, generateFiat } = parsed.time;
-    times.validate += validate;
-    times.generateFiat += generateFiat;
-    times.generateCryptopt += generateCryptopt;
-  }
-
-  const convergence = parsed.convergence;
-  finalConvergences.push(convergence.join(" "));
-  longestDataRow = Math.max(longestDataRow, convergence.length);
+if ("time" in parsed) {
+  const { validate, generateCryptopt, generateFiat } = parsed.time;
+  times.validate += validate;
+  times.generateFiat += generateFiat;
+  times.generateCryptopt += generateCryptopt;
 }
+
+const convergence = parsed.convergence;
+finalConvergences.push(convergence.join(" "));
+longestDataRow = Math.max(longestDataRow, convergence.length);
+
 
 // MEASUREMENT STUFF DONE.
 
