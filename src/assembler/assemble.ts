@@ -41,6 +41,7 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
         );
         throw e;
       }
+      RegisterAllocator.getInstance().clearOrphans();
     }
     const { pre, post, stacklength } = ra.finalize();
 

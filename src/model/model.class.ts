@@ -18,7 +18,6 @@ import {
 } from "@/helper";
 import globals from "@/helper/globals";
 import { BIAS, Paul } from "@/paul";
-import { RegisterAllocator } from "@/registerAllocator";
 import type { CryptOpt } from "@/types";
 
 import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "./model.helper";
@@ -172,16 +171,12 @@ export class Model {
     const f = candidates.filter(isCallerSave);
     if (f.length > 0) {
       const choice = f[0];
-      RegisterAllocator.getInstance().addToPreInstructions(
-        `;chose ${choice} to spill because its a caller save.`,
-      );
+    
       return choice;
     }
     if (candidates.length === 1) {
       const choice = candidates[0];
-      RegisterAllocator.getInstance().addToPreInstructions(
-        `;chose ${choice} to spill because its the only  available.`,
-      );
+     
       return choice;
     }
     const map = candidates.reduce((map, candidate) => {
@@ -195,11 +190,7 @@ export class Model {
     });
 
     const choice = lastRead[0];
-    RegisterAllocator.getInstance().addToPreInstructions(
-      `;chose ${choice} to spill because map:${Object.entries(map)
-        .map(([n, i]) => n + "->" + i)
-        .join("L")} and candidates: ${candidates.join(", ")}`,
-    );
+   
     return choice;
   }
 
@@ -441,7 +432,6 @@ export class Model {
     Model._currentInstIdx = -1;
   }
   public static nextOperation(): CryptOpt.StringInstruction | null {
-    RegisterAllocator.getInstance().clearOrphans();
     if (Model._currentInstIdx < Model._order.length) {
       const nextIdx = this._order[++Model._currentInstIdx];
       return Model._nodes[nextIdx];
