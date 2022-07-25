@@ -24,7 +24,7 @@ export const parsedArgs = yargs
   .option("bridge", {
     alias: "b",
     describe: `The specified method will be searched in this order: ${BRIDGES}. If there is ambiguities, the choice of bridge can be specified. Then, the method is only searched in respective bridge. (Errors out, if not found.)\nIf --bridge gets assigned 'manual', one must specify --cFile and --jsonFile.`,
-    choices: BRIDGES,
+    choices: ["", ...BRIDGES],
     default: "",
     type: "string",
   })
