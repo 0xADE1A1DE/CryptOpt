@@ -5,6 +5,7 @@ import os from "os";
 import { cy, env, generateStateFileName, gn, parsedArgs, PRINT_EVERY, rd, re, SI } from "@/helper";
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
+import type { OptimiserArgs } from "@/optimizer";
 import { Optimiser } from "@/optimizer";
 import { sha1Hash } from "@/paul";
 import type { CryptoptGlobals } from "@/types";
@@ -21,7 +22,7 @@ registerExitHooks(seed);
 
 type RunResult = { statefile: string; ratio: number; convergence: string[] };
 
-function bet(evals: number, bets: number): RunResult[] {
+async function bet(evals: number, bets: number): Promise<RunResult[]> {
   const runRes = [] as RunResult[];
 
   let derivedSeed = seed;
@@ -34,7 +35,7 @@ function bet(evals: number, bets: number): RunResult[] {
       logComment: `${i}/${bets}`,
       seed: derivedSeed,
     });
-    const runResult = run(args);
+    const runResult = await run(args);
     runRes.push(runResult);
   }
 
@@ -51,9 +52,9 @@ function bet(evals: number, bets: number): RunResult[] {
   return runRes;
 }
 
-function run(args: any): RunResult {
+async function run(args: OptimiserArgs): Promise<RunResult> {
   try {
-    new Optimiser(args).optimise();
+    await new Optimiser(args).optimise();
   } catch (e) {
     console.error(`Cryptopt-Error while optimising:\n`, e);
     process.exit(1000);
@@ -65,7 +66,7 @@ function run(args: any): RunResult {
   return { statefile, ratio, convergence };
 }
 
-const args = { seed, logComment: "run" };
+const args: Partial<OptimiserArgs> = { seed, logComment: "run" };
 
 let runResults: RunResult[];
 
@@ -73,15 +74,14 @@ const allocatedToPopulation = evals * betRatio; // total for population
 const offspringEvals = allocatedToPopulation / bets; // each of the offspring
 
 if (single) {
-  Object.assign(args, { evals: evals });
-
-  const singleRun = run(args);
+  const fullArgs = Object.assign({}, args, parsedArgs, { evals: evals },);
+  const singleRun = await run(fullArgs);
   runResults = [singleRun];
 } else {
-  runResults = bet(offspringEvals, bets);
+  runResults = await bet(offspringEvals, bets);
   const [bestRun] = runResults;
-  Object.assign(args, { evals: evals * (1 - betRatio), readState: bestRun.statefile });
-  const lastRun = run(args);
+  const fullArgs = Object.assign({}, args, parsedArgs, { evals: evals * (1 - betRatio), readState: bestRun.statefile });
+  const lastRun = await run(fullArgs);
   runResults.push(lastRun);
 }
 

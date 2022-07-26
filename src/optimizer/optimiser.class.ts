@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import Measuresuite from "measuresuite";
 import os from "os";
-import path from "path";
+import path, { resolve } from "path";
 
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
@@ -25,6 +25,7 @@ import type { AnalyseResult } from "@/types";
 
 import { genStatusLine } from "./optimiser.helper";
 import { init } from "./optimiser.helper.class";
+import type { OptimiserArgs } from "./optimiser.types";
 
 const { CC, CFLAGS } = env;
 let choice: CHOICE;
@@ -34,19 +35,9 @@ export class Optimiser {
   private resultspath: string;
 
   public constructor(
-    private args: {
-      evals: number;
-      seed: number;
-      curve: string;
-      method: string;
-      cyclegoal: number;
-      readState?: string; // filename
-      logComment: string;
-      skipProof: boolean;
-      verbose: boolean;
-      bridge?: string;
-    },
+    private args: OptimiserArgs
   ) {
+
     this.resultspath = generateResultsPath();
     Paul.seed = args.seed;
     this.measuresuite = init(args);
@@ -108,7 +99,7 @@ export class Optimiser {
     }
   }
 
-  public optimise(): void {
+  public optimise = () => new Promise<number>((resolve) => {
     console.log("starting optimisation");
     printStartInfo(this.resultspath);
 
@@ -130,13 +121,11 @@ export class Optimiser {
         `; ratio ${ratioString}`,
         `; seed ${Paul.initialSeed} `,
         `; CC / CFLAGS ${CC} / ${CFLAGS} `,
-        `; time needed: ${elapsed} ms / ${evaluation_number} evals=> ${
-          elapsed / Number(evaluation_number)
+        `; time needed: ${elapsed} ms / ${evaluation_number} evals=> ${elapsed / Number(evaluation_number)
         }ms/eval`,
         `; Time spent for assembling and measureing (initial batch_size=${batchSize}, initial num_batches=${numBatches}): ${accumulatedTimeSpentByMeasuring} ms`,
         `; number of used evaluations: ${evaluation_number}`,
-        `; Ratio (time for assembling + measure)/(total runtime for ${evaluation_number} evals): ${
-          accumulatedTimeSpentByMeasuring / elapsed
+        `; Ratio (time for assembling + measure)/(total runtime for ${evaluation_number} evals): ${accumulatedTimeSpentByMeasuring / elapsed
         }`,
         ...["permutation", "decision"].map(
           (key) =>
@@ -380,11 +369,13 @@ export class Optimiser {
           // DONE WITH OPTIMISING WRITE EVERYTING TO DISK AND EXIT.
           clearInterval(intervalHandle);
           write_current_asm();
-          process.exit(0);
+          resolve(0);
         }
       }
     }, 0);
-  }
+  });
+
+
   public static recordError(e: Error): void {
     this._errors.push(e);
   }
