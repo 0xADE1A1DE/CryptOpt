@@ -1,4 +1,4 @@
-import { existsSync, realpathSync } from "fs";
+import { existsSync, } from "fs";
 import { ensureDirSync } from "fs-extra";
 import { resolve } from "path";
 
@@ -29,7 +29,7 @@ function _genR({
     c = `${bridge}-${c}`;
   }
 
-  const resFolder = resultDir ?? realpathSync(`${process.cwd()}/results`);
+  const resFolder = resultDir ?? resolve(`${process.cwd()}/results`);
   const path = resolve(resFolder, c, method);
 
   if (!existsSync(path)) {
