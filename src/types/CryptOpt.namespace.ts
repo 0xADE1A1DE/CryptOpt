@@ -4,6 +4,18 @@ import { Fiat } from "./fiat.namespace";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CryptOpt {
+  export type StateFile = {
+    to: number[];
+    body: StringInstruction[];
+    ratio: number;
+    convergence: string[];
+    seed: number;
+    time: {
+      validate: number;
+      generateFiat: number;
+      generateCryptopt: number;
+    };
+  };
   export type Operation_T =
     | Fiat.Operation
     // | "-" // name = arguments[0] - arguments[1] - arguments[2]

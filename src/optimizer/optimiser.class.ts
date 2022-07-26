@@ -7,13 +7,23 @@ import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
 import { CHOICE, FUNCTIONS } from "@/enums";
 import { ERRORS } from "@/errors";
-import { analyseMeasureResult, env, LOG_EVERY, PRINT_EVERY, toggleFUNCTIONS, writeasm } from "@/helper";
+import {
+  analyseMeasureResult,
+  env,
+  generateResultsPath,
+  LOG_EVERY,
+  PRINT_EVERY,
+  printStartInfo,
+  shouldProof,
+  toggleFUNCTIONS,
+  writeasm,
+} from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import type { AnalyseResult } from "@/types";
 
-import { genStatusLine, shouldProof } from "./optimiser.helper";
+import { genStatusLine } from "./optimiser.helper";
 import { init } from "./optimiser.helper.class";
 
 const { CC, CFLAGS } = env;
@@ -21,9 +31,9 @@ let choice: CHOICE;
 
 export class Optimiser {
   private measuresuite: Measuresuite;
+  private resultspath: string;
 
   public constructor(
-    private resultspath: string,
     private args: {
       evals: number;
       seed: number;
@@ -37,6 +47,8 @@ export class Optimiser {
       bridge?: string;
     },
   ) {
+    this.resultspath = generateResultsPath();
+    Paul.seed = args.seed;
     this.measuresuite = init(args);
     // load a saved state if necessary
     if (args.readState) {
@@ -98,6 +110,8 @@ export class Optimiser {
 
   public optimise(): void {
     console.log("starting optimisation");
+    printStartInfo(this.resultspath);
+
     let batchSize = 200;
     const numBatches = 31;
     let lastGood = Infinity;

@@ -51,22 +51,23 @@ export class Model {
     return Model._instance;
   }
 
+  public static getState(): CryptOpt.StateFile {
+    return {
+      to: Model._order,
+      body: Model._nodes,
+      ratio: globals.currentRatio,
+      convergence: globals.convergence,
+      seed: Paul.state,
+      time: {
+        validate: globals.time.validate,
+        generateFiat: globals.time.generateFiat,
+        generateCryptopt: globals.time.generateCryptopt,
+      },
+    };
+  }
+
   public static persist(filename: fs.PathLike) {
-    fs.writeFileSync(
-      filename,
-      JSON.stringify({
-        to: Model._order,
-        body: Model._nodes,
-        ratio: globals.currentRatio,
-        convergence: globals.convergence,
-        seed: Paul.state,
-        time: {
-          validate: globals.time.validate,
-          generateFiat: globals.time.generateFiat,
-          generateCryptopt: globals.time.generateCryptopt,
-        },
-      }),
-    );
+    fs.writeFileSync(filename, JSON.stringify(Model.getState()));
     filename = filename.toString();
     if (filename.includes("results")) {
       filename = "RES" + filename.split("results")[1];

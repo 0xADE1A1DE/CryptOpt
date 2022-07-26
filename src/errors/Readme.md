@@ -19,7 +19,7 @@
 | 9     | deprecated
 | 10    | deprecated
 | 11    | deprecated
-| 12    | if populatioratio or populatio is being passed 0. Must be bigger than 0.
+| 12    | deprecated
 | 13    | program was interruped with SIGINT/SIGTERM. State was persisted at the current evaluation.
 | 14    | When Statistics could not be calculated, it exits.
 | 15    | When measuresuite does not yield more than one datapoint.

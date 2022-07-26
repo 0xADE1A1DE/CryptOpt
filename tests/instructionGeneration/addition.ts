@@ -101,10 +101,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-      ({
-        [Flags.CF]: FlagState.KILLED,
-        [Flags.OF]: FlagState.KILLED,
-      } as { [f in Flags]: FlagState }),
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -137,10 +137,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-      ({
-        [Flags.CF]: FlagState.KILLED,
-        [Flags.OF]: FlagState.KILLED,
-      } as { [f in Flags]: FlagState }),
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -170,10 +170,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-      ({
-        [Flags.CF]: FlagState.KILLED,
-        [Flags.OF]: FlagState.KILLED,
-      } as { [f in Flags]: FlagState }),
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -206,10 +206,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-      ({
-        [Flags.CF]: FlagState.KILLED,
-        [Flags.OF]: FlagState.KILLED,
-      } as { [f in Flags]: FlagState }),
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -249,10 +249,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-      ({
-        [Flags.CF]: FlagState.KILLED,
-        [Flags.OF]: FlagState.KILLED,
-      } as { [f in Flags]: FlagState }),
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
     );
 
     const c: CryptOpt.StringInstruction = {
@@ -284,10 +284,10 @@ describe("instructionGeneration:add", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
-      ({
-        [Flags.CF]: FlagState.KILLED,
-        [Flags.OF]: FlagState.KILLED,
-      } as { [f in Flags]: FlagState }),
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
     );
     // getVarnameFromStore()
 

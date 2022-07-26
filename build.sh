@@ -18,7 +18,7 @@ download_node() {
 build_ms(){
   echo "building MeasureSuite"
   cd ./modules/MeasureSuite || echo "MeasureSuite is not there. Please init" >&2
-  npm install
+  CFLAGS="-I${BIN_DIR}/node/include" npm install
 }
 
 build_cryptopt() {
@@ -40,6 +40,14 @@ clean() {
 
 if ! test -x "${NODE}" || ! which node >/dev/null; then
   download_node
+fi
+
+if [[ "$*" =~ "--ms" ]]; then
+  build_ms
+fi
+
+if [[ "$*" =~ "--clean" ]]; then
+  deepclean
 fi
 
 if [[ "$*" =~ "-f" ]] || ! test -e "${BUILT_CRYPTOPT}"; then

@@ -60,15 +60,3 @@ export function genStatusLine(a: {
       `${pu}${a.show_per_second}${re}`,
   ].join("|");
 }
-
-export function shouldProof({
-  skipProof,
-  method,
-  bridge,
-}: {
-  skipProof: boolean;
-  method: string;
-  bridge?: string;
-}): boolean {
-  return !skipProof && method !== "keccakf" && bridge !== "bitcoin-core";
-}

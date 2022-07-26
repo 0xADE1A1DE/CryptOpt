@@ -1,11 +1,8 @@
 // rollup.config.js
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
+// import { terser } from "rollup-plugin-terser";
 
-const output = {
-  dir: "dist",
-  format: "cjs",
-};
 const external = [
   "child_process",
   "crypto",
@@ -22,17 +19,16 @@ const external = [
 export default [
   {
     input: "src/CryptOpt.ts",
-    output,
-    external,
-    plugins: [typescript()],
-  },
-  {
-    input: "src/BetAndRun.ts",
-    output,
+    output: {
+      dir: "dist",
+      format: "cjs",
+    },
     external,
     plugins: [
       typescript(),
+      //  terser()
       copy({
+        hook: "parallel",
         targets: [
           {
             src: [

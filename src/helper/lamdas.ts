@@ -294,3 +294,15 @@ export function makeU64NameLimbs<T extends CryptOpt.ArgumentWithStringNames>(nod
   // until https://github.com/microsoft/TypeScript/issues/44373 is adressed
   return r as Array<CryptOpt.Varname | "_">;
 }
+
+export function shouldProof({
+  skipProof,
+  method,
+  bridge,
+}: {
+  skipProof: boolean;
+  method: string;
+  bridge?: string;
+}): boolean {
+  return !skipProof && method !== "keccakf" && bridge !== "bitcoin-core";
+}

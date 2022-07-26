@@ -19,7 +19,7 @@ it("optimise", (done) => {
     done();
   }) as any);
   resultpath = getTestResultsPath();
-  new Optimiser(resultpath, getTestArgs(__filename)).optimise();
+  new Optimiser(getTestArgs(__filename)).optimise();
   jest.runAllTimers();
 });
 afterAll(() => {

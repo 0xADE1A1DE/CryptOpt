@@ -5,5 +5,6 @@ export * from "./env";
 export * from "./fiat-helpers";
 export * from "./lamdas";
 export * from "./path";
+export * from "./printInfo";
 export * from "./reg-conversion";
 export * from "./toposort";

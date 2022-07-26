@@ -19,7 +19,7 @@ it("optimise", (done) => {
   const args = getTestArgs(__filename);
   args.bridge = "bitcoin-core";
   resultpath = getTestResultsPath();
-  const opt = new Optimiser(resultpath, args);
+  const opt = new Optimiser(args);
 
   try {
     expect(() => opt.optimise()).not.toThrow();
@@ -32,7 +32,7 @@ it("optimise", (done) => {
 });
 
 afterAll(() => {
-  rm(resultpath, { recursive: true, force: true }, () => { });
+  rm(resultpath, { recursive: true, force: true }, () => {});
   mockLog.mockRestore();
   mockErr.mockRestore();
   spyExit.mockRestore();

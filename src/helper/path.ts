@@ -2,23 +2,35 @@ import { existsSync, realpathSync } from "fs";
 import { ensureDirSync } from "fs-extra";
 import { resolve } from "path";
 
-export function generateResultsPath({
+import { parsedArgs } from "./argParse";
+
+export function generateResultsPath(): string {
+  const { curve, bridge, method, resultDir } = parsedArgs;
+  return _genR({ curve, bridge, method, resultDir });
+}
+
+export function generateStateFileName(seed: number | string): string {
+  return resolve(generateResultsPath() + `/_state_${seed}.json`).toString();
+}
+
+function _genR({
   curve,
-  method,
   bridge,
+  method,
+  resultDir,
 }: {
   curve: string;
   method: string;
   bridge?: string;
+  resultDir?: string;
 }): string {
   let c = curve;
   if (bridge && bridge != "fiat") {
-    c = `${bridge}-${curve}`;
+    c = `${bridge}-${c}`;
   }
 
-  const path =
-    realpathSync(`${process.cwd()}/automate/..`.replace("automate/automate", "automate")) +
-    `/results/${c}/${method}`;
+  const resFolder = resultDir ?? realpathSync(`${process.cwd()}/results`);
+  const path = resolve(resFolder, c, method);
 
   if (!existsSync(path)) {
     console.warn(`${path} does not exist. Trying to create it.`);
@@ -32,17 +44,4 @@ export function generateResultsPath({
     }
   }
   return path;
-}
-export function generateStateFileName({
-  curve,
-  method,
-  seed,
-  bridge,
-}: {
-  curve: string;
-  method: string;
-  seed: number | string;
-  bridge?: string;
-}): string {
-  return resolve(generateResultsPath({ curve, method, bridge }) + `/_state_${seed}.json`).toString();
 }

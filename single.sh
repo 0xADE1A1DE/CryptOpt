@@ -2,10 +2,10 @@
 ROOT=$(dirname "${0}")
 BIN_DIR="${ROOT}/bins"
 NODE=${BIN_DIR}/node/bin/node
-PATH="${PATH}:$(basename "${NODE}")"
-export PATH
+
+
 
 BUILT_CRYPTOPT="${ROOT}/dist/CryptOpt.js"
 
 #run single
-node "${BUILT_CRYPTOPT}" "${@}"
+PATH="${PATH}:$(basename "${NODE}")" /usr/bin/env node "${BUILT_CRYPTOPT}" "${@}"
