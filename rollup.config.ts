@@ -1,6 +1,6 @@
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
-// import { terser } from "rollup-plugin-terser";
+import { terser } from "rollup-plugin-terser";
 
 const external = [
   "child_process",
@@ -19,7 +19,7 @@ export default [
     input: "src/CryptOpt.ts",
     output: {
       dir: "dist",
-      format: "cjs",
+      format: "es",
     },
     external,
     plugins: [

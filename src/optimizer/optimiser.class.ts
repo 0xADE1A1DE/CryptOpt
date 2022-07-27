@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import Measuresuite from "measuresuite";
+import { Measuresuite } from "measuresuite";
 import os from "os";
 import path, { resolve } from "path";
 

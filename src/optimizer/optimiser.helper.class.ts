@@ -1,4 +1,4 @@
-import Measuresuite from "measuresuite";
+import { Measuresuite } from "measuresuite";
 
 import { BRIDGES } from "@/bridge";
 import {

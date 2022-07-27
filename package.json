@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Generates high performance ASM from JSON-specified Arithmetic",
   "main": "dist/CryptOpt.js",
+  "type": "module",
   "cpu": [
     "x64"
   ],
