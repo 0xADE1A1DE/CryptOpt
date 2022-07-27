@@ -65,7 +65,7 @@ export const parsedArgs = y
   .option("betRatio", {
     number: true,
     alias: "r",
-    default: 0.02,
+    default: 0.2,
     describe:
       "It describes how much of the total evaluation-budget is being used for the bet part. E.g. if this is 0.2, then 20% of @param evals will be used for used for finding a good seed, and 80% of mutations is spent on the best found.",
     min: 0,
