@@ -1,12 +1,15 @@
 import { uniq } from "lodash-es";
 import yargs from "yargs";
+import { hideBin } from 'yargs/helpers'
 
 import { AVAILABLE_METHODS as BITCOIN_CORE_METHODS } from "@/bridge/bitcoin-core-bridge/constants";
 import { BRIDGES } from "@/bridge/constants";
 import { AVAILABLE_CURVES, AVAILABLE_METHODS as FIAT_METHODS } from "@/bridge/fiat-bridge/constants";
 import { errorOut, ERRORS } from "@/errors";
 
-export const parsedArgs = yargs
+const y = await yargs(hideBin(process.argv));
+
+export const parsedArgs = y
   .option("curve", {
     string: true,
     alias: "c",
@@ -130,5 +133,5 @@ export const parsedArgs = yargs
   })
   .help("help")
   .alias("h", "help")
-  .wrap(Math.min(160, yargs.terminalWidth()))
+  .wrap(Math.min(160, y.terminalWidth()))
   .parseSync();
