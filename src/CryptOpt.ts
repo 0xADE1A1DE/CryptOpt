@@ -5,7 +5,7 @@ import os from "os";
 import { cy, env, generateStateFileName, gn, parsedArgs, PRINT_EVERY, rd, re, SI } from "@/helper";
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
-import type { OptimiserArgs } from "@/optimizer";
+import type { OptimizerArgs } from "@/optimizer";
 import { Optimizer } from "@/optimizer";
 import { sha1Hash } from "@/paul";
 import type { CryptoptGlobals } from "@/types";
@@ -52,7 +52,7 @@ async function bet(evals: number, bets: number): Promise<RunResult[]> {
   return runRes;
 }
 
-async function run(args: OptimiserArgs): Promise<RunResult> {
+async function run(args: OptimizerArgs): Promise<RunResult> {
   try {
     await new Optimizer(args).optimise();
   } catch (e) {

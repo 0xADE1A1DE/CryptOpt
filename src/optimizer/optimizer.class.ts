@@ -26,7 +26,7 @@ import type { AnalyseResult } from "@/types";
 
 import { genStatusLine } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
-import type { OptimiserArgs } from "./optimizer.types";
+import type { OptimizerArgs } from "./optimizer.types";
 
 const { CC, CFLAGS } = env;
 let choice: CHOICE;
@@ -36,7 +36,7 @@ export class Optimizer {
   private resultspath: string;
   private libcheckfunctionDirectory: string;
 
-  public constructor(private args: OptimiserArgs) {
+  public constructor(private args: OptimizerArgs) {
     this.libcheckfunctionDirectory = mkdtempSync(`${tmpdir()}${path.sep}`);
     this.resultspath = generateResultsPath();
     Paul.seed = args.seed;

@@ -1,4 +1,4 @@
-export type OptimiserArgs = {
+export type OptimizerArgs = {
   evals: number;
   seed: number;
   curve: string;
