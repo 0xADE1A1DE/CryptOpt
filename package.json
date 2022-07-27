@@ -1,7 +1,7 @@
 {
   "name": "cryptopt",
   "version": "1.0.0",
-  "description": "generates high performance ASM from JSON-specified Arithmetic",
+  "description": "Generates high performance ASM from JSON-specified Arithmetic",
   "main": "dist/CryptOpt.js",
   "cpu": [
     "x64"

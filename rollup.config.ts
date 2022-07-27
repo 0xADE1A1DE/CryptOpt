@@ -1,4 +1,3 @@
-// rollup.config.js
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
 // import { terser } from "rollup-plugin-terser";
@@ -7,7 +6,6 @@ const external = [
   "child_process",
   "crypto",
   "fs-extra",
-  "fs",
   "fs",
   "lodash-es",
   "measuresuite",
@@ -26,9 +24,8 @@ export default [
     external,
     plugins: [
       typescript(),
-      //  terser()
+      // terser(),
       copy({
-        hook: "parallel",
         targets: [
           {
             src: [

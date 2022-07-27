@@ -10,7 +10,6 @@ download_node() {
   mkdir -p "${BIN_DIR}"
   curl -L https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz | tar --extract --xz --directory ./bins
   mv -f ./bins/node-v${NODE_VERSION}-linux-x64 "${BIN_DIR}/node"
-
   PATH="${PATH}:$(basename "${NODE}")"
   export PATH
 }
