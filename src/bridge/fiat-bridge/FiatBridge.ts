@@ -60,15 +60,17 @@ export class FiatBridge implements Bridge {
     const { cmd, hash } = this.buildCommand(curve, method, "JSON");
     const jsonCacheFilename = resolve(cacheDir, `${hash}.json`);
 
+    let fiatBuffer: Buffer;
     if (existsSync(jsonCacheFilename)) {
       console.log(`reading json-fiat: ${jsonCacheFilename}`);
-      return JSON.parse(readFileSync(jsonCacheFilename).toString());
+      fiatBuffer = readFileSync(jsonCacheFilename);
+    } else {
+      const command = `${cmd} | jq -s .[0] | tee ${jsonCacheFilename}`;
+      console.log(`executing cmd to generate fiat: ${command}`);
+      fiatBuffer = execSync(command);
     }
 
-    const command = `${cmd} | jq -s .[0] | tee ${jsonCacheFilename}`;
-    console.log(`executing cmd to generate fiat: ${command}`);
-
-    const fiat = JSON.parse(execSync(command).toString()) as Fiat.FiatFunction;
+    const fiat = JSON.parse(fiatBuffer.toString()) as Fiat.FiatFunction;
     const cryptOpt = preprocessFunction(fiat);
     return cryptOpt;
   }

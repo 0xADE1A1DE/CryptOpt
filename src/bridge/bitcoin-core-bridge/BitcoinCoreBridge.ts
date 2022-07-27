@@ -64,12 +64,11 @@ export class BitcoinCoreBridge implements Bridge {
     }
 
     // raw preprocessing (i.e. llvm->fiat)
-    const a = new BCBPreprocessor(structs).preprocessRaw(found);
+    const fiat = new BCBPreprocessor(structs).preprocessRaw(found);
 
     // 'normal' preprocessing (fiat-> cryptopt)
-    const preprocessed = preprocessFunction(a);
-
-    return preprocessed;
+    const cryptOpt = preprocessFunction(fiat);
+    return cryptOpt;
   }
 
   public machinecode(method: METHOD_T, filename = "libcheckfunctions.so"): string {
