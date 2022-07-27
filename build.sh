@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-ROOT=$(dirname "${0}")
+ROOT=$(realpath $(dirname "${0}"))
 BIN_DIR="${ROOT}/bins"
 NODE=${BIN_DIR}/node/bin/node
 NODE_VERSION=18.2.0
