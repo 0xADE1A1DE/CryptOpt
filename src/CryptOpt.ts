@@ -10,7 +10,7 @@ import { Optimizer } from "@/optimizer";
 import { sha1Hash } from "@/paul";
 import type { CryptoptGlobals } from "@/types";
 
-const { single, bets, betRatio, seed, curve, method, evals, verbose } = parsedArgs;
+const { single, bets, betRatio, curve, method, verbose } = parsedArgs;
 
 // GENERAL INITIALIZATION
 if (!verbose) {
@@ -18,23 +18,25 @@ if (!verbose) {
     // intentionally empty
   };
 }
-registerExitHooks(seed);
+registerExitHooks(parsedArgs.seed);
 
 type RunResult = { statefile: string; ratio: number; convergence: string[] };
 
-async function bet(evals: number, bets: number): Promise<RunResult[]> {
+async function allBets(evals: number, bets: number): Promise<RunResult[]> {
   const runRes = [] as RunResult[];
 
-  let derivedSeed = seed;
+  let derivedSeed = parsedArgs.seed;
 
   for (let i = 1; i <= bets; i++) {
     derivedSeed = sha1Hash(derivedSeed);
 
-    const args = Object.assign({}, parsedArgs, {
+    const args = {
+      ...parsedArgs,
       evals,
       logComment: `${i}/${bets}`,
       seed: derivedSeed,
-    });
+    };
+    console.log("running a bet with ", JSON.stringify(args, undefined, 2));
     const runResult = await run(args);
     runRes.push(runResult);
   }
@@ -66,24 +68,27 @@ async function run(args: OptimizerArgs): Promise<RunResult> {
   return { statefile, ratio, convergence };
 }
 
-const args: Partial<OptimiserArgs> = { seed, logComment: "run" };
-
 let runResults: RunResult[];
 
-const allocatedToPopulation = evals * betRatio; // total for population
+const allocatedToPopulation = parsedArgs.evals * betRatio; // total for population
 const offspringEvals = allocatedToPopulation / bets; // each of the offspring
 
 if (single) {
-  const fullArgs = Object.assign({}, args, parsedArgs, { evals: evals });
+  const fullArgs = {
+    ...parsedArgs,
+    logComment: "run",
+  };
   const singleRun = await run(fullArgs);
   runResults = [singleRun];
 } else {
-  runResults = await bet(offspringEvals, bets);
+  runResults = await allBets(offspringEvals, bets);
   const [bestRun] = runResults;
-  const fullArgs = Object.assign({}, args, parsedArgs, {
-    evals: evals * (1 - betRatio),
+  const fullArgs = {
+    ...parsedArgs,
+    logComment: "run",
+    evals: parsedArgs.evals - allocatedToPopulation,
     readState: bestRun.statefile,
-  });
+  };
   const lastRun = await run(fullArgs);
   runResults.push(lastRun);
 }
@@ -119,7 +124,7 @@ const spaceSeparated = runResults
   // have the final convergences at the end, so that it overwrites the earlier one. (that way it will be the same color.)
   // For some eager programmer, feel free to find the particular rows of finalConvergences in ratios and delete it.
   .concat(finalConvergences);
-const finalStateFile = generateStateFileName(seed);
+const finalStateFile = generateStateFileName(parsedArgs.seed);
 
 const datFileFull = `${finalStateFile}.dat`;
 
@@ -129,8 +134,8 @@ process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${
 const gpFile = `${datFileFull}.gp`;
 const title = [
   `${curve.replace("_", "\\\\_")}-${method}`,
-  single || `Restarts^{${bets}}_{${(offspringEvals / evals) * 100}%}`,
-  `#Mutations ${SI(evals)}`,
+  single || `Restarts^{${bets}}_{${(offspringEvals / parsedArgs.evals) * 100}%}`,
+  `#Mutations ${SI(parsedArgs.evals)}`,
   new Date().toISOString(),
   os.hostname(),
   Object.entries(times).map((k, v) => `Time for ${k}: ${(v / 60).toFixed(2)}min`),
