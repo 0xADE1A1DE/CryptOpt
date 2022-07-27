@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { existsSync, mkdtempSync, unlinkSync } from "fs";
+import { existsSync, mkdtempSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { cpus, tmpdir } from "os";
 import path from "path";
@@ -379,7 +379,14 @@ export class Optimizer {
 
   private cleanLibcheckfunctions() {
     if (existsSync(this.libcheckfunctionDirectory)) {
-      unlinkSync(this.libcheckfunctionDirectory);
+      try {
+        console.log(`removing libcheckfunctions in '${this.libcheckfunctionDirectory}'`);
+        rmSync(this.libcheckfunctionDirectory, { recursive: true });
+        console.log(`removed ${this.libcheckfunctionDirectory}`);
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
     }
   }
 }
