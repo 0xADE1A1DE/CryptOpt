@@ -75,10 +75,7 @@ export class ManualBridge implements Bridge {
    * @returns the name of the symbol, which is being present in @param filename after this function is finished.
    * if force is false, it will check if the machinecode needs to be generated, and skip the step if its not necessary
    */
-  public machinecode(
-    filename = "libcheckfunctions.so",
-    ccOverwrite?: string,
-  ): string {
+  public machinecode(filename = "libcheckfunctions.so", ccOverwrite?: string): string {
     const methodname = this._coFunction.operation;
 
     if (existsSync(filename)) {

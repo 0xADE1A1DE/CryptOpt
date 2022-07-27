@@ -25,7 +25,6 @@ const { CC, CFLAGS } = env;
 const cacheDir = resolve(cwd, ".cache");
 
 export class FiatBridge implements Bridge {
-
   public argnumin(m: METHOD_T): number {
     if (!AVAILABLE_METHODS.includes(m)) {
       throw new Error(`unsupported method ${m}`);
@@ -69,7 +68,7 @@ export class FiatBridge implements Bridge {
     const command = `${cmd} | jq -s .[0] | tee ${jsonCacheFilename}`;
     console.log(`executing cmd to generate fiat: ${command}`);
 
-    const fiat = (JSON.parse(execSync(command).toString()) as Fiat.FiatFunction);
+    const fiat = JSON.parse(execSync(command).toString()) as Fiat.FiatFunction;
     const cryptOpt = preprocessFunction(fiat);
     return cryptOpt;
   }
@@ -234,4 +233,3 @@ export class FiatBridge implements Bridge {
     }
   }
 }
-

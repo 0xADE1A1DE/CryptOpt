@@ -1,5 +1,5 @@
 import { Measuresuite } from "measuresuite";
-import { resolve, } from "path";
+import { resolve } from "path";
 
 import { BRIDGES } from "@/bridge";
 import {
@@ -16,11 +16,13 @@ import {
 import { ManualBridge } from "@/bridge/manual-bridge";
 import { Model } from "@/model";
 
-
-const genLibcheckfunctionFullFilepath = (tmpDir: string, args: { seed: number; curve: string; method?: string }) => {
+const genLibcheckfunctionFullFilepath = (
+  tmpDir: string,
+  args: { seed: number; curve: string; method?: string },
+) => {
   const suffix = `s${args.seed}-p${process.pid}-c${args.curve}${args.method ? "-m" : ""}${args.method ?? ""}`;
   return resolve(tmpDir, `libcheckfunctions-${suffix}.so`);
-}
+};
 
 type neededArgs = {
   seed: number;
@@ -46,7 +48,7 @@ function initFiat(sharedObject: string, args: neededArgs): ret {
     json: bridge.getCryptOptFunction(args.method, args.curve),
   });
 
-  const symbolname = bridge.machinecode(sharedObject, args.method, args.curve,);
+  const symbolname = bridge.machinecode(sharedObject, args.method, args.curve);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
   const argwidth = bridge.argwidth(args.curve);
   const argnumin = bridge.argnumin(args.method);
@@ -106,14 +108,19 @@ function initManual(sharedObject: string, args: neededArgs): ret {
   return res;
 }
 
-function createMS({ argwidth, argnumin, argnumout, chunksize, bounds, symbolname }: ret, libcheckfunctionFile: string): Measuresuite {
+function createMS(
+  { argwidth, argnumin, argnumout, chunksize, bounds, symbolname }: ret,
+  libcheckfunctionFile: string,
+): Measuresuite {
   return new Measuresuite(argwidth, argnumin, argnumout, chunksize, bounds, libcheckfunctionFile, symbolname);
 }
 
 export function init(tmpDir: string, args: neededArgs): Measuresuite {
-
   const mapping: {
-    [bridge: string]: { availableMethods: string[]; generatorFunction: (soFile: string, args: neededArgs) => ret };
+    [bridge: string]: {
+      availableMethods: string[];
+      generatorFunction: (soFile: string, args: neededArgs) => ret;
+    };
   } = {
     fiat: { availableMethods: AVAILABLE_FIAT_METHODS, generatorFunction: initFiat },
     manual: { availableMethods: [], generatorFunction: initManual },
@@ -123,7 +130,6 @@ export function init(tmpDir: string, args: neededArgs): Measuresuite {
   const sharedObject = genLibcheckfunctionFullFilepath(tmpDir, args);
 
   if (args.bridge) {
-
     if (!(args.bridge in mapping)) {
       throw new Error("Bridge is specified, but not valid.");
     }
@@ -140,7 +146,6 @@ export function init(tmpDir: string, args: neededArgs): Measuresuite {
       return createMS(common, sharedObject);
     }
     throw new Error("Could not find  specified method in specified Bridge.");
-
   } else {
     const found = BRIDGES.find((bridge) => mapping[bridge].availableMethods.includes(args.method));
     if (found) {

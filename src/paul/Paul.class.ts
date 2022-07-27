@@ -23,7 +23,8 @@ export class Paul {
     const decision = d[decisionKey];
     if (!decision) {
       throw new Error(
-        `TSNH; shouldnt happen because all appropriate decision should have been initalised e.g. for add, there must be a chosen choise for which flag to use. Check addDecisionProperty-function. ${decisionKey}, ${d[decisionKey]
+        `TSNH; shouldnt happen because all appropriate decision should have been initalised e.g. for add, there must be a chosen choise for which flag to use. Check addDecisionProperty-function. ${decisionKey}, ${
+          d[decisionKey]
         }, ${JSON.stringify(Paul.getInstance()._currentInstruction)}`,
       );
     }
@@ -180,7 +181,7 @@ export class Paul {
       n <= 0 // and if its left of 0, we want to subtract that negative number from start (as in: start+Math.abs(n))
         ? start - n
         : // otherwise we want to have end - small number
-        end - n;
+          end - n;
 
     if (r < start || r >= end) {
       throw new Error(

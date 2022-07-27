@@ -1,4 +1,4 @@
-import { existsSync, } from "fs";
+import { existsSync } from "fs";
 import { ensureDirSync } from "fs-extra";
 import { resolve } from "path";
 

@@ -1,6 +1,6 @@
 import { uniq } from "lodash-es";
 import yargs from "yargs";
-import { hideBin } from 'yargs/helpers'
+import { hideBin } from "yargs/helpers";
 
 import { AVAILABLE_METHODS as BITCOIN_CORE_METHODS } from "@/bridge/bitcoin-core-bridge/constants";
 import { BRIDGES } from "@/bridge/constants";

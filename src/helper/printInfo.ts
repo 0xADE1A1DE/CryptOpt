@@ -24,4 +24,3 @@ export function printStartInfo(resultspath: string) {
     ].join(" "),
   );
 }
-

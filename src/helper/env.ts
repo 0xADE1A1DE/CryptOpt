@@ -7,4 +7,4 @@ export const env = defaults(process.env, {
   CFLAGS: "-march=native -mtune=native -O3",
 });
 
-export const datadir = resolve(cwd(), "dist", "data")
+export const datadir = resolve(cwd(), "dist", "data");

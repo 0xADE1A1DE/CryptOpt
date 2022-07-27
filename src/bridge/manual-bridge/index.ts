@@ -1,1 +1,1 @@
-export * from "./ManualBridge"
+export * from "./ManualBridge";

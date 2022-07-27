@@ -1,4 +1,3 @@
-
 import { Model } from "@/model";
 
 import { cy, re } from "./constants";
@@ -27,5 +26,4 @@ export function registerExitHooks(seed: number) {
     process.stdout.write(`\ncaught ${signal}`);
     process.exit(13);
   });
-
 }

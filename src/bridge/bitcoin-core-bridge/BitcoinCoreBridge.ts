@@ -12,16 +12,15 @@ import { AVAILABLE_METHODS, METHOD_DETAILS, METHOD_T } from "./constants";
 import { BCBPreprocessor } from "./preprocess";
 import type { raw_T, structDef_T } from "./raw.type";
 
-const cwd = resolve(datadir, "bitcoin-core-bridge",);
+const cwd = resolve(datadir, "bitcoin-core-bridge");
 
 const createExecOpts = () => {
-  const c = { env, cwd, };
+  const c = { env, cwd };
   c.env.CFLAGS = `-DUSE_ASM_X86_64 ${c.env.CFLAGS}`;
   return c;
 };
 
 export class BitcoinCoreBridge implements Bridge {
-
   public getCryptOptFunction(method: METHOD_T, _curve?: string): CryptOpt.Function {
     if (!(method in METHOD_DETAILS)) {
       throw new Error(`unsupported method '${method}'. Choose from ${AVAILABLE_METHODS.join(", ")}.`);

@@ -30,11 +30,11 @@ export default [
       copy({
         targets: [
           {
-            src: ["src/bridge/fiat-bridge/data/*",],
+            src: ["src/bridge/fiat-bridge/data/*"],
             dest: "./dist/data/fiat-bridge",
           },
           {
-            src: ["src/bridge/bitcoin-core-bridge/data/*",],
+            src: ["src/bridge/bitcoin-core-bridge/data/*"],
             dest: "./dist/data/bitcoin-core-bridge",
           },
         ],

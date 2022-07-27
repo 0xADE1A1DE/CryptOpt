@@ -74,13 +74,16 @@ const allocatedToPopulation = evals * betRatio; // total for population
 const offspringEvals = allocatedToPopulation / bets; // each of the offspring
 
 if (single) {
-  const fullArgs = Object.assign({}, args, parsedArgs, { evals: evals },);
+  const fullArgs = Object.assign({}, args, parsedArgs, { evals: evals });
   const singleRun = await run(fullArgs);
   runResults = [singleRun];
 } else {
   runResults = await bet(offspringEvals, bets);
   const [bestRun] = runResults;
-  const fullArgs = Object.assign({}, args, parsedArgs, { evals: evals * (1 - betRatio), readState: bestRun.statefile });
+  const fullArgs = Object.assign({}, args, parsedArgs, {
+    evals: evals * (1 - betRatio),
+    readState: bestRun.statefile,
+  });
   const lastRun = await run(fullArgs);
   runResults.push(lastRun);
 }
