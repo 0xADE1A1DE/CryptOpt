@@ -1,4 +1,6 @@
+import { jest } from "@jest/globals";
 import { rm } from "fs";
+import { basename } from "path";
 
 import { Optimizer } from "@/optimizer";
 
@@ -6,28 +8,37 @@ import { getTestArgs, getTestResultsPath, nothing } from "../test-helpers";
 
 const mockLog = jest.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = jest.spyOn(console, "error").mockImplementation(nothing);
-const mockDbg = jest.spyOn(console, "debug").mockImplementation(nothing); // executing bla to generate machinecode...
-let spyExit: jest.SpyInstance;
+
 jest.useFakeTimers();
 let resultpath = "";
 
-it("optimize", (done) => {
-  spyExit = jest.spyOn(process, "exit").mockImplementation(((nu: number) => {
-    expect(nu).toEqual(0);
-    expect(mockErr).not.toHaveBeenCalled();
-    done();
-  }) as any);
+it("optimise", (done) => {
+  const filename = basename(import.meta.url);
+  const args = getTestArgs(filename);
   resultpath = getTestResultsPath();
-  new Optimizer(getTestArgs(__filename)).optimise();
-  jest.runAllTimers();
+  const opt = new Optimizer(args);
+
+  try {
+    expect(() =>
+      opt.optimise().then((code) => {
+        expect(code).toEqual(0);
+        expect(mockErr).not.toHaveBeenCalled();
+        done();
+      }),
+    ).not.toThrow();
+    jest.runAllTimers();
+  } catch (e) {
+    mockErr.mockRestore();
+    console.error(e);
+    done(e);
+  }
 });
+
 afterAll(() => {
   rm(resultpath, { recursive: true, force: true }, () => {
     /* intentionally empty */
   });
   mockLog.mockRestore();
   mockErr.mockRestore();
-  mockDbg.mockRestore();
-  spyExit.mockRestore();
   jest.useRealTimers();
 });

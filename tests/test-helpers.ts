@@ -15,7 +15,7 @@ export function getTestArgs(filename: string): {
   verbose: false;
   bridge?: string;
 } {
-  const groups = basename(filename).match(/(?<curve>.*)-(?<method>.*).ts/)?.groups;
+  const groups = basename(filename).match(/(?<curve>.*)-(?<method>.*)\.ts/)?.groups;
 
   if (!groups) {
     throw new Error("filename not matching.");

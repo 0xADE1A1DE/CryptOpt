@@ -367,7 +367,7 @@ export class Optimizer {
             clearInterval(intervalHandle);
             write_current_asm();
             this.cleanLibcheckfunctions();
-            console.warn("Wonderful. Done with my work. Time for lunch.");
+            console.log("Wonderful. Done with my work. Time for lunch.");
             resolve(0);
           }
         }
