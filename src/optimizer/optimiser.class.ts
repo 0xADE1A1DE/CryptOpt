@@ -46,7 +46,7 @@ export class Optimiser {
       Model.import(args.readState);
     }
   }
-  private static _errors: Error[] = [];
+
   private no_of_instructions = -1;
   private asmStrings: { [k in FUNCTIONS]: string } = {
     [FUNCTIONS.F_A]: "",
@@ -137,9 +137,6 @@ export class Optimiser {
       ];
 
       console.log(statistics);
-      if (Optimiser._errors.length) {
-        Optimiser._errors.forEach((e) => console.error(e));
-      }
       const { curve, method: func } = this.args;
 
       const evalString = number_evaluation ? `_eval${number_evaluation}of${this.args.evals}` : "";
@@ -375,8 +372,5 @@ export class Optimiser {
     }, 0);
   });
 
-
-  public static recordError(e: Error): void {
-    this._errors.push(e);
   }
 }
