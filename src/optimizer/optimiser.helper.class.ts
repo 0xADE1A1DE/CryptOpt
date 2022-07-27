@@ -94,12 +94,12 @@ function initManual(sharedObject: string, args: neededArgs): ret {
   const argnumout = bridge.argnumout();
   //  bounds:    ["0x0000 3000 0000 0000",
   //  &            0x0000 1fff ffff ffff
-  const bounds = ["0x0000 0000 0000 ffff"]
+  const bounds = ["0xffff ffff ffff ffff"]
     .concat(
       Array(argwidth - 1)
         //     0x0000 0fff ffff ffff
         //    "0x0000 1800 0000 0000"],
-        .fill("0x0000 0000 0000 ffff"),
+        .fill("0xffff ffff ffff ffff"),
     )
     .map((s) => s.replaceAll(" ", ""));
 
