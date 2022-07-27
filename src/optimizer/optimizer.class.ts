@@ -130,7 +130,7 @@ export class Optimizer {
           }`,
           ...["permutation", "decision"].map(
             (key) =>
-              `; number reverted ${key}/ tried ${key}: ${this.numRevert[key]} / ${this.numMut[key]} =${(
+              `; number reverted ${key} / tried ${key}: ${this.numRevert[key]} / ${this.numMut[key]} =${(
                 (this.numRevert[key] / this.numMut[key]) *
                 100
               ).toFixed(3)}%`,

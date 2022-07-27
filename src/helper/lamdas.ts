@@ -174,7 +174,7 @@ export const assertStringArguments: (
   c: CryptOpt.Argument,
 ) => asserts c is CryptOpt.ArgumentWithStringArguments = (c) => {
   if (typeof c === "string" || c.arguments.length == 0 || c.arguments.some((a) => typeof a !== "string")) {
-    throw new Error(` ${c} was used with hierarchical arguments. This is not yet supported`);
+    throw new Error(` ${JSON.stringify(c)} was used with hierarchical arguments. This is not yet supported`);
   }
 };
 
@@ -209,6 +209,7 @@ export function setToString(s: Set<string>, max = Infinity): string {
 
 export function writeasm(asmString: string, filename: string): void {
   // used to be more complicated in there...
+  console.log(`writing ${asmString} chars of asm to '${filename}'`);
   fs.writeFileSync(filename, asmString);
 }
 
