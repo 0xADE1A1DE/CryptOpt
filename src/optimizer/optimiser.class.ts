@@ -1,7 +1,8 @@
 import { execSync } from "child_process";
+import { existsSync, mkdtempSync, unlinkSync } from "fs";
 import { Measuresuite } from "measuresuite";
-import os from "os";
-import path, { resolve } from "path";
+import { cpus, tmpdir } from "os";
+import path from "path";
 
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
@@ -31,16 +32,18 @@ const { CC, CFLAGS } = env;
 let choice: CHOICE;
 
 export class Optimiser {
+
   private measuresuite: Measuresuite;
   private resultspath: string;
+  private libcheckfunctionDirectory: string;
 
   public constructor(
     private args: OptimiserArgs
   ) {
-
+    this.libcheckfunctionDirectory = mkdtempSync(`${tmpdir()}${path.sep}`);
     this.resultspath = generateResultsPath();
     Paul.seed = args.seed;
-    this.measuresuite = init(args);
+    this.measuresuite = init(this.libcheckfunctionDirectory, args);
     // load a saved state if necessary
     if (args.readState) {
       Model.import(args.readState);
@@ -117,7 +120,7 @@ export class Optimiser {
       const elapsed = Date.now() - optimistaionStartDate;
       const evaluation_number = number_evaluation ?? this.args.evals;
       const statistics = [
-        `; cpu ${os.cpus()[0].model}`,
+        `; cpu ${cpus()[0].model}`,
         `; ratio ${ratioString}`,
         `; seed ${Paul.initialSeed} `,
         `; CC / CFLAGS ${CC} / ${CFLAGS} `,
@@ -366,11 +369,17 @@ export class Optimiser {
           // DONE WITH OPTIMISING WRITE EVERYTING TO DISK AND EXIT.
           clearInterval(intervalHandle);
           write_current_asm();
+          this.cleanLibcheckfunctions();
           resolve(0);
         }
       }
     }, 0);
   });
 
+  private cleanLibcheckfunctions() {
+    if (existsSync(this.libcheckfunctionDirectory)) {
+      unlinkSync(this.libcheckfunctionDirectory)
+    }
   }
+
 }

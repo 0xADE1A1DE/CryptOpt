@@ -1,4 +1,5 @@
 import { Measuresuite } from "measuresuite";
+import { resolve, } from "path";
 
 import { BRIDGES } from "@/bridge";
 import {
@@ -16,8 +17,12 @@ import { ManualBridge } from "@/bridge/manual-bridge";
 import { preprocessFunction } from "@/helper";
 import { Model } from "@/model";
 
-const genLibcheckfunctionsSuff = (args: { seed: number; curve: string; method?: string }) =>
-  `s${args.seed}-p${process.pid}-c${args.curve}${args.method ? "-m" : ""}${args.method ?? ""}`;
+
+const genLibcheckfunctionFullFilepath = (tmpDir: string, args: { seed: number; curve: string; method?: string }) => {
+  const suffix = `s${args.seed}-p${process.pid}-c${args.curve}${args.method ? "-m" : ""}${args.method ?? ""}`;
+  return resolve(tmpDir, `libcheckfunctions-${suffix}.so`);
+}
+
 type neededArgs = {
   seed: number;
   curve: CURVE_T;
@@ -35,7 +40,7 @@ type ret = {
   symbolname: string;
 };
 
-function initFiat(args: neededArgs): ret {
+function initFiat(sharedObject: string, args: neededArgs): ret {
   const fiat = FiatBridge.getFiatFunction(args.curve, args.method);
   const json = preprocessFunction(fiat);
   console.log(`fiat body.len: ${fiat.body.length} + after${json.body.length}`);
@@ -43,8 +48,7 @@ function initFiat(args: neededArgs): ret {
     curve: args.curve,
     json,
   });
-  Measuresuite.libcheckfunctionssuffix = genLibcheckfunctionsSuff(args);
-  const symbolname = FiatBridge.machinecode(args.curve, args.method, Measuresuite.libcheckfunctionsFilename);
+  const symbolname = FiatBridge.machinecode(args.curve, args.method, sharedObject);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
   const argwidth = FiatBridge.argwidth(args.curve);
   const argnumin = FiatBridge.argnumin(args.method);
@@ -54,14 +58,14 @@ function initFiat(args: neededArgs): ret {
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
-function initBitcoinCore(args: neededArgs): ret {
+function initBitcoinCore(sharedObject: string, args: neededArgs): ret {
   const bitcoinCoreBridge = new BitcoinCoreBridge();
   Model.init({
     curve: args.curve,
     json: bitcoinCoreBridge.getCryptOptFunction(args.method),
   });
-  Measuresuite.libcheckfunctionssuffix = genLibcheckfunctionsSuff(args);
-  const symbolname = bitcoinCoreBridge.machinecode(args.method, Measuresuite.libcheckfunctionsFilename);
+
+  const symbolname = bitcoinCoreBridge.machinecode(args.method, sharedObject);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
   const argwidth = bitcoinCoreBridge.argwidth(args.curve, args.method);
   const argnumin = bitcoinCoreBridge.argnumin(args.method);
@@ -71,10 +75,10 @@ function initBitcoinCore(args: neededArgs): ret {
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
-function initManual(args: neededArgs): ret {
+function initManual(sharedObject: string, args: neededArgs): ret {
   if (!args.jsonFile || !args.cFile) {
     throw new Error(
-      "cannot use manual-brige w/o a bridgefile...  Where should I get my Information from, huh?",
+      "cannot use manual-brige w/o a bridgefile...  Where should I get my information from, huh?",
     );
   }
   const bridge = new ManualBridge(args.jsonFile, args.cFile);
@@ -83,8 +87,7 @@ function initManual(args: neededArgs): ret {
     curve: "",
     json: bridge.getCryptOptFunction(),
   });
-  Measuresuite.libcheckfunctionssuffix = genLibcheckfunctionsSuff(args);
-  const symbolname = bridge.machinecode(Measuresuite.libcheckfunctionsFilename);
+  const symbolname = bridge.machinecode(sharedObject);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
   const argwidth = bridge.argwidth();
   const argnumin = bridge.argnumin();
@@ -105,34 +108,46 @@ function initManual(args: neededArgs): ret {
   return res;
 }
 
-function createMS({ argwidth, argnumin, argnumout, chunksize, bounds, symbolname }: ret): Measuresuite {
-  return new Measuresuite(argwidth, argnumin, argnumout, chunksize, bounds, symbolname);
+function createMS({ argwidth, argnumin, argnumout, chunksize, bounds, symbolname }: ret, libcheckfunctionFile: string): Measuresuite {
+  return new Measuresuite(argwidth, argnumin, argnumout, chunksize, bounds, libcheckfunctionFile, symbolname);
 }
-export function init(args: neededArgs): Measuresuite {
+
+export function init(tmpDir: string, args: neededArgs): Measuresuite {
+
   const mapping: {
-    [bridge: string]: { availableMethods: string[]; gen: (args: neededArgs) => ret };
+    [bridge: string]: { availableMethods: string[]; generatorFunction: (soFile: string, args: neededArgs) => ret };
   } = {
-    fiat: { availableMethods: AVAILABLE_FIAT_METHODS, gen: initFiat },
-    manual: { availableMethods: [], gen: initManual },
-    "bitcoin-core": { availableMethods: AVAILABLE_BITCOIN_METHODS, gen: initBitcoinCore },
+    fiat: { availableMethods: AVAILABLE_FIAT_METHODS, generatorFunction: initFiat },
+    manual: { availableMethods: [], generatorFunction: initManual },
+    "bitcoin-core": { availableMethods: AVAILABLE_BITCOIN_METHODS, generatorFunction: initBitcoinCore },
   };
 
+  const sharedObject = genLibcheckfunctionFullFilepath(tmpDir, args);
+
   if (args.bridge) {
+
     if (!(args.bridge in mapping)) {
       throw new Error("Bridge is specified, but not valid.");
     }
+
     if (args.bridge === "manual") {
-      return createMS(mapping[args.bridge].gen(args));
+      const common = mapping[args.bridge].generatorFunction(sharedObject, args);
+      return createMS(common, sharedObject);
     }
-    const { gen, availableMethods } = mapping[args.bridge];
+
+    const { generatorFunction: gen, availableMethods } = mapping[args.bridge];
+
     if (availableMethods.includes(args.method)) {
-      return createMS(gen(args));
+      const common = gen(sharedObject, args);
+      return createMS(common, sharedObject);
     }
     throw new Error("Could not find  specified method in specified Bridge.");
+
   } else {
     const found = BRIDGES.find((bridge) => mapping[bridge].availableMethods.includes(args.method));
     if (found) {
-      return createMS(mapping[found].gen(args));
+      const common = mapping[found].generatorFunction(sharedObject, args);
+      return createMS(common, sharedObject);
     } else {
       throw new Error("Could not find Bridge for specified method.");
     }
