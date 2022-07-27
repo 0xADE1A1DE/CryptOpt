@@ -28,12 +28,12 @@ export default [
       copy({
         targets: [
           {
-            src: [
-              "src/bridge/fiat-bridge/word_by_word_montgomery",
-              "src/bridge/fiat-bridge/unsaturated_solinas",
-              "src/bridge/fiat-bridge/sha256sums",
-            ],
-            dest: "./dist",
+            src: ["src/bridge/fiat-bridge/data",],
+            dest: "./dist/data/fiat-bridge/data",
+          },
+          {
+            src: ["src/bridge/bitcoin-core-bridge/data",],
+            dest: "./dist/data/bitcoin-core-bridge/data",
           },
         ],
       }),
