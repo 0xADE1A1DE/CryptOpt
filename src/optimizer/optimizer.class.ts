@@ -165,6 +165,7 @@ export class Optimizer {
         if (shouldProof(this.args)) {
           // and proof correct
           const proofCommandLine = FiatBridge.buildProofCommand(curve, func, fullpath);
+          console.log(`proofing that asm correct with '${proofCommandLine}'`);
           try {
             const now = Date.now();
             execSync(proofCommandLine);
@@ -178,6 +179,7 @@ export class Optimizer {
             process.exit(6);
           }
         }
+        console.log("done with that current price of assembly code.");
       };
       let currentNameOfTheFunctionThatHasTheMutation = FUNCTIONS.F_A;
       let time = Date.now();
@@ -185,7 +187,7 @@ export class Optimizer {
       let per_second_counter = 0;
       const intervalHandle = setInterval(() => {
         if (numEvals > 0) {
-          // not first eval thus, undefined we want to mutate.
+          // not first eval, thus we want to mutate.
           this.mutate();
         }
 
@@ -204,8 +206,6 @@ export class Optimizer {
 
         if (numEvals == 0) {
           // then point to fB and continue, write first
-          console.log("wrote to /tmp/cur_frist.asm");
-          writeasm(this.asmStrings[FUNCTIONS.F_A], "/tmp/cur_frist.asm");
           if (this.asmStrings[FUNCTIONS.F_A].includes("undefined")) {
             const e = "\n\n\nNah... we dont want undefined \n\n\n";
             console.error(e);
@@ -220,10 +220,6 @@ export class Optimizer {
 
           let analyseResult: AnalyseResult | undefined;
           try {
-            // fs.writeFileSync("/tmp/a.asm", this.asmStrings[FUNCTIONS.F_A]);
-            // fs.writeFileSync("/tmp/b.asm", this.asmStrings[FUNCTIONS.F_B]);
-            // console.log("wrote files /tmp/a.asm, /tmp/b.asm");
-
             console.log("let the measurements begin!");
             // here we need the barriers
             const results = this.measuresuite.measure(
@@ -292,12 +288,10 @@ export class Optimizer {
           const [meanrawA, meanrawB, meanrawCheck] = analyseResult.rawMedian;
 
           batchSize = Math.ceil((Number(this.args.cyclegoal) / meanrawCheck) * batchSize);
-          if (batchSize > 10000) {
-            batchSize = 10000;
-          }
-          if (batchSize < 5) {
-            batchSize = this.args.method === "keccakf" ? 1 : 5;
-          }
+          // We want to limit for some corner cases.
+          batchSize = Math.max(batchSize, 10000);
+          batchSize = Math.min(batchSize, 5);
+
           const currentFunctionIsA = () => currentNameOfTheFunctionThatHasTheMutation === FUNCTIONS.F_A;
 
           console.log(currentFunctionIsA() ? "New".padEnd(10) : "New".padStart(10));
@@ -367,10 +361,11 @@ export class Optimizer {
           if (numEvals >= this.args.evals) {
             globals.time.generateCryptopt =
               (Date.now() - optimistaionStartDate) / 1000 - globals.time.validate;
-            // DONE WITH OPTIMISING WRITE EVERYTING TO DISK AND EXIT.
+            // DONE WITH OPTIMISING WRITE EVERYTHING TO DISK AND EXIT.
             clearInterval(intervalHandle);
             write_current_asm();
             this.cleanLibcheckfunctions();
+            console.warn("Wonderful. Done with my work. Time for lunch.");
             resolve(0);
           }
         }
