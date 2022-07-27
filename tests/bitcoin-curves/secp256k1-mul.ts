@@ -32,7 +32,9 @@ it("optimise", (done) => {
 });
 
 afterAll(() => {
-  rm(resultpath, { recursive: true, force: true }, () => { });
+  rm(resultpath, { recursive: true, force: true }, () => {
+    /* intentionally empty */
+  });
   mockLog.mockRestore();
   mockErr.mockRestore();
   spyExit.mockRestore();
