@@ -16,8 +16,9 @@ download_node() {
 
 build_ms(){
   echo "building MeasureSuite"
-  cd ./modules/MeasureSuite || echo "MeasureSuite is not there. Please init" >&2
+  pushd ./modules/MeasureSuite || echo "MeasureSuite is not there. Please init" >&2
   CFLAGS="-I${BIN_DIR}/node/include" npm install
+  popd
 }
 
 build_cryptopt() {
