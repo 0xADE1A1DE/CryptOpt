@@ -4,6 +4,7 @@ import { Optimizer } from "@/optimizer";
 
 import { getTestArgs, getTestResultsPath, nothing } from "../test-helpers";
 
+
 const mockLog = jest.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = jest.spyOn(console, "error").mockImplementation(nothing);
 const mockDbg = jest.spyOn(console, "debug").mockImplementation(nothing); // executing bla to generate machinecode...
@@ -11,7 +12,7 @@ let spyExit: jest.SpyInstance;
 jest.useFakeTimers();
 let resultpath = "";
 
-it("optimise", (done) => {
+it("optimize", (done) => {
   spyExit = jest.spyOn(process, "exit").mockImplementation(((nu: number) => {
     expect(nu).toEqual(0);
     expect(mockErr).not.toHaveBeenCalled();
@@ -22,7 +23,7 @@ it("optimise", (done) => {
   jest.runAllTimers();
 });
 afterAll(() => {
-  rm(resultpath, { recursive: true, force: true }, () => { });
+  rm(resultpath, { recursive: true, force: true }, () => { /* intentionally empty */ });
   mockLog.mockRestore();
   mockErr.mockRestore();
   mockDbg.mockRestore();
