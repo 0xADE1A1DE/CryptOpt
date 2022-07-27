@@ -102,8 +102,10 @@ export class Optimizer {
   public optimise = () =>
     new Promise<number>((resolve) => {
       console.log("starting optimisation");
-      printStartInfo(this.resultspath);
-
+      printStartInfo({
+        resultsPath: this.resultspath,
+        ...this.args,
+      });
       let batchSize = 200;
       const numBatches = 31;
       let lastGood = Infinity;
