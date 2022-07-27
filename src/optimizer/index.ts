@@ -1,3 +1,3 @@
-export * from "./optimiser.class";
-export * from "./optimiser.helper";
-export * from "./optimiser.types";
+export * from "./optimizer.class";
+export * from "./optimizer.helper.class";
+export * from "./optimizer.types";

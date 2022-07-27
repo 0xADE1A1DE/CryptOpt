@@ -1,6 +1,6 @@
 import { rm } from "fs";
 
-import { Optimiser } from "@/optimizer";
+import { Optimizer } from "@/optimizer";
 
 import { getTestArgs, getTestResultsPath, nothing } from "../test-helpers";
 
@@ -19,7 +19,7 @@ it("optimise", (done) => {
   const args = getTestArgs(__filename);
   args.bridge = "bitcoin-core";
   resultpath = getTestResultsPath();
-  const opt = new Optimiser(args);
+  const opt = new Optimizer(args);
 
   try {
     expect(() => opt.optimise()).not.toThrow();
@@ -32,7 +32,7 @@ it("optimise", (done) => {
 });
 
 afterAll(() => {
-  rm(resultpath, { recursive: true, force: true }, () => {});
+  rm(resultpath, { recursive: true, force: true }, () => { });
   mockLog.mockRestore();
   mockErr.mockRestore();
   spyExit.mockRestore();

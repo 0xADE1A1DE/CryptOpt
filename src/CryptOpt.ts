@@ -6,7 +6,7 @@ import { cy, env, generateStateFileName, gn, parsedArgs, PRINT_EVERY, rd, re, SI
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
 import type { OptimiserArgs } from "@/optimizer";
-import { Optimiser } from "@/optimizer";
+import { Optimizer } from "@/optimizer";
 import { sha1Hash } from "@/paul";
 import type { CryptoptGlobals } from "@/types";
 
@@ -54,7 +54,7 @@ async function bet(evals: number, bets: number): Promise<RunResult[]> {
 
 async function run(args: OptimiserArgs): Promise<RunResult> {
   try {
-    await new Optimiser(args).optimise();
+    await new Optimizer(args).optimise();
   } catch (e) {
     console.error(`Cryptopt-Error while optimising:\n`, e);
     process.exit(1000);

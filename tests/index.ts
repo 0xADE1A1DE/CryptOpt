@@ -1,4 +1,4 @@
-import { Optimiser } from "@/optimizer";
+import { Optimizer } from "@/optimizer";
 
 const args: {
   evals: number;
@@ -44,11 +44,11 @@ describe("full tests fiat", () => {
 
   it("should only throw on invalid curves.", () => {
     expect(() => {
-      new Optimiser(Object.assign({}, args, { curve: "curve25519", method: "square" }));
+      new Optimizer(Object.assign({}, args, { curve: "curve25519", method: "square" }));
     }).not.toThrow();
 
     expect(() => {
-      new Optimiser(Object.assign({}, args, { curve: "INVALIDCURVE", method: "square" }));
+      new Optimizer(Object.assign({}, args, { curve: "INVALIDCURVE", method: "square" }));
     }).toThrow(/Cannot destructure property 'binary' of '.*' as it is undefined./);
   });
 

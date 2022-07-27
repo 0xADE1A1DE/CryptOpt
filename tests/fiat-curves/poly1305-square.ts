@@ -1,6 +1,6 @@
 import { rm } from "fs";
 
-import { Optimiser } from "@/optimizer";
+import { Optimizer } from "@/optimizer";
 
 import { getTestArgs, getTestResultsPath, nothing } from "../test-helpers";
 
@@ -18,11 +18,11 @@ it("optimise", (done) => {
     done();
   }) as any);
   resultpath = getTestResultsPath();
-  new Optimiser(getTestArgs(__filename)).optimise();
+  new Optimizer(getTestArgs(__filename)).optimise();
   jest.runAllTimers();
 });
 afterAll(() => {
-  rm(resultpath, { recursive: true, force: true }, () => {});
+  rm(resultpath, { recursive: true, force: true }, () => { });
   mockLog.mockRestore();
   mockErr.mockRestore();
   mockDbg.mockRestore();
