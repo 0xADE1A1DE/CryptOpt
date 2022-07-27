@@ -9,7 +9,7 @@ const external = [
   "fs-extra",
   "fs",
   "fs",
-  "lodash",
+  "lodash-es",
   "measuresuite",
   "os",
   "path",

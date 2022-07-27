@@ -1,4 +1,4 @@
-import { defaults } from "lodash";
+import { defaults } from "lodash-es";
 
 export const env = defaults(process.env, {
   CC: "gcc",

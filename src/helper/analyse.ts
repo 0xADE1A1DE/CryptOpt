@@ -1,4 +1,4 @@
-import { defaults, zip } from "lodash";
+import { defaults, zip } from "lodash-es";
 import * as Stats from "simple-statistics";
 
 import type {

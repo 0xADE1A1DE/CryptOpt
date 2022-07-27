@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "fs-extra": "^10.1.0",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "measuresuite": "file:./modules/MeasureSuite",
     "simple-statistics": "^7.7.5",
     "yargs": "^17.5.1"
@@ -37,7 +37,7 @@
     "@rollup/plugin-typescript": "^8.3.3",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^28.1.4",
-    "@types/lodash": "^4.14.182",
+    "@types/lodash-es": "^4.17.6",
     "@types/node": "^18.0.3",
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.30.5",

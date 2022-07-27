@@ -1,4 +1,4 @@
-import { uniq } from "lodash";
+import { uniq } from "lodash-es";
 
 import { AllocationFlags, ByteRegister, C_DI_IMM, Flags, FlagState, Register } from "@/enums";
 import {

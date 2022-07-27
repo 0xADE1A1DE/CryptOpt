@@ -1,4 +1,4 @@
-import { defaults } from "lodash";
+import { defaults } from "lodash-es";
 
 import { AllocationFlags, Flags, FlagState } from "@/enums";
 import { limbify, matchIMM, matchXD } from "@/helper";

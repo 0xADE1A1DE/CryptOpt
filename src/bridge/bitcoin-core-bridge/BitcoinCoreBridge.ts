@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { existsSync, readFileSync } from "fs";
-import { groupBy } from "lodash";
+import { groupBy } from "lodash-es";
 import { resolve } from "path";
 
 import { ERRORS } from "@/errors";

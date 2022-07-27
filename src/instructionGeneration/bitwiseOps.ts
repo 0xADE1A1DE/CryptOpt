@@ -1,4 +1,4 @@
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 
 import { AllocationFlags, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Flags, FlagState } from "@/enums";
 import {

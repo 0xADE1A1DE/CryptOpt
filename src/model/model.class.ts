@@ -1,5 +1,5 @@
 import fs from "fs";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 
 import { CURVE_T } from "@/bridge/fiat-bridge/constants";
 import { DECISION_IDENTIFIER } from "@/enums";
