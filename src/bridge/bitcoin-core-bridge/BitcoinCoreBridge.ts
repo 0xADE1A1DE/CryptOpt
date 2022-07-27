@@ -4,7 +4,7 @@ import { groupBy } from "lodash-es";
 import { resolve } from "path";
 
 import { ERRORS } from "@/errors";
-import { env, preprocessFunction } from "@/helper";
+import { datadir, env, preprocessFunction } from "@/helper";
 import type { CryptOpt } from "@/types";
 
 import { Bridge } from "../bridge.interface";
@@ -12,52 +12,53 @@ import { AVAILABLE_METHODS, METHOD_DETAILS, METHOD_T } from "./constants";
 import { BCBPreprocessor } from "./preprocess";
 import type { raw_T, structDef_T } from "./raw.type";
 
+const cwd = resolve(datadir, "bitcoin-core-bridge",);
+
 const createExecOpts = () => {
-  const c = {
-    env,
-    cwd: __dirname,
-  };
+  const c = { env, cwd, };
   c.env.CFLAGS = `-DUSE_ASM_X86_64 ${c.env.CFLAGS}`;
   return c;
 };
 
 export class BitcoinCoreBridge implements Bridge {
-  public getCryptOptFunction(method: METHOD_T): CryptOpt.Function {
+
+  public getCryptOptFunction(method: METHOD_T, _curve?: string): CryptOpt.Function {
     if (!(method in METHOD_DETAILS)) {
-      throw new Error(`unsupported method '${method}'. choose from ${AVAILABLE_METHODS.join(", ")}.`);
+      throw new Error(`unsupported method '${method}'. Choose from ${AVAILABLE_METHODS.join(", ")}.`);
     }
-    const tses = ["field.json", "scalar.json"].map((f) => resolve(__dirname, f));
 
-    const [raw, structs] = tses.reduce(
-      (acc, f) => {
-        if (!existsSync(f)) {
-          console.error(ERRORS.bcbFail.msg);
-          process.exit(ERRORS.bcbFail.exitCode);
-        }
-        // read+Parse
-        const parsed = JSON.parse(readFileSync(f).toString()) as Array<raw_T | structDef_T>;
+    const [raw, structs] = ["field.json", "scalar.json"]
+      .map((f) => resolve(cwd, f))
+      .reduce(
+        (acc, f) => {
+          if (!existsSync(f)) {
+            console.error(ERRORS.bcbFail.msg);
+            process.exit(ERRORS.bcbFail.exitCode);
+          }
+          // read+Parse
+          const parsed = JSON.parse(readFileSync(f).toString()) as Array<raw_T | structDef_T>;
 
-        // group to funcs and struct defs
-        const { structDef, func } = groupBy(parsed, (funcOrStructDef) =>
-          "definition" in funcOrStructDef ? "structDef" : "func",
-        );
-        if (func) {
-          acc[0].push(...(func as raw_T[]));
-        }
-        if (structDef) {
-          acc[1].push(...(structDef as structDef_T[]));
-        }
+          // group to funcs and struct defs
+          const { structDef, func } = groupBy(parsed, (funcOrStructDef) =>
+            "definition" in funcOrStructDef ? "structDef" : "func",
+          );
+          if (func) {
+            acc[0].push(...(func as raw_T[]));
+          }
+          if (structDef) {
+            acc[1].push(...(structDef as structDef_T[]));
+          }
 
-        return acc;
-      },
-      [[], []] as [raw_T[], structDef_T[]],
-    );
+          return acc;
+        },
+        [[], []] as [raw_T[], structDef_T[]],
+      );
 
     const found = raw.find(({ operation }) => operation == METHOD_DETAILS[method].name);
 
     if (!found) {
       throw new Error(
-        `${METHOD_DETAILS[method].name} not found. TSNH. available '${raw.length}':${raw.map(
+        `${METHOD_DETAILS[method].name} not found. TSNH. Available '#${raw.length}':${raw.map(
           ({ operation }) => operation,
         )}`,
       );
@@ -65,9 +66,10 @@ export class BitcoinCoreBridge implements Bridge {
 
     // raw preprocessing (i.e. llvm->fiat)
     const a = new BCBPreprocessor(structs).preprocessRaw(found);
+
     // 'normal' preprocessing (fiat-> cryptopt)
     const preprocessed = preprocessFunction(a);
-    // fs.writeFileSync("/tmp/frombcb.json", JSON.stringify(preprocessed));
+
     return preprocessed;
   }
 
@@ -77,7 +79,7 @@ export class BitcoinCoreBridge implements Bridge {
     }
 
     const opts = createExecOpts();
-    const command = `make -C ${__dirname} ${filename}`;
+    const command = `make -C ${cwd} ${filename}`;
 
     console.log(`executing cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
     try {

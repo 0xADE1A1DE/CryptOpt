@@ -14,7 +14,6 @@ import {
   METHOD_T,
 } from "@/bridge/fiat-bridge";
 import { ManualBridge } from "@/bridge/manual-bridge";
-import { preprocessFunction } from "@/helper";
 import { Model } from "@/model";
 
 
@@ -41,37 +40,36 @@ type ret = {
 };
 
 function initFiat(sharedObject: string, args: neededArgs): ret {
-  const fiat = FiatBridge.getFiatFunction(args.curve, args.method);
-  const json = preprocessFunction(fiat);
-  console.log(`fiat body.len: ${fiat.body.length} + after${json.body.length}`);
+  const bridge = new FiatBridge();
   Model.init({
     curve: args.curve,
-    json,
+    json: bridge.getCryptOptFunction(args.method, args.curve),
   });
-  const symbolname = FiatBridge.machinecode(args.curve, args.method, sharedObject);
+
+  const symbolname = bridge.machinecode(sharedObject, args.method, args.curve,);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
-  const argwidth = FiatBridge.argwidth(args.curve);
-  const argnumin = FiatBridge.argnumin(args.method);
-  const argnumout = FiatBridge.argnumout(args.method);
+  const argwidth = bridge.argwidth(args.curve);
+  const argnumin = bridge.argnumin(args.method);
+  const argnumout = bridge.argnumout(args.method);
 
   const bounds = CURVE_DETAILS[args.curve].bounds;
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
 function initBitcoinCore(sharedObject: string, args: neededArgs): ret {
-  const bitcoinCoreBridge = new BitcoinCoreBridge();
+  const bridge = new BitcoinCoreBridge();
   Model.init({
     curve: args.curve,
-    json: bitcoinCoreBridge.getCryptOptFunction(args.method),
+    json: bridge.getCryptOptFunction(args.method),
   });
 
-  const symbolname = bitcoinCoreBridge.machinecode(args.method, sharedObject);
+  const symbolname = bridge.machinecode(sharedObject, args.method);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
-  const argwidth = bitcoinCoreBridge.argwidth(args.curve, args.method);
-  const argnumin = bitcoinCoreBridge.argnumin(args.method);
-  const argnumout = bitcoinCoreBridge.argnumout(args.method);
+  const argwidth = bridge.argwidth(args.curve, args.method);
+  const argnumin = bridge.argnumin(args.method);
+  const argnumout = bridge.argnumout(args.method);
 
-  const bounds = bitcoinCoreBridge.bounds(args.curve, args.method);
+  const bounds = bridge.bounds(args.curve, args.method);
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 

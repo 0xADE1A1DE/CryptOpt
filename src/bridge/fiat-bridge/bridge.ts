@@ -1,14 +1,13 @@
 import { execSync } from "child_process";
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, readFileSync } from "fs";
 import { ensureDirSync } from "fs-extra";
-import os from "os";
-import path from "path";
+import { resolve } from "path";
 
-import { env } from "@/helper";
+import { datadir, env, preprocessFunction } from "@/helper";
 import { sha256Hash } from "@/paul";
-import type { Fiat } from "@/types";
+import type { CryptOpt, Fiat } from "@/types";
 
-import fiat from "./all_fiat_array";
+import { Bridge } from "../bridge.interface";
 import {
   AVAILABLE_CURVES,
   AVAILABLE_METHODS,
@@ -20,17 +19,14 @@ import {
 } from "./constants";
 import { BINS } from "./enums";
 
+const cwd = resolve(datadir, "fiat-bridge");
+
 const { CC, CFLAGS } = env;
-const cacheDir = path.resolve(__dirname, ".cache");
+const cacheDir = resolve(cwd, ".cache");
 
-export class FiatBridge {
-  // decides, if we need to read local c / libs / jsons or if we can generate them on the fly
-  private static get readlocal(): boolean {
-    const type = os.type();
-    return type === "Darwin" || (type == "Linux" && os.release().startsWith("3"));
-  }
+export class FiatBridge implements Bridge {
 
-  public static argnumin(m: METHOD_T): number {
+  public argnumin(m: METHOD_T): number {
     if (!AVAILABLE_METHODS.includes(m)) {
       throw new Error(`unsupported method ${m}`);
     }
@@ -39,11 +35,11 @@ export class FiatBridge {
     return 2;
   }
 
-  public static argnumout(_m: METHOD_T): number {
+  public argnumout(_m: METHOD_T): number {
     return 1;
   }
 
-  public static argwidth(c: CURVE_T): number {
+  public argwidth(c: CURVE_T): number {
     if (c in CURVE_DETAILS) return CURVE_DETAILS[c].argwidth;
     throw new Error(`unsupported curve ${c}`);
   }
@@ -56,14 +52,14 @@ export class FiatBridge {
    * calls ./unsaturated_solinas or ./word_by_word_montgomery,
    * obtains the JSON code and returns the parsed string of the specified @param method on @param curve
    */
-  public static getFiatFunction(curve: CURVE_T, method: METHOD_T): Fiat.FiatFunction {
+  public getCryptOptFunction(method: METHOD_T, curve: CURVE_T): CryptOpt.Function {
     if (!existsSync(cacheDir)) {
       ensureDirSync(cacheDir);
     }
     // we want to make sure, that the filename is dependent on the hash of the binary creating it, and on the arguments passed to it.
 
-    const { cmd, methodname, hash } = FiatBridge.buildCommand(curve, method, "JSON");
-    const jsonCacheFilename = path.resolve(cacheDir, `${hash}.json`);
+    const { cmd, hash } = this.buildCommand(curve, method, "JSON");
+    const jsonCacheFilename = resolve(cacheDir, `${hash}.json`);
 
     if (existsSync(jsonCacheFilename)) {
       console.log(`reading json-fiat: ${jsonCacheFilename}`);
@@ -73,10 +69,9 @@ export class FiatBridge {
     const command = `${cmd} | jq -s .[0] | tee ${jsonCacheFilename}`;
     console.log(`executing cmd to generate fiat: ${command}`);
 
-    const r = FiatBridge.readlocal
-      ? (fiat.find(({ operation }) => operation === methodname) as Fiat.FiatFunction)
-      : (JSON.parse(execSync(command).toString()) as Fiat.FiatFunction);
-    return r;
+    const fiat = (JSON.parse(execSync(command).toString()) as Fiat.FiatFunction);
+    const cryptOpt = preprocessFunction(fiat);
+    return cryptOpt;
   }
 
   /**
@@ -84,14 +79,14 @@ export class FiatBridge {
    * @returns the name of the symbol, which is being present in @param filename after this function is finished.
    * if force is false, it will check if the machinecode needs to be generated, and skip the step if its not necessary
    */
-  public static machinecode(
-    curve: CURVE_T,
-    method: METHOD_T,
+  public machinecode(
     filename = "libcheckfunctions.so",
+    method: METHOD_T,
+    curve: CURVE_T,
     ccOverwrite: string | undefined = undefined,
     force = true,
   ): string {
-    const { cmd, methodname, hash } = FiatBridge.buildCommand(curve, method, "C");
+    const { cmd, methodname, hash } = this.buildCommand(curve, method, "C");
     if (!force && existsSync(filename)) {
       return methodname;
     }
@@ -105,21 +100,12 @@ export class FiatBridge {
       return methodname;
     };
 
-    // if we want to compile from fiat.c
-    if (FiatBridge.readlocal) {
-      const file = `${__dirname}/fiat.c`;
-      if (!existsSync(file)) {
-        throw new Error(`supposed to compile from ${file}, but it does not exist.`);
-      }
-      return compileFromFile(file);
-    }
-
     // lets check cached.
     if (!existsSync(cacheDir)) {
       ensureDirSync(cacheDir);
     }
 
-    const cCacheFilename = path.resolve(cacheDir, `${hash}.c`);
+    const cCacheFilename = resolve(cacheDir, `${hash}.c`);
 
     // if the cache-file does not exist, write it.
     if (!existsSync(cCacheFilename)) {
@@ -137,16 +123,15 @@ export class FiatBridge {
    * It also validated, if the generation binaries are present (./word_by_word_montgomery or ./unsaturated_solinas), depending on the curve.
    * It @returns a string to be executed in the current dir and the method it has created (like mul or carry_mul).
    */
-  public static buildCommand(
+  public buildCommand(
     curve: CURVE_T,
     method: METHOD_T,
     lang: "C" | "JSON",
   ): { cmd: string; methodname: string; hash: string } {
     const { binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
-    const binWithPath = `${__dirname}/${binary}`;
-    const sha256sumsFile = `${__dirname}/${SHA256SUMS}`;
 
-    this.check(curve, method, binWithPath, lang);
+    const binWithPath = resolve(cwd, binary);
+    FiatBridge.check(curve, method, binWithPath, lang);
 
     const required_function = METHOD_DETAILS[method].name[binary]; // e.g carry_mul
     const methodname = `fiat_${curve}_${required_function}`;
@@ -160,6 +145,7 @@ export class FiatBridge {
     };
 
     // represents the identity of the fiat binaries.
+    const sha256sumsFile = resolve(cwd, SHA256SUMS);
     const hashFiatBinaries = readFileSync(sha256sumsFile).toString();
 
     let cmd = "";
@@ -180,9 +166,9 @@ export class FiatBridge {
 
   public static buildProofCommand(curve: CURVE_T, method: METHOD_T, hintsFilename: string): string {
     const { binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
-    const binWithPath = `${__dirname}/${binary}`;
+    const binWithPath = resolve(cwd, binary);
 
-    this.check(curve, method, binWithPath);
+    FiatBridge.check(curve, method, binWithPath);
 
     const required_function = METHOD_DETAILS[method].name[binary]; // e.g carry_mul
 
@@ -248,3 +234,4 @@ export class FiatBridge {
     }
   }
 }
+

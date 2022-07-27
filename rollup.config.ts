@@ -1,6 +1,6 @@
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
-import { terser } from "rollup-plugin-terser";
+// import { terser } from "rollup-plugin-terser";
 
 const external = [
   "child_process",
@@ -11,8 +11,10 @@ const external = [
   "measuresuite",
   "os",
   "path",
+  "process",
   "simple-statistics",
   "yargs",
+  "yargs/helpers",
 ];
 export default [
   {
@@ -28,12 +30,12 @@ export default [
       copy({
         targets: [
           {
-            src: ["src/bridge/fiat-bridge/data",],
-            dest: "./dist/data/fiat-bridge/data",
+            src: ["src/bridge/fiat-bridge/data/*",],
+            dest: "./dist/data/fiat-bridge",
           },
           {
-            src: ["src/bridge/bitcoin-core-bridge/data",],
-            dest: "./dist/data/bitcoin-core-bridge/data",
+            src: ["src/bridge/bitcoin-core-bridge/data/*",],
+            dest: "./dist/data/bitcoin-core-bridge",
           },
         ],
       }),
