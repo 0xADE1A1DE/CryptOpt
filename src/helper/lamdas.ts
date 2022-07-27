@@ -209,7 +209,7 @@ export function setToString(s: Set<string>, max = Infinity): string {
 
 export function writeasm(asmString: string, filename: string): void {
   // used to be more complicated in there...
-  console.log(`writing ${asmString} chars of asm to '${filename}'`);
+  console.log(`writing ${asmString.length} chars of asm to '${filename}'`);
   fs.writeFileSync(filename, asmString);
 }
 

@@ -13,18 +13,17 @@ export function printStartInfo({
   seed,
   evals,
   cyclegoal,
-  skipProof
-}:
-  {
-    resultsPath: string,
-    bridge?: string,
-    curve: string,
-    method: string,
-    seed: number,
-    evals: number,
-    cyclegoal: number,
-    skipProof: boolean
-  }) {
+  skipProof,
+}: {
+  resultsPath: string;
+  bridge?: string;
+  curve: string;
+  method: string;
+  seed: number;
+  evals: number;
+  cyclegoal: number;
+  skipProof: boolean;
+}) {
   process.stdout.write(
     [
       `Start`,
