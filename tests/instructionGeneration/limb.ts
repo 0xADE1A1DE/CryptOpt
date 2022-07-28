@@ -1,12 +1,14 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { AllocationFlags, Flags, Register } from "@/enums";
 import { limb } from "@/instructionGeneration/limb";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
-const allocate = jest.fn();
-const getCurrentAllocations = jest.fn();
-const lazyMov = jest.fn();
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn();
+const lazyMov = vi.fn();
 
-jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

@@ -1,13 +1,16 @@
+import type { SpyInstance } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { AllocationFlags, ByteRegister, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Register } from "@/enums";
 import { LSB_MAPPING } from "@/helper";
 import { bitwiseOp } from "@/instructionGeneration/bitwiseOps";
 import { Paul } from "@/paul";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
-let paulChooseAndSpy: jest.SpyInstance;
+let paulChooseAndSpy: SpyInstance;
 
 beforeAll(() => {
-  paulChooseAndSpy = jest.spyOn(Paul, "chooseInstructionAND");
+  paulChooseAndSpy = vi.spyOn(Paul, "chooseInstructionAND");
 });
 beforeEach(() => {
   paulChooseAndSpy.mockClear();
@@ -15,13 +18,13 @@ beforeEach(() => {
 afterAll(() => {
   paulChooseAndSpy.mockRestore();
 });
-const allocate = jest.fn();
-const getCurrentAllocations = jest.fn();
-const declare128 = jest.fn();
-const zext = jest.fn();
-const declareDatatypeForVar = jest.fn();
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn();
+const declare128 = vi.fn();
+const zext = vi.fn();
+const declareDatatypeForVar = vi.fn();
 
-jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

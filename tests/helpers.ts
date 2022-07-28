@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import {
   CALLER_SAVE_PREFIX,
   delimbify,

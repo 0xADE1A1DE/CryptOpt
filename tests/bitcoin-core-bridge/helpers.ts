@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import {
   getArguments,
   getScalarsAndImmMappedAsConstArg,
@@ -121,7 +123,7 @@ describe("bitcoinCoreBridge:helpers", () => {
       expect(r[1]).toBe("-0x4551231950b75fc5");
     });
   });
-  describe("isStructPointer", () => {
+  it("isStructPointer", () => {
     expect(isStructPointer("struct.abc*")).toBe(true);
     expect(isStructPointer("i64*")).toBe(false);
     expect(isStructPointer("%struct.abc*" as any)).toBe(false);

@@ -1,17 +1,18 @@
-import { defaults } from "lodash";
+import { defaults } from "lodash-es";
+import { describe, expect, it, vi } from "vitest";
 
 import { AllocationFlags, Flags, FlagState, Register } from "@/enums";
 import { llvm2CC } from "@/helper";
 import { cmp } from "@/instructionGeneration/cmp";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
-const allocate = jest.fn();
-const getCurrentAllocations = jest.fn();
-const setCC = jest.fn();
-const declareFlagState = jest.fn();
-const declareVarForFlag = jest.fn();
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn();
+const setCC = vi.fn();
+const declareFlagState = vi.fn();
+const declareVarForFlag = vi.fn();
 
-jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

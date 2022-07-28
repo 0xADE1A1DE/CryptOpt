@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { populateClobbers } from "@/registerAllocator";
 import type { AllocationReq } from "@/types";
 

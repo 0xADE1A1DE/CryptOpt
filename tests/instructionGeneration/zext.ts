@@ -1,10 +1,12 @@
+import { beforeAll, describe, expect, it, vi } from "vitest";
+
 import { Register } from "@/enums";
 import { zext } from "@/instructionGeneration/zext";
 
-const ra_zext = jest.fn();
-const backupIfVarHasDependencies = jest.fn();
+const ra_zext = vi.fn();
+const backupIfVarHasDependencies = vi.fn();
 
-jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

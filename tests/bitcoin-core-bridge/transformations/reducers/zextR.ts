@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import type { FiatDynArgWCryptoptOperations } from "@/bridge/bitcoin-core-bridge/transformations/reducers/zextR";
 import { zextR } from "@/bridge/bitcoin-core-bridge/transformations/reducers/zextR";
 

@@ -1,13 +1,15 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { AllocationFlags, Register } from "@/enums";
 import { shiftLeft, shiftRight, shiftRightDouble } from "@/instructionGeneration/shift";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
-const allocate = jest.fn();
-const getCurrentAllocations = jest.fn();
-const declare128 = jest.fn();
-const backupIfVarHasDependencies = jest.fn();
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn();
+const declare128 = vi.fn();
+const backupIfVarHasDependencies = vi.fn();
 
-jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+vi.mock("@/registerAllocator/RegisterAllocator.class", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

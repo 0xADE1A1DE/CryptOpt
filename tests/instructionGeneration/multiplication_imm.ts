@@ -1,16 +1,18 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { AllocationFlags, DECISION_IDENTIFIER, Flags, FlagState, Register } from "@/enums";
 import { IMM_MUL_DI_MAP } from "@/helper";
 import { mul } from "@/instructionGeneration/multiplication";
 import { Paul } from "@/paul";
 import type { AllocationReq, AllocationRes, Allocations, asm, CryptOpt } from "@/types";
 
-const allocate = jest.fn();
-const getCurrentAllocations = jest.fn();
-const declare128 = jest.fn();
-const declareFlagState = jest.fn();
-const flagStateString = jest.fn(() => ";flagStateString");
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn();
+const declare128 = vi.fn();
+const declareFlagState = vi.fn();
+const flagStateString = vi.fn(() => ";flagStateString");
 
-jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "@/model";
 
 import { createModelHelpers } from "./test-helpers";

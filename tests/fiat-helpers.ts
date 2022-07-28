@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import fiat from "@/bridge/fiat-bridge/all_fiat_array";
 import { preprocessFunction } from "@/helper";
 import type { Fiat } from "@/types";

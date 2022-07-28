@@ -1,3 +1,5 @@
+import { afterAll, describe, expect, it, vi } from "vitest";
+
 import { AllocationFlags, ByteRegister, Flags, FlagState, Register } from "@/enums";
 import { isByteRegister, isMem, isRegister, limbify, limbifyImm } from "@/helper";
 import { Model } from "@/model";
@@ -7,9 +9,9 @@ import type { CryptOpt, ValueAllocation } from "@/types";
 
 import { nothing } from "./test-helpers";
 
-const mockLog = jest.spyOn(console, "log").mockImplementation(nothing);
-const mockErr = jest.spyOn(console, "error").mockImplementation(nothing);
-jest.useFakeTimers();
+const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
+const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
+vi.useFakeTimers();
 afterAll(() => {
   mockLog.mockRestore();
   mockErr.mockRestore();

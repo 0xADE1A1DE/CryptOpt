@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { C_DI_HANDLE_FLAGS_KK, Flags, FlagState } from "@/enums";
 import { add } from "@/instructionGeneration/addition";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation } from "@/types";
@@ -49,16 +51,16 @@ const allocs = {
   x110_1: { datatype: "u64", store: "rbx" },
   x111: { datatype: "u64", store: "rcx" },
 } as Allocations;
-const allocate = jest.fn();
-const getCurrentAllocations = jest.fn().mockImplementation(() => allocs);
-const flagState = jest.fn();
-const spillFlag = jest.fn();
-const addToPreInstructions = jest.fn();
-const addToClobbers = jest.fn();
-const declareVarForFlag = jest.fn();
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
+const flagState = vi.fn();
+const spillFlag = vi.fn();
+const addToPreInstructions = vi.fn();
+const addToClobbers = vi.fn();
+const declareVarForFlag = vi.fn();
 
-const backupIfStoreHasDependencies = jest.fn();
-jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+const backupIfStoreHasDependencies = vi.fn();
+vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {
@@ -67,7 +69,7 @@ jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
           addToPreInstructions,
           allocate,
           backupIfStoreHasDependencies,
-          declare128: jest.fn().mockImplementation((name: string) => (allocs[name] = { datatype: "u128" })),
+          declare128: vi.fn().mockImplementation((name: string) => (allocs[name] = { datatype: "u128" })),
           declareFlagState: () => {
             /**intentionally empty */
           },
@@ -78,7 +80,7 @@ jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
           initNewInstruction: () => {
             /**intentionally empty */
           },
-          loadImmToReg64: jest.fn().mockImplementation((name: string) => {
+          loadImmToReg64: vi.fn().mockImplementation((name: string) => {
             if (name in allocs) return allocs[name].store;
             else throw { name, allocs };
           }),

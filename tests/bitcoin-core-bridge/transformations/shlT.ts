@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { SSA } from "@/bridge/bitcoin-core-bridge/raw.type";
 import { transformShl } from "@/bridge/bitcoin-core-bridge/transformations";
 

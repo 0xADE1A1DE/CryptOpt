@@ -34,7 +34,7 @@ export function getTestArgs(filename: string): {
   };
 }
 export function getTestResultsPath(): string {
-  return mkdtempSync(pathJoin(osTmpdir(), "jest-"));
+  return mkdtempSync(pathJoin(osTmpdir(), "test-"));
 }
 export function nothing(_msg: string) {
   /*intentionally empty*/

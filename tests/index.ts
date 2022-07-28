@@ -1,3 +1,6 @@
+import type { SpyInstance } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { Optimizer } from "@/optimizer";
 
 const args: {
@@ -23,14 +26,14 @@ const args: {
 };
 
 describe("full tests fiat", () => {
-  let mockLog: jest.SpyInstance;
-  let mockErr: jest.SpyInstance;
+  let mockLog: SpyInstance;
+  let mockErr: SpyInstance;
   beforeAll(() => {
     const dofkall = (_msg: string) => {
       /*intentionally empty*/
     };
-    mockLog = jest.spyOn(console, "log").mockImplementation(dofkall);
-    mockErr = jest.spyOn(console, "error").mockImplementation(dofkall);
+    mockLog = vi.spyOn(console, "log").mockImplementation(dofkall);
+    mockErr = vi.spyOn(console, "error").mockImplementation(dofkall);
   });
   afterAll(() => {
     mockLog.mockRestore();
@@ -53,6 +56,6 @@ describe("full tests fiat", () => {
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });

@@ -1,13 +1,15 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { AllocationFlags, Register } from "@/enums";
 import { mulx } from "@/instructionGeneration/multiplication";
 import type { AllocationReq, AllocationRes, Allocations, asm } from "@/types";
 
-const allocate = jest.fn();
-const getCurrentAllocations = jest.fn();
-const declare128 = jest.fn();
-const declareFlagState = jest.fn();
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn();
+const declare128 = vi.fn();
+const declareFlagState = vi.fn();
 
-jest.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
       getInstance: () => {

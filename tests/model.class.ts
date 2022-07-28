@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 

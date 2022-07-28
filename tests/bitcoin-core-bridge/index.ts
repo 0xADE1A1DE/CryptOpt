@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
 
 describe("bridge", () => {

@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { BIAS, Paul } from "@/paul";
 import type { CryptOpt } from "@/types";
 
@@ -41,7 +43,9 @@ describe("Paul", () => {
     }
     limit /= 2;
     // console.log({ neg: left, pos: right, n: left / limit, p: right / limit });
-    expect(left / limit).toBeLessThan(min + delta / 5);
-    expect(right / limit).toBeGreaterThan(max - delta / 5);
+    it("should calculate correct", () => {
+      expect(left / limit).toBeLessThan(min + delta / 5);
+      expect(right / limit).toBeGreaterThan(max - delta / 5);
+    })
   });
 });
