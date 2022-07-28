@@ -4,6 +4,9 @@ import { configDefaults, defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
+    coverage: {
+      reporter: ['text', 'json', 'html', "cobertura"],
+    },
     include: ["**/tests/**/*.ts"],
     exclude: [...configDefaults.exclude, "tests/test-helpers.ts"]
   },

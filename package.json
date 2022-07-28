@@ -4,6 +4,10 @@
   "description": "Generates high performance ASM from JSON-specified Arithmetic",
   "main": "dist/CryptOpt.js",
   "type": "module",
+  "files": [
+    "./dist/CryptOpt.js",
+    "./dist/data/*"
+  ],
   "cpu": [
     "x64"
   ],
@@ -18,11 +22,11 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/0xADE1AIDE/CryptOpt#readme",
   "scripts": {
-    "test": "vitest --config ./vitest.config.ts",
+    "test": "vitest",
     "test-cov": " vitest --coverage",
-    "lint-check": "eslint ./src",
+    "lint-check": "eslint .",
+    "lint-fix": "eslint . --fix",
     "format-check": "npx prettier --check \"./**/*.ts\" \"!./dist\"",
-    "lint-fix": "eslint ./tests/bitcoin-curves/secp256k1-reduce.ts --fix",
     "pack": "rollup --config rollup.config.ts"
   },
   "prettier": {
@@ -44,6 +48,7 @@
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
+    "c8": "^7.12.0",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
@@ -106,3 +111,4 @@
     ]
   }
 }
+
