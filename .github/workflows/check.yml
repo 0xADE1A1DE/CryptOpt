@@ -27,11 +27,11 @@ jobs:
       with:
         node-version: 16
 
-    - name: Build
-      run: ./build.sh
-
     - name: TS build
       run: npm clean-install
+
+    - name: Build
+      run: ./build.sh
 
     - name: TS checks
       run: npm run test-cov
