@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { afterAll, describe, expect, it, vi } from "vitest";
 
 import { AllocationFlags, ByteRegister, Flags, FlagState, Register } from "@/enums";
@@ -9,6 +11,7 @@ import type { CryptOpt, ValueAllocation } from "@/types";
 
 import { nothing } from "./test-helpers";
 
+type MOCK_RA = any;
 const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
 vi.useFakeTimers();
@@ -211,7 +214,7 @@ describe("RegisterAllocator:", () => {
   });
   describe("allocate", () => {
     it("should allocate two limbs and two imms", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         out1: { datatype: "u64[n]", store: "rdi" },
         arg1: { datatype: "u64[n]", store: "rsi" },
         callerSaverbx: { datatype: "u64", store: "rbx" },
@@ -257,7 +260,7 @@ describe("RegisterAllocator:", () => {
       expect(res.in[2]).toBe("-0x1");
     });
     it("should give back r/64 if  SAME_SIZE_READ is set, ", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         out1: { datatype: "u64[n]", store: "rdi" },
         arg1: { datatype: "u64[n]", store: "rsi" },
         x65: { datatype: "u64", store: "rax" },
@@ -291,7 +294,7 @@ describe("RegisterAllocator:", () => {
       expect(allocation.in[1]).toBe(Register.rbx);
     });
     it("should give back m/64 if  SAME_SIZE_READ is set, ", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         out1: { datatype: "u64[n]", store: "rdi" },
         arg1: { datatype: "u64[n]", store: "rsi" },
         x65: { datatype: "u64", store: "rax" },
@@ -327,7 +330,7 @@ describe("RegisterAllocator:", () => {
       expect(isRegister(allocation.in[1])).toBe(true);
     });
     it("should give back imms-as-is, if ~DISALLOW_IMM|SAME_SIZE_READ is set, ", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         out1: { datatype: "u64[n]", store: "rdi" },
         arg1: { datatype: "u64[n]", store: "rsi" },
         x65: { datatype: "u64", store: "rax" },
@@ -357,7 +360,7 @@ describe("RegisterAllocator:", () => {
       expect(allocation.in[1]).toBe("-0x66");
     });
     it("should give back at least one non-mem, if DISALLOW_ALL_MEM is set, ", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         out1: { datatype: "u64[n]", store: "rdi" },
         arg1: { datatype: "u64[n]", store: "rsi" },
         x65: { datatype: "u64", store: "[ rsp + 0x08 ]" },
@@ -391,7 +394,7 @@ describe("RegisterAllocator:", () => {
       expect(isRegister(allocation.in[1])).toBe(true);
     });
     it("should setc a flag, even if there is no deps", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         out1: { datatype: "u64[n]", store: "rdi" },
         arg1: { datatype: "u64[n]", store: "rsi" },
         x65: { datatype: "u1", store: Flags.CF },
@@ -411,7 +414,7 @@ describe("RegisterAllocator:", () => {
 
       ra.initNewInstruction(c);
 
-      const allocation = ra.allocate({
+      ra.allocate({
         oReg: limbify(c.name),
         in: c.arguments,
         allocationFlags:
@@ -429,7 +432,7 @@ describe("RegisterAllocator:", () => {
     it("should split looong immediate value and put 64-bit chunks into the clobs", () => {
       // cast ra->any, cuz im messing with very private information here... some comments here are really just for the lolz.
 
-      (ra as any)._clobbers = new Set<string>();
+      (ra as MOCK_RA)._clobbers = new Set<string>();
       const c: CryptOpt.StringInstruction = {
         name: ["x23"],
         datatype: "u128",
@@ -440,7 +443,7 @@ describe("RegisterAllocator:", () => {
       };
       ra.initNewInstruction(c);
 
-      const newClobs = (ra as any)._clobbers as Set<string>;
+      const newClobs = (ra as MOCK_RA)._clobbers as Set<string>;
       expect(newClobs.size).toBe(9);
       //name and args and their limbs
       expect(newClobs).toContainEqual("x22");
@@ -456,7 +459,7 @@ describe("RegisterAllocator:", () => {
       expect(newClobs).toContainEqual("0x0000000000000000");
     });
     it("should split add xDD to clobs when only xDD_n is given  ", () => {
-      (ra as any)._clobbers = new Set<string>();
+      (ra as MOCK_RA)._clobbers = new Set<string>();
       const c: CryptOpt.StringInstruction = {
         name: ["x23_0"],
         datatype: "u128",
@@ -467,7 +470,7 @@ describe("RegisterAllocator:", () => {
       };
       ra.initNewInstruction(c);
 
-      const newClobs = (ra as any)._clobbers as Set<string>;
+      const newClobs = (ra as MOCK_RA)._clobbers as Set<string>;
       expect(newClobs.size).toBe(4);
       expect(newClobs).toContainEqual("x22");
       expect(newClobs).toContainEqual("x22_0");
@@ -476,7 +479,7 @@ describe("RegisterAllocator:", () => {
     });
 
     it("should put name limbs also into clobbers", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x22_0: { datatype: "u64", store: "r10" },
         x22_1: { datatype: "u64", store: "r11" },
         x22: { datatype: "u128" },
@@ -497,7 +500,7 @@ describe("RegisterAllocator:", () => {
         oReg: limbify(c.name),
         in: ins,
       });
-      const clobs = (ra as any)._clobbers as Set<string>;
+      const clobs = (ra as MOCK_RA)._clobbers as Set<string>;
       expect(clobs).toContainEqual("x23");
       expect(clobs).toContainEqual("x22");
       expect(clobs).toContainEqual("x23_0");
@@ -511,7 +514,7 @@ describe("RegisterAllocator:", () => {
   });
   describe("clearOrphans", () => {
     it("should clear u128s, which dont have limbs", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x11: { datatype: "u64", store: "rax" },
 
         x21: { datatype: "u128" },
@@ -559,7 +562,7 @@ describe("RegisterAllocator:", () => {
   });
   describe("lazyMov", () => {
     it("x5 = x3", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         arg1: { datatype: "u64", store: "rsi" },
         x3: { datatype: "u64", store: "rax" },
       };
@@ -577,7 +580,7 @@ describe("RegisterAllocator:", () => {
       expect(allocs).not.toHaveProperty("x3");
     });
     it("x5 = x3 with x3 undefined", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         arg1: { datatype: "u64", store: "rsi" },
       };
 
@@ -589,7 +592,7 @@ describe("RegisterAllocator:", () => {
       expect(() => ra.lazyMov("x3", "x5")).toThrowError();
     });
     it("x5 = x3 with x5 already set", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         arg1: { datatype: "u64", store: "rsi" },
         x5: { datatype: "u64", store: "rax" },
       };
@@ -601,7 +604,7 @@ describe("RegisterAllocator:", () => {
       expect(() => ra.lazyMov("x3", "x5")).toThrowError();
     });
     it("x5 = arg1[2]  (unsupported, because arg1[2] is always created on demand)", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         arg1: { datatype: "u64", store: "rsi" },
       };
 
@@ -612,7 +615,7 @@ describe("RegisterAllocator:", () => {
   });
   describe("loadVarToReg", () => {
     it("should load mem to reg", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u64", store: "[ rsp + 0x08 ]" },
       };
 
@@ -622,7 +625,7 @@ describe("RegisterAllocator:", () => {
       expect(ra.pres.pop()).toMatch(RegExp(`mov ${r}, \\[ rsp \\+ 0x08 \\]; .*`));
     });
     it("should load byte to reg with movzx", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u1", store: "[ rsp + 0x08 ]" },
       };
 
@@ -632,7 +635,7 @@ describe("RegisterAllocator:", () => {
       expect(ra.pres.pop()).toMatch(RegExp(`mov ${r}, byte \\[ rsp \\+ 0x08 \\]; .*`));
     });
     it("should load byte to reg with movzx", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u1", store: "[ rsp + 0x08 ]" },
       };
 
@@ -642,7 +645,7 @@ describe("RegisterAllocator:", () => {
       expect(ra.pres.pop()).toMatch(RegExp(`movzx ${r}, byte \\[ rsp \\+ 0x08 \\]; .*`));
     });
     it("should load byte to reg with mov, if var is already a u64", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u64", store: "[ rsp + 0x08 ]" },
       };
 
@@ -652,20 +655,20 @@ describe("RegisterAllocator:", () => {
       expect(ra.pres.pop()).toMatch(RegExp(`mov ${r}, \\[ rsp \\+ 0x08 \\];.*`));
     });
     it("should do nothing if var is in reg", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u64", store: "rax" },
       };
 
       const allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("x1");
-      const r = ra.loadVarToReg("x1");
+      ra.loadVarToReg("x1");
       expect(ra.pres).toHaveLength(0);
     });
     it("should spill var to u64 if it is in a flag, and set allocations", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u1", store: Flags.CF },
       };
-      (ra as any)._flagState[Flags.CF] = FlagState.ALIVE;
+      (ra as MOCK_RA)._flagState[Flags.CF] = FlagState.ALIVE;
 
       let allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("x1");
@@ -734,10 +737,10 @@ describe("RegisterAllocator:", () => {
   });
   describe("spillFlag", () => {
     it("should spill flag and set allocations to the byte-reg", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u1", store: Flags.CF },
       };
-      (ra as any)._flagState[Flags.CF] = FlagState.ALIVE;
+      (ra as MOCK_RA)._flagState[Flags.CF] = FlagState.ALIVE;
 
       let allocs = ra.getCurrentAllocations();
       expect(allocs).toHaveProperty("x1");
@@ -752,7 +755,7 @@ describe("RegisterAllocator:", () => {
   });
   describe("declareDatatypeForVar", () => {
     it("set the datatype for a variable u8->u64", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u1", store: "r8b" },
       };
 
@@ -768,7 +771,7 @@ describe("RegisterAllocator:", () => {
     });
     it("should not update store if its not a register ", () => {
       const m = "[ rsp + 0x10 ]";
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u1", store: Flags.CF },
         x2: { datatype: "u1", store: m },
       };
@@ -793,7 +796,7 @@ describe("RegisterAllocator:", () => {
       expect(allocs.x2.datatype).toBe("u64");
     });
     it("set the datatype for a variable u64->u8->u1", () => {
-      (ra as any)._allocations = {
+      (ra as MOCK_RA)._allocations = {
         x1: { datatype: "u64", store: "r9" },
       };
 

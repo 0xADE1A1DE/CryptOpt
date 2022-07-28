@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { SSA } from "@/bridge/bitcoin-core-bridge/raw.type";
 import { transformIcmp } from "@/bridge/bitcoin-core-bridge/transformations";

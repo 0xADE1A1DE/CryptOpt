@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { defaults } from "lodash-es";
 import { describe, expect, it, vi } from "vitest";
 

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
 import { matchXD, toposort } from "@/helper";

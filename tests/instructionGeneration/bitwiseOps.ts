@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { SpyInstance } from "vitest";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -390,7 +391,7 @@ describe("instructionGeneration:and", () => {
       decisionsHot: [],
       arguments: ["x65", "x66"],
     };
-    const code = bitwiseOp(c);
+    bitwiseOp(c);
     expect(getCurrentAllocations).toBeCalled();
     expect(allocate).toBeCalled();
   });

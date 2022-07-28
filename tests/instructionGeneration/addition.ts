@@ -95,7 +95,7 @@ vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
 describe("instructionGeneration:add", () => {
   // just assume it does not have deps
   backupIfStoreHasDependencies.mockImplementation(
-    (varname: MemoryAllocation | RegisterAllocation, out: string): string => {
+    (varname: MemoryAllocation | RegisterAllocation, _out: string): string => {
       return varname.store;
     },
   );

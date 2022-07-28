@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it, vi } from "vitest";
 
 import { AllocationFlags, DECISION_IDENTIFIER, Flags, FlagState, Register } from "@/enums";
@@ -1180,8 +1181,9 @@ describe("instructionGeneration:mul_imm", () => {
       const code: asm[] = mul(c);
       // imm is 19 (=0x13)
       expect(code.length).toBe(2);
-      expect(code[0]).toMatch(/lea r9, [rax \+ 8 \* rax]*/); // *9
-      expect(code[1]).toMatch(/lea rcx, [rax \+ 2 \* r9]*/); // 1 + 2*9
+
+      expect(code[0]).toMatch(/lea r9, \[rax \+ 8 \* rax\]*/); // *9
+      expect(code[1]).toMatch(/lea rcx, \[rax \+ 2 \* r9\]*/); // 1 + 2*9
       expect(declareFlagState).not.toBeCalled();
       expect(declareFlagState).not.toBeCalled();
       expect(allocate).toBeCalled();

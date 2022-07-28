@@ -1,4 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { describe, expect, it } from "vitest";
 
 import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "@/model";
 
@@ -302,6 +303,7 @@ describe("model.helpers", () => {
       });
       it("is x4 dependent on 0xffffffffffffffff, ... not really supported, cuz imms are not nodes", () => {
         const a = nodes.findIndex((n) => n.name[0] === "x4");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const b = nodes.findIndex((n) => n.name[0] === ("0xffffffffffffffff" as any));
         expect(b).toBe(-1);
         expect(() => isADependentOnB(a, b, nodes, neededBy)).toThrow();

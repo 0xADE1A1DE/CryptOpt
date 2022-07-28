@@ -1,5 +1,5 @@
 import type { SpyInstance } from "vitest";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { Optimizer } from "@/optimizer";
 

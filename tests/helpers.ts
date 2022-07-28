@@ -1,4 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { describe, expect, it } from "vitest";
 
 import {
   CALLER_SAVE_PREFIX,
@@ -13,7 +14,7 @@ import {
   matchArg,
   matchArgPrefix,
   matchIMM,
-  matchXD,
+  matchXD
 } from "@/helper";
 import type { CryptOpt } from "@/types";
 
