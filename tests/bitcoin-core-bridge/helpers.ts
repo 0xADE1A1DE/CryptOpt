@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   getArguments,
   getScalarsAndImmMappedAsConstArg,
-  isStructPointer
+  isStructPointer,
 } from "@/bridge/bitcoin-core-bridge/helpers";
 
 describe("bitcoinCoreBridge:helpers", () => {

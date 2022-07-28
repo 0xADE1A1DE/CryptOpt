@@ -14,7 +14,7 @@ import {
   matchArg,
   matchArgPrefix,
   matchIMM,
-  matchXD
+  matchXD,
 } from "@/helper";
 import type { CryptOpt } from "@/types";
 

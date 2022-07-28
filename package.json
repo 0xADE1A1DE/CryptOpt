@@ -27,6 +27,7 @@
     "lint-check": "eslint .",
     "lint-fix": "eslint . --fix",
     "format-check": "npx prettier --check \"./**/*.ts\" \"!./dist\"",
+    "format-fix": "npx prettier -w \"./**/*.ts\" \"!./dist\"",
     "pack": "rollup --config rollup.config.ts"
   },
   "prettier": {
