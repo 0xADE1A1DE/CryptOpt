@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-ROOT=$(realpath $(dirname "${0}"))
+
+ROOT=$(realpath "$(dirname "${0}")")
 BIN_DIR="${ROOT}/bins"
 NODE=${BIN_DIR}/node/bin/node
 NODE_VERSION=18.2.0
@@ -14,7 +15,7 @@ download_node() {
   export PATH
 }
 
-build_ms(){
+build_ms() {
   echo "building MeasureSuite"
   pushd ./modules/MeasureSuite || echo "MeasureSuite is not there. Please init" >&2
   CFLAGS="-I${BIN_DIR}/node/include" npm install
@@ -29,7 +30,7 @@ build_cryptopt() {
   test -e "${BUILT_CRYPTOPT}" && echo "Sucessfully built CryptOpt. :)"
 }
 
-deepclean(){
+deepclean() {
   clean
   make clean -C ./modules/MeasureSuite
 }
