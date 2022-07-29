@@ -4,7 +4,7 @@ import { BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
 import { matchXD, toposort } from "@/helper";
 
 import { createModelHelpers } from "./test-helpers";
-import { fiat_curve25519_carry_square } from "./toposort_helper";
+import { fiat_curve25519_carry_square } from "./toposort-helper";
 
 describe("toposort", () => {
   describe("general", () => {
