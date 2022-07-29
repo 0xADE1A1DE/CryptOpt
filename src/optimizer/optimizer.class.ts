@@ -115,7 +115,7 @@ export class Optimizer {
       const optimistaionStartDate = Date.now();
       let accumulatedTimeSpentByMeasuring = 0;
 
-      const write_current_asm = (number_evaluation?: number): void => {
+      const writeCurrentAsm = (number_evaluation?: number): void => {
         console.log("writing current asm");
         const elapsed = Date.now() - optimistaionStartDate;
         const evaluation_number = number_evaluation ?? this.args.evals;
@@ -254,8 +254,8 @@ export class Optimizer {
               process.exit(14);
             }
 
-            //TODO increase num_batches, if the times have a big stddeviation
-            //TODO change batch_size if the avg number is batch_size *= avg(times)/goal ; goal=10000cycles
+            //TODO increase numBatches, if the times have a big stddeviation
+            //TODO change batchSize if the avg number is batchSize *= avg(times)/goal ; goal=10000 cycles
           } catch (e) {
             const isIncorrect = e instanceof Error && e.message.includes("tested_incorrect");
             const isInvalid = e instanceof Error && e.message.includes("could not be assembled");
@@ -269,16 +269,12 @@ export class Optimizer {
             }
 
             if (isIncorrect) {
-              console.error(e, ERRORS.measureIncorrect.msg);
-              process.exit(ERRORS.measureIncorrect.exitCode);
+              errorOut(ERRORS.measureIncorrect);
             }
             if (isInvalid) {
-              console.error(e, ERRORS.measureInvalid.msg);
-              process.exit(ERRORS.measureInvalid.exitCode);
+              errorOut(ERRORS.measureInvalid);
             }
-
-            console.error(e, ERRORS.measureGeneric.msg);
-            process.exit(ERRORS.measureGeneric.exitCode);
+            errorOut(ERRORS.measureGeneric);
           }
 
           accumulatedTimeSpentByMeasuring += Date.now() - now_measure;
@@ -361,7 +357,7 @@ export class Optimizer {
               (Date.now() - optimistaionStartDate) / 1000 - globals.time.validate;
             // DONE WITH OPTIMISING WRITE EVERYTHING TO DISK AND EXIT.
             clearInterval(intervalHandle);
-            write_current_asm();
+            writeCurrentAsm();
             this.cleanLibcheckfunctions();
             console.log("Wonderful. Done with my work. Time for lunch.");
             resolve(0);

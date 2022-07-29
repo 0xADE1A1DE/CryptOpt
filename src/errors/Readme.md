@@ -13,7 +13,7 @@
 | 3     | deprecated
 | 4     | When parsing the mean-Values from executing the measuresuite, one of the means is NaN. This should not happen.
 | 5     | deprecated
-| 6     | The generated code was not proven correct.
+| 6     | deprecated
 | 7     | Internal. Models' instance has been requested, but there is no method set. Set `Model.method=...` first.
 | 8     | deprecated
 | 9     | deprecated
