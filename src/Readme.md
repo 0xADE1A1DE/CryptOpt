@@ -18,10 +18,9 @@ The optimization then runs in the Chrome V8 engine through Node.js.
 
 The general entry point is `CryptOpt.ts`.
 Output is then written to the `results/<CURVE>/<METHOD>/`, can be changed with the `--resultDir` option.
-Output for each optimization, it generates 
-TBD
-
-also collects the data points, into the `results/<CURVE>/<METHOD>/*.dat` files, and creates + executes the corresponding `.gp` file to create the `*pdf` showing the optimization over time.
+For each run, it generates an `*.asm` file and a state (`seed<SEED>.json`) file, that is, for each of the `bet`s.
+Additionally, we generate one `seed<SEED>.dat`,`seed<SEED>.gp` and `seed<SEED>.pdf` file.
+The `dat` contains the ratio over time in each line and doubles as an input for the `gp` file, which executed with `gnuplot`, generates the `pdf`.
 
 ## Dependencies
 
