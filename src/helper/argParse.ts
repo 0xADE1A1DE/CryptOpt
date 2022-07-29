@@ -92,7 +92,7 @@ export const parsedArgs = y
     alias: "n",
     default: true,
     describe:
-      "If this is set, it will proof the solution correct with fiat-bridge in addition to comparing the results with the C-compiled solution.",
+      "If this is set, it will proof the solution correct with fiat-bridge in addition to comparing the results with the C-compiled solution. Disable with --no-proof",
     boolean: true,
   })
   .option("readState", {
@@ -134,15 +134,20 @@ export const parsedArgs = y
     },
   })
   .check(({ evals, bridge, cFile, jsonFile, method, curve }) => {
-    if (evals <= 0) return false;
-    if (bridge == "manual" && (!jsonFile || !cFile)) return false;
+    if (evals <= 0) throw new Error("Evals must be >0");
+    if (bridge == "manual" && (!jsonFile || !cFile))
+      throw new Error("Bridge is set to manual, but either json or c file is not specified.");
     if (["", "fiat"].includes(bridge)) {
-      if (!FIAT_METHODS.includes(method)) return false;
-      if (!FIAT_CURVES.includes(curve)) return false;
+      if (!FIAT_METHODS.includes(method))
+        throw new Error(`Bridge is Fiat; the specified method '${method}' is not available.`);
+      if (!FIAT_CURVES.includes(curve))
+        throw new Error(`Bridge is Fiat; the specified curve '${curve}' is not available.`);
     }
     if (bridge == "bitcoin-core") {
-      if (curve !== "secp256k1") return false;
-      if (!BITCOIN_CORE_METHODS.includes(method)) return false;
+      if (curve !== "secp256k1")
+        throw new Error(`Bridge is bitcoin-core. The specified curve '${curve}' not 'secp256k1'.`);
+      if (!BITCOIN_CORE_METHODS.includes(method))
+        throw new Error(`Bridge is bitcoin-core. The specified method '${method}' not available.`);
     }
     return true;
   })

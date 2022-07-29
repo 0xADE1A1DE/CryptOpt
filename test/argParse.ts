@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { parsedArgs } from "@/helper";
 
 describe("default argParse", () => {
