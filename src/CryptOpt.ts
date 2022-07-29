@@ -154,7 +154,7 @@ fs.writeFileSync(
     "# remove legend",
     "unset key\n",
     "# and plot the matrix with line colors, and a line at y=1 with color 0 (gre)",
-    `plot "${datFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 line color variable with lines, 1 lc 0`,
+    `plot "${datFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 linecolor variable with lines, 1 lc 0`,
   ].join("\n"),
   { mode: 0o700 },
 );
