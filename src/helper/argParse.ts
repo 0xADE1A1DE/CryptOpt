@@ -134,20 +134,28 @@ export const parsedArgs = y
     },
   })
   .check(({ evals, bridge, cFile, jsonFile, method, curve }) => {
-    if (evals <= 0) throw new Error("Evals must be >0");
-    if (bridge == "manual" && (!jsonFile || !cFile))
+    if (evals <= 0) {
+      throw new Error("--evals must be >0");
+    }
+    if (bridge == "manual" && (!jsonFile || !cFile)) {
       throw new Error("Bridge is set to manual, but either json or c file is not specified.");
+    }
     if (["", "fiat"].includes(bridge)) {
-      if (!FIAT_METHODS.includes(method))
+      if (!FIAT_METHODS.includes(method)) {
         throw new Error(`Bridge is Fiat; the specified method '${method}' is not available.`);
-      if (!FIAT_CURVES.includes(curve))
+      }
+
+      if (!FIAT_CURVES.includes(curve)) {
         throw new Error(`Bridge is Fiat; the specified curve '${curve}' is not available.`);
+      }
     }
     if (bridge == "bitcoin-core") {
-      if (curve !== "secp256k1")
+      if (curve !== "secp256k1") {
         throw new Error(`Bridge is bitcoin-core. The specified curve '${curve}' not 'secp256k1'.`);
-      if (!BITCOIN_CORE_METHODS.includes(method))
+      }
+      if (!BITCOIN_CORE_METHODS.includes(method)) {
         throw new Error(`Bridge is bitcoin-core. The specified method '${method}' not available.`);
+      }
     }
     return true;
   })

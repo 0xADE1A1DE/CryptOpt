@@ -297,7 +297,7 @@ export function makeU64NameLimbs<T extends CryptOpt.ArgumentWithStringNames>(nod
 }
 
 export function shouldProof({ proof, bridge }: { proof: boolean; bridge?: string }): boolean {
-  return proof && bridge !== "bitcoin-core";
+  return proof && (typeof bridge == "undefined" || ["fiat", ""].includes(bridge));
 }
 
 export function padSeed(seed: string | number): string {
