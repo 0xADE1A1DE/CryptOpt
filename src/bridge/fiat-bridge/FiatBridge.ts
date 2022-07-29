@@ -81,7 +81,7 @@ export class FiatBridge implements Bridge {
    * if force is false, it will check if the machinecode needs to be generated, and skip the step if its not necessary
    */
   public machinecode(
-    filename = "libcheckfunctions.so",
+    filename: string,
     method: METHOD_T,
     curve: CURVE_T,
     ccOverwrite: string | undefined = undefined,

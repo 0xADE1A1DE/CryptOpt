@@ -71,7 +71,7 @@ export class BitcoinCoreBridge implements Bridge {
     return cryptOpt;
   }
 
-  public machinecode(filename = "libcheckfunctions.so", method: METHOD_T): string {
+  public machinecode(filename: string, method: METHOD_T): string {
     if (!filename.endsWith(".so")) {
       throw Error(`filename must end with .so, but instead is '${filename}'`);
     }

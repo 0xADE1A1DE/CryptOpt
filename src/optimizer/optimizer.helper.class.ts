@@ -41,14 +41,14 @@ type ret = {
   symbolname: string;
 };
 
-function initFiat(sharedObject: string, args: neededArgs): ret {
+function initFiat(sharedObjectFilename: string, args: neededArgs): ret {
   const bridge = new FiatBridge();
   Model.init({
     curve: args.curve,
     json: bridge.getCryptOptFunction(args.method, args.curve),
   });
 
-  const symbolname = bridge.machinecode(sharedObject, args.method, args.curve);
+  const symbolname = bridge.machinecode(sharedObjectFilename, args.method, args.curve);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
   const argwidth = bridge.argwidth(args.curve);
   const argnumin = bridge.argnumin(args.method);
@@ -58,14 +58,14 @@ function initFiat(sharedObject: string, args: neededArgs): ret {
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
-function initBitcoinCore(sharedObject: string, args: neededArgs): ret {
+function initBitcoinCore(sharedObjectFilename: string, args: neededArgs): ret {
   const bridge = new BitcoinCoreBridge();
   Model.init({
     curve: args.curve,
     json: bridge.getCryptOptFunction(args.method),
   });
 
-  const symbolname = bridge.machinecode(sharedObject, args.method);
+  const symbolname = bridge.machinecode(sharedObjectFilename, args.method);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
   const argwidth = bridge.argwidth(args.curve, args.method);
   const argnumin = bridge.argnumin(args.method);
@@ -75,7 +75,7 @@ function initBitcoinCore(sharedObject: string, args: neededArgs): ret {
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
-function initManual(sharedObject: string, args: neededArgs): ret {
+function initManual(sharedObjectFilename: string, args: neededArgs): ret {
   if (!args.jsonFile || !args.cFile) {
     throw new Error(
       "cannot use manual-brige w/o a bridgefile...  Where should I get my information from, huh?",
@@ -87,7 +87,7 @@ function initManual(sharedObject: string, args: neededArgs): ret {
     curve: "",
     json: bridge.getCryptOptFunction(),
   });
-  const symbolname = bridge.machinecode(sharedObject);
+  const symbolname = bridge.machinecode(sharedObjectFilename);
   const chunksize = 16; // only for reading the chunk breaks atm. see MS code
   const argwidth = bridge.argwidth();
   const argnumin = bridge.argnumin();
@@ -127,7 +127,7 @@ export function init(tmpDir: string, args: neededArgs): Measuresuite {
     "bitcoin-core": { availableMethods: AVAILABLE_BITCOIN_METHODS, generatorFunction: initBitcoinCore },
   };
 
-  const sharedObject = genLibcheckfunctionFullFilepath(tmpDir, args);
+  const sharedObjectFilename = genLibcheckfunctionFullFilepath(tmpDir, args);
 
   if (args.bridge) {
     if (!(args.bridge in mapping)) {
@@ -135,22 +135,22 @@ export function init(tmpDir: string, args: neededArgs): Measuresuite {
     }
 
     if (args.bridge === "manual") {
-      const common = mapping[args.bridge].generatorFunction(sharedObject, args);
-      return createMS(common, sharedObject);
+      const common = mapping[args.bridge].generatorFunction(sharedObjectFilename, args);
+      return createMS(common, sharedObjectFilename);
     }
 
     const { generatorFunction: gen, availableMethods } = mapping[args.bridge];
 
     if (availableMethods.includes(args.method)) {
-      const common = gen(sharedObject, args);
-      return createMS(common, sharedObject);
+      const common = gen(sharedObjectFilename, args);
+      return createMS(common, sharedObjectFilename);
     }
     throw new Error("Could not find  specified method in specified Bridge.");
   } else {
     const found = BRIDGES.find((bridge) => mapping[bridge].availableMethods.includes(args.method));
     if (found) {
-      const common = mapping[found].generatorFunction(sharedObject, args);
-      return createMS(common, sharedObject);
+      const common = mapping[found].generatorFunction(sharedObjectFilename, args);
+      return createMS(common, sharedObjectFilename);
     } else {
       throw new Error("Could not find Bridge for specified method.");
     }
