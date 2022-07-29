@@ -1,4 +1,4 @@
-# Techinical Documentation
+# Technical Documentation
 
 ## Overall directory structure
 
