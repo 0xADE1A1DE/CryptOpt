@@ -307,3 +307,7 @@ export function shouldProof({
 }): boolean {
   return !skipProof && method !== "keccakf" && bridge !== "bitcoin-core";
 }
+
+export function padSeed(seed: string | number): string {
+  return seed.toString().padStart(16, "0");
+}

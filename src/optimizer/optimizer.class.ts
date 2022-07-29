@@ -15,6 +15,7 @@ import {
   LOG_EVERY,
   PRINT_EVERY,
   printStartInfo,
+  padSeed,
   shouldProof,
   toggleFUNCTIONS,
   writeasm,
@@ -150,7 +151,7 @@ export class Optimizer {
         const fileNameOptimised = [
           `${lastGood.toFixed(0)}${evalString}`,
           `_ratio${ratioString.replace(".", "")}`,
-          `_seed${Paul.initialSeed}_${methodName}`,
+          `_seed${padSeed(Paul.initialSeed)}_${methodName}`,
         ].join("");
         const fullpath = path.join(this.resultspath, `${fileNameOptimised}.asm`);
         // write best found solution with headers

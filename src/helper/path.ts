@@ -2,6 +2,8 @@ import { existsSync } from "fs";
 import { ensureDirSync } from "fs-extra";
 import { resolve } from "path";
 
+import { padSeed } from "@/helper";
+
 import { parsedArgs } from "./argParse";
 
 export function generateResultsPath(): string {
@@ -10,7 +12,7 @@ export function generateResultsPath(): string {
 }
 
 export function generateResultFilename(seed: number | string, suff = "json"): string {
-  return resolve(generateResultsPath(), `seed${seed.toString().padStart(16, "0")}.${suff}`).toString();
+  return resolve(generateResultsPath(), `seed${padSeed(seed)}.${suff}`).toString();
 }
 
 function _genR({
