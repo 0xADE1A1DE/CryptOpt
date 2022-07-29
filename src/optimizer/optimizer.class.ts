@@ -7,15 +7,15 @@ import path from "path";
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
 import { CHOICE, FUNCTIONS } from "@/enums";
-import { ERRORS, errorOut } from "@/errors";
+import { errorOut, ERRORS } from "@/errors";
 import {
   analyseMeasureResult,
   env,
   generateResultsPath,
   LOG_EVERY,
+  padSeed,
   PRINT_EVERY,
   printStartInfo,
-  padSeed,
   shouldProof,
   toggleFUNCTIONS,
   writeasm,

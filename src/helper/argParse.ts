@@ -136,7 +136,7 @@ export const parsedArgs = y
   .check(({ evals, bridge, cFile, jsonFile, method, curve }) => {
     if (evals <= 0) return false;
     if (bridge == "manual" && (!jsonFile || !cFile)) return false;
-    if (bridge == "" || "fiat") {
+    if (["", "fiat"].includes(bridge)) {
       if (!FIAT_METHODS.includes(method)) return false;
       if (!FIAT_CURVES.includes(curve)) return false;
     }

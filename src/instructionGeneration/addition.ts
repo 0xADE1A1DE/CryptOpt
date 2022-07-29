@@ -13,7 +13,7 @@ import type {
   ValueAllocation,
 } from "@/types";
 
-import { fr_rm_f_f, fr__rm_rm, fr__rm_rm_rmf, r_rm_f_f, r__rmf_rmf, r__rm_rm_rmf } from "./additionhelpers";
+import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_rm_rmf, r__rmf_rmf, r_rm_f_f } from "./additionhelpers";
 
 export function add(c: CryptOpt.StringOperation): asm[] {
   // Step 1 Find out, what to do and get allcoations: highlevel
