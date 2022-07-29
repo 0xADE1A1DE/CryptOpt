@@ -296,16 +296,8 @@ export function makeU64NameLimbs<T extends CryptOpt.ArgumentWithStringNames>(nod
   return r as Array<CryptOpt.Varname | "_">;
 }
 
-export function shouldProof({
-  skipProof,
-  method,
-  bridge,
-}: {
-  skipProof: boolean;
-  method: string;
-  bridge?: string;
-}): boolean {
-  return !skipProof && method !== "keccakf" && bridge !== "bitcoin-core";
+export function shouldProof({ skipProof, bridge }: { skipProof: boolean; bridge?: string }): boolean {
+  return !skipProof && bridge !== "bitcoin-core";
 }
 
 export function padSeed(seed: string | number): string {
