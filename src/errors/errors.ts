@@ -12,6 +12,10 @@ export const ERRORS: { [k: string]: Err } = {
     exitCode: 22,
     msg: `measuresuite.measure should return a result but didn't, because the asmstring could not be assembled.`,
   },
+  proofUnsuccessful: {
+    exitCode: 50,
+    msg: `Could not prove correct. Aborting mission. I repeat: Abort mission now.`,
+  },
   bcbMakeFail: {
     exitCode: 30,
     msg: "While Executing `make` in bitcoin-core-bridge, there was an error.",

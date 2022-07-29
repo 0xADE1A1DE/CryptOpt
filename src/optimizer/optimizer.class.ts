@@ -7,7 +7,7 @@ import path from "path";
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
 import { CHOICE, FUNCTIONS } from "@/enums";
-import { ERRORS } from "@/errors";
+import { ERRORS, errorOut } from "@/errors";
 import {
   analyseMeasureResult,
   env,
@@ -173,12 +173,8 @@ export class Optimizer {
             execSync(proofCommandLine);
             globals.time.validate += (Date.now() - now) / 1000;
           } catch (e) {
-            console.error(
-              `Could not prove ${fullpath} correct with ${proofCommandLine}`,
-              `. Aborting mission. I repeat: Abort mission now.`,
-              e,
-            );
-            process.exit(6);
+            console.debug(`${proofCommandLine}`);
+            errorOut(ERRORS.proofUnsuccessful);
           }
         }
         console.log("done with that current price of assembly code.");
