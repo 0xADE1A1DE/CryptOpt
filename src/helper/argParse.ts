@@ -4,18 +4,25 @@ import { hideBin } from "yargs/helpers";
 
 import { AVAILABLE_METHODS as BITCOIN_CORE_METHODS } from "@/bridge/bitcoin-core-bridge/constants";
 import { BRIDGES } from "@/bridge/constants";
-import { AVAILABLE_CURVES, AVAILABLE_METHODS as FIAT_METHODS } from "@/bridge/fiat-bridge/constants";
+import {
+  AVAILABLE_CURVES as FIAT_CURVES,
+  AVAILABLE_METHODS as FIAT_METHODS,
+} from "@/bridge/fiat-bridge/constants";
 import { errorOut, ERRORS } from "@/errors";
 
 const y = await yargs(hideBin(process.argv));
 
 export const parsedArgs = y
+  .parserConfiguration({
+    "strip-aliased": true,
+    "strip-dashed": true,
+  })
   .option("curve", {
     string: true,
     alias: "c",
     default: "curve25519",
     describe: `Curve to optimise a method on. Must be secp256k1, if @param bridge is 'bitcoin-core'.`,
-    choices: AVAILABLE_CURVES,
+    choices: FIAT_CURVES,
   })
   .option("method", {
     string: true,
@@ -126,9 +133,17 @@ export const parsedArgs = y
       return Math.pow(1000, idx + 1) * Number(evals.substring(0, evals.length - 1));
     },
   })
-  .check(({ evals, bridge, cFile, jsonFile }) => {
+  .check(({ evals, bridge, cFile, jsonFile, method, curve }) => {
     if (evals <= 0) return false;
     if (bridge == "manual" && (!jsonFile || !cFile)) return false;
+    if (bridge == "" || "fiat") {
+      if (!FIAT_METHODS.includes(method)) return false;
+      if (!FIAT_CURVES.includes(curve)) return false;
+    }
+    if (bridge == "bitcoin-core") {
+      if (curve !== "secp256k1") return false;
+      if (!BITCOIN_CORE_METHODS.includes(method)) return false;
+    }
     return true;
   })
   .help("help")
