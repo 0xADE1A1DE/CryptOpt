@@ -126,9 +126,7 @@ export class Optimizer {
           `; ratio ${ratioString}`,
           `; seed ${paddedSeed} `,
           `; CC / CFLAGS ${CC} / ${CFLAGS} `,
-          `; time needed: ${elapsed} ms / ${evaluation_number} evals=> ${
-            elapsed / Number(evaluation_number)
-          }ms/eval`,
+          `; time needed: ${elapsed} ms on ${evaluation_number} evaluations.`,
           `; Time spent for assembling and measuring (initial batch_size=${batchSize}, initial num_batches=${numBatches}): ${accumulatedTimeSpentByMeasuring} ms`,
           `; number of used evaluations: ${evaluation_number}`,
           `; Ratio (time for assembling + measure)/(total runtime for ${evaluation_number} evals): ${
