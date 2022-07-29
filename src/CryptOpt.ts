@@ -48,7 +48,6 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
       `Done finding good SEEEDs.`,
       `Starting final optimization now.`,
       `Starting with a ratio of: ${cy}${runRes[0].ratio}${re}`,
-      // `on statefile ${cy}${bestStateFileYet}${re}`,
     ].join(" "),
   );
   return runRes;

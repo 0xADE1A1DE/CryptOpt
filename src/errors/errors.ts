@@ -2,15 +2,15 @@ type Err = { exitCode: number; msg: string };
 export const ERRORS: { [k: string]: Err } = {
   measureGeneric: {
     exitCode: 20,
-    msg: "measuresuite.measure should return a result but didn't. TSNH.",
+    msg: "measuresuite.measure should return a result but didn't.",
   },
   measureIncorrect: {
     exitCode: 21,
-    msg: `measuresuite.measure should return a result but didn't, because the result is not the same as per measureCheck.`,
+    msg: `measuresuite.measure should return a result but didn't, because the result is not the same as per measureCheck. RES/tested_incorrect{_A.asm,_B.asm,.json} haven been written for debug.`,
   },
   measureInvalid: {
     exitCode: 22,
-    msg: `measuresuite.measure should return a result but didn't, because the asmstring could not be assembled.`,
+    msg: `measuresuite.measure should return a result but didn't, because the ASM string could not be assembled. RES/tested_incorrect{_A.asm,_B.asm,.json} haven been written for debug.`,
   },
   measureInsufficientData: {
     exitCode: 23,

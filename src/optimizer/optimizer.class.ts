@@ -368,7 +368,7 @@ export class Optimizer {
   private cleanLibcheckfunctions() {
     if (existsSync(this.libcheckfunctionDirectory)) {
       try {
-        console.log(`removing libcheckfunctions in '${this.libcheckfunctionDirectory}'`);
+        console.log(`Removing lib check functions in '${this.libcheckfunctionDirectory}'`);
         rmSync(this.libcheckfunctionDirectory, { recursive: true });
         console.log(`removed ${this.libcheckfunctionDirectory}`);
       } catch (e) {
