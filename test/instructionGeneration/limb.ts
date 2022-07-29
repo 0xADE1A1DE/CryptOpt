@@ -54,7 +54,7 @@ describe("instructionGeneration:limb", () => {
         x22_1: { datatype: "u64", store: Register.r10 },
       } as Allocations;
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x26"],
       datatype: "u64",
       operation: "limb",
@@ -75,7 +75,7 @@ describe("instructionGeneration:limb", () => {
         x14: { datatype: "u64", store: Register.r9 },
       } as Allocations;
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x15"],
       datatype: "u64",
       operation: "limb",
@@ -96,7 +96,7 @@ describe("instructionGeneration:limb", () => {
         x14: { datatype: "i1", store: Flags.CF },
       } as Allocations;
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x15"],
       datatype: "u64",
       operation: "limb",

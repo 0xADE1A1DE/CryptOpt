@@ -59,7 +59,7 @@ describe("instructionGeneration:mul_imm", () => {
         in: [Register.rax /*x30*/],
       };
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x40"],
       datatype: "u64",
       operation: "*",
@@ -106,7 +106,7 @@ describe("instructionGeneration:mul_imm", () => {
         };
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -149,7 +149,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -196,7 +196,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x31*/, Register.rbx /*0x01*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -242,7 +242,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -290,7 +290,7 @@ describe("instructionGeneration:mul_imm", () => {
         };
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -335,7 +335,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -383,7 +383,7 @@ describe("instructionGeneration:mul_imm", () => {
         };
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -426,7 +426,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -473,7 +473,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x31*/, Register.rbx /*0x01*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -518,7 +518,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -566,7 +566,7 @@ describe("instructionGeneration:mul_imm", () => {
         };
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -611,7 +611,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -659,7 +659,7 @@ describe("instructionGeneration:mul_imm", () => {
         };
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -702,7 +702,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -749,7 +749,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x31*/, Register.rbx /*0x01*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -794,7 +794,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -842,7 +842,7 @@ describe("instructionGeneration:mul_imm", () => {
         };
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -887,7 +887,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -936,7 +936,7 @@ describe("instructionGeneration:mul_imm", () => {
         };
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -979,7 +979,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -1026,7 +1026,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x31*/, Register.rbx /*0x01*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -1071,7 +1071,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -1120,7 +1120,7 @@ describe("instructionGeneration:mul_imm", () => {
         };
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",
@@ -1166,7 +1166,7 @@ describe("instructionGeneration:mul_imm", () => {
           in: [Register.rax /*x30*/],
         };
       });
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x40"],
         datatype: "u64",
         operation: "*",

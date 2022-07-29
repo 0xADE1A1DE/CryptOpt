@@ -42,7 +42,7 @@ export function nothing(_msg: string) {
 
 export function createModelHelpers(): {
   rex: RegExp;
-  nodes: CryptOpt.StringInstruction[];
+  nodes: CryptOpt.StringOperation[];
 } {
   // special dev-'friendly'-way to specify nodes, sepcified in rex
   const rex = /^(?<datatype>u\d+) (?<names>[xout[\]_,0-9]+) = (?<operation>[\S]+) (?<args>[^/\n]+)/;
@@ -79,7 +79,7 @@ export function createModelHelpers(): {
       arguments: g.args.split(" ").filter((a) => a), // to get rid of all the non-args,
       decisions: {},
       decisionsHot: [] as string[],
-    } as CryptOpt.StringInstruction;
+    } as CryptOpt.StringOperation;
   });
   if (rawNodes.length !== nodes.length) {
     throw new Error("integrety failed.");

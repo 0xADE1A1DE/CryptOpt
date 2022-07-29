@@ -3,7 +3,7 @@ import { isByteRegister, isImm, llvm2CC } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function cmp(c: CryptOpt.StringInstruction): asm[] {
+export function cmp(c: CryptOpt.StringOperation): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 3) {
     throw new Error(`${c.operation} with more than one name or not 3 args is not supported.`);
   }

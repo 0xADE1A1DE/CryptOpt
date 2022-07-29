@@ -3,7 +3,7 @@ import { isImm } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function mul_imm_shlx(c: CryptOpt.StringInstruction): asm[] {
+export function mul_imm_shlx(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   const imm = c.arguments[1];
@@ -25,7 +25,7 @@ export function mul_imm_shlx(c: CryptOpt.StringInstruction): asm[] {
       throw new Error("unsupported immediate value");
   }
 }
-function mul_x_shlx(c: CryptOpt.StringInstruction, shiftCnt: CryptOpt.HexConstant): asm[] {
+function mul_x_shlx(c: CryptOpt.StringOperation, shiftCnt: CryptOpt.HexConstant): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   const factor = c.arguments[0];

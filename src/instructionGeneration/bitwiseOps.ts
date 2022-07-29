@@ -14,7 +14,7 @@ import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function bitwiseOp(c: CryptOpt.StringInstruction): asm[] {
+export function bitwiseOp(c: CryptOpt.StringOperation): asm[] {
   switch (c.operation) {
     case "&": {
       const decision = c.decisions[DECISION_IDENTIFIER.DI_INSTRUCTION_AND];
@@ -67,7 +67,7 @@ export function bitwiseOp(c: CryptOpt.StringInstruction): asm[] {
   }
 }
 
-function and(_c: CryptOpt.StringInstruction): asm[] {
+function and(_c: CryptOpt.StringOperation): asm[] {
   const c = cloneDeep(_c);
   if (c.datatype === "u128") {
     return and128(c);
@@ -119,7 +119,7 @@ function and(_c: CryptOpt.StringInstruction): asm[] {
   ];
 }
 
-function and128(c: CryptOpt.StringInstruction): asm[] {
+function and128(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   // first usecase:
@@ -178,7 +178,7 @@ function and128(c: CryptOpt.StringInstruction): asm[] {
   return res;
 }
 
-function bzhi(_c: CryptOpt.StringInstruction): asm[] {
+function bzhi(_c: CryptOpt.StringOperation): asm[] {
   // will clear OF, kills CF (according to res).
   const c = cloneDeep(_c);
   const ra = RegisterAllocator.getInstance();
@@ -217,7 +217,7 @@ function bzhi(_c: CryptOpt.StringInstruction): asm[] {
   ];
 }
 
-function or(c: CryptOpt.StringInstruction): asm[] {
+function or(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   // will clear OF/CF, ZF according to result
@@ -260,7 +260,7 @@ function or(c: CryptOpt.StringInstruction): asm[] {
   ];
 }
 
-function xor(c: CryptOpt.StringInstruction): asm[] {
+function xor(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   // will clear OF/CF, ZF according to result

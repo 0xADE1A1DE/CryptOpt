@@ -255,7 +255,7 @@ describe("makeU64NameLimbs", () => {
       arguments: ["x1", "x2"],
       decisions: [],
       decisionsHot: [],
-    } as CryptOpt.StringInstruction;
+    } as CryptOpt.StringOperation;
     const out = makeU64NameLimbs(c);
     expect(out).toHaveLength(2);
     expect(out).toStrictEqual(["x3_0", "x3_1"]);
@@ -268,7 +268,7 @@ describe("makeU64NameLimbs", () => {
       arguments: ["x1", "x2"],
       decisions: [],
       decisionsHot: [],
-    } as CryptOpt.StringInstruction;
+    } as CryptOpt.StringOperation;
     const out = makeU64NameLimbs(c);
     expect(out).toHaveLength(1);
     expect(out).toStrictEqual(["x3"]);
@@ -281,7 +281,7 @@ describe("makeU64NameLimbs", () => {
       arguments: ["x1", "x2", "0x0"],
       decisions: [],
       decisionsHot: [],
-    } as CryptOpt.StringInstruction;
+    } as CryptOpt.StringOperation;
     const out = makeU64NameLimbs(c);
     expect(out).toHaveLength(2);
     expect(out).toStrictEqual(["x3", "x4"]);

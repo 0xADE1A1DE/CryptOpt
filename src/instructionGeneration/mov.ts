@@ -3,7 +3,7 @@ import { isFlag, matchArg, SETX, toMem } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function mov(c: CryptOpt.StringInstruction): asm[] {
+export function mov(c: CryptOpt.StringOperation): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 1) {
     throw new Error(`${c.operation}with multiple operands is not supported.`);
   }
@@ -46,7 +46,7 @@ export function mov(c: CryptOpt.StringInstruction): asm[] {
     return ra.pres;
   }
 }
-export function conditionalMovZNZ(c: CryptOpt.StringInstruction): asm[] {
+export function conditionalMovZNZ(c: CryptOpt.StringOperation): asm[] {
   // will clear OF/CF, ZF according to result
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);

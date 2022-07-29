@@ -13,9 +13,9 @@ import type {
   ValueAllocation,
 } from "@/types";
 
-import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_rm_rmf, r__rmf_rmf, r_rm_f_f } from "./additionhelpers";
+import { fr_rm_f_f, fr__rm_rm, fr__rm_rm_rmf, r_rm_f_f, r__rmf_rmf, r__rm_rm_rmf } from "./additionhelpers";
 
-export function add(c: CryptOpt.StringInstruction): asm[] {
+export function add(c: CryptOpt.StringOperation): asm[] {
   // Step 1 Find out, what to do and get allcoations: highlevel
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
@@ -28,7 +28,7 @@ export function add(c: CryptOpt.StringInstruction): asm[] {
   }
 }
 
-function add128(c: CryptOpt.StringInstruction): asm[] {
+function add128(c: CryptOpt.StringOperation): asm[] {
   // for now, add all to the first 1
   const [collector, ...tail] = c.arguments;
   const [olo, ohi] = limbify(c.name);
@@ -71,7 +71,7 @@ function add128(c: CryptOpt.StringInstruction): asm[] {
 
     if (ahi == "0x0" && bhi == "0x0") {
       // u128 = u64+u64
-      const cLo: CryptOpt.StringInstruction = {
+      const cLo: CryptOpt.StringOperation = {
         name: [olo, ohi],
         arguments: ["0x0", alo, blo],
         operation: "addcarryx",
@@ -95,7 +95,7 @@ function add128(c: CryptOpt.StringInstruction): asm[] {
     // we need at least two addition ops:
     // the first one, is cLo, saving the intermediate hi-limb in TEMP_VARNAME
 
-    const cLo: CryptOpt.StringInstruction = {
+    const cLo: CryptOpt.StringOperation = {
       name: [olo, TEMP_VARNAME],
       arguments: ["0x0", alo, blo],
       operation: "addcarryx",
@@ -113,7 +113,7 @@ function add128(c: CryptOpt.StringInstruction): asm[] {
 
     // if there is two hi-limbs
     if (ahi !== "0x0" && bhi !== "0x0") {
-      const cHi: CryptOpt.StringInstruction = {
+      const cHi: CryptOpt.StringOperation = {
         name: [ohi, "_"],
         arguments: [TEMP_VARNAME, ahi, bhi],
         operation: "addcarryx",
@@ -134,7 +134,7 @@ function add128(c: CryptOpt.StringInstruction): asm[] {
       throw new Error("Corrupt flow. Either A or B should be 0x0 at this point.");
     }
 
-    const cHi: CryptOpt.StringInstruction = {
+    const cHi: CryptOpt.StringOperation = {
       name: [ohi],
       arguments: [TEMP_VARNAME, hi],
       operation: "+",
@@ -155,7 +155,7 @@ function add128(c: CryptOpt.StringInstruction): asm[] {
   ra.declare128(c.name[0]);
   return all;
 }
-function add64(c: CryptOpt.StringInstruction): asm[] {
+function add64(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   // ra.addToClobbers(c);
 

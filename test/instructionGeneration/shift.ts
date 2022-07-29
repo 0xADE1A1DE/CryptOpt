@@ -58,7 +58,7 @@ describe("instructionGeneration:shld", () => {
         x11_1: { datatype: "u64", store: Register.r10 },
       } as Allocations;
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x28"],
       datatype: "u64",
       operation: "<<",
@@ -103,7 +103,7 @@ describe("instructionGeneration:shld", () => {
         x25_1: { datatype: "u64", store: Register.r10 },
       } as Allocations;
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x27"],
       datatype: "u128",
       operation: ">>",
@@ -147,7 +147,7 @@ describe("instructionGeneration:shld", () => {
         x78_1: { datatype: "u64", store: Register.r10 },
       } as Allocations;
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x79"],
       datatype: "u64",
       operation: ">>",
@@ -190,7 +190,7 @@ describe("instructionGeneration:shld", () => {
         x78_1: { datatype: "u64", store: Register.r10 },
       } as Allocations;
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x79"],
       datatype: "u64",
       operation: ">>",
@@ -230,7 +230,7 @@ describe("instructionGeneration:sar", () => {
       };
     });
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x58"],
       datatype: "u128",
       operation: "sar",

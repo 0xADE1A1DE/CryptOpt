@@ -109,7 +109,7 @@ describe("instructionGeneration:add", () => {
         } as { [f in Flags]: FlagState }),
     );
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x20"],
       datatype: "u128",
       operation: "+",
@@ -145,7 +145,7 @@ describe("instructionGeneration:add", () => {
         } as { [f in Flags]: FlagState }),
     );
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x92"],
       datatype: "u128",
       operation: "+",
@@ -178,7 +178,7 @@ describe("instructionGeneration:add", () => {
         } as { [f in Flags]: FlagState }),
     );
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x92"],
       datatype: "u128",
       operation: "+",
@@ -214,7 +214,7 @@ describe("instructionGeneration:add", () => {
         } as { [f in Flags]: FlagState }),
     );
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x112"],
       datatype: "u128",
       operation: "+",
@@ -257,7 +257,7 @@ describe("instructionGeneration:add", () => {
         } as { [f in Flags]: FlagState }),
     );
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x112"],
       datatype: "u128",
       operation: "+",
@@ -293,7 +293,7 @@ describe("instructionGeneration:add", () => {
     );
     // getVarnameFromStore()
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x112" /*limb*/, "x113" /*carry*/],
       datatype: "u64",
       operation: "addcarryx",

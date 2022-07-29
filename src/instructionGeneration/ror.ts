@@ -1,7 +1,7 @@
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function ror(c: CryptOpt.StringInstruction): asm[] {
+export function ror(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   const [inVarname, imm8] = c.arguments as string[];

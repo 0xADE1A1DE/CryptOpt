@@ -1,7 +1,7 @@
 import { isImm, isReadOnlyMemory, limbify, limbifyImm, makeU64NameLimbs } from "@/helper";
 import type { CryptOpt } from "@/types";
 
-export type Node = CryptOpt.StringInstruction;
+export type Node = CryptOpt.StringOperation;
 export type Nodes = Node[];
 
 /**
@@ -156,7 +156,7 @@ export function createDependencyRelation(
 
 function groupDepLimbs(
   op: CryptOpt.Operation_T,
-  args: CryptOpt.StringInstruction["arguments"],
+  args: CryptOpt.StringOperation["arguments"],
 ): [string[], string[]] {
   switch (op) {
     case "mulx":

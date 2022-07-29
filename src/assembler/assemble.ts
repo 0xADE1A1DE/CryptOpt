@@ -15,7 +15,7 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
 
   console.log("initializing Model.");
   Model.startNewImplementation();
-  let curOp: CryptOpt.StringInstruction | null = null;
+  let curOp: CryptOpt.StringOperation | null = null;
   while ((curOp = Model.nextOperation())) {
     try {
       const ins = getInstruction(curOp);

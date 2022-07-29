@@ -6,7 +6,7 @@ import { Fiat } from "./fiat.namespace";
 export namespace CryptOpt {
   export type StateFile = {
     to: number[];
-    body: StringInstruction[];
+    body: StringOperation[];
     ratio: number;
     convergence: string[];
     seed: number;
@@ -67,9 +67,9 @@ export namespace CryptOpt {
     decisionsHot: string[];
   }
 
-  export type Function = Omit<Fiat.FiatFunction, "body"> & { body: StringInstruction[] };
+  export type Function = Omit<Fiat.FiatFunction, "body"> & { body: StringOperation[] };
 
-  export interface StaticCastInstruction extends DynArgument {
+  export interface StaticCastOperation extends DynArgument {
     name: [];
     operation: "static_cast";
     arguments: Argument[];
@@ -87,7 +87,7 @@ export namespace CryptOpt {
     name: Exclude<DynArgument["name"], []>;
   }
 
-  export interface StringInstruction
+  export interface StringOperation
     extends Omit<ArgumentWithStringNames, "arguments">,
       Omit<ArgumentWithStringArguments, "name"> {}
 }

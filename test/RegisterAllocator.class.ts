@@ -104,7 +104,7 @@ describe("RegisterAllocator:", () => {
           decisions: {},
           decisionsHot: [] as string[],
         },
-      ] as CryptOpt.StringInstruction[],
+      ] as CryptOpt.StringOperation[],
     },
     curve: "curve25519",
   });
@@ -230,7 +230,7 @@ describe("RegisterAllocator:", () => {
         x22_1: { datatype: "u64", store: "r11" },
         x22: { datatype: "u128" },
       };
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x23"],
         datatype: "u128",
         operation: "&",
@@ -266,7 +266,7 @@ describe("RegisterAllocator:", () => {
         x65: { datatype: "u64", store: "rax" },
         x66: { datatype: "u1", store: "bl" },
       };
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x68"],
         datatype: "u64",
         operation: "&",
@@ -300,7 +300,7 @@ describe("RegisterAllocator:", () => {
         x65: { datatype: "u64", store: "rax" },
         x66: { datatype: "u1", store: "[ rsp + 0x08 ]" },
       };
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x68"],
         datatype: "u64",
         operation: "&",
@@ -335,7 +335,7 @@ describe("RegisterAllocator:", () => {
         arg1: { datatype: "u64[n]", store: "rsi" },
         x65: { datatype: "u64", store: "rax" },
       };
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x68"],
         datatype: "u64",
         operation: "&",
@@ -366,7 +366,7 @@ describe("RegisterAllocator:", () => {
         x65: { datatype: "u64", store: "[ rsp + 0x08 ]" },
         x66: { datatype: "u64", store: "[ rsp + 0x80 ]" },
       };
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x68"],
         datatype: "u64",
         operation: "&",
@@ -400,7 +400,7 @@ describe("RegisterAllocator:", () => {
         x65: { datatype: "u1", store: Flags.CF },
         x66: { datatype: "u1", store: "[ rsp + 0x80 ]" },
       };
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x68"],
         datatype: "u64",
         operation: "&",
@@ -433,7 +433,7 @@ describe("RegisterAllocator:", () => {
       // cast ra->any, cuz im messing with very private information here... some comments here are really just for the lolz.
 
       (ra as MOCK_RA)._clobbers = new Set<string>();
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x23"],
         datatype: "u128",
         operation: "&",
@@ -460,7 +460,7 @@ describe("RegisterAllocator:", () => {
     });
     it("should split add xDD to clobs when only xDD_n is given  ", () => {
       (ra as MOCK_RA)._clobbers = new Set<string>();
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x23_0"],
         datatype: "u128",
         operation: "&",
@@ -484,7 +484,7 @@ describe("RegisterAllocator:", () => {
         x22_1: { datatype: "u64", store: "r11" },
         x22: { datatype: "u128" },
       };
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x23"],
         datatype: "u128",
         operation: "&",

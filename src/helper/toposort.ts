@@ -3,10 +3,10 @@ import type { CryptOpt } from "@/types";
 
 import { assertStringArguments, assertStringNames, matchXD } from "./lamdas";
 
-export function toposort(_nodes: Readonly<Readonly<CryptOpt.StringInstruction>[]>): number[] {
+export function toposort(_nodes: Readonly<Readonly<CryptOpt.StringOperation>[]>): number[] {
   _nodes.forEach(assertStringNames);
   _nodes.forEach(assertStringArguments);
-  const nodes = _nodes as CryptOpt.StringInstruction[];
+  const nodes = _nodes as CryptOpt.StringOperation[];
   const sorted = [] as number[];
   let l = 0;
 

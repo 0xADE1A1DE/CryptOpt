@@ -56,7 +56,7 @@ describe("instructionGeneration:cmp", () => {
         } as Allocations;
       });
 
-      const c: CryptOpt.StringInstruction = {
+      const c: CryptOpt.StringOperation = {
         name: ["x257"],
         datatype: "i1",
         operation: "cmp",
@@ -94,7 +94,7 @@ describe("instructionGeneration:cmp", () => {
       } as Allocations;
     });
 
-    const c: Partial<CryptOpt.StringInstruction> = {
+    const c: Partial<CryptOpt.StringOperation> = {
       name: ["x257"],
       datatype: "i1",
       operation: "cmp",
@@ -104,7 +104,7 @@ describe("instructionGeneration:cmp", () => {
     };
 
     Object.entries(llvm2CC).forEach(([llvm, setcc]) => {
-      const instr = defaults({ arguments: [llvm, "x254", "-0x1"] }, c) as CryptOpt.StringInstruction;
+      const instr = defaults({ arguments: [llvm, "x254", "-0x1"] }, c) as CryptOpt.StringOperation;
       if (setcc == "setb") {
         //skipping general setb check here, as it has special treatment
         return;
@@ -146,7 +146,7 @@ describe("instructionGeneration:cmp", () => {
           } as Allocations;
         });
 
-        const c: CryptOpt.StringInstruction = {
+        const c: CryptOpt.StringOperation = {
           name: ["x257"],
           datatype: "i1",
           operation: "cmp",
@@ -195,7 +195,7 @@ describe("instructionGeneration:cmp", () => {
       } as Allocations;
     });
 
-    const c: Partial<CryptOpt.StringInstruction> = {
+    const c: Partial<CryptOpt.StringOperation> = {
       name: ["x257"],
       datatype: "i1",
       operation: "cmp",
@@ -205,7 +205,7 @@ describe("instructionGeneration:cmp", () => {
     };
 
     ["0xffffffff", "-4994812053365940165", "-0x4551231950b75fc5"].forEach((imm) => {
-      const instr = defaults({ arguments: ["ne", "x254", imm] }, c) as CryptOpt.StringInstruction;
+      const instr = defaults({ arguments: ["ne", "x254", imm] }, c) as CryptOpt.StringOperation;
       it(`should mov to imm for imm: ${imm}`, () => {
         allocate.mockClear().mockImplementation(mockimpl);
         const result = cmp(instr);

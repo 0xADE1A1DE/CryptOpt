@@ -15,7 +15,7 @@ import { shiftLeft, shiftRight, shiftRightDouble } from "./shift";
 import { sub } from "./subtraction";
 import { zext } from "./zext";
 
-export const getInstruction = (o: CryptOpt.StringInstruction): asm[] => {
+export const getInstruction = (o: CryptOpt.StringOperation): asm[] => {
   assertStringNames(o);
   Paul.currentInstruction = o;
   switch (o.operation) {

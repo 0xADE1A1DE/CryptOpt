@@ -2,7 +2,7 @@ import { AllocationFlags } from "@/enums";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function not(c: CryptOpt.StringInstruction): asm[] {
+export function not(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   const [inVarname] = c.arguments as string[];

@@ -13,7 +13,7 @@ import type { asm, CryptOpt } from "@/types";
 
 import { mul_imm_imul, mul_imm_lea, mul_imm_shl, mul_imm_shlx } from "./multiplicationHelpers";
 
-export function mul(c: CryptOpt.StringInstruction): asm[] {
+export function mul(c: CryptOpt.StringOperation): asm[] {
   // assumes, that the operands are max 64bit
   if (c.datatype !== "u64") {
     return mulx(c);
@@ -41,7 +41,7 @@ export function mul(c: CryptOpt.StringInstruction): asm[] {
       return mul_imm_imul(c);
   }
 }
-export function mulx(c: CryptOpt.StringInstruction): asm[] {
+export function mulx(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
 
@@ -64,7 +64,7 @@ export function mulx(c: CryptOpt.StringInstruction): asm[] {
   // ];
 }
 
-function mulx64(ra: RegisterAllocator, c: CryptOpt.StringInstruction): asm[] {
+function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
   if (c.name.length === 1) {
     console.log("will truncate result to 64bit");
     // TODO: what about arg[1] in oReg?
@@ -123,7 +123,7 @@ function mulx64(ra: RegisterAllocator, c: CryptOpt.StringInstruction): asm[] {
     `mulx ${resHiR}, ${resLoR}, ${argR}; hi${c.name[1]}, lo${c.name[0]}<- ${c.arguments[0]} * ${c.arguments[1]}`,
   ];
 }
-function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringInstruction): asm[] {
+function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
   // if we have only one symbol, we want to limbify them
   const [u64loVarname, u64hiVarname] = c.name.length == 1 ? limbify(c.name) : c.name;
   const allocs = ra.getCurrentAllocations();

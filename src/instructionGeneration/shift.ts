@@ -6,7 +6,7 @@ import { RegisterAllocator } from "@/registerAllocator";
 import { AllocationRes, asm, CryptOpt } from "@/types";
 
 // assumes, that arg[2] is always val_imm
-export function shiftLeft(c: CryptOpt.StringInstruction): asm[] {
+export function shiftLeft(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   if (c.arguments.length !== 2) {
@@ -35,7 +35,7 @@ export function shiftLeft(c: CryptOpt.StringInstruction): asm[] {
     `shl ${allocation.oReg[0]}, ${shiftWidth}; ${c.name[0]} <- ${inVarname}<< ${shiftWidth}`,
   ];
 }
-export function shiftRight(c: CryptOpt.StringInstruction): asm[] {
+export function shiftRight(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   let res: asm[];
@@ -130,7 +130,7 @@ export function shiftRight(c: CryptOpt.StringInstruction): asm[] {
   return res;
 }
 
-export function shiftRightDouble(c: CryptOpt.StringInstruction): asm[] {
+export function shiftRightDouble(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   let [inVarname, fillFromVarname, shiftWidth] = c.arguments as string[];

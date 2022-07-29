@@ -1139,10 +1139,10 @@ export class RegisterAllocator {
   }
 
   // this is to not return the string args publicly (because I dont know about the lifetime)
-  public addToClobbers(c: CryptOpt.DynArgument | CryptOpt.StringInstruction): void {
+  public addToClobbers(c: CryptOpt.DynArgument | CryptOpt.StringOperation): void {
     this._addToClobbers(c);
   }
-  private _addToClobbers(arg: CryptOpt.DynArgument | CryptOpt.StringInstruction): string[] {
+  private _addToClobbers(arg: CryptOpt.DynArgument | CryptOpt.StringOperation): string[] {
     const c = arg as CryptOpt.DynArgument; // TDOO why doesnt  TS get this by itself:
 
     const stringArgs = c.arguments.filter((a) => typeof a === "string") as string[];
@@ -1169,7 +1169,7 @@ export class RegisterAllocator {
     return stringArgs;
   }
 
-  public initNewInstruction(ni: CryptOpt.StringInstruction): void {
+  public initNewInstruction(ni: CryptOpt.StringOperation): void {
     const newInstruction = ni as CryptOpt.DynArgument; // TDOO why doesnt  TS get this by itself:
 
     this.currentInstruction = newInstruction;

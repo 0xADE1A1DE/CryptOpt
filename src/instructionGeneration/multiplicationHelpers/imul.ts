@@ -2,7 +2,7 @@ import { AllocationFlags, Flags, FlagState } from "@/enums";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function mul_imm_imul(c: CryptOpt.StringInstruction): asm[] {
+export function mul_imm_imul(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   const allocation = ra.allocate({

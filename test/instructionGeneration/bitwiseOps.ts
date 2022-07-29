@@ -77,7 +77,7 @@ describe("instructionGeneration:and", () => {
         x22_1: { datatype: "u64", store: Register.r10 },
       } as Allocations;
     });
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x23"],
       datatype: "u128",
       operation: "&",
@@ -125,7 +125,7 @@ describe("instructionGeneration:and", () => {
     });
 
     // this instruction could deliberately choose to delete x66_1, but I think the entire x66 will be deleted anyhow. lets see, if this will be an issue later on (to have deps on x66_0, but not on x66_1, thus x66_1 wouldnt be deleted cus not all x66-limbs are not used anymore, but x66_1 could..).
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x67"],
       datatype: "u128",
       operation: "&",
@@ -179,7 +179,7 @@ describe("instructionGeneration:and", () => {
     });
 
     // this instruction could deliberately choose to delete x66_1, but I think the entire x66 will be deleted anyhow. lets see, if this will be an issue later on (to have deps on x66_0, but not on x66_1, thus x66_1 wouldnt be deleted cus not all x66-limbs are not used anymore, but x66_1 could..).
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x67"],
       datatype: "u128",
       operation: "&",
@@ -233,7 +233,7 @@ describe("instructionGeneration:and", () => {
     });
 
     // this instruction could deliberately choose to delete x66_1, but I think the entire x66 will be deleted anyhow. lets see, if this will be an issue later on (to have deps on x66_0, but not on x66_1, thus x66_1 wouldnt be deleted cus not all x66-limbs are not used anymore, but x66_1 could..).
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x67"],
       datatype: "u64",
       operation: "&",
@@ -279,7 +279,7 @@ describe("instructionGeneration:and", () => {
       } as Allocations;
     });
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x68"],
       datatype: "u64",
       operation: "&",
@@ -333,7 +333,7 @@ describe("instructionGeneration:and", () => {
       } as Allocations;
     });
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x68"],
       datatype: "u64",
       operation: "&",
@@ -381,7 +381,7 @@ describe("instructionGeneration:and", () => {
       } as Allocations;
     });
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x68"],
       datatype: "u64",
       operation: "&",
@@ -421,7 +421,7 @@ describe("instructionGeneration:and", () => {
       } as Allocations;
     });
 
-    const c: CryptOpt.StringInstruction = {
+    const c: CryptOpt.StringOperation = {
       name: ["x68"],
       datatype: "u64",
       operation: "&",

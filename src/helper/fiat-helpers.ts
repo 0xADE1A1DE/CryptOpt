@@ -47,7 +47,7 @@ export function preprocessFunction(func: Fiat.FiatFunction): CryptOpt.Function {
   const fiveSixthProcessed = filterDeadOps(fourFifthProcessed);
 
   // and add decisionsproperties where due
-  const body = fiveSixthProcessed.map(addDecisionProperty) as CryptOpt.StringInstruction[]; // decisionsproperty should be added last.
+  const body = fiveSixthProcessed.map(addDecisionProperty) as CryptOpt.StringOperation[]; // decisionsproperty should be added last.
 
   // types
   body.forEach(assertStringArguments);

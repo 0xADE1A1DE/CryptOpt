@@ -2,7 +2,7 @@ import { AllocationFlags } from "@/enums";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function limb(c: CryptOpt.StringInstruction): asm[] {
+export function limb(c: CryptOpt.StringOperation): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 2) {
     throw new Error(`${c.operation} with more than one name or not 2 args is not supported.`);
   }

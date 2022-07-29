@@ -3,7 +3,7 @@ import { isImm, TEMP_VARNAME } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
-export function mul_imm_lea(c: CryptOpt.StringInstruction): asm[] {
+export function mul_imm_lea(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   const imm = c.arguments[1];
@@ -27,7 +27,7 @@ export function mul_imm_lea(c: CryptOpt.StringInstruction): asm[] {
   }
 }
 //*without helper variable*/
-export function mul_lea(c: CryptOpt.StringInstruction, hex: CryptOpt.HexConstant): asm[] {
+export function mul_lea(c: CryptOpt.StringOperation, hex: CryptOpt.HexConstant): asm[] {
   const ra = RegisterAllocator.getInstance();
   const factor = c.arguments[0];
   const allocation = ra.allocate({
@@ -75,7 +75,7 @@ export function mul_lea(c: CryptOpt.StringInstruction, hex: CryptOpt.HexConstant
 }
 
 //** allocates x0 to tmp store stuff*/
-export function mul_tmp_lea(c: CryptOpt.StringInstruction, hex: CryptOpt.HexConstant): asm[] {
+export function mul_tmp_lea(c: CryptOpt.StringOperation, hex: CryptOpt.HexConstant): asm[] {
   const ra = RegisterAllocator.getInstance();
   const factor = c.arguments[0];
   const allocation = ra.allocate({

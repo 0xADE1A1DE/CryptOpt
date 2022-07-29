@@ -25,7 +25,7 @@ import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "./mode
 type methodParam = CryptOpt.Function["arguments"][number] | CryptOpt.Function["returns"][number];
 export class Model {
   // this is set once.
-  private static _nodes: Readonly<CryptOpt.StringInstruction>[] = [];
+  private static _nodes: Readonly<CryptOpt.StringOperation>[] = [];
   private static _order: number[] = []; // indexes into Model._nodes
   private static _neededBy: Map<string, Set<string>>;
 
@@ -105,7 +105,7 @@ export class Model {
       throw new Error("Illegal Arument (json)");
     }
 
-    Model._nodes = options.json.body as CryptOpt.StringInstruction[];
+    Model._nodes = options.json.body as CryptOpt.StringOperation[];
     Model._nodeLookupMap = nodeLookupMap(Model._nodes);
     Model._neededBy = createDependencyRelation(Model._nodes, Model._nodeLookupMap).neededBy;
     Model._order = toposort(Model._nodes);
@@ -125,7 +125,7 @@ export class Model {
   }
 
   // public for debugging
-  public static get nodesInTopologicalOrder(): CryptOpt.StringInstruction[] {
+  public static get nodesInTopologicalOrder(): CryptOpt.StringOperation[] {
     return Model._order.map((i) => Model._nodes[i]);
   }
 
@@ -350,7 +350,7 @@ export class Model {
     return true;
   }
 
-  private backup: { nodes: Readonly<CryptOpt.StringInstruction>[]; order: number[] } = {
+  private backup: { nodes: Readonly<CryptOpt.StringOperation>[]; order: number[] } = {
     nodes: [],
     order: [],
   };
@@ -432,7 +432,7 @@ export class Model {
     // and initializing the pointer.
     Model._currentInstIdx = -1;
   }
-  public static nextOperation(): CryptOpt.StringInstruction | null {
+  public static nextOperation(): CryptOpt.StringOperation | null {
     if (Model._currentInstIdx < Model._order.length) {
       const nextIdx = this._order[++Model._currentInstIdx];
       return Model._nodes[nextIdx];
