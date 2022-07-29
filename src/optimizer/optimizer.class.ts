@@ -42,6 +42,7 @@ export class Optimizer {
     this.resultspath = generateResultsPath();
     Paul.seed = args.seed;
     this.measuresuite = init(this.libcheckfunctionDirectory, args);
+    globals.convergence = [];
     // load a saved state if necessary
     if (args.readState) {
       Model.import(args.readState);
