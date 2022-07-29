@@ -81,11 +81,11 @@ export const parsedArgs = y
     describe:
       "Where to safe the result-files (assembly, pdfs, ...). Defaults to a new `results`-directory in the cwd.",
   })
-  .option("skipProof", {
+  .option("proof", {
     alias: "n",
-    default: false,
+    default: true,
     describe:
-      "If this is set, it will not Proof the solution correct. It will only compare the results with the C-Compiled solution.",
+      "If this is set, it will proof the solution correct with fiat-bridge in addition to comparing the results with the C-compiled solution.",
     boolean: true,
   })
   .option("readState", {

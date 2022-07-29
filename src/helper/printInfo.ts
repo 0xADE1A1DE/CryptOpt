@@ -13,7 +13,7 @@ export function printStartInfo({
   seed,
   evals,
   cyclegoal,
-  skipProof,
+  proof,
 }: {
   resultsPath: string;
   bridge?: string;
@@ -22,13 +22,13 @@ export function printStartInfo({
   seed: number;
   evals: number;
   cyclegoal: number;
-  skipProof: boolean;
+  proof: boolean;
 }) {
   process.stdout.write(
     [
       `\nStart`,
       `on brg-curve-method >>${cy}${bridge}-${curve}-${method}${re}<<`,
-      `>>${cy}${shouldProof({ bridge, skipProof }) ? "with" : "without"} proofing${re} correct<<`,
+      `>>${cy}${shouldProof({ bridge, proof }) ? "with" : "without"} proofing${re} correct<<`,
       `on cpu >>${cy}${os.cpus()[0].model}${re}<<`,
       `writing results to>>${cy}${resultsPath}${re}<<`,
       `with seed >>${cy}${seed}${re}<<`,

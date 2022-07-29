@@ -11,7 +11,7 @@ const args: {
   cyclegoal: number;
   readState?: string; // filename
   logComment: string;
-  skipProof: boolean;
+  proof: boolean;
   verbose: boolean;
   bridge?: string;
 } = {
@@ -22,7 +22,7 @@ const args: {
   cyclegoal: 100,
   logComment: "",
   verbose: false,
-  skipProof: true,
+  proof: false,
 };
 
 describe("full tests fiat", () => {

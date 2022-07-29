@@ -9,10 +9,10 @@ export function getTestArgs(filename: string): {
   seed: 1;
   cyclegoal: 100;
   logComment: "";
-  skipProof: true;
+  proof: boolean;
   curve: string;
   method: string;
-  verbose: false;
+  verbose: boolean;
   bridge?: string;
 } {
   const groups = basename(filename).match(/(?<curve>.*)-(?<method>.*)\.ts/)?.groups;
@@ -27,7 +27,7 @@ export function getTestArgs(filename: string): {
     seed: 1,
     cyclegoal: 100,
     logComment: "",
-    skipProof: true,
+    proof: false,
     curve,
     method,
     verbose: false,
