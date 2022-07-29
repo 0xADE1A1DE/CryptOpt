@@ -1,3 +1,19 @@
+/**
+ * Copyright 2022 University of Adelaide
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 export enum DECISION_IDENTIFIER {
   DI_FLAG = "di_flag", // if a choice needs to be taken on which flag to choose from (add via OF or CF)
   DI_HANDLE_FLAGS_KK = "di_handle_flags_kk", // how to deal with two killed flags (in an add situation, for now).
