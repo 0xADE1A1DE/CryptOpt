@@ -8,7 +8,7 @@ export default defineConfig({
       reporter: ["text", "json", "html", "cobertura"],
       include: ["src"],
     },
-    include: ["**/tests/**/*.ts"],
-    exclude: [...configDefaults.exclude, "tests/test-helpers.ts"],
+    include: ["./test/**/*.ts"],
+    exclude: [...configDefaults.exclude, "test/test-helpers.ts"],
   },
 });
