@@ -15,61 +15,61 @@ import { shiftLeft, shiftRight, shiftRightDouble } from "./shift";
 import { sub } from "./subtraction";
 import { zext } from "./zext";
 
-export const getInstruction = (c: CryptOpt.StringInstruction): asm[] => {
-  assertStringNames(c);
-  Paul.currentInstruction = c;
-  switch (c.operation) {
+export const getInstruction = (o: CryptOpt.StringInstruction): asm[] => {
+  assertStringNames(o);
+  Paul.currentInstruction = o;
+  switch (o.operation) {
     case "*":
-      return mul(c);
+      return mul(o);
     case "mulx":
-      return mulx(c);
+      return mulx(o);
     case "+":
     case "addcarryx": {
       const comment = [
         `\n`,
         `; add:`,
-        `; r:${c.name[0]},f:${c.name[1] ?? "_"}<-add(${c.arguments.join(",")})`,
+        `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-add(${o.arguments.join(",")})`,
         `; ${RegisterAllocator.getInstance().flagStateString()}`,
       ];
-      const instructions = add(c);
+      const instructions = add(o);
       return [...comment, ...RegisterAllocator.getInstance().pres, ...instructions];
     }
     case "subborrowx": {
       const comment = [
         `\n`,
         `; sub:`,
-        `; r:${c.name[0]},f:${c.name[1] ?? "_"}<-sub(${c.arguments.join(",")})`,
+        `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-sub(${o.arguments.join(",")})`,
         `; ${RegisterAllocator.getInstance().flagStateString()}`,
       ];
-      const instructions = sub(c);
+      const instructions = sub(o);
       return [...comment, ...RegisterAllocator.getInstance().pres, ...instructions];
     }
     case "<<":
-      return shiftLeft(c);
+      return shiftLeft(o);
     case "shrd":
     case "sar": // because if its a u128, we need to to an shrd, too
-      return shiftRightDouble(c);
+      return shiftRightDouble(o);
     case ">>":
-      return shiftRight(c);
+      return shiftRight(o);
     case "ror":
-      return ror(c);
+      return ror(o);
     case "|":
     case "&":
     case "^":
-      return bitwiseOp(c);
+      return bitwiseOp(o);
     case "=":
-      return mov(c);
+      return mov(o);
     case "cmovznz":
-      return conditionalMovZNZ(c);
+      return conditionalMovZNZ(o);
     case "~":
-      return not(c);
+      return not(o);
     case "limb":
-      return limb(c);
+      return limb(o);
     case "zext":
-      return zext(c);
+      return zext(o);
     case "cmp":
-      return cmp(c);
+      return cmp(o);
     default:
-      throw new Error(`Alarm. Not implemented. ${JSON.stringify(c)}`);
+      throw new Error(`Alarm. Not implemented. ${JSON.stringify(o)}`);
   }
 };
