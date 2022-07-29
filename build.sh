@@ -23,7 +23,7 @@ build_ms() {
 }
 
 build_cryptopt() {
-  ! test -x ./modules/MeasureSuite/build/Release/measuresuite.node && build_ms
+  ! test -x ./modules/MeasureSuite/dist/measureaddon.node && build_ms
   echo "building CryptOpt"
   clean
   npm run pack
