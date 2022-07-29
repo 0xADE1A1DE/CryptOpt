@@ -65,7 +65,7 @@ export class Optimizer {
   private revertFunction = (): void => {
     /**intentionally blank */
   };
-  /** you usually dont want to mess with @param random.
+  /** you usually don't want to mess with @param random.
    * mutate should not be called from outside with @param random=false*/
   private mutate(random = true): void {
     if (random) {
@@ -120,10 +120,11 @@ export class Optimizer {
         console.log("writing current asm");
         const elapsed = Date.now() - optimistaionStartDate;
         const evaluation_number = number_evaluation ?? this.args.evals;
+        const paddedSeed = padSeed(Paul.initialSeed);
         const statistics = [
           `; cpu ${cpus()[0].model}`,
           `; ratio ${ratioString}`,
-          `; seed ${Paul.initialSeed} `,
+          `; seed ${paddedSeed} `,
           `; CC / CFLAGS ${CC} / ${CFLAGS} `,
           `; time needed: ${elapsed} ms / ${evaluation_number} evals=> ${
             elapsed / Number(evaluation_number)
@@ -151,7 +152,7 @@ export class Optimizer {
         const fileNameOptimised = [
           `${lastGood.toFixed(0)}${evalString}`,
           `_ratio${ratioString.replace(".", "")}`,
-          `_seed${padSeed(Paul.initialSeed)}_${methodName}`,
+          `_seed${paddedSeed}_${methodName}`,
         ].join("");
         const fullpath = path.join(this.resultspath, `${fileNameOptimised}.asm`);
         // write best found solution with headers
@@ -227,15 +228,15 @@ export class Optimizer {
               batchSize,
               numBatches,
             );
-            console.log("well done guys. the results are in!");
+            console.log("well done guys. The results are in!");
 
             if (!results) {
-              throw new Error("Measuresuite did not yield results.");
+              throw new Error("MeasureSuite did not yield results.");
             }
             if (!results.stats.checkResult) {
               const ro = results.stats.runOrder;
               console.error(
-                `${ro.charAt(ro.length - 1)} was incorreect: ${ro}. You probably want to diff them. here:`,
+                `${ro.charAt(ro.length - 1)} was incorrect: ${ro}. You probably want to diff them. Here:`,
                 `diff ${this.resultspath}/tested_incorrect_*.asm`,
               );
               throw Error("tested_incorrect");

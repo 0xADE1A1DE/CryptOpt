@@ -94,7 +94,7 @@ export class Model {
     Model._methodParameters = options.json.returns;
     Model._methodParameters = Model._methodParameters.concat(options.json.arguments);
 
-    // double check that hierarchial has been flattened
+    // double check that hierarchical has been flattened
     try {
       options.json.body.forEach((e) => {
         assertStringArguments(e);
@@ -102,7 +102,7 @@ export class Model {
     } catch (err) {
       console.error("puhhh.");
       console.error(err);
-      throw new Error("Illegal Arument (json)");
+      throw new Error("Illegal Argument (json)");
     }
 
     Model._nodes = options.json.body as CryptOpt.StringOperation[];
@@ -114,7 +114,6 @@ export class Model {
       .map((n) => `${n.name.join("--").padStart(15)} = ${n.arguments.join(` ${n.operation} `)}`)
       .join("\n");
     console.log(s);
-    // fs.writeFileSync("/tmp/order", s);
   }
 
   public static get methodParametes(): methodParam[] {

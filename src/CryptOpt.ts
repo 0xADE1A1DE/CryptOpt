@@ -46,7 +46,7 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
   console.log(
     [
       `Done finding good SEEEDs.`,
-      `Starting final optimistaion now.`,
+      `Starting final optimization now.`,
       `Starting with a ratio of: ${cy}${runRes[0].ratio}${re}`,
       // `on statefile ${cy}${bestStateFileYet}${re}`,
     ].join(" "),
@@ -58,7 +58,7 @@ async function run(args: OptimizerArgs): Promise<RunResult> {
   try {
     await new Optimizer(args).optimise();
   } catch (e) {
-    console.error(`Cryptopt-Error while optimising:\n`, e);
+    console.error(`CryptOpt-Error while optimising:\n`, e);
     process.exit(1000);
   }
 
@@ -117,8 +117,6 @@ const spaceSeparated = runResults.reduce((arr, { convergence }) => {
   arr.push(convergence.concat(paddingArray).join(" "));
   return arr;
 }, [] as string[]);
-// have the final convergences at the end, so that it overwrites the earlier one. (that way it will be the same color.)
-// For some eager programmer, feel free to find the particular rows of finalConvergences in ratios and delete it.
 
 const datFileFull = generateResultFilename(parsedArgs.seed, "dat");
 const gpFileFull = generateResultFilename(parsedArgs.seed, "gp");

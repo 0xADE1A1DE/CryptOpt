@@ -26,7 +26,7 @@ export function printStartInfo({
 }) {
   process.stdout.write(
     [
-      `Start`,
+      `\nStart`,
       `on brg-curve-method >>${cy}${bridge}-${curve}-${method}${re}<<`,
       `>>${cy}${shouldProof({ bridge, skipProof }) ? "with" : "without"} proofing${re} correct<<`,
       `on cpu >>${cy}${os.cpus()[0].model}${re}<<`,
