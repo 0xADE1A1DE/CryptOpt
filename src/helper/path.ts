@@ -9,8 +9,8 @@ export function generateResultsPath(): string {
   return _genR({ curve, bridge, method, resultDir });
 }
 
-export function generateStateFileName(seed: number | string): string {
-  return resolve(generateResultsPath() + `/_state_${seed}.json`).toString();
+export function generateResultFilename(seed: number | string, suff = "json"): string {
+  return resolve(generateResultsPath(), `seed${seed.toString().padStart(16, "0")}.${suff}`).toString();
 }
 
 function _genR({

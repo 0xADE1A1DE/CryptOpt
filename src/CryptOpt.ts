@@ -2,7 +2,7 @@ import { exec } from "child_process";
 import fs from "fs";
 import os from "os";
 
-import { cy, env, generateStateFileName, gn, parsedArgs, PRINT_EVERY, rd, re, SI } from "@/helper";
+import { cy, env, generateResultFilename, gn, parsedArgs, PRINT_EVERY, rd, re, SI } from "@/helper";
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
 import type { OptimizerArgs } from "@/optimizer";
@@ -62,7 +62,7 @@ async function run(args: OptimizerArgs): Promise<RunResult> {
     process.exit(1000);
   }
 
-  const statefile = generateStateFileName(args.seed);
+  const statefile = generateResultFilename(args.seed);
   Model.persist(statefile);
   const { ratio, convergence } = Model.getState();
   return { statefile, ratio, convergence };
@@ -96,9 +96,7 @@ if (single) {
 // OPTIMIZATION DONE.
 // NOW Analyse and write files for graphing.
 
-const finalConvergences = [] as string[];
 const times: CryptoptGlobals["time"] = { validate: 0, generateCryptopt: 0, generateFiat: 0 };
-let longestDataRow = -1;
 
 const parsed = Model.getState();
 
@@ -109,32 +107,30 @@ if ("time" in parsed) {
   times.generateCryptopt += generateCryptopt;
 }
 
-const convergence = parsed.convergence;
-finalConvergences.push(convergence.join(" "));
-longestDataRow = Math.max(longestDataRow, convergence.length);
+const lastConvergence = runResults[runResults.length - 1].convergence;
+const longestDataRow = lastConvergence.length;
 
-const spaceSeparated = runResults
-  .reduce((arr, { convergence }) => {
-    // in order to create a matrix for gnuplot, we need to pad with " ?"
-    const paddingAmount = longestDataRow - convergence.length;
-    const paddingArray = new Array(paddingAmount).fill("?");
-    arr.push(convergence.concat(paddingArray).join(" "));
-    return arr;
-  }, [] as string[])
-  // have the final convergences at the end, so that it overwrites the earlier one. (that way it will be the same color.)
-  // For some eager programmer, feel free to find the particular rows of finalConvergences in ratios and delete it.
-  .concat(finalConvergences);
-const finalStateFile = generateStateFileName(parsedArgs.seed);
+const spaceSeparated = runResults.reduce((arr, { convergence }) => {
+  // in order to create a matrix for gnuplot, we need to pad with " ?"
+  const paddingAmount = longestDataRow - convergence.length;
+  const paddingArray = new Array(paddingAmount).fill("?");
+  arr.push(convergence.concat(paddingArray).join(" "));
+  return arr;
+}, [] as string[]);
+// have the final convergences at the end, so that it overwrites the earlier one. (that way it will be the same color.)
+// For some eager programmer, feel free to find the particular rows of finalConvergences in ratios and delete it.
 
-const datFileFull = `${finalStateFile}.dat`;
+const datFileFull = generateResultFilename(parsedArgs.seed, "dat");
+const gpFileFull = generateResultFilename(parsedArgs.seed, "gp");
+const pdfFileFull = generateResultFilename(parsedArgs.seed, "pdf");
 
 fs.writeFileSync(datFileFull, spaceSeparated.join("\n"));
 process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);
 
-const gpFile = `${datFileFull}.gp`;
+console.log(JSON.stringify(times));
 const title = [
   `${curve.replace("_", "\\\\_")}-${method}`,
-  single || `Restarts^{${bets}}_{${(offspringEvals / parsedArgs.evals) * 100}%}`,
+  single ? "Single Run" : `Restarts^{${bets}}_{${(offspringEvals / parsedArgs.evals) * 100} %}`,
   `#Mutations ${SI(parsedArgs.evals)}`,
   new Date().toISOString(),
   os.hostname(),
@@ -142,7 +138,7 @@ const title = [
 ].join(", ");
 
 fs.writeFileSync(
-  gpFile,
+  gpFileFull,
   [
     `#!/usr/bin/env gnuplot\n`,
     `set title "${title}"`,
@@ -150,7 +146,7 @@ fs.writeFileSync(
     `set datafile missing "?"\n`,
     "# setting output sizes and filename",
     "set terminal pdf size 80cm,20cm",
-    `set output '${datFileFull}.pdf'\n`,
+    `set output '${pdfFileFull}'\n`,
     "# set x",
     'set xlabel "Mutation"',
     "set logscale x 10\n",
@@ -159,8 +155,8 @@ fs.writeFileSync(
     `set ylabel "ratio: '${env.CC}-compiled cycle lib'/'cycle good' "\n`,
     "# remove legend",
     "unset key\n",
-    "# and plot the marix with linecolors, and a line at y=1 with color 0 (gre)",
-    `plot "${datFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 linecolor variable with lines, 1 lc 0`,
+    "# and plot the matrix with line colors, and a line at y=1 with color 0 (gre)",
+    `plot "${datFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 line color variable with lines, 1 lc 0`,
   ].join("\n"),
   { mode: 0o700 },
 );
@@ -170,7 +166,7 @@ const d = (chunk: Buffer | string) => {
   const str = chunk.toString();
   if (
     !str.includes("line 22: ") &&
-    !str.includes(gpFile) &&
+    !str.includes(gpFileFull) &&
     str !== "\n" &&
     !str.includes("warning: ") &&
     !str.includes("matrix contains missing or undefined values")
@@ -179,7 +175,7 @@ const d = (chunk: Buffer | string) => {
   }
 };
 
-const child = exec(`gnuplot ${gpFile}`);
+const child = exec(`gnuplot ${gpFileFull}`);
 child.stdout?.on("data", d);
 child.stderr?.on("data", d);
 child.on("close", (code) => {

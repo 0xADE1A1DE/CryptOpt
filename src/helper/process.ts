@@ -1,10 +1,10 @@
 import { Model } from "@/model";
 
 import { cy, re } from "./constants";
-import { generateStateFileName } from "./path";
+import { generateResultFilename } from "./path";
 
 export function registerExitHooks(seed: number) {
-  const stateFileName = generateStateFileName(seed);
+  const stateFileName = generateResultFilename(seed);
 
   process.on("exit", (exitcode: number) => {
     if (exitcode == 0) {
