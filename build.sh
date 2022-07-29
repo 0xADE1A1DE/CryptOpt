@@ -3,7 +3,7 @@
 ROOT=$(realpath "$(dirname "${0}")")
 BIN_DIR="${ROOT}/bins"
 NODE=${BIN_DIR}/node/bin/node
-NODE_VERSION=18.2.0
+NODE_VERSION=18.7.0
 BUILT_CRYPTOPT="${ROOT}/dist/CryptOpt.js"
 
 set -e # die on error
