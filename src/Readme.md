@@ -2,7 +2,7 @@
 
 ## Overall directory structure
 
-- `modules`: git-submodules. Currently contains [0xAde1a1de/MeasureSuite](https://github.com/0xADE1A1DE/MeasureSuite).
+- `modules`: git-submodules. Currently contains [0xADE1A1DE/MeasureSuite](https://github.com/0xADE1A1DE/MeasureSuite).
 - `src`: source files for CryptOpt
 - `src/bridge`: We call a class, which provides a `JSON`-format of the input function and generates machine code a **Bridge**. Those are in this folder, currently supported are `fiat-bridge` and `bitcoin-core-bridge`. Additionally an experimental `manual-bridge`, where one can specify a C and JSON source file to run the optimization on.
 - `test`: unit and e2e-tests
@@ -27,7 +27,7 @@ also collects the data points, into the `results/<CURVE>/<METHOD>/*.dat` files, 
 
 CryptOpt is dependent on `MeasureSuite`. In a nutshell, CryptOpt gives `MeasureSuite` two assembly strings and `MeasureSuite` will then evaluate them in our adapted R3-Validation fashion.
 It itself is written in C, but provides TypeScript bindings.
-It also depends on [AssemblyLine](https://github.com/0xAde1a1de/Assemblyline) (*An ultra-lightweight C library and binary for generating machine code of x86_64 assembly language and executing on the fly*) to generate and execute machine code.
+It also depends on [AssemblyLine](https://github.com/0XADE1A1DE/Assemblyline) (*An ultra-lightweight C library and binary for generating machine code of x86_64 assembly language and executing on the fly*) to generate and execute machine code.
 
 ## How does it work then?
 
