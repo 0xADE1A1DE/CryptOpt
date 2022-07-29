@@ -4,7 +4,7 @@ import { cy, re } from "./constants";
 import { generateResultFilename } from "./path";
 
 export function registerExitHooks(seed: number) {
-  const stateFileName = generateResultFilename(seed);
+  const [stateFileName] = generateResultFilename(seed);
 
   process.on("exit", (exitcode: number) => {
     if (exitcode == 0) {

@@ -72,7 +72,7 @@ export class Model {
     if (filename.includes("results")) {
       filename = "RES" + filename.split("results")[1];
     }
-    process.stdout.write(`Wrote ${cy}${filename}${re} `);
+    process.stdout.write(`\nWrote ${cy}${filename}${re} `);
   }
 
   public static import(filename: fs.PathLike) {

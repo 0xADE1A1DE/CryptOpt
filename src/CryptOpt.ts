@@ -61,7 +61,7 @@ async function run(args: OptimizerArgs): Promise<RunResult> {
     process.exit(1000);
   }
 
-  const statefile = generateResultFilename(args.seed);
+  const [statefile] = generateResultFilename(args.seed);
   Model.persist(statefile);
   const { ratio, convergence } = Model.getState();
   return { statefile, ratio, convergence };
@@ -112,14 +112,12 @@ const longestDataRow = lastConvergence.length;
 const spaceSeparated = runResults.reduce((arr, { convergence }) => {
   // in order to create a matrix for gnuplot, we need to pad with " ?"
   const paddingAmount = longestDataRow - convergence.length;
-  const paddingArray = new Array(paddingAmount).fill("?");
+  const paddingArray = new Array(paddingAmount).fill("  ?   ");
   arr.push(convergence.concat(paddingArray).join(" "));
   return arr;
 }, [] as string[]);
 
-const datFileFull = generateResultFilename(parsedArgs.seed, "dat");
-const gpFileFull = generateResultFilename(parsedArgs.seed, "gp");
-const pdfFileFull = generateResultFilename(parsedArgs.seed, "pdf");
+const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename(parsedArgs.seed, ["dat", "gp", "pdf"]);
 
 fs.writeFileSync(datFileFull, spaceSeparated.join("\n"));
 process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);

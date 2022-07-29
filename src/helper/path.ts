@@ -11,8 +11,10 @@ export function generateResultsPath(): string {
   return _genR({ curve, bridge, method, resultDir });
 }
 
-export function generateResultFilename(seed: number | string, suff = "json"): string {
-  return resolve(generateResultsPath(), `seed${padSeed(seed)}.${suff}`).toString();
+export function generateResultFilename(seed: number | string, suff = ["json"]): string[] {
+  const dir = generateResultsPath();
+  const padded = padSeed(seed);
+  return suff.map((s) => resolve(dir, `seed${padded}.${s}`).toString());
 }
 
 function _genR({
