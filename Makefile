@@ -9,9 +9,10 @@ PATH           := $(PATH):$(NODE_DIR)/bin
 BUILT_CRYPTOPT := $(ROOT)/dist/CryptOpt.js
 BUILT_MS       := $(ROOT)/modules/MeasureSuite/dist/measureaddon.node
 
-.PHONY: all check clean deepclean
+.PHONY: all build check clean deepclean
 
 all: clean $(BUILT_CRYPTOPT)
+build: $(BUILT_CRYPTOPT)
 
 $(NODE):
 	mkdir -p ./bins
@@ -23,7 +24,7 @@ $(BUILT_MS): $(NODE)
 	@echo "Building MeasureSuite"
 	CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm clean-install
 
-$(BUILT_CRYPTOPT): $(BUILT_MS)
+$(BUILT_CRYPTOPT): $(BUILT_MS) $(shell find ./src -type f -name '*ts')
 	PATH=$(PATH) npm clean-install
 	PATH=$(PATH) npm run pack
 	@test -e "$(BUILT_CRYPTOPT)" && echo "Sucessfully built CryptOpt. :)"

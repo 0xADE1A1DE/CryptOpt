@@ -13,10 +13,8 @@ import { errorOut, ERRORS } from "@/errors";
 const y = await yargs(hideBin(process.argv));
 
 export const parsedArgs = y
-  .parserConfiguration({
-    "strip-aliased": true,
-    "strip-dashed": true,
-  })
+  .scriptName("./run.sh")
+  .usage("$0 [OPTION]...")
   .option("curve", {
     string: true,
     alias: "c",

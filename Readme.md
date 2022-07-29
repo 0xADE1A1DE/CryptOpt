@@ -51,7 +51,7 @@ CryptOpt also generates the internal state (in `*.json` files) of the optimizati
 The directory also contains a `*.dat` file with `l/g` value every time it is printed to the terminal.
 From that `*.dat` file, the generated `*.gp` file will generate the `*.pdf` file, which shows the optimization in progress.
 
-## Play around Fiat
+## Play around w/ Fiat
 
 We can give CryptOpt a wide range of parameters:
 
@@ -71,7 +71,7 @@ For more information check `./run.sh --help`
 
 As next example, use `CC=clang ./run.sh --curve p256 --method mul --evals 10k` to generate an optimized version for NIST P-256 multiply and compare the function with `clang`.
 
-## Play around Bitcoin Bridge
+## Play around w/ Bitcoin
 
 1. Run `./run.sh --bridge bitcoin-core --curve secp256k1 --method mul --bets 5`  
 This will try 5 different *bets* for the primitive *mul* of *libsecp256k1*.
