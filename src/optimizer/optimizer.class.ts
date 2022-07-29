@@ -241,18 +241,16 @@ export class Optimizer {
               throw Error("tested_incorrect");
             }
 
+            if (results.times.length == 0) {
+              console.error(JSON.stringify(results));
+              errorOut(ERRORS.measureInsufficientData);
+            }
+
             try {
-              if (results.times.length > 1) {
-                analyseResult = analyseMeasureResult(results);
-              } else {
-                console.error(JSON.stringify(results));
-                console.error("measuresuite did not yield enough datapoints. TSNH.");
-                process.exit(15);
-              }
+              analyseResult = analyseMeasureResult(results);
             } catch (e) {
               console.error(JSON.stringify(results));
-              console.error(e, "Could not analyse measuresuites' results. TSNH.");
-              process.exit(14);
+              errorOut(ERRORS.measureCannotAnalyze);
             }
 
             //TODO increase numBatches, if the times have a big stddeviation

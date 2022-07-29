@@ -12,6 +12,14 @@ export const ERRORS: { [k: string]: Err } = {
     exitCode: 22,
     msg: `measuresuite.measure should return a result but didn't, because the asmstring could not be assembled.`,
   },
+  measureInsufficientData: {
+    exitCode: 23,
+    msg: "measuresuite.measure did not yield even one data point.",
+  },
+  measureCannotAnalyze: {
+    exitCode: 24,
+    msg: "measuresuite.measure did yield data points, but could not be analyzed.",
+  },
   proofUnsuccessful: {
     exitCode: 50,
     msg: `Could not prove correct. Aborting mission. I repeat: Abort mission now.`,

@@ -20,9 +20,9 @@
 | 10    | deprecated
 | 11    | deprecated
 | 12    | deprecated
-| 13    | program was interruped with SIGINT/SIGTERM. State was persisted at the current evaluation.
-| 14    | When Statistics could not be calculated, it exits.
-| 15    | When measuresuite does not yield more than one datapoint.
+| 13    | program was interrupted with SIGINT/SIGTERM. State was persisted at the current evaluation.
+| 14    | deprecated
+| 15    | deprecated
 | 16    | When there is no hot decisions to mutate.
 | 17    | deprecated
 | 18    | deprecated
