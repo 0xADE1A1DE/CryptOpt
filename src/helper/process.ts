@@ -8,12 +8,12 @@ export function registerExitHooks(seed: number) {
 
   process.on("exit", (exitcode: number) => {
     if (exitcode == 0) {
-      process.stdout.write(`\nDone Success.${cy}${new Date().toISOString()}${re}`);
+      process.stdout.write(`\nDone Success. ${cy}${new Date().toISOString()}${re}\n`);
     } else {
       process.stderr.write(`\nDone with code: ${exitcode}\n`);
     }
     Model.persist(stateFileName);
-    process.stdout.write("exiting.");
+    process.stdout.write("exiting.\n");
     process.exit(exitcode);
   });
 
