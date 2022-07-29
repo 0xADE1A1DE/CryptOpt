@@ -51,8 +51,8 @@ export const parsedArgs = y
   .option("seed", {
     number: true,
     alias: "s",
-    default: new Date().getUTCMilliseconds(),
-    describe: "Seed to base the randomness on. Defaults to the current time's milliseconds.",
+    default: Date.now(),
+    describe: "Seed to base the randomness on. Defaults to the current UTC timestamp in ms.",
   })
   .option("bets", {
     number: true,
