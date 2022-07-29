@@ -1,0 +1,55 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      # - dev
+
+jobs:
+  build:
+    name: Build and test Measuresuite
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: 0xADE1A1DE/AssemblyLine@main
+
+    - name: Install dependencies for 0xADE1A1DE/MeasureSuite
+      run: sudo apt install -y make python3 python3-pip
+    - run: pip3 install plotly
+
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: TS build
+      run: make build
+
+    - name: TS checks
+      run: npm run test-cov
+
+    - name: Code Coverage Summary
+      if: ${{ github.actor != 'dependabot[bot]' }}
+      uses: irongut/CodeCoverageSummary@v1.2.0
+      with:
+        badge: true
+        format: markdown
+        output: both
+        filename: ./coverage/cobertura-coverage.xml
+
+    - uses: jwalton/gh-find-current-pr@v1
+      if: ${{ github.actor != 'dependabot[bot]' }}
+      id: finder
+    - name: Add Coverage PR Comment
+      if: ${{ github.actor != 'dependabot[bot]' }}
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        number: ${{ steps.finder.outputs.pr }}
+        recreate: true
+        path: code-coverage-results.md
+

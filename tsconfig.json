@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "./",
+    "./src/bridge/fiat-bridge/fiat.c",
+    "./src/bridge/fiat-bridge/fiat.h",
+    "./src/bridge/bitcoin-core-bridge/Makefile",
+    "./src/bridge/bitcoin-core-bridge/llvm2cryptopt.sed",
+    "./src/bridge/bitcoin-core-bridge/*.h",
+    "./src/bridge/bitcoin-core-bridge/*.c",
+    "./src/bridge/bitcoin-core-bridge/*.json"
+  ],
+  "exclude": [
+    "./node_modules",
+    "./dist"
+  ],
+  "ts-node": {
+    "transpileOnly": true
+  }
+}

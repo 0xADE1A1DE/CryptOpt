@@ -1,0 +1,38 @@
+name: TS Code formatting
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      # - dev
+
+jobs:
+  formatting-check:
+    name: TS Prettier formatting check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: actions/checkout@v3
+
+      - name: Check Format
+        run: npm run format-check
+
+  lint:
+    name: TS Lint check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm clean-install --ignore-scripts
+        
+      - name: Check Lint
+        run: npm run lint-check
