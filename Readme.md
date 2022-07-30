@@ -4,6 +4,12 @@
 1. Run `./run.sh --help` to check if the installation worked.
 1. Run `./run.sh` to see an optimization in action.
 
+## Research Paper
+
+A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primitives with High Performance and Formal Assurance* is available [here](./papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./papers/CryptOpt-preprint.bib).
+
+
+
 ## Understand Output
 
 While optimizing, CryptOpt will output the current status of the optimization.
@@ -78,4 +84,15 @@ This will try 5 different *bets* for the primitive *mul* of *libsecp256k1*.
 
 1. Find the result files (`*.asm`,`*.pdf`) for this run in `./results/bitcoin-core-secp256k1/mul`
 
+
+## Acknowledgements
+#### This project was supported by:  
+* The Air Force Office of Scientific Research (AFOSR) under award number FA9550-20-1-0425
+* the ARC Discovery Early Career Researcher Award  DE200101577
+* the ARC Discovery Projects DP200102364 and DP210102670
+* The Blavatnik ICRC at Tel-Aviv University  
+* the National Science Foundation under grants CNS-1954712 and CNS-2130671
+* the National Science Foundation Expedition on the Science of Deep Specification (award CCF-1521584)
+* the Phoenix HPC service at the University of Adelaide
+* and gifts from Amazon Web Services, AMD, Facebook, Google, Intel and the Tezos Foundation.
 
