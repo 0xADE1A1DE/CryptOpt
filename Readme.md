@@ -6,7 +6,7 @@
 
 ## Research Paper
 
-A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primitives with High Performance and Formal Assurance* is available [here](./raw/main/papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./raw/main/papers/CryptOpt-preprint.bib).
+A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primitives with High Performance and Formal Assurance* is available [here](./papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./papers/CryptOpt-preprint.bib).
 
 
 
