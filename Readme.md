@@ -6,9 +6,7 @@
 
 ## Research Paper
 
-A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primitives with High Performance and Formal Assurance* is available [here](./papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./papers/CryptOpt-preprint.bib).
-
-
+A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primitives with High Performance and Formal Assurance* [is available here](./papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./papers/CryptOpt-preprint.bib).
 
 ## Understand Output
 
@@ -95,4 +93,3 @@ This will try 5 different *bets* for the primitive *mul* of *libsecp256k1*.
 * the National Science Foundation Expedition on the Science of Deep Specification (award CCF-1521584)
 * the Phoenix HPC service at the University of Adelaide
 * and gifts from Amazon Web Services, AMD, Facebook, Google, Intel and the Tezos Foundation.
-
