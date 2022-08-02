@@ -88,8 +88,8 @@ export class ManualBridge implements Bridge {
 
   /**
    * Compiles the c code to a shared object.
-   * @returns the name of the symbol, which is being present in @param filename after this function is finished.
-   * if force is false, it will check if the machinecode needs to be generated, and skip the step if its not necessary
+   * @returns the name of the symbol, which is being present in shared object @param filename.
+   * The used symbol is the `operation` of parsed from JSON
    */
   public machinecode(filename: string, ccOverwrite?: string): string {
     const methodname = this._coFunction.operation;
@@ -97,13 +97,7 @@ export class ManualBridge implements Bridge {
     if (existsSync(filename)) {
       return methodname;
     }
-    const cc = ccOverwrite ?? CC; // this is being used for the x-val, where in one session of the FiatBridge, the CC chagnes
-
-    // write the c-code to a tmp file
-    // const tmpDir = mkdtempSync(join(tmpdir(), "cryptopt-"));
-    // const tmpFilename = "machinecode.c";
-    // const tmpFileFullpath = join(tmpDir, tmpFilename);
-    // writeFileSync(tmpFileFullpath, ManualBridge._fiatFunction.c);
+    const cc = ccOverwrite ?? CC;
 
     //compile it
     const command = `${cc} ${CFLAGS} -x c -fPIC -shared -o ${filename} ${this.filepathC}`;
