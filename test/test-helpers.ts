@@ -16,10 +16,15 @@
 
 import { mkdtempSync } from "fs";
 import { tmpdir as osTmpdir } from "os";
-import { basename, join as pathJoin } from "path";
+import { basename, join, resolve } from "path";
 
 import type { CryptOpt } from "@/types";
+import { sha1Hash } from "@/paul";
 
+/**
+ * uses a filename curve-method.ts for curve+method.
+ * If that filename does not match, curve and method are empty string""
+ */
 export function getTestArgs(filename: string): {
   evals: 1;
   seed: 1;
@@ -31,12 +36,14 @@ export function getTestArgs(filename: string): {
   verbose: boolean;
   bridge?: string;
 } {
+  let curve = "";
+  let method = "";
   const groups = basename(filename).match(/(?<curve>.*)-(?<method>.*)\.ts/)?.groups;
 
-  if (!groups) {
-    throw new Error("filename not matching.");
+  if (groups) {
+    curve = groups.curve;
+    method = groups.method;
   }
-  const { curve, method } = groups;
 
   return {
     evals: 1,
@@ -49,9 +56,21 @@ export function getTestArgs(filename: string): {
     verbose: false,
   };
 }
-export function getTestResultsPath(): string {
-  return mkdtempSync(pathJoin(osTmpdir(), "test-"));
+
+// creates /tmp/test-ABCDEF directory
+export function getTestResultsPath(suff = "test-"): string {
+  return mkdtempSync(join(osTmpdir(), suff));
 }
+
+/*
+ * creates filename /tmp/test-ABCDEF/abcdeef filename
+ * The file wont exist yet
+ */
+export function genTestFilename(): string {
+  const name = sha1Hash(Date.now()).toString(36);
+  return resolve(getTestResultsPath(), name);
+}
+
 export function nothing(_msg: string) {
   /*intentionally empty*/
 }
