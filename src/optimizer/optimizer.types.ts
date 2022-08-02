@@ -25,4 +25,6 @@ export type OptimizerArgs = {
   proof: boolean;
   verbose: boolean;
   bridge?: string;
+  cFile?: string;
+  jsonFile?: string;
 };
