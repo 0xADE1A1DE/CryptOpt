@@ -18,32 +18,19 @@ import { existsSync } from "fs";
 import { ensureDirSync } from "fs-extra";
 import { resolve } from "path";
 
-import { padSeed } from "@/helper";
+import type { OptimizerArgs } from "@/types";
+import { padSeed } from "./lamdas";
 
-import { parsedArgs } from "./argParse";
-
-export function generateResultsPath(): string {
-  const { curve, bridge, method, resultDir } = parsedArgs;
-  return _genR({ curve, bridge, method, resultDir });
-}
-
-export function generateResultFilename(seed: number | string, suff = ["json"]): string[] {
-  const dir = generateResultsPath();
-  const padded = padSeed(seed);
-  return suff.map((s) => resolve(dir, `seed${padded}.${s}`).toString());
-}
-
-function _genR({
-  curve,
-  bridge,
-  method,
-  resultDir,
-}: {
-  curve: string;
-  method: string;
-  bridge?: string;
-  resultDir?: string;
-}): string {
+export function generateResultFilename(
+  {
+    curve,
+    bridge,
+    method,
+    resultDir,
+    seed,
+  }: Pick<OptimizerArgs, "curve" | "bridge" | "method" | "resultDir" | "seed">,
+  suff = ["json"],
+): string[] {
   let c = curve;
   if (bridge && bridge != "fiat") {
     c = `${bridge}-${c}`;
@@ -63,5 +50,7 @@ function _genR({
       process.exit(2);
     }
   }
-  return path;
+
+  const padded = padSeed(seed);
+  return suff.map((s) => resolve(path, `seed${padded}.${s}`).toString());
 }

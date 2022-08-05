@@ -100,7 +100,9 @@ export const parsedArgs = y
   .option("resultDir", {
     string: true,
     describe:
-      "Where to safe the result-files (assembly, pdfs, ...). Defaults to a new `results`-directory in the cwd.",
+      "Where to safe the result-files (assembly, pdfs, ...). Defaults to a new `results`-directory in the cwd, if not given or empty string.",
+    required: false,
+    default: "",
   })
   .option("proof", {
     alias: "n",

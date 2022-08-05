@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import type { CryptOpt } from "@/types";
+import type { Intermediate } from "./intermediate.type";
 
 import { getArguments } from "../helpers";
 import type { SSA } from "../raw.type";
 
-export function transformAdd(input: SSA): CryptOpt.DynArgument {
+export function transformAdd(input: SSA): Intermediate {
   if (input.operation !== "add") {
     throw new Error("unsupported operation while transform add.");
   }
@@ -33,8 +33,6 @@ export function transformAdd(input: SSA): CryptOpt.DynArgument {
     name: input.name,
     datatype: input.datatype == "i128" ? "u128" : "u64",
     operation: "+",
-    decisions: {},
-    decisionsHot: [],
     arguments: scalars.map(({ id }) => id),
   };
 }

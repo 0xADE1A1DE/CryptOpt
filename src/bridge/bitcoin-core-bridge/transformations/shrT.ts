@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import type { CryptOpt } from "@/types";
+import type { Intermediate } from "./intermediate.type";
 
 import { getArguments, getScalarsAndImmMappedAsConstArg } from "../helpers";
 import type { SSA } from "../raw.type";
 
 export const transformAshr = shr;
 export const transformLshr = shr;
-function shr(input: SSA): CryptOpt.DynArgument {
+function shr(input: SSA): Intermediate {
   if (!["lshr", "ashr"].includes(input.operation)) {
     throw new Error("unsupported operation while transform shift right.");
   }
@@ -36,8 +36,6 @@ function shr(input: SSA): CryptOpt.DynArgument {
       name: input.name,
       datatype: "u64",
       operation: "limb",
-      decisions: {},
-      decisionsHot: [],
       arguments: [scalars[0].id, "1"],
     };
   }
@@ -46,8 +44,6 @@ function shr(input: SSA): CryptOpt.DynArgument {
     name: input.name,
     datatype: input.datatype == "i128" ? "u128" : "u64",
     operation: input.operation == "lshr" ? ">>" : "sar",
-    decisions: {},
-    decisionsHot: [],
     arguments: args,
   };
 }

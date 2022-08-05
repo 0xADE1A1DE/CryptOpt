@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { C_DI_MULTIPLICATION_IMM, Flags, Register } from "@/enums";
+import { C_DI_MULTIPLICATION_IMM, Flags, Register, XmmRegister } from "@/enums";
 import type { CryptOpt } from "@/types";
 
 export const COMPILERS = ["gcc", "clang"];
@@ -198,6 +198,25 @@ export const CALLER_SAVE_REGISTERS = [
   Register.r13,
   Register.r14,
   Register.r15,
+];
+
+export const ALL_XMM_REGISTERS = [
+  XmmRegister.xmm0,
+  XmmRegister.xmm1,
+  XmmRegister.xmm2,
+  XmmRegister.xmm3,
+  XmmRegister.xmm4,
+  XmmRegister.xmm5,
+  XmmRegister.xmm6,
+  XmmRegister.xmm7,
+  XmmRegister.xmm8,
+  XmmRegister.xmm9,
+  XmmRegister.xmm10,
+  XmmRegister.xmm11,
+  XmmRegister.xmm12,
+  XmmRegister.xmm13,
+  XmmRegister.xmm14,
+  XmmRegister.xmm15,
 ];
 
 export const ADX = {

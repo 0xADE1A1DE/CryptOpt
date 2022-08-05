@@ -18,7 +18,14 @@
 import { defaults } from "lodash-es";
 import { describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, Flags, FlagState, Register } from "@/enums";
+import {
+  DECISION_IDENTIFIER,
+  C_DI_SPILL_LOCATION,
+  AllocationFlags,
+  Flags,
+  FlagState,
+  Register,
+} from "@/enums";
 import { llvm2CC } from "@/helper";
 import { cmp } from "@/instructionGeneration/cmp";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
@@ -76,7 +83,13 @@ describe("instructionGeneration:cmp", () => {
         name: ["x257"],
         datatype: "i1",
         operation: "cmp",
-        decisions: {},
+        decisions: {
+          [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["x254", "-0x1"]],
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+        },
         decisionsHot: [],
         arguments: ["ne", "x254", "-0x1"] as CryptOpt.ConstArgument[],
       };
@@ -114,7 +127,13 @@ describe("instructionGeneration:cmp", () => {
       name: ["x257"],
       datatype: "i1",
       operation: "cmp",
-      decisions: {},
+      decisions: {
+        [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["x254", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
       decisionsHot: [],
       // arguments: ["ne", "x254", "-0x1"] as CryptOpt.ConstArgument[],
     };
@@ -166,7 +185,13 @@ describe("instructionGeneration:cmp", () => {
           name: ["x257"],
           datatype: "i1",
           operation: "cmp",
-          decisions: {},
+          decisions: {
+            [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["x254", "-0x1"]],
+            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+              0,
+              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+            ],
+          },
           decisionsHot: [],
           arguments: ["ult" /*setb*/, "x254", "-0x1"] as CryptOpt.ConstArgument[],
         };
@@ -215,7 +240,13 @@ describe("instructionGeneration:cmp", () => {
       name: ["x257"],
       datatype: "i1",
       operation: "cmp",
-      decisions: {},
+      decisions: {
+        [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["x254", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
       decisionsHot: [],
       // arguments: ["ne", "x254", "-0x1"] as CryptOpt.ConstArgument[],
     };

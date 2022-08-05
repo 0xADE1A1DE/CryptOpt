@@ -18,6 +18,7 @@ import { describe, expect, it } from "vitest";
 
 import { BIAS, Paul } from "@/paul";
 import type { CryptOpt } from "@/types";
+import { DECISION_IDENTIFIER, C_DI_SPILL_LOCATION } from "@/enums";
 
 describe("Paul", () => {
   describe("Paul:choose<T>", () => {
@@ -27,6 +28,10 @@ describe("Paul", () => {
         datatype: "u128",
         operation: "mulx",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x14", "x13"]],
         },
         decisionsHot: ["di_choose_arg"],

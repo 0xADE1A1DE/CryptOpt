@@ -17,7 +17,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, Register } from "@/enums";
+import { DECISION_IDENTIFIER, C_DI_SPILL_LOCATION, AllocationFlags, Register } from "@/enums";
 import { shiftLeft, shiftRight, shiftRightDouble } from "@/instructionGeneration/shift";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
@@ -78,7 +78,13 @@ describe("instructionGeneration:shld", () => {
       name: ["x28"],
       datatype: "u64",
       operation: "<<",
-      decisions: { di_choose_arg: [1, ["x11", "0x1"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [1, ["x11", "0x1"]],
+      },
       decisionsHot: [],
       arguments: ["x11", "0x1"],
     };
@@ -123,7 +129,13 @@ describe("instructionGeneration:shld", () => {
       name: ["x27"],
       datatype: "u128",
       operation: ">>",
-      decisions: { di_choose_arg: [0, ["x25", "0x34"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [0, ["x25", "0x34"]],
+      },
       decisionsHot: [],
       arguments: ["x25", "0x34"],
     };
@@ -167,7 +179,13 @@ describe("instructionGeneration:shld", () => {
       name: ["x79"],
       datatype: "u64",
       operation: ">>",
-      decisions: { di_choose_arg: [0, ["x78", "56"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [0, ["x78", "56"]],
+      },
       decisionsHot: [],
       arguments: ["x78", "56"],
     };
@@ -210,7 +228,13 @@ describe("instructionGeneration:shld", () => {
       name: ["x79"],
       datatype: "u64",
       operation: ">>",
-      decisions: { di_choose_arg: [0, ["x78_0", "x78_1", "56"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [0, ["x78_0", "x78_1", "56"]],
+      },
       decisionsHot: [],
       arguments: ["x78_0", "x78_1", "56"],
     };
@@ -250,7 +274,13 @@ describe("instructionGeneration:sar", () => {
       name: ["x58"],
       datatype: "u128",
       operation: "sar",
-      decisions: { di_choose_arg: [1, ["x56", "0x34"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [1, ["x56", "0x34"]],
+      },
       decisionsHot: [],
       arguments: ["x56", "0x34"],
     };

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import type { CryptOpt } from "@/types";
+import type { Intermediate } from "./intermediate.type";
 
 import { getArguments } from "../helpers";
 import type { SSA } from "../raw.type";
 
-export function transformTrunc(input: Readonly<SSA>): CryptOpt.DynArgument {
+export function transformTrunc(input: Readonly<SSA>): Intermediate {
   if (input.operation !== "trunc") {
     throw new Error("unsupported operation while transform trunc.");
   }
@@ -37,8 +37,6 @@ export function transformTrunc(input: Readonly<SSA>): CryptOpt.DynArgument {
     name: input.name,
     datatype: "u64",
     operation: "limb",
-    decisions: {},
-    decisionsHot: [],
     arguments: [scalars[0].id, "0"],
   };
 }

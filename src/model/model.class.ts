@@ -176,38 +176,42 @@ export class Model {
     return this._currentReadOrder;
   }
 
+  /*
+   * @param candidates is a list of variable names like xNN, argNN, ...
+   * returns the one that we, in the current ordering, read last.
+   */
   public static chooseSpillValue(candidates: string[]): string {
     if (candidates.length < 1) {
       throw new Error("cannot choose from nothing, mate");
     }
+    // well, not much to choose from, right?
+    if (candidates.length === 1) {
+      return candidates[0];
+    }
+    // check if there is caller saves in there
+    const filtered = candidates.filter(isCallerSave);
+    if (filtered.length > 0) {
+      // if so, just return the first one
+      return filtered[0];
+    }
+
     const m = Model.getInstance();
     const r = m.currentReadOrder;
     const fromIdx = Model._currentInstIdx;
-    // check if there is caller saves in there
-    const f = candidates.filter(isCallerSave);
-    if (f.length > 0) {
-      const choice = f[0];
 
-      return choice;
-    }
-    if (candidates.length === 1) {
-      const choice = candidates[0];
-
-      return choice;
-    }
     const map = candidates.reduce((map, candidate) => {
       const idx = r.indexOf(candidate, fromIdx);
       map[candidate] = idx == -1 ? Infinity : idx;
       return map;
     }, {} as { [varname: string]: number });
+
     // find the varname with the biggest index
     const lastRead = Object.entries(map).reduce((currentBest, current) => {
       return currentBest[1] > current[1] ? currentBest : current;
     });
 
-    const choice = lastRead[0];
-
-    return choice;
+    // and return it's name
+    return lastRead[0];
   }
 
   public static mutatePermutation(): void {

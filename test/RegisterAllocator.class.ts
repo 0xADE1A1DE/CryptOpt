@@ -18,7 +18,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { afterAll, describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, ByteRegister, Flags, FlagState, Register } from "@/enums";
+import {
+  DECISION_IDENTIFIER,
+  C_DI_SPILL_LOCATION,
+  AllocationFlags,
+  ByteRegister,
+  Flags,
+  FlagState,
+  Register,
+} from "@/enums";
 import { isByteRegister, isMem, isRegister, limbify, limbifyImm } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
@@ -85,7 +93,17 @@ describe("RegisterAllocator:", () => {
           datatype: "u64",
           operation: "=",
           arguments: ["arg1[4]"],
-          decisions: {},
+          decisions: {
+            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+              0,
+              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+            ],
+            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+              0,
+              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+            ],
+            [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["arg1[4]"]],
+          },
           decisionsHot: [] as string[],
         },
         {
@@ -93,7 +111,17 @@ describe("RegisterAllocator:", () => {
           datatype: "u128",
           operation: "zext",
           arguments: ["x1"],
-          decisions: {},
+          decisions: {
+            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+              0,
+              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+            ],
+            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+              0,
+              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+            ],
+            [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["x1"]],
+          },
           decisionsHot: [] as string[],
         },
         {
@@ -101,7 +129,13 @@ describe("RegisterAllocator:", () => {
           datatype: "u64",
           operation: "=",
           arguments: ["arg1[4]"],
-          decisions: {},
+          decisions: {
+            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+              0,
+              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+            ],
+            [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["arg1[4]"]],
+          },
           decisionsHot: [] as string[],
         },
         {
@@ -109,7 +143,13 @@ describe("RegisterAllocator:", () => {
           datatype: "u128",
           operation: "zext",
           arguments: ["x11"],
-          decisions: {},
+          decisions: {
+            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+              0,
+              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+            ],
+            [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["x11"]],
+          },
           decisionsHot: [] as string[],
         },
         {
@@ -117,7 +157,13 @@ describe("RegisterAllocator:", () => {
           datatype: "u64",
           operation: "<<",
           arguments: ["x11", "0x1"],
-          decisions: {},
+          decisions: {
+            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+              0,
+              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+            ],
+            [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [1, ["x11", "0x1"]],
+          },
           decisionsHot: [] as string[],
         },
       ] as CryptOpt.StringOperation[],
@@ -250,7 +296,13 @@ describe("RegisterAllocator:", () => {
         name: ["x23"],
         datatype: "u128",
         operation: "&",
-        decisions: { di_choose_arg: [1, ["x22", "0x10000000000000000"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x22", "0x10000000000000000"]],
+        },
         decisionsHot: [],
         arguments: ["x22", "0x10000000000000000"],
       };
@@ -287,6 +339,10 @@ describe("RegisterAllocator:", () => {
         datatype: "u64",
         operation: "&",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x65", "x66"]],
         },
         decisionsHot: [],
@@ -321,6 +377,10 @@ describe("RegisterAllocator:", () => {
         datatype: "u64",
         operation: "&",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x65", "x66"]],
         },
         decisionsHot: [],
@@ -356,6 +416,10 @@ describe("RegisterAllocator:", () => {
         datatype: "u64",
         operation: "&",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x65", "-0x66"]],
         },
         decisionsHot: [],
@@ -387,6 +451,10 @@ describe("RegisterAllocator:", () => {
         datatype: "u64",
         operation: "&",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x65", "x66"]],
         },
         decisionsHot: [],
@@ -421,6 +489,10 @@ describe("RegisterAllocator:", () => {
         datatype: "u64",
         operation: "&",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x65", "x66"]],
         },
         decisionsHot: [],
@@ -453,7 +525,13 @@ describe("RegisterAllocator:", () => {
         name: ["x23"],
         datatype: "u128",
         operation: "&",
-        decisions: { di_choose_arg: [1, ["x22", "0x10000000000000000"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x22", "0x10000000000000000"]],
+        },
         decisionsHot: [],
         arguments: ["x22", "0x10000000000000000"],
       };
@@ -480,7 +558,13 @@ describe("RegisterAllocator:", () => {
         name: ["x23_0"],
         datatype: "u128",
         operation: "&",
-        decisions: { di_choose_arg: [0, ["x22"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [0, ["x22"]],
+        },
         decisionsHot: [],
         arguments: ["x22_0"],
       };
@@ -504,7 +588,13 @@ describe("RegisterAllocator:", () => {
         name: ["x23"],
         datatype: "u128",
         operation: "&",
-        decisions: { di_choose_arg: [1, ["x22", "0x10000000000000000"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x22", "0x10000000000000000"]],
+        },
         decisionsHot: [],
         arguments: ["x22", "0x10000000000000000"],
       };

@@ -17,7 +17,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, Flags, Register } from "@/enums";
+import { AllocationFlags, Flags, Register, DECISION_IDENTIFIER, C_DI_SPILL_LOCATION } from "@/enums";
 import { limb } from "@/instructionGeneration/limb";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
@@ -45,6 +45,7 @@ vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
     },
   };
 });
+
 describe("instructionGeneration:limb", () => {
   it("should put limb 1 into x26 from x22", () => {
     allocate.mockImplementation((req: AllocationReq) => {
@@ -74,7 +75,13 @@ describe("instructionGeneration:limb", () => {
       name: ["x26"],
       datatype: "u64",
       operation: "limb",
-      decisions: { di_choose_arg: [1, ["x22", "1"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [1, ["x22", "1"]],
+      },
       decisionsHot: [],
       arguments: ["x22", "1"],
     };
@@ -95,7 +102,13 @@ describe("instructionGeneration:limb", () => {
       name: ["x15"],
       datatype: "u64",
       operation: "limb",
-      decisions: { di_choose_arg: [1, ["x14", "0"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [1, ["x14", "0"]],
+      },
       decisionsHot: [],
       arguments: ["x14", "0"],
     };
@@ -116,7 +129,13 @@ describe("instructionGeneration:limb", () => {
       name: ["x15"],
       datatype: "u64",
       operation: "limb",
-      decisions: { di_choose_arg: [1, ["x14", "0"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [1, ["x14", "0"]],
+      },
       decisionsHot: [],
       arguments: ["x14", "0"],
     };

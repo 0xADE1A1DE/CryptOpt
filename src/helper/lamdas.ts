@@ -16,7 +16,7 @@
 
 import fs from "fs";
 
-import { ByteRegister, Flags, FUNCTIONS, Register } from "@/enums";
+import { ByteRegister, Flags, FUNCTIONS, Register, XmmRegister } from "@/enums";
 import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation } from "@/types";
 
 import {
@@ -114,6 +114,15 @@ export function isRegister(test: string | undefined | null): test is Register {
     return false;
   }
   for (const r in Register) {
+    if (r === test) return true;
+  }
+  return false;
+}
+export function isXmmRegister(test: string | undefined | null): test is XmmRegister {
+  if (!test) {
+    return false;
+  }
+  for (const r in XmmRegister) {
     if (r === test) return true;
   }
   return false;

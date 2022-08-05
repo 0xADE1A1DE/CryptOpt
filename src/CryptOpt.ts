@@ -21,10 +21,9 @@ import os from "os";
 import { cy, env, generateResultFilename, gn, parsedArgs, PRINT_EVERY, rd, re, SI } from "@/helper";
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
-import type { OptimizerArgs } from "@/optimizer";
 import { Optimizer } from "@/optimizer";
 import { sha1Hash } from "@/paul";
-import type { CryptoptGlobals } from "@/types";
+import type { OptimizerArgs, CryptoptGlobals } from "@/types";
 
 const { single, bets, betRatio, curve, method, verbose } = parsedArgs;
 
@@ -34,7 +33,7 @@ if (!verbose) {
     // intentionally empty
   };
 }
-registerExitHooks(parsedArgs.seed);
+registerExitHooks(parsedArgs);
 
 type RunResult = { statefile: string; ratio: number; convergence: string[] };
 
@@ -77,7 +76,7 @@ async function run(args: OptimizerArgs): Promise<RunResult> {
     process.exit(1000);
   }
 
-  const [statefile] = generateResultFilename(args.seed);
+  const [statefile] = generateResultFilename(args);
   Model.persist(statefile);
   const { ratio, convergence } = Model.getState();
   return { statefile, ratio, convergence };
@@ -133,7 +132,7 @@ const spaceSeparated = runResults.reduce((arr, { convergence }) => {
   return arr;
 }, [] as string[]);
 
-const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename(parsedArgs.seed, ["dat", "gp", "pdf"]);
+const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename(parsedArgs, ["dat", "gp", "pdf"]);
 
 fs.writeFileSync(datFileFull, spaceSeparated.join("\n"));
 process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);

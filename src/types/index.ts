@@ -22,5 +22,6 @@ export * from "./AnalyseResult.type";
 export * from "./CryptOpt.namespace";
 export * from "./CryptoptGlobals.interface";
 export * from "./fiat.namespace";
+export * from "./optimizer.types";
 export * from "./Storage.type";
 export type { MeasureResult };

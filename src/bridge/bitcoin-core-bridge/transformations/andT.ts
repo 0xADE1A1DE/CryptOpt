@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import type { CryptOpt } from "@/types";
+import type { Intermediate } from "./intermediate.type";
 
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";
 import type { SSA } from "../raw.type";
 
-export function transformAnd(input: SSA): CryptOpt.DynArgument {
+export function transformAnd(input: SSA): Intermediate {
   if (input.operation !== "and") {
     throw new Error("unsupported operation while transformAnd.");
   }
-  let datatype: CryptOpt.Datatype_T = input.datatype;
+  let datatype: Intermediate["datatype"] = input.datatype;
 
   if (["i128", "i64"].includes(input.datatype)) {
     datatype = datatype.replaceAll("i", "u") as "u128" | "u64";
@@ -34,8 +34,6 @@ export function transformAnd(input: SSA): CryptOpt.DynArgument {
     name: input.name,
     datatype,
     operation: "&",
-    decisions: {},
-    decisionsHot: [],
     arguments: args,
   };
 }

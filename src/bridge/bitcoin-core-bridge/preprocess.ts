@@ -21,6 +21,7 @@ import type { CryptOpt, Fiat } from "@/types";
 
 import { getArguments, isStructPointer } from "./helpers";
 import type { raw_T, SSA, structDef_T, StructName } from "./raw.type";
+import type { Intermediate } from "./transformations/intermediate.type";
 import {
   transformAdd,
   transformAnd,
@@ -88,7 +89,7 @@ export class BCBPreprocessor {
         );
       }
       return acc;
-    }, [] as CryptOpt.Argument[]);
+    }, [] as Intermediate[]);
 
     delete grouped.or;
     delete grouped.and;
@@ -104,7 +105,7 @@ export class BCBPreprocessor {
     body = body.concat(
       stores as unknown as Fiat.DynArgument[],
       loads as unknown as Fiat.DynArgument[],
-      otherInstrs as unknown as Fiat.DynArgument[],
+      otherInstrs as Fiat.DynArgument[],
     );
 
     body = zextR(body);

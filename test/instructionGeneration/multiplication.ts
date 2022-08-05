@@ -17,7 +17,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, Register } from "@/enums";
+import { DECISION_IDENTIFIER, C_DI_SPILL_LOCATION, AllocationFlags, Register } from "@/enums";
 import { mulx } from "@/instructionGeneration/multiplication";
 import type { AllocationReq, AllocationRes, Allocations, asm } from "@/types";
 
@@ -84,7 +84,13 @@ describe("instructionGeneration:mulx", () => {
       name: ["x40", "x41"],
       datatype: "u64",
       operation: "mulx",
-      decisions: { di_choose_arg: [1, ["x30", "x44"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        di_choose_arg: [1, ["x30", "x44"]],
+      },
       decisionsHot: [],
       arguments: ["x30", "x44"],
     });
@@ -98,7 +104,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x45"],
         datatype: "u8",
         operation: "mulx",
-        decisions: { di_choose_arg: [1, ["x30", "x44"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x30", "x44"]],
+        },
         decisionsHot: [],
         arguments: ["x30", "x44"],
       }),
@@ -117,7 +129,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x45"],
         datatype: "u128",
         operation: "mulx",
-        decisions: { di_choose_arg: [1, ["x30", "x44"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x30", "x44"]],
+        },
         decisionsHot: [],
         arguments: ["x30", "x44"],
       });
@@ -152,7 +170,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x45"],
         datatype: "u128",
         operation: "mulx",
-        decisions: { di_choose_arg: [1, ["x30", "x44"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x30", "x44"]],
+        },
         decisionsHot: [],
         arguments: ["x30", "x44"],
       });
@@ -196,7 +220,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x24"],
         datatype: "u128",
         operation: "mulx",
-        decisions: { di_choose_arg: [1, ["x30", "0x1000003d10"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x30", "0x1000003d10"]],
+        },
         decisionsHot: [],
         arguments: ["x30", "0x1000003d10"],
       });
@@ -241,7 +271,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x24"],
         datatype: "u64",
         operation: "mulx",
-        decisions: { di_choose_arg: [1, ["x30", "0x1000003d10"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x30", "0x1000003d10"]],
+        },
         decisionsHot: [],
         arguments: ["x30", "0x1000003d10"],
       });
@@ -283,7 +319,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x24"],
         datatype: "u64",
         operation: "mulx",
-        decisions: { di_choose_arg: [1, ["x30", "x30"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x30", "x30"]],
+        },
         decisionsHot: [],
         arguments: ["x30", "x30"],
       });
@@ -328,7 +370,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x24"],
         datatype: "u128",
         operation: "mulx",
-        decisions: { di_choose_arg: [0, ["x30", "0x1000003d10"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [0, ["x30", "0x1000003d10"]],
+        },
         decisionsHot: [],
         arguments: ["x30", "0x1000003d10"],
       });
@@ -367,7 +415,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x173", "x174"],
         operation: "mulx",
         arguments: ["arg1[2]", "arg1[2]"],
-        decisions: { di_choose_arg: [1, ["arg1[2]", "arg1[2]"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["arg1[2]", "arg1[2]"]],
+        },
         decisionsHot: [],
       });
       expect(code).toHaveLength(1);
@@ -405,7 +459,13 @@ describe("instructionGeneration:mulx", () => {
         name: ["x45"],
         datatype: "u128",
         operation: "mulx",
-        decisions: { di_choose_arg: [1, ["x30", "x44", "0x2"]] },
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x30", "x44", "0x2"]],
+        },
         decisionsHot: [],
         arguments: ["x30", "x44", "0x2"],
       });

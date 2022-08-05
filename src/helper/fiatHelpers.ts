@@ -18,7 +18,14 @@
 // grep operation -r *.json |tr -s '[[:space:]]' |  cut -d":" -f 3 | sed -e 's/,/|/' |sort |uniq
 import { groupBy } from "lodash-es";
 
-import { C_DI_HANDLE_FLAGS_KK, C_DI_IMM, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Flags } from "@/enums";
+import {
+  C_DI_HANDLE_FLAGS_KK,
+  C_DI_IMM,
+  C_DI_INSTRUCTION_AND,
+  C_DI_SPILL_LOCATION,
+  DECISION_IDENTIFIER,
+  Flags,
+} from "@/enums";
 import { Paul } from "@/paul/Paul.class";
 import type { CryptOpt, Fiat } from "@/types";
 
@@ -122,6 +129,10 @@ function addDecisionProperty(arg: Fiat.Argument): CryptOpt.Argument {
   const result: CryptOpt.DynArgument = Object.assign({}, arg, {
     decisions: {
       [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [Paul.chooseBetween(arg.arguments.length), arg.arguments],
+      [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+        Paul.chooseBetween(2),
+        [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+      ],
     },
     decisionsHot: [] as string[],
   }) as CryptOpt.DynArgument;

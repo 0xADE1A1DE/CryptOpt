@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import type { CryptOpt } from "@/types";
+import type { Intermediate } from "./intermediate.type";
 
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";
 import type { SSA } from "../raw.type";
 
-export function transformMul(input: SSA): CryptOpt.DynArgument {
+export function transformMul(input: SSA): Intermediate {
   if (input.operation !== "mul") {
     throw new Error("unsupported operation while transform mul.");
   }
@@ -33,8 +33,6 @@ export function transformMul(input: SSA): CryptOpt.DynArgument {
     name: input.name,
     datatype: input.datatype == "i128" ? "u128" : "u64",
     operation: "mulx",
-    decisions: {},
-    decisionsHot: [],
     arguments: args,
   };
 }

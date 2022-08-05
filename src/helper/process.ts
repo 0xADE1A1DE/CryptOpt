@@ -19,8 +19,8 @@ import { Model } from "@/model";
 import { cy, re } from "./constants";
 import { generateResultFilename } from "./path";
 
-export function registerExitHooks(seed: number) {
-  const [stateFileName] = generateResultFilename(seed);
+export function registerExitHooks(args: Parameters<typeof generateResultFilename>[0]) {
+  const [stateFileName] = generateResultFilename(args);
 
   process.on("exit", (exitcode: number) => {
     if (exitcode == 0) {

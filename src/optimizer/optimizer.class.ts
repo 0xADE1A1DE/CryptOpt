@@ -27,7 +27,6 @@ import { errorOut, ERRORS } from "@/errors";
 import {
   analyseMeasureResult,
   env,
-  generateResultsPath,
   LOG_EVERY,
   padSeed,
   PRINT_EVERY,
@@ -39,23 +38,20 @@ import {
 import globals from "@/helper/globals";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
-import type { AnalyseResult } from "@/types";
+import type { OptimizerArgs, AnalyseResult } from "@/types";
 
 import { genStatusLine } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
-import type { OptimizerArgs } from "./optimizer.types";
 
 const { CC, CFLAGS } = env;
 let choice: CHOICE;
 
 export class Optimizer {
   private measuresuite: Measuresuite;
-  private resultspath: string;
   private libcheckfunctionDirectory: string;
 
   public constructor(private args: OptimizerArgs) {
     this.libcheckfunctionDirectory = mkdtempSync(`${tmpdir()}${path.sep}`);
-    this.resultspath = generateResultsPath();
     Paul.seed = args.seed;
     this.measuresuite = init(this.libcheckfunctionDirectory, args);
     globals.convergence = [];
@@ -117,11 +113,10 @@ export class Optimizer {
     }
   }
 
-  public optimise = () =>
-    new Promise<number>((resolve) => {
+  public optimise() {
+    return new Promise<number>((resolve) => {
       console.log("starting optimisation");
       printStartInfo({
-        resultsPath: this.resultspath,
         ...this.args,
       });
       let batchSize = 200;
@@ -169,10 +164,12 @@ export class Optimizer {
           `_ratio${ratioString.replace(".", "")}`,
           `_seed${paddedSeed}_${methodName}`,
         ].join("");
-        const fullpath = path.join(this.resultspath, `${fileNameOptimised}.asm`);
+        const fullpath = path.join(this.args.resultDir, `${fileNameOptimised}.asm`);
         // write best found solution with headers
         // flip, because we want the last accepted, not the last mutated.
         const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
+
+        console.warn("writing current asm to " + fullpath);
         writeasm(
           ["SECTION .text", `\tGLOBAL ${methodName}`, `${methodName}:`]
             .concat(this.asmStrings[flipped])
@@ -207,7 +204,7 @@ export class Optimizer {
         }
 
         console.log("assembling");
-        const { code, stacklength } = assemble(this.resultspath);
+        const { code, stacklength } = assemble(this.args.resultDir);
 
         console.log("now we have the current string in the object, filtering");
         const filteredInstructions = code.filter((line) => line && !line.startsWith(";") && line !== "\n");
@@ -252,7 +249,7 @@ export class Optimizer {
               const ro = results.stats.runOrder;
               console.error(
                 `${ro.charAt(ro.length - 1)} was incorrect: ${ro}. You probably want to diff them. Here:`,
-                `diff ${this.resultspath}/tested_incorrect_*.asm`,
+                `diff ${this.args.resultDir}/tested_incorrect_*.asm`,
               );
               throw Error("tested_incorrect");
             }
@@ -275,11 +272,17 @@ export class Optimizer {
             const isIncorrect = e instanceof Error && e.message.includes("tested_incorrect");
             const isInvalid = e instanceof Error && e.message.includes("could not be assembled");
             if (isInvalid || isIncorrect) {
-              writeasm(this.asmStrings[FUNCTIONS.F_A], path.join(this.resultspath, "tested_incorrect_A.asm"));
-              writeasm(this.asmStrings[FUNCTIONS.F_B], path.join(this.resultspath, "tested_incorrect_B.asm"));
+              writeasm(
+                this.asmStrings[FUNCTIONS.F_A],
+                path.join(this.args.resultDir, "tested_incorrect_A.asm"),
+              );
+              writeasm(
+                this.asmStrings[FUNCTIONS.F_B],
+                path.join(this.args.resultDir, "tested_incorrect_B.asm"),
+              );
               writeasm(
                 JSON.stringify(Model.nodesInTopologicalOrder),
-                path.join(this.resultspath, "tested_incorrect.json"),
+                path.join(this.args.resultDir, "tested_incorrect.json"),
               );
             }
 
@@ -380,6 +383,7 @@ export class Optimizer {
         }
       }, 0);
     });
+  }
 
   private cleanLibcheckfunctions() {
     if (existsSync(this.libcheckfunctionDirectory)) {

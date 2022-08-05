@@ -16,7 +16,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { C_DI_HANDLE_FLAGS_KK, Flags, FlagState } from "@/enums";
+import { C_DI_HANDLE_FLAGS_KK, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Flags, FlagState } from "@/enums";
 import { add } from "@/instructionGeneration/addition";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation } from "@/types";
 
@@ -137,6 +137,10 @@ describe("instructionGeneration:add", () => {
           [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
         ],
         di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x15", "x19"],
@@ -173,6 +177,10 @@ describe("instructionGeneration:add", () => {
           [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
         ],
         di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x90", "x91"],
@@ -206,6 +214,10 @@ describe("instructionGeneration:add", () => {
           [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
         ],
         di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x100", "x101", "x102"],
@@ -242,6 +254,10 @@ describe("instructionGeneration:add", () => {
           [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
         ],
         di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x110", "x111"],
@@ -285,6 +301,10 @@ describe("instructionGeneration:add", () => {
           [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
         ],
         di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x111", "x110"],
@@ -321,6 +341,10 @@ describe("instructionGeneration:add", () => {
           [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
         ],
         di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["0x0", "x111", "0x0"],

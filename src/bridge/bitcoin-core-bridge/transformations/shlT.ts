@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+import type { Intermediate } from "./intermediate.type";
 import type { CryptOpt } from "@/types";
 
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";
 import type { SSA } from "../raw.type";
 
-export function transformShl(input: SSA): CryptOpt.DynArgument {
+export function transformShl(input: SSA): Intermediate {
   if (input.operation !== "shl") {
     throw new Error("unsupported operation while transformShl.");
   }
@@ -40,8 +41,6 @@ export function transformShl(input: SSA): CryptOpt.DynArgument {
       name: input.name,
       datatype: input.datatype == "i128" ? "u128" : "u64",
       operation: "*",
-      decisions: {},
-      decisionsHot: [],
       arguments: [args[0], MAP[args[1]]],
     };
   }
@@ -49,8 +48,6 @@ export function transformShl(input: SSA): CryptOpt.DynArgument {
     name: input.name,
     datatype: input.datatype == "i128" ? "u128" : "u64",
     operation: "<<",
-    decisions: {},
-    decisionsHot: [],
     arguments: args,
   };
 }

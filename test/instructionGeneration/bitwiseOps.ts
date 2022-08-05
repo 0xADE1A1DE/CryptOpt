@@ -18,7 +18,14 @@
 import type { SpyInstance } from "vitest";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, ByteRegister, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Register } from "@/enums";
+import {
+  AllocationFlags,
+  ByteRegister,
+  C_DI_INSTRUCTION_AND,
+  C_DI_SPILL_LOCATION,
+  DECISION_IDENTIFIER,
+  Register,
+} from "@/enums";
 import { LSB_MAPPING } from "@/helper";
 import { bitwiseOp } from "@/instructionGeneration/bitwiseOps";
 import { Paul } from "@/paul";
@@ -97,7 +104,13 @@ describe("instructionGeneration:and", () => {
       name: ["x23"],
       datatype: "u128",
       operation: "&",
-      decisions: { di_choose_arg: [1, ["x22", "0x10000000000000000"]] },
+      decisions: {
+        di_choose_arg: [1, ["x22", "0x10000000000000000"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
       decisionsHot: [],
       arguments: ["x22", "0x10000000000000000"],
     };
@@ -150,6 +163,10 @@ describe("instructionGeneration:and", () => {
         [DECISION_IDENTIFIER.DI_INSTRUCTION_AND]: [
           0,
           [C_DI_INSTRUCTION_AND.C_AND, C_DI_INSTRUCTION_AND.C_BZHI],
+        ],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
         ],
       },
       decisionsHot: [],
@@ -205,6 +222,10 @@ describe("instructionGeneration:and", () => {
           1,
           [C_DI_INSTRUCTION_AND.C_AND, C_DI_INSTRUCTION_AND.C_BZHI],
         ],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x66", "0xfffffffffffff"],
@@ -253,7 +274,13 @@ describe("instructionGeneration:and", () => {
       name: ["x67"],
       datatype: "u64",
       operation: "&",
-      decisions: { di_choose_arg: [1, ["x66", "0xfffffffffffff"]] },
+      decisions: {
+        [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [1, ["x66", "0xfffffffffffff"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
       decisionsHot: [],
       arguments: ["x66", "0xfffffffffffff"],
     };
@@ -305,6 +332,10 @@ describe("instructionGeneration:and", () => {
           [C_DI_INSTRUCTION_AND.C_AND, C_DI_INSTRUCTION_AND.C_BZHI],
         ],
         di_choose_arg: [1, ["x65", bitmask]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x65", bitmask],
@@ -359,6 +390,10 @@ describe("instructionGeneration:and", () => {
           [C_DI_INSTRUCTION_AND.C_AND, C_DI_INSTRUCTION_AND.C_BZHI],
         ],
         di_choose_arg: [1, ["x65", bitmask]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x65", bitmask],
@@ -403,6 +438,10 @@ describe("instructionGeneration:and", () => {
       operation: "&",
       decisions: {
         di_choose_arg: [1, ["x65", "x66"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x65", "x66"],
@@ -443,6 +482,10 @@ describe("instructionGeneration:and", () => {
       operation: "&",
       decisions: {
         di_choose_arg: [1, ["x65", "x66"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
       },
       decisionsHot: [],
       arguments: ["x65", "x66"],

@@ -17,7 +17,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, DECISION_IDENTIFIER, Flags, FlagState, Register } from "@/enums";
+import {
+  AllocationFlags,
+  DECISION_IDENTIFIER,
+  C_DI_SPILL_LOCATION,
+  Flags,
+  FlagState,
+  Register,
+} from "@/enums";
 import { IMM_MUL_DI_MAP } from "@/helper";
 import { mul } from "@/instructionGeneration/multiplication";
 import { Paul } from "@/paul";
@@ -80,6 +87,10 @@ describe("instructionGeneration:mul_imm", () => {
       datatype: "u64",
       operation: "*",
       decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
         di_choose_arg: [1, ["x30", factor]],
       },
       decisionsHot: [],
@@ -127,6 +138,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [0, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -170,6 +185,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [1, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -217,6 +236,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x31", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [2, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -263,6 +286,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [3, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -311,6 +338,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [0, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -356,6 +387,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [1, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -404,6 +439,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [0, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -447,6 +486,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [1, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -494,6 +537,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x31", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [2, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -539,6 +586,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [3, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -587,6 +638,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [0, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -632,6 +687,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [1, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -680,6 +739,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [0, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -723,6 +786,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [1, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -770,6 +837,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x31", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [2, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -815,6 +886,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [3, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -863,6 +938,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [0, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -908,6 +987,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [1, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -957,6 +1040,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [0, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -1000,6 +1087,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [1, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -1047,6 +1138,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x31", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [2, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -1092,6 +1187,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [3, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -1141,6 +1240,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [0, [...IMM_MUL_DI_MAP[factor]]],
         },
@@ -1187,6 +1290,10 @@ describe("instructionGeneration:mul_imm", () => {
         datatype: "u64",
         operation: "*",
         decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
           di_choose_arg: [1, ["x30", factor]],
           [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: [1, [...IMM_MUL_DI_MAP[factor]]],
         },

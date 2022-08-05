@@ -19,6 +19,7 @@ import { describe, expect, it } from "vitest";
 import fiat from "@/bridge/fiat-bridge/all_fiat_array";
 import { preprocessFunction } from "@/helper";
 import type { Fiat } from "@/types";
+import { DECISION_IDENTIFIER, C_DI_SPILL_LOCATION } from "@/enums";
 
 const boilerplate = {
   operation: "secp256k1_fe_mul_inner",
@@ -265,7 +266,7 @@ describe("preprocessFunction", () => {
     expect(o2.operation).toBe("=");
     expect(o3.operation).toBe("=");
   });
-  it("should remove dead ops", () => {
+  it("should remove dead ops, i.e. x2=... but never read.", () => {
     const result = preprocessFunction(
       Object.assign({}, Object.assign({}, boilerplate), {
         body: [
@@ -358,5 +359,44 @@ describe("preprocessFunction", () => {
     expect(result[6].datatype).toBe("u64");
     expect(result[6].decisions.di_choose_arg?.[1]).toStrictEqual(["arg1[8]", "0x4"]);
     expect(result[6].decisions.di_mult_imm?.[1]).toStrictEqual(["c_imul", "c_shl", "c_shlx", "c_lea"]);
+  });
+  it("should add descision properties for all operations", () => {
+    const result = preprocessFunction(
+      Object.assign({}, Object.assign({}, boilerplate), {
+        body: [
+          {
+            // keep this to make sure that they dont end up missing
+            name: ["x1"],
+            arguments: ["arg1[5]", "0x2"],
+            operation: "*",
+            datatype: "u64",
+          },
+          {
+            datatype: "u64",
+            name: ["x2"],
+            operation: "+",
+            arguments: ["x1", "0x2"],
+          },
+          {
+            name: ["x3"],
+            arguments: ["x2", "2"],
+            operation: ">>",
+            datatype: "u64",
+          },
+          createOut("x3"),
+        ],
+      }),
+    ).body;
+    expect(result).toHaveLength(4);
+    const decs = result.map(({ decisions }) => decisions);
+    expect(decs).toHaveLength(4);
+    decs.forEach((d) => {
+      expect(d).toHaveProperty(DECISION_IDENTIFIER.DI_CHOOSE_ARG);
+      expect(d).toHaveProperty(DECISION_IDENTIFIER.DI_SPILL_LOCATION);
+      const [choice, alternatives] = d[DECISION_IDENTIFIER.DI_SPILL_LOCATION];
+      expect(choice).greaterThanOrEqual(0);
+      expect(choice).lessThanOrEqual(1);
+      expect(alternatives).toHaveLength(2);
+    });
   });
 });

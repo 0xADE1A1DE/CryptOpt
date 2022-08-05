@@ -19,8 +19,9 @@ import type { CryptOpt } from "@/types";
 
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";
 import type { SSA } from "../raw.type";
+import type { Intermediate } from "./intermediate.type";
 
-export function transformIcmp(input: SSA): CryptOpt.DynArgument {
+export function transformIcmp(input: SSA): Intermediate {
   if (input.operation !== "icmp") {
     throw new Error("unsupported operation while transformAnd.");
   }
@@ -36,8 +37,6 @@ export function transformIcmp(input: SSA): CryptOpt.DynArgument {
     name: input.name,
     datatype: "i1",
     operation: "cmp",
-    decisions: {},
-    decisionsHot: [],
     arguments: [
       comparisonString as CryptOpt.ConstArgument /* liitle bit of a cheat. The correct way would be to create types for all ops, then put that as 'modifier'/'parameter' to cmp. Or to have many many cmp-ops ... And we chose the ~lazy~ straigt forward way.*/,
       ...args,

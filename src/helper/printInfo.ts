@@ -20,9 +20,11 @@ import { cy, re } from "./constants";
 import { env } from "./env";
 import { shouldProof, SI } from "./lamdas";
 
+import type { OptimizerArgs } from "@/types";
+
 const { CC, CFLAGS } = env;
 export function printStartInfo({
-  resultsPath,
+  resultDir,
   bridge,
   curve,
   method,
@@ -30,23 +32,17 @@ export function printStartInfo({
   evals,
   cyclegoal,
   proof,
-}: {
-  resultsPath: string;
-  bridge?: string;
-  curve: string;
-  method: string;
-  seed: number;
-  evals: number;
-  cyclegoal: number;
-  proof: boolean;
-}) {
+}: Pick<
+  OptimizerArgs,
+  "resultDir" | "bridge" | "curve" | "method" | "seed" | "evals" | "cyclegoal" | "proof"
+>) {
   process.stdout.write(
     [
       `\nStart`,
       `on brg-curve-method >>${cy}${bridge}-${curve}-${method}${re}<<`,
       `>>${cy}${shouldProof({ bridge, proof }) ? "with" : "without"} proofing${re} correct<<`,
       `on cpu >>${cy}${os.cpus()[0].model}${re}<<`,
-      `writing results to>>${cy}${resultsPath}${re}<<`,
+      `writing results to>>${cy}${resultDir}${re}<<`,
       `with seed >>${cy}${seed}${re}<<`,
       `for >>${cy}${SI(evals)}${re}<< evaluations`,
       `against CC>>${cy}${CC} ${CFLAGS}${re}<<`,

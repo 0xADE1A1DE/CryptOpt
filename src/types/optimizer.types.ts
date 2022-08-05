@@ -27,4 +27,5 @@ export type OptimizerArgs = {
   bridge?: string;
   cFile?: string;
   jsonFile?: string;
+  resultDir: string;
 };

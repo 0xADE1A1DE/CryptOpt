@@ -18,6 +18,7 @@ import {
   C_DI_HANDLE_FLAGS_KK,
   C_DI_INSTRUCTION_AND,
   C_DI_MULTIPLICATION_IMM,
+  C_DI_SPILL_LOCATION,
   DECISION_IDENTIFIER,
   Flags,
 } from "@/enums";
@@ -92,6 +93,14 @@ export class Paul {
       DECISION_IDENTIFIER.DI_HANDLE_FLAGS_KK,
     );
   }
+
+  public static chooseSpillLocation(): C_DI_SPILL_LOCATION {
+    return Paul.choose(
+      [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+      DECISION_IDENTIFIER.DI_SPILL_LOCATION,
+    );
+  }
+
   /**
    * checks in currentInstruction if there is a decicion on C_FLAG. If not, chose randomly and save it.
    */

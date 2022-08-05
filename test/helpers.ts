@@ -17,6 +17,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it } from "vitest";
 
+import { DECISION_IDENTIFIER, C_DI_SPILL_LOCATION } from "@/enums";
 import {
   CALLER_SAVE_PREFIX,
   delimbify,
@@ -269,7 +270,13 @@ describe("makeU64NameLimbs", () => {
       datatype: "u128",
       operation: "+",
       arguments: ["x1", "x2"],
-      decisions: [],
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [1, ["x1", "x2"]],
+      },
       decisionsHot: [],
     } as CryptOpt.StringOperation;
     const out = makeU64NameLimbs(c);
@@ -282,7 +289,13 @@ describe("makeU64NameLimbs", () => {
       datatype: "u64",
       operation: "+",
       arguments: ["x1", "x2"],
-      decisions: [],
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [1, ["x1", "x2"]],
+      },
       decisionsHot: [],
     } as CryptOpt.StringOperation;
     const out = makeU64NameLimbs(c);
@@ -295,7 +308,13 @@ describe("makeU64NameLimbs", () => {
       datatype: "u64",
       operation: "addcarryx",
       arguments: ["x1", "x2", "0x0"],
-      decisions: [],
+      decisions: {
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+        [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [1, ["x1", "x2"]],
+      },
       decisionsHot: [],
     } as CryptOpt.StringOperation;
     const out = makeU64NameLimbs(c);

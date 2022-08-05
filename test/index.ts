@@ -18,28 +18,7 @@ import type { SpyInstance } from "vitest";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { Optimizer } from "@/optimizer";
-
-const args: {
-  evals: number;
-  seed: number;
-  curve: string;
-  method: string;
-  cyclegoal: number;
-  readState?: string; // filename
-  logComment: string;
-  proof: boolean;
-  verbose: boolean;
-  bridge?: string;
-} = {
-  evals: 1,
-  seed: 1,
-  curve: "",
-  method: "",
-  cyclegoal: 100,
-  logComment: "",
-  verbose: false,
-  proof: false,
-};
+import { getTestArgs } from "./test-helpers";
 
 describe("full tests fiat", () => {
   let mockLog: SpyInstance;
@@ -60,10 +39,11 @@ describe("full tests fiat", () => {
       throw new Error("n");
     }).toThrow();
   });
+  const args = getTestArgs("curve25519-square.ts");
 
   it("should only throw on invalid curves.", () => {
     expect(() => {
-      new Optimizer(Object.assign({}, args, { curve: "curve25519", method: "square" }));
+      new Optimizer(args);
     }).not.toThrow();
 
     expect(() => {

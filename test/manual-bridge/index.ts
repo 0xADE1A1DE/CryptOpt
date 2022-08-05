@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-import { rm, writeFileSync } from "fs";
+import { rm, readFileSync, writeFileSync } from "fs";
 import { afterAll, expect, it, vi } from "vitest";
 
 import { Optimizer } from "@/optimizer";
-import type { OptimizerArgs } from "@/optimizer";
-import type { Fiat } from "@/types";
+import type { OptimizerArgs, Fiat } from "@/types";
 
-import { getTestArgs, genTestFilename, getTestResultsPath, nothing } from "../test-helpers";
+import { getTestArgs, genTestFilename, nothing } from "../test-helpers";
 
 const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
@@ -39,17 +38,15 @@ it("optimise", () => {
     args.curve = "";
     args.cFile = someCFilename;
     args.jsonFile = someJsonFilename;
-    resultpath = getTestResultsPath();
+    args.evals = 1000;
     const opt = new Optimizer(args);
 
     try {
-      expect(() =>
-        opt.optimise().then((code) => {
-          expect(code).toEqual(0);
-          expect(mockErr).not.toHaveBeenCalled();
-          resolve(0);
-        }),
-      ).not.toThrow();
+      opt.optimise().then((code) => {
+        expect(code).toEqual(0);
+        expect(mockErr).not.toHaveBeenCalled();
+        resolve(0);
+      });
       vi.runAllTimers();
     } catch (e) {
       mockErr.mockRestore();
@@ -60,7 +57,9 @@ it("optimise", () => {
 });
 
 afterAll(() => {
-  rm(resultpath, { recursive: true, force: true }, () => nothing);
+  // readFileSync(resultpath);
+  console.warn(resultpath);
+  // rm(resultpath, { recursive: true, force: true }, () => nothing);
   rm(someJsonFilename, { force: true }, () => nothing);
   rm(someCFilename, { force: true }, () => nothing);
   mockLog.mockRestore();

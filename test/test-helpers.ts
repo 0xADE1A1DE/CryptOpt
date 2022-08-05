@@ -18,24 +18,14 @@ import { mkdtempSync } from "fs";
 import { tmpdir as osTmpdir } from "os";
 import { basename, join, resolve } from "path";
 
-import type { CryptOpt } from "@/types";
+import type { CryptOpt, OptimizerArgs } from "@/types";
 import { sha1Hash } from "@/paul";
 
 /**
  * uses a filename curve-method.ts for curve+method.
  * If that filename does not match, curve and method are empty string""
  */
-export function getTestArgs(filename: string): {
-  evals: 1;
-  seed: 1;
-  cyclegoal: 100;
-  logComment: "";
-  proof: boolean;
-  curve: string;
-  method: string;
-  verbose: boolean;
-  bridge?: string;
-} {
+export function getTestArgs(filename: string): OptimizerArgs {
   let curve = "";
   let method = "";
   const groups = basename(filename).match(/(?<curve>.*)-(?<method>.*)\.ts/)?.groups;
@@ -44,6 +34,7 @@ export function getTestArgs(filename: string): {
     curve = groups.curve;
     method = groups.method;
   }
+  const resultDir = getTestResultsPath();
 
   return {
     evals: 1,
@@ -54,6 +45,7 @@ export function getTestArgs(filename: string): {
     curve,
     method,
     verbose: false,
+    resultDir,
   };
 }
 
