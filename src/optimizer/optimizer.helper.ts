@@ -24,6 +24,7 @@ export function genStatusLine(a: {
   logComment: string;
   curve: string;
   method: string;
+  symbolname: string;
   stacklength: number;
   batchSize: number;
   no_of_instructions: number;
@@ -42,9 +43,12 @@ export function genStatusLine(a: {
   const cyclDeltaR = Math.abs(a.analyseResult.rawMedian[0] - a.analyseResult.rawMedian[1])
     .toString()
     .padStart(6);
+
+  const primitive = !a.curve && !a.method ? a.symbolname : `${a.curve}-${a.method}`;
+
   return [
     // general
-    `${a.writeout ? "\n" : "\r"}${a.curve}-${a.method}`,
+    `${a.writeout ? "\n" : "\r"}${primitive}`,
     `${a.logComment ?? "-"}`,
     `${bl}${a.stacklength.toString().padStart(3)}${re}`,
     `${cy}bs${a.batchSize.toString().padStart(5)}${re}`,

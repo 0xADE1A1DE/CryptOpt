@@ -49,11 +49,15 @@ let choice: CHOICE;
 export class Optimizer {
   private measuresuite: Measuresuite;
   private libcheckfunctionDirectory: string;
+  private symbolname: string;
 
   public constructor(private args: OptimizerArgs) {
     this.libcheckfunctionDirectory = mkdtempSync(`${tmpdir()}${path.sep}`);
     Paul.seed = args.seed;
-    this.measuresuite = init(this.libcheckfunctionDirectory, args);
+    const { measuresuite, symbolname } = init(this.libcheckfunctionDirectory, args);
+    this.measuresuite = measuresuite;
+    this.symbolname = symbolname;
+
     globals.convergence = [];
     // load a saved state if necessary
     if (args.readState) {
@@ -154,24 +158,22 @@ export class Optimizer {
         ];
 
         console.log(statistics);
-        const { curve, method: func } = this.args;
+        const { curve, method } = this.args;
 
         const evalString = number_evaluation ? `_eval${number_evaluation}of${this.args.evals}` : "";
 
-        const methodName = `${func}_${curve}`;
         const fileNameOptimised = [
           `${lastGood.toFixed(0)}${evalString}`,
           `_ratio${ratioString.replace(".", "")}`,
-          `_seed${paddedSeed}_${methodName}`,
+          `_seed${paddedSeed}_${this.symbolname}`,
         ].join("");
         const fullpath = path.join(this.args.resultDir, `${fileNameOptimised}.asm`);
         // write best found solution with headers
         // flip, because we want the last accepted, not the last mutated.
         const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
 
-        console.warn("writing current asm to " + fullpath);
         writeasm(
-          ["SECTION .text", `\tGLOBAL ${methodName}`, `${methodName}:`]
+          ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
             .concat(this.asmStrings[flipped])
             .concat(statistics)
             .join("\n"),
@@ -180,7 +182,7 @@ export class Optimizer {
 
         if (shouldProof(this.args)) {
           // and proof correct
-          const proofCommandLine = FiatBridge.buildProofCommand(curve, func, fullpath);
+          const proofCommandLine = FiatBridge.buildProofCommand(curve, method, fullpath);
           console.log(`proofing that asm correct with '${proofCommandLine}'`);
           try {
             const now = Date.now();
@@ -351,6 +353,7 @@ export class Optimizer {
             const statusline = genStatusLine({
               writeout,
               ...this.args,
+              symbolname: this.symbolname,
               stacklength,
               batchSize,
               no_of_instructions: this.no_of_instructions,

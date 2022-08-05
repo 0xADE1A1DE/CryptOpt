@@ -127,11 +127,22 @@ function initManual(sharedObjectFilename: string, args: neededArgs): ret {
 function createMS(
   { argwidth, argnumin, argnumout, chunksize, bounds, symbolname }: ret,
   libcheckfunctionFile: string,
-): Measuresuite {
-  return new Measuresuite(argwidth, argnumin, argnumout, chunksize, bounds, libcheckfunctionFile, symbolname);
+): { symbolname: string; measuresuite: Measuresuite } {
+  return {
+    symbolname,
+    measuresuite: new Measuresuite(
+      argwidth,
+      argnumin,
+      argnumout,
+      chunksize,
+      bounds,
+      libcheckfunctionFile,
+      symbolname,
+    ),
+  };
 }
 
-export function init(tmpDir: string, args: neededArgs): Measuresuite {
+export function init(tmpDir: string, args: neededArgs): { symbolname: string; measuresuite: Measuresuite } {
   const mapping: {
     [bridge: string]: {
       availableMethods: string[];

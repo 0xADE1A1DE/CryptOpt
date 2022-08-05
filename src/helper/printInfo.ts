@@ -26,20 +26,18 @@ const { CC, CFLAGS } = env;
 export function printStartInfo({
   resultDir,
   bridge,
-  curve,
-  method,
   seed,
   evals,
   cyclegoal,
   proof,
-}: Pick<
-  OptimizerArgs,
-  "resultDir" | "bridge" | "curve" | "method" | "seed" | "evals" | "cyclegoal" | "proof"
->) {
+  symbolname,
+}: Pick<OptimizerArgs, "resultDir" | "bridge" | "seed" | "evals" | "cyclegoal" | "proof"> & {
+  symbolname: string;
+}) {
   process.stdout.write(
     [
       `\nStart`,
-      `on brg-curve-method >>${cy}${bridge}-${curve}-${method}${re}<<`,
+      `on brg-curve-method >>${cy}${symbolname}${re}<<`,
       `>>${cy}${shouldProof({ bridge, proof }) ? "with" : "without"} proofing${re} correct<<`,
       `on cpu >>${cy}${os.cpus()[0].model}${re}<<`,
       `writing results to>>${cy}${resultDir}${re}<<`,
