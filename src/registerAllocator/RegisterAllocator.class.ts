@@ -369,7 +369,7 @@ export class RegisterAllocator {
         // spill to vreg
         const vr: XmmRegister = this.getXmmW(spareVariableName);
         this.addToPreInstructions(
-          `movq ${vr} ${spilling_reg}; spilling ${spareVariableName} to vectorreg (Paul said so.)`,
+          `movq ${vr}, ${spilling_reg}; spilling ${spareVariableName} to vectorreg (Paul said so.)`,
         );
         this._allocations[spareVariableName].store = vr;
       }
