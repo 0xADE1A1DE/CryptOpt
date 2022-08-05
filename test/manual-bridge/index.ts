@@ -28,6 +28,7 @@ const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
 vi.useFakeTimers();
 let resultpath = "";
 const symbol = "stairwayToHeaven";
+
 const someCFilename = writeC();
 const someJsonFilename = writeJSON();
 
@@ -40,6 +41,7 @@ it("optimise", () => {
     args.jsonFile = someJsonFilename;
     args.evals = 1000;
     const opt = new Optimizer(args);
+    console.warn({ someJsonFilename, someCFilename, resultDir: args.resultDir });
 
     try {
       opt.optimise().then((code) => {

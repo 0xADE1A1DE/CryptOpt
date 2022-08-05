@@ -16,7 +16,7 @@
 
 import { mkdtempSync } from "fs";
 import { tmpdir as osTmpdir } from "os";
-import { basename, join, resolve } from "path";
+import { basename, join } from "path";
 
 import type { CryptOpt, OptimizerArgs } from "@/types";
 import { sha1Hash } from "@/paul";
@@ -38,7 +38,7 @@ export function getTestArgs(filename: string): OptimizerArgs {
 
   return {
     evals: 1,
-    seed: 1,
+    seed: Date.now(),
     cyclegoal: 100,
     logComment: "",
     proof: false,
@@ -55,12 +55,12 @@ export function getTestResultsPath(suff = "test-"): string {
 }
 
 /*
- * creates filename /tmp/test-ABCDEF/abcdeef filename
+ * creates filename /tmp/test-ABCDEF-abcdeef filename
  * The file wont exist yet
  */
 export function genTestFilename(): string {
   const name = sha1Hash(Date.now()).toString(36);
-  return resolve(getTestResultsPath(), name);
+  return `${getTestResultsPath()}-${name}`;
 }
 
 export function nothing(_msg: string) {
