@@ -15,7 +15,7 @@
  */
 
 import { execSync } from "child_process";
-import { existsSync, mkdtempSync, rmSync } from "fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { cpus, tmpdir } from "os";
 import path from "path";
@@ -52,7 +52,8 @@ export class Optimizer {
   private symbolname: string;
 
   public constructor(private args: OptimizerArgs) {
-    this.libcheckfunctionDirectory = mkdtempSync(`${tmpdir()}${path.sep}`);
+    this.libcheckfunctionDirectory = `${tmpdir()}${path.sep}CryptOpt.cache`;
+    mkdirSync(this.libcheckfunctionDirectory, { recursive: true });
     Paul.seed = args.seed;
     const { measuresuite, symbolname } = init(this.libcheckfunctionDirectory, args);
     this.measuresuite = measuresuite;

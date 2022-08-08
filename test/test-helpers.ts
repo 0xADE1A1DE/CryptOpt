@@ -49,8 +49,8 @@ export function getTestArgs(filename: string): OptimizerArgs {
   };
 }
 
-// creates /tmp/test-ABCDEF directory
-export function getTestResultsPath(suff = "test-"): string {
+// creates /tmp/CryptOpt.test-ABCDEF directory
+export function getTestResultsPath(suff = "CryptOpt.test-"): string {
   return mkdtempSync(join(osTmpdir(), suff));
 }
 
