@@ -33,7 +33,7 @@ import {
   printStartInfo,
   shouldProof,
   toggleFUNCTIONS,
-  writeasm,
+  writeString,
 } from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
@@ -173,7 +173,7 @@ export class Optimizer {
         // flip, because we want the last accepted, not the last mutated.
         const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
 
-        writeasm(
+        writeString(
           ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
             .concat(this.asmStrings[flipped])
             .concat(statistics)
@@ -275,16 +275,19 @@ export class Optimizer {
             const isIncorrect = e instanceof Error && e.message.includes("tested_incorrect");
             const isInvalid = e instanceof Error && e.message.includes("could not be assembled");
             if (isInvalid || isIncorrect) {
-              writeasm(
+              writeString(
                 this.asmStrings[FUNCTIONS.F_A],
                 path.join(this.args.resultDir, "tested_incorrect_A.asm"),
               );
-              writeasm(
+              writeString(
                 this.asmStrings[FUNCTIONS.F_B],
                 path.join(this.args.resultDir, "tested_incorrect_B.asm"),
               );
-              writeasm(
-                JSON.stringify(Model.nodesInTopologicalOrder),
+              writeString(
+                JSON.stringify({
+                  nodes: Model.nodesInTopologicalOrder,
+                  allocs: (RegisterAllocator.getInstance() as any)._allocations,
+                }),
                 path.join(this.args.resultDir, "tested_incorrect.json"),
               );
             }

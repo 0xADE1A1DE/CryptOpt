@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { writeasm } from "@/helper";
+import { writeString } from "@/helper";
 import { getInstruction } from "@/instructionGeneration/InstructionGenerator";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
@@ -45,7 +45,7 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
 
       console.warn({ curOperation: curOp, e, allocs, pres });
       console.error({ curOperation: curOp, e, allocs, pres });
-      writeasm(
+      writeString(
         output
           .map((i) => `\t${i}`)
           .concat(Model.order)
