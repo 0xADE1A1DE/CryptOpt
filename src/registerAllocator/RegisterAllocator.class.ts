@@ -43,7 +43,6 @@ import {
   isFlag,
   isImm,
   isMem,
-  isNotNoU,
   isRegister,
   isXmmRegister,
   isU1,
@@ -93,7 +92,6 @@ export class RegisterAllocator {
   private static _instance: RegisterAllocator | null;
   private _preInstructions: asm[] = [];
   private _ALL_REGISTERS: Register[] = [];
-  private _ALL_VECTOR_REGISTERS: XmmRegister[] = ALL_XMM_REGISTERS;
   private _allocations: Allocations = {};
   private _stack: { size: number; name: string }[] = [];
   private _clobbers = new Set<string>();
@@ -162,6 +160,7 @@ export class RegisterAllocator {
    * Will return a register declared to the @param variableName or false, if no FR was available
    */
   public getFreeRegister(variableName: string): Register | false {
+    this.addToPreInstructions(this.allocationString());
     const allocatedRegs = this.valuesAllocations
       .map(({ store }) => store)
       .filter((r) => isRegister(r) || isByteRegister(r)) as Array<ByteRegister | Register>;
@@ -170,34 +169,38 @@ export class RegisterAllocator {
       (r) => !(allocatedRegs.includes(r) || allocatedRegs.includes(getByteRegFromQwReg(r))),
     );
 
-    this.addToPreInstructions(`; fr:${frs}`);
-    this.addToPreInstructions(`; allocatedR: ${this.allocationString()}`);
-
-    if (frs.length > 0) {
-      const fr = frs[0];
-      this._allocations[variableName] = { datatype: "u64", store: fr };
-      return fr;
+    if (frs.length == 0) {
+      this.addToPreInstructions(`; fr: none.`);
+      return false;
     }
-    return false;
+
+    this.addToPreInstructions(`; fr: ${frs}`);
+
+    const fr = frs[0];
+    this._allocations[variableName] = { datatype: "u64", store: fr };
+    return fr;
   }
 
-  private getFreeXmmRegister(name: string): XmmRegister | false {
-    const allocatedVecRegs = this.valuesAllocations
+  /*
+   * will not persist to _this._allocatons
+   */
+  private getFreeXmmRegister(): XmmRegister | false {
+    this.addToPreInstructions(this.allocationString());
+    const allocatedXmms = this.valuesAllocations
       .map(({ store }) => store)
       .filter((r) => isXmmRegister(r)) as XmmRegister[];
 
-    const freeVectorRegs = this._ALL_VECTOR_REGISTERS.filter((r) => !allocatedVecRegs.includes(r));
+    const freeXmms = ALL_XMM_REGISTERS.filter((r) => !allocatedXmms.includes(r));
 
-    this.addToPreInstructions(`; free vregs:${freeVectorRegs}`);
-    this.addToPreInstructions(`; allocatedR: ${this.allocationString()}`);
-
-    if (freeVectorRegs.length > 0) {
-      const store = freeVectorRegs[0];
-      this._allocations[name] = { datatype: "u64", store };
-      return store;
+    if (freeXmms.length == 0) {
+      this.addToPreInstructions(`; free xmm's: none`);
+      return false;
     }
-    return false;
+
+    this.addToPreInstructions(`; free xmm's: ${freeXmms}`);
+    return freeXmms[0];
   }
+
   private get valuesAllocations(): ValueAllocation[] {
     return Object.values(this._allocations).filter((a) => "store" in a) as ValueAllocation[];
   }
@@ -207,40 +210,43 @@ export class RegisterAllocator {
     return Object.entries(this._allocations).filter(([, a]) => "store" in a) as [string, ValueAllocation][];
   }
 
-  private getXmmW(name: string): XmmRegister {
-    const fvr = this.getFreeXmmRegister(name);
-    if (fvr) {
-      return fvr;
-    }
-    //TODO: find symbols which are stored in XmmRegs and not in clobs
-    const namesOfSymbolsAllocatedInXMMR = this.entriesAllocations
-      .filter(([, { store }]) => isXmmRegister(store))
-      .map(([name]) => name);
-    const spareVariableName = Model.chooseSpillValue(namesOfSymbolsAllocatedInXMMR);
-    const fr = this.getFreeRegister(spareVariableName);
-    if (fr) {
-      const src = this._allocations[spareVariableName].store as XmmRegister;
-      this.movVregToReg({ spareVariableName, targetReg: fr, spillingXmmReg: src });
-      // now we should find a XmmReg via getFreeRegister
-      return this.getXmmW(name);
-    }
-    throw new Error("need to spill something to memory");
-  }
+  // private getXmmW(name: string): XmmRegister {
+  //   const freeXmm = this.getFreeXmmRegister(name);
+  //   if (freeXmm) {
+  //     return freeXmm;
+  //   }
+  //
+  //   //TODO: find symbols which are stored in XmmRegs and not in clobs
+  //   const namesOfSymbolsAllocatedInXMMR = this.entriesAllocations
+  //     .filter(([n, { store }]) => isXmmRegister(store) && !this._clobbers.has(n))
+  //     .map(([n]) => n);
+  //   const spareVariableName = Model.chooseSpillValue(namesOfSymbolsAllocatedInXMMR);
+  //   const fr = this.getW(spareVariableName, true) as Register;
+  //   if (fr) {
+  //     const src = this._allocations[spareVariableName].store as XmmRegister;
+  //     this.movXmmToReg({ spareVariableName, targetReg: fr, spillingXmmReg: src });
+  //     // now we should find a XmmReg via getFreeRegister
+  //     return this.getXmmW(name);
+  //   }
+  //   throw new Error("need to spill something to memory");
+  // }
 
   /* will issue the instruction to preinst
    * will update this._allocations
    */
-  private movVregToReg({
-    spareVariableName,
-    targetReg,
-    spillingXmmReg,
-  }: {
-    spareVariableName: string;
-    targetReg: Register;
-    spillingXmmReg: XmmRegister;
-  }): void {
-    this.addToPreInstructions(`movq ${targetReg}, ${spillingXmmReg}; spilling ${spareVariableName} to reg`);
-    this._allocations[spareVariableName].store = targetReg;
+  public static xmm2reg(arg: ValueAllocation): RegisterAllocation {
+    //   spareVariableName: string;
+    //   targetReg: Register;
+    //   spillingXmmReg: XmmRegister;
+    // }): void {
+    return RegisterAllocator.getInstance().moveXmmToReg(arg);
+  }
+  private moveXmmToReg(arg: ValueAllocation): RegisterAllocation {
+    const src = arg.store;
+    const varname = this.getVarnameFromStore(arg);
+    const dest = this.getW(varname);
+    this.addToPreInstructions(`movq ${dest}, ${src}; un-xmm-ify ${varname} `);
+    return this._allocations[varname] as RegisterAllocation;
   }
 
   /*
@@ -324,7 +330,7 @@ export class RegisterAllocator {
         if (match) clobs.add(match[1]);
       });
 
-      // try to find some arg1[n] first, aka not xNN
+      // try to find some arg1[n] first, i.e. 'not-xNN'
       const candidatesInArguments = allocs.filter(
         (varname) => !clobs.has(varname) && !(matchXD(varname) || matchArgPrefix(varname)),
       );
@@ -341,7 +347,7 @@ export class RegisterAllocator {
       this.addToPreInstructions(
         [
           `; freeing, i.e. spilling ${spareVariableName}, because I am out of ideas`,
-          `; allocs: ${allocs.map((a) => `${a}(${this._allocations[a].store})`).join(",")}`,
+          `; allocs: ${allocs.map((a) => `${a}(${this._allocations[a].store})`).join(" ,")}`,
           `; clobs ${setToString(clobs)}; will spare: ${spareVariableName} `,
         ].join("\n"),
       );
@@ -355,23 +361,25 @@ export class RegisterAllocator {
       checkToSpill &&
       (matchXD(spareVariableName) || isCallerSave(spareVariableName) || matchArgPrefix(spareVariableName))
     ) {
-      const choice = Paul.chooseSpillLocation();
+      const freeXmm = this.getFreeXmmRegister(); // if we could, let Paul decide where to spill it to.
+      const choice = freeXmm ? Paul.chooseSpillLocation() : C_DI_SPILL_LOCATION.C_DI_MEM;
+
       if (choice == C_DI_SPILL_LOCATION.C_DI_MEM) {
         // if its worth to save, save it to mem.
         const { isNew, targetMem } = this._varToMemStr(spareVariableName);
         if (isNew) {
           this.movRegToMem({ targetMem, spareVariableName, spillingReg: spilling_reg });
         } else {
-          // only update the state, such that subsequent reads read from memory
+          // only need to update the state, such that subsequent reads read from memory
           this._allocations[spareVariableName].store = targetMem;
         }
       } else {
-        // spill to vreg
-        const vr: XmmRegister = this.getXmmW(spareVariableName);
+        // spill to xmm
         this.addToPreInstructions(
-          `movq ${vr}, ${spilling_reg}; spilling ${spareVariableName} to vectorreg (Paul said so.)`,
+          `movq ${freeXmm}, ${spilling_reg}; spilling ${spareVariableName} to xmm (Paul said so.)`,
         );
-        this._allocations[spareVariableName].store = vr;
+
+        this._allocations[spareVariableName].store = freeXmm as XmmRegister;
       }
     } else {
       // no need to spill (either unused or memory)
@@ -553,7 +561,6 @@ export class RegisterAllocator {
       // _allocations["arg1[4]"].store is "[rsi + 0x08 * 4]"
 
       // we want now change any of those inAllocations with rdx.
-      // Paul choosed one of those
 
       // Paul chooses an element, which we'll move to rdx.
       const element = Paul.chooseArg(allocationReq.in);
@@ -598,6 +605,7 @@ export class RegisterAllocator {
         datatype: "u64",
         store: Register.rdx,
       };
+      const movInst = isXmmRegister(oldAllocatedStore) ? "movq" : "mov";
 
       // now check if rdx can be discarded:
       // which it can,
@@ -607,7 +615,7 @@ export class RegisterAllocator {
         isImm(dVarname) || // its an Immediate
         !Model.hasDependants(dVarname) // or if it just has no dependencies
       ) {
-        this._preInstructions.push(`mov ${Register.rdx}, ${oldAllocatedStore}; ${element} to rdx`);
+        this._preInstructions.push(`${movInst} ${Register.rdx}, ${oldAllocatedStore}; ${element} to rdx`);
         // beacuse we are overwriting the value, which used to be in rdx
         // remove the allocation information, if it existed
         dVarname && delete this._allocations[dVarname];
@@ -624,10 +632,10 @@ export class RegisterAllocator {
             ? getByteRegFromQwReg(oldAllocatedStore)
             : oldAllocatedStore;
         }
-        // if instead target to be in RDX is currently in  memory (such as an arg1[0]),
-        else if (isMem(oldAllocatedStore)) {
+        // if instead target to be in RDX is currently in memory (such as an arg1[0]) or in an Xmm,
+        else if (isMem(oldAllocatedStore) || isXmmRegister(oldAllocatedStore)) {
           this._clobbers.add(dVarname);
-          // then we cant use xchg (would would kill mem)
+          // then we cant use xchg (would would kill mem) or is not defined for xmm
           // instead want to save current rdx in another reg
           let reg = this.getW(dVarname);
           // then fix the allocation, for the case that we are actually only using u1
@@ -637,15 +645,15 @@ export class RegisterAllocator {
             this._allocations[dVarname].datatype = "u1";
           }
 
+          const src = isByte ? ByteRegister.dl : Register.rdx;
+
           this._preInstructions.push(
-            `mov ${reg}, ${
-              isByte ? ByteRegister.dl : Register.rdx
-            }; preserving value of ${dVarname} into a new reg`,
-            `mov ${Register.rdx}, ${oldAllocatedStore}; saving ${element} in rdx.`,
+            `mov ${reg}, ${src}; preserving value of ${dVarname} into a new reg`,
+            `${movInst} ${Register.rdx}, ${oldAllocatedStore}; saving ${element} in rdx.`,
           );
         }
 
-        // now for some very rare cases, if in rdx was an argPrefix (caon only happen if its not a byte)
+        // now for some very rare cases, if in rdx was an argPrefix (can only happen if its not a byte)
         if (!isByte && matchArgPrefix(rdxSpillVarname)) {
           // and in any inAllocations there
           inAllocations.forEach((inAlloc, idx, arr) => {
@@ -957,7 +965,7 @@ export class RegisterAllocator {
       this.declareFlagState(flag, FlagState.KILLED);
     } else {
       if (!setcc.startsWith("set")) {
-        throw new Error("must be calles with a flag or an instructon, starting with 'set'");
+        throw new Error("must be called with a flag or an instructon, starting with 'set'");
       }
       this._preInstructions.push(`${setcc} ${bytereg}; setCC ${nameOfVar} to reg (${reg})`);
     }
@@ -1138,8 +1146,15 @@ export class RegisterAllocator {
     if (isRegister(store)) {
       return store;
     }
+    if (isXmmRegister(store)) {
+      this._clobbers.add(nameOfVar);
+      const reg = this.getW(nameOfVar);
+      this._preInstructions.push(`movq ${reg}, ${store}; loading ${nameOfVar} from spilled xmm`);
+      this._allocations[nameOfVar].store = reg;
+      return reg;
+    }
     throw new Error(
-      `Wanted to load ${nameOfVar} to a register, but thats not a memory reference nor a byte reg. Giving up.`,
+      `Wanted to load ${nameOfVar} to a register, but thats not a memory reference nor a byte reg not xmm. Giving up.`,
     );
   }
 
@@ -1185,6 +1200,7 @@ export class RegisterAllocator {
       return reg;
     }
   }
+
   // only use that to read current flags, maps from FLAG to varname
   private get _flags(): { [k in Flags]: string } {
     return this.entriesAllocations
@@ -1201,14 +1217,16 @@ export class RegisterAllocator {
       .join(",");
   }
 
-  public allocationString(): string {
-    return `;-- allocation: ${JSON.stringify(
-      this.entriesAllocations
-        .map(([k, { store }]) =>
-          isRegister(store) || isByteRegister(store) || isFlag(store) ? `${k}:${store}` : undefined,
-        )
-        .filter(isNotNoU),
-    )}`;
+  public allocationString(sep = ", "): string {
+    const pad = sep != ", ";
+    return `;-- allocation: ${sep}${this.entriesAllocations
+      .filter(
+        ([k, { store }]) =>
+          isRegister(store) || isByteRegister(store) || isFlag(store) || isXmmRegister(store),
+      )
+      .sort(([, a], [, b]) => a.store.localeCompare(b.store))
+      .map(([k, { store }]) => `${pad ? k.padStart(10) : k} ${store}`)
+      .join(sep)}`;
   }
 
   public flagState(): { [f in Flags]: FlagState } {
@@ -1349,18 +1367,28 @@ export class RegisterAllocator {
 
   public finalize(): { pre: asm[]; stacklength: number; post: asm[] } {
     const stacklength = this._stack.length;
+
     const pre = [] as asm[];
     const post = ["ret"] as asm[];
     if (stacklength > 0) {
-      // CALLER SAVE REGS must be places at the end.
-      const stacksizeInBytes = toImm(stacklength * 8);
-      pre.push(`sub rsp, ${stacksizeInBytes}`);
-      post.unshift(`add rsp, ${stacksizeInBytes} `);
+      // CALLER SAVE REGS must be placed at the end.
+      const stacksizeInBytes = stacklength * 8;
+      const stacksizeInBytes__REAL = toImm(ALL_XMM_REGISTERS.length * 16 + stacksizeInBytes);
+
+      const xmm2rsp = ALL_XMM_REGISTERS.map((x, i) => ({
+        x,
+        r: `[ rsp + ${toImm(stacksizeInBytes + i * 16)} ]`,
+      }));
+
+      pre.push(`sub rsp, ${stacksizeInBytes__REAL}`);
+      pre.push(...xmm2rsp.map(({ r, x }) => `vmovdqu ${r}, ${x}`));
+      post.unshift(`add rsp, ${stacksizeInBytes__REAL} `);
       post.unshift(
         ...this._stack
           .filter(({ name }) => isCallerSave(name))
           .map(({ name }, index) => `mov ${name.split(CALLER_SAVE_PREFIX)[1]}, ${toMem(index)} ; pop`),
       );
+      post.unshift(...xmm2rsp.map(({ r, x }) => `vmovdqu ${x}, ${r}`));
     }
     return {
       stacklength,

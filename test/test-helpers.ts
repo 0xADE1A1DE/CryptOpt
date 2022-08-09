@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { mkdtempSync } from "fs";
+import { mkdtempSync, mkdirSync } from "fs";
 import { tmpdir as osTmpdir } from "os";
 import { basename, join } from "path";
 
@@ -38,7 +38,7 @@ export function getTestArgs(filename: string): OptimizerArgs {
 
   return {
     evals: 1,
-    seed: Date.now(),
+    seed: 11, //Date.now(),
     cyclegoal: 100,
     logComment: "",
     proof: false,
@@ -51,7 +51,10 @@ export function getTestArgs(filename: string): OptimizerArgs {
 
 // creates /tmp/CryptOpt.test-ABCDEF directory
 export function getTestResultsPath(suff = "CryptOpt.test-"): string {
-  return mkdtempSync(join(osTmpdir(), suff));
+  // return mkdtempSync(join(osTmpdir(), suff));
+  const p = join(osTmpdir(), suff);
+  mkdirSync(p, { recursive: true });
+  return p;
 }
 
 /*

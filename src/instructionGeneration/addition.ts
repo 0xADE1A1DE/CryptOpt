@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { delimbify, isFlag, isImm, isU1, limbify, TEMP_VARNAME } from "@/helper";
+import { delimbify, isFlag, isImm, isU1, isXmmRegister, limbify, TEMP_VARNAME } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
@@ -29,10 +29,10 @@ import type {
   ValueAllocation,
 } from "@/types";
 
-import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_rm_rmf, r__rmf_rmf, r_rm_f_f } from "./additionhelpers";
+import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_rm_rmf, r__rmf_rmf, r__rm_f_f } from "./additionhelpers";
 
 export function add(c: CryptOpt.StringOperation): asm[] {
-  // Step 1 Find out, what to do and get allcoations: highlevel
+  // Step 1 Find out, what to do and get allocations: highlevel
   const ra = RegisterAllocator.getInstance();
   ra.initNewInstruction(c);
   if (c.datatype == "u64") {
@@ -214,6 +214,16 @@ function add64(c: CryptOpt.StringOperation): asm[] {
       }
     }
 
+    // we need to get them both into GP-regs, as we are interested in the COUT-Flag
+    if (c.name[1]) {
+      if (isXmmRegister(a_arg1.store)) {
+        a_arg1 = RegisterAllocator.xmm2reg(a_arg1);
+      }
+      if (isXmmRegister(a_arg2.store)) {
+        a_arg2 = RegisterAllocator.xmm2reg(a_arg2);
+      }
+    }
+
     if (isU1(a_arg1) && isU1(a_arg2)) {
       throw new Error("TSNH add() being called with too many u1's.");
     }
@@ -239,6 +249,7 @@ function add64(c: CryptOpt.StringOperation): asm[] {
           "thats weired. looking for u1 + u64/u1 but not using it as carry in... TSNH. Reorder those args and/or call different method",
         );
       }
+
       return fr__rm_rm(c.name[1] /* COUT */, c.name[0], a_arg1, a_arg2);
     }
 
@@ -252,7 +263,7 @@ function add64(c: CryptOpt.StringOperation): asm[] {
     if (c.name[1] === "_") {
       // Three operands, no cout
       if (both_u1_are_flags) {
-        return r_rm_f_f(c.name[0], a_arg1);
+        return r__rm_f_f(c.name[0], a_arg1);
       }
       return r__rm_rm_rmf(c.name[0], a_arg1, a_arg2, a_cin /* CarryIN */);
     } else {

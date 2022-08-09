@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Flags, Register } from "@/enums";
-import { getQwRegFromByteReg, isByteRegister, isFlag, isRegister, matchArg } from "@/helper";
+import { Flags, Register, XmmRegister } from "@/enums";
+import { getQwRegFromByteReg, isByteRegister, isFlag, isRegister, isXmmRegister, matchArg } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { CryptOpt } from "@/types";
 
@@ -37,12 +37,15 @@ export function sanityCheckAllocations(c: CryptOpt.DynArgument): void {
     if (isFlag(store)) {
       r64 = store;
     }
+    if (isXmmRegister(store)) {
+      r64 = store;
+    }
     if (r64) {
       if (byReg[r64]) {
         throw new Error(
           `@calculating ${c.name.join("--")}, ${r64} is used twice. ${
             byReg[r64]
-          } and for ${varname}. Allocations: ${ra.allocationString()}`,
+          } and for ${varname}. Allocations: ${ra.allocationString("\n")}`,
         );
       }
       byReg[r64] = varname;
@@ -51,5 +54,5 @@ export function sanityCheckAllocations(c: CryptOpt.DynArgument): void {
       throw new Error("should not be allocated.");
     }
     return byReg;
-  }, {} as { [k in Register | Flags]: string });
+  }, {} as { [k in Register | Flags | XmmRegister]: string });
 }

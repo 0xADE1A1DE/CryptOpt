@@ -15,9 +15,9 @@
  */
 
 import { AllocationFlags, Flags, Register } from "@/enums";
-import { isFlag, matchArg, SETX, toMem } from "@/helper";
+import { isFlag, isXmmRegister, matchArg, SETX, toMem } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { asm, CryptOpt, ValueAllocation } from "@/types";
 
 export function mov(c: CryptOpt.StringOperation): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 1) {
@@ -37,8 +37,13 @@ export function mov(c: CryptOpt.StringOperation): asm[] {
       in: [read, m.base],
       allocationFlags: AllocationFlags.DISALLOW_MEM,
     });
+    let baseReg = allocation.in[1];
+    if (isXmmRegister(baseReg)) {
+      const baseAlloc = ra.getCurrentAllocations()[m.base];
+      baseReg = RegisterAllocator.xmm2reg(baseAlloc as ValueAllocation).store;
+    }
 
-    const memOut = toMem(m.offset, allocation.in[1] as Register);
+    const memOut = toMem(m.offset, baseReg as Register);
     // this construct will put the allocation.in0 data into tmp (allocation.oReg0)
     if (isFlag(allocation.in[0])) {
       const flag = allocation.in[0];

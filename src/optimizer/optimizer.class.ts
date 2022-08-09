@@ -38,6 +38,7 @@ import {
 import globals from "@/helper/globals";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
+import { RegisterAllocator } from "@/registerAllocator";
 import type { OptimizerArgs, AnalyseResult } from "@/types";
 
 import { genStatusLine } from "./optimizer.helper";
@@ -122,6 +123,7 @@ export class Optimizer {
     return new Promise<number>((resolve) => {
       console.log("starting optimisation");
       printStartInfo({
+        symbolname: this.symbolname,
         ...this.args,
       });
       let batchSize = 200;

@@ -18,7 +18,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { C_DI_HANDLE_FLAGS_KK, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Flags, FlagState } from "@/enums";
 import { add } from "@/instructionGeneration/addition";
-import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation } from "@/types";
+import type { Allocations, ValueAllocation, CryptOpt, MemoryAllocation, RegisterAllocation } from "@/types";
 
 // this not consistent in within itself (multiple vars in one single reg).
 // Certain vars but is only used certain test
@@ -66,6 +66,9 @@ const allocs = {
   x110_0: { datatype: "u64", store: "rax" },
   x110_1: { datatype: "u64", store: "rbx" },
   x111: { datatype: "u64", store: "rcx" },
+
+  x200: { datatype: "u64", store: "rax" },
+  x201: { datatype: "u64", store: "xmm2" },
 } as Allocations;
 const allocate = vi.fn();
 const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
@@ -79,6 +82,7 @@ const backupIfStoreHasDependencies = vi.fn();
 vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
+      xmm2reg: vi.fn().mockImplementation((a: ValueAllocation) => ({ store: "rbx", datatype: "u64" })),
       getInstance: () => {
         return {
           addToClobbers,
@@ -356,5 +360,35 @@ describe("instructionGeneration:add", () => {
     expect(code[0]).toEqual("adox r8, rcx");
     expect(getCurrentAllocations).toBeCalled();
     expect(flagState).toBeCalled();
+  });
+  it("should load from xmm", () => {
+    getCurrentAllocations.mockClear();
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x202"],
+      datatype: "u64",
+      operation: "+",
+      decisions: {
+        di_choose_arg: [1, ["x200", "x201"]],
+        di_flag: [1, [Flags.CF, Flags.OF]],
+        di_handle_flags_kk: [
+          2,
+          [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
+        ],
+        di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x200", "x201"],
+    };
+
+    const code = add(c).filter((a) => !a.startsWith(";"));
+    expect(code).toHaveLength(1);
+    // I dont really care about the order as long as the allocation was done correctly.
+    expect(code[0]).toEqual("lea rax, [ rax + rbx ]");
+    expect(getCurrentAllocations).toBeCalled();
   });
 });

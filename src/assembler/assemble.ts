@@ -58,6 +58,11 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
     RegisterAllocator.getInstance().clearOrphans();
   }
   const { pre, post, stacklength } = ra.finalize();
+  const code = pre.concat(output).concat(post);
+  writeString(
+    code.map((i) => `\t${i}`).join("\n"),
+    `${resultspath}/current${output.length}-${Date.now()}.asm`,
+  );
 
-  return { code: pre.concat(output).concat(post), stacklength };
+  return { code, stacklength };
 }

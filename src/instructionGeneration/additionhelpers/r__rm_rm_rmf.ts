@@ -29,7 +29,7 @@ import type {
   U64RegisterAllocation,
 } from "@/types";
 
-export function r_rm_f_f(out: string, arg0: U64Allocation): asm[] {
+export function r__rm_f_f(out: string, arg0: U64Allocation): asm[] {
   // spill OF to a reg; then adc that to r/m.
   const ra = RegisterAllocator.getInstance();
   const bytereg = ra.spillFlag(Flags.OF);

@@ -29,7 +29,7 @@
  * They will also take care of the allocation and new allocation of the results. (name of out-flag and out-reg)
  */
 
-import { isByteRegister, isFlag, isMem, isRegister } from "@/helper";
+import { isByteRegister, isFlag, isMem, isRegister, isXmmRegister } from "@/helper";
 import type {
   asm,
   MemoryAllocation,
@@ -67,6 +67,7 @@ import {
   r__r_r_r,
 } from "./r__rm_rm_rmf";
 import { r__f_f, r__m_f, r__m_m, r__r_f, r__r_m, r__r_r } from "./r__rmf_rmf";
+import { RegisterAllocator } from "@/registerAllocator";
 
 export function fr__rm_rm(cout: string, out: string, arg0: ValueAllocation, arg1: ValueAllocation): asm[] {
   if (isFlag(arg0.store) || isFlag(arg1.store)) {
@@ -318,11 +319,24 @@ export function fr__rm_rm_rmf(
 export function r__rmf_rmf(out: string, arg0: ValueAllocation, arg1: ValueAllocation): asm[] {
   const flag0 = isFlag(arg0.store);
   const mem0 = isMem(arg0.store);
-  const reg0 = !flag0 && !mem0;
+  const xmm0 = isXmmRegister(arg0.store);
+  let reg0 = !flag0 && !mem0 && !xmm0;
 
   const flag1 = isFlag(arg1.store);
   const mem1 = isMem(arg1.store);
-  const reg1 = !flag1 && !mem1;
+  const xmm1 = isXmmRegister(arg1.store);
+  let reg1 = !flag1 && !mem1 && !xmm1;
+
+  if (xmm0) {
+    //x-
+    arg0 = RegisterAllocator.xmm2reg(arg0);
+    reg0 = true;
+  }
+  if (xmm1) {
+    //-x
+    arg1 = RegisterAllocator.xmm2reg(arg1);
+    reg1 = true;
+  }
 
   /**
    *
