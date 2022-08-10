@@ -210,42 +210,20 @@ export class RegisterAllocator {
     return Object.entries(this._allocations).filter(([, a]) => "store" in a) as [string, ValueAllocation][];
   }
 
-  // private getXmmW(name: string): XmmRegister {
-  //   const freeXmm = this.getFreeXmmRegister(name);
-  //   if (freeXmm) {
-  //     return freeXmm;
-  //   }
-  //
-  //   //TODO: find symbols which are stored in XmmRegs and not in clobs
-  //   const namesOfSymbolsAllocatedInXMMR = this.entriesAllocations
-  //     .filter(([n, { store }]) => isXmmRegister(store) && !this._clobbers.has(n))
-  //     .map(([n]) => n);
-  //   const spareVariableName = Model.chooseSpillValue(namesOfSymbolsAllocatedInXMMR);
-  //   const fr = this.getW(spareVariableName, true) as Register;
-  //   if (fr) {
-  //     const src = this._allocations[spareVariableName].store as XmmRegister;
-  //     this.movXmmToReg({ spareVariableName, targetReg: fr, spillingXmmReg: src });
-  //     // now we should find a XmmReg via getFreeRegister
-  //     return this.getXmmW(name);
-  //   }
-  //   throw new Error("need to spill something to memory");
-  // }
-
   /* will issue the instruction to preinst
    * will update this._allocations
    */
-  public static xmm2reg(arg: ValueAllocation): RegisterAllocation {
+  public static xmm2reg({ store }: Pick<ValueAllocation, "store">): RegisterAllocation {
     //   spareVariableName: string;
     //   targetReg: Register;
     //   spillingXmmReg: XmmRegister;
     // }): void {
-    return RegisterAllocator.getInstance().moveXmmToReg(arg);
+    return RegisterAllocator.getInstance().moveXmmToReg({ store });
   }
-  private moveXmmToReg(arg: ValueAllocation): RegisterAllocation {
-    const src = arg.store;
-    const varname = this.getVarnameFromStore(arg);
+  private moveXmmToReg({ store }: Pick<ValueAllocation, "store">): RegisterAllocation {
+    const varname = this.getVarnameFromStore({ store });
     const dest = this.getW(varname);
-    this.addToPreInstructions(`movq ${dest}, ${src}; un-xmm-ify ${varname} `);
+    this.addToPreInstructions(`movq ${dest}, ${store}; un-xmm-ify ${varname} `);
     return this._allocations[varname] as RegisterAllocation;
   }
 
@@ -907,7 +885,7 @@ export class RegisterAllocator {
    * It will throw an error or return emptystring (depending on @param throwIfNotFound), if nothing or more than one has been found.
    */
   public getVarnameFromStore(
-    { store: storeNeedle }: { store: ValueAllocation["store"] },
+    { store: storeNeedle }: Pick<ValueAllocation, "store">,
     throwIfNotFound = true,
   ): string {
     const findings = this.entriesAllocations
