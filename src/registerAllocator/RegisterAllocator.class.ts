@@ -353,6 +353,14 @@ export class RegisterAllocator {
         }
       } else {
         // spill to xmm
+
+        // in case we rant to spill dl to xmm4
+        if (isByteRegister(spilling_reg)) {
+          // we first need to spill movzx rdx, dl, and then movq xmm4, rdx
+          const { inst, reg } = zx(spilling_reg);
+          this.addToPreInstructions(inst);
+          spilling_reg = reg;
+        }
         this.addToPreInstructions(
           `movq ${freeXmm}, ${spilling_reg}; spilling ${spareVariableName} to xmm (Paul said so.)`,
         );
