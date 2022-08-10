@@ -19,8 +19,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   AllocationFlags,
-  DECISION_IDENTIFIER,
   C_DI_SPILL_LOCATION,
+  DECISION_IDENTIFIER,
   Flags,
   FlagState,
   Register,

@@ -18,7 +18,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { C_DI_HANDLE_FLAGS_KK, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Flags, FlagState } from "@/enums";
 import { add } from "@/instructionGeneration/addition";
-import type { Allocations, ValueAllocation, CryptOpt, MemoryAllocation, RegisterAllocation } from "@/types";
+import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
 
 // this not consistent in within itself (multiple vars in one single reg).
 // Certain vars but is only used certain test
@@ -82,7 +82,7 @@ const backupIfStoreHasDependencies = vi.fn();
 vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
-      xmm2reg: vi.fn().mockImplementation((a: ValueAllocation) => ({ store: "rbx", datatype: "u64" })),
+      xmm2reg: vi.fn().mockImplementation((_a: ValueAllocation) => ({ store: "rbx", datatype: "u64" })),
       getInstance: () => {
         return {
           addToClobbers,

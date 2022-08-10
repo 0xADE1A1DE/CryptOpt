@@ -17,9 +17,9 @@
 import { describe, expect, it } from "vitest";
 
 import fiat from "@/bridge/fiat-bridge/all_fiat_array";
+import { DECISION_IDENTIFIER } from "@/enums";
 import { preprocessFunction } from "@/helper";
 import type { Fiat } from "@/types";
-import { DECISION_IDENTIFIER, C_DI_SPILL_LOCATION } from "@/enums";
 
 const boilerplate = {
   operation: "secp256k1_fe_mul_inner",

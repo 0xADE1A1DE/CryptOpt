@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import type { Intermediate } from "./intermediate.type";
-
 import { getArguments, getScalarsAndImmMappedAsConstArg } from "../helpers";
 import type { SSA } from "../raw.type";
+import type { Intermediate } from "./intermediate.type";
 
 export const transformAshr = shr;
 export const transformLshr = shr;

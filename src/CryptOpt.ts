@@ -23,7 +23,7 @@ import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
 import { Optimizer } from "@/optimizer";
 import { sha1Hash } from "@/paul";
-import type { OptimizerArgs, CryptoptGlobals } from "@/types";
+import type { CryptoptGlobals,OptimizerArgs } from "@/types";
 
 const { single, bets, betRatio, curve, method, verbose } = parsedArgs;
 

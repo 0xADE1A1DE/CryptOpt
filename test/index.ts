@@ -18,6 +18,7 @@ import type { SpyInstance } from "vitest";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { Optimizer } from "@/optimizer";
+
 import { getTestArgs } from "./test-helpers";
 
 describe("full tests fiat", () => {

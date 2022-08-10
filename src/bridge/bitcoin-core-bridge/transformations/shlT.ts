@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import type { Intermediate } from "./intermediate.type";
 import type { CryptOpt } from "@/types";
 
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";
 import type { SSA } from "../raw.type";
+import type { Intermediate } from "./intermediate.type";
 
 export function transformShl(input: SSA): Intermediate {
   if (input.operation !== "shl") {

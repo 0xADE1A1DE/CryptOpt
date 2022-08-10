@@ -19,9 +19,9 @@ import { defaults } from "lodash-es";
 import { describe, expect, it, vi } from "vitest";
 
 import {
-  DECISION_IDENTIFIER,
-  C_DI_SPILL_LOCATION,
   AllocationFlags,
+  C_DI_SPILL_LOCATION,
+  DECISION_IDENTIFIER,
   Flags,
   FlagState,
   Register,

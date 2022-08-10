@@ -29,7 +29,7 @@ import type {
   ValueAllocation,
 } from "@/types";
 
-import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_rm_rmf, r__rmf_rmf, r__rm_f_f } from "./additionhelpers";
+import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_f_f,r__rm_rm_rmf, r__rmf_rmf } from "./additionhelpers";
 
 export function add(c: CryptOpt.StringOperation): asm[] {
   // Step 1 Find out, what to do and get allocations: highlevel

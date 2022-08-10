@@ -44,10 +44,10 @@ import {
   isImm,
   isMem,
   isRegister,
-  isXmmRegister,
   isU1,
   isU64,
   isXD,
+  isXmmRegister,
   limbify,
   limbifyImm,
   matchArg,
@@ -1207,7 +1207,7 @@ export class RegisterAllocator {
     const pad = sep != ", ";
     return `;-- allocation: ${sep}${this.entriesAllocations
       .filter(
-        ([k, { store }]) =>
+        ([, { store }]) =>
           isRegister(store) || isByteRegister(store) || isFlag(store) || isXmmRegister(store),
       )
       .sort(([, a], [, b]) => a.store.localeCompare(b.store))

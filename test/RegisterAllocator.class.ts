@@ -19,10 +19,10 @@
 import { afterAll, describe, expect, it, vi } from "vitest";
 
 import {
-  DECISION_IDENTIFIER,
-  C_DI_SPILL_LOCATION,
   AllocationFlags,
   ByteRegister,
+  C_DI_SPILL_LOCATION,
+  DECISION_IDENTIFIER,
   Flags,
   FlagState,
   Register,

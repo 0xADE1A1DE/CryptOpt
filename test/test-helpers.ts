@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { mkdtempSync, mkdirSync } from "fs";
+import { mkdirSync } from "fs";
 import { tmpdir as osTmpdir } from "os";
 import { basename, join } from "path";
 
-import type { CryptOpt, OptimizerArgs } from "@/types";
 import { sha1Hash } from "@/paul";
+import type { CryptOpt, OptimizerArgs } from "@/types";
 
 /**
  * uses a filename curve-method.ts for curve+method.

@@ -22,7 +22,7 @@ import {
   FlagState,
   Register,
 } from "@/enums";
-import { limbify, isXmmRegister, matchIMM, TEMP_VARNAME } from "@/helper";
+import { isXmmRegister, limbify, matchIMM, TEMP_VARNAME } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";

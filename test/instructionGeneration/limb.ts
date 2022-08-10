@@ -17,7 +17,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, Flags, Register, DECISION_IDENTIFIER, C_DI_SPILL_LOCATION } from "@/enums";
+import { AllocationFlags, C_DI_SPILL_LOCATION,DECISION_IDENTIFIER, Flags, Register } from "@/enums";
 import { limb } from "@/instructionGeneration/limb";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 

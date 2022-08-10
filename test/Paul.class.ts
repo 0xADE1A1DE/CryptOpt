@@ -16,9 +16,9 @@
 
 import { describe, expect, it } from "vitest";
 
+import { C_DI_SPILL_LOCATION,DECISION_IDENTIFIER } from "@/enums";
 import { BIAS, Paul } from "@/paul";
 import type { CryptOpt } from "@/types";
-import { DECISION_IDENTIFIER, C_DI_SPILL_LOCATION } from "@/enums";
 
 describe("Paul", () => {
   describe("Paul:choose<T>", () => {

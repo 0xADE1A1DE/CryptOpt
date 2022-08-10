@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import type { Intermediate } from "./intermediate.type";
-
 import { getArguments } from "../helpers";
 import type { SSA } from "../raw.type";
+import type { Intermediate } from "./intermediate.type";
 
 export function transformZext(input: SSA): Intermediate {
   if (input.operation !== "zext") {

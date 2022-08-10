@@ -19,6 +19,7 @@ import { ensureDirSync } from "fs-extra";
 import { resolve } from "path";
 
 import type { OptimizerArgs } from "@/types";
+
 import { padSeed } from "./lamdas";
 
 export function generateResultFilename(

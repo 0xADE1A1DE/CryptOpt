@@ -29,7 +29,8 @@
  * They will also take care of the allocation and new allocation of the results. (name of out-flag and out-reg)
  */
 
-import { isByteRegister, isNotNoU, isFlag, isMem, isRegister, isXmmRegister } from "@/helper";
+import { isByteRegister, isFlag, isMem, isNotNoU, isRegister, isXmmRegister } from "@/helper";
+import { RegisterAllocator } from "@/registerAllocator";
 import type {
   asm,
   MemoryAllocation,
@@ -67,7 +68,6 @@ import {
   r__r_r_r,
 } from "./r__rm_rm_rmf";
 import { r__f_f, r__m_f, r__m_m, r__r_f, r__r_m, r__r_r } from "./r__rmf_rmf";
-import { RegisterAllocator } from "@/registerAllocator";
 
 export function fr__rm_rm(cout: string, out: string, arg0: ValueAllocation, arg1: ValueAllocation): asm[] {
   if (isFlag(arg0.store) || isFlag(arg1.store)) {

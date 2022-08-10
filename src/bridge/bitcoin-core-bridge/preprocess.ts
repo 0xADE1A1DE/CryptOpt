@@ -17,11 +17,10 @@
 import { groupBy } from "lodash-es";
 
 import { matchArgPrefix } from "@/helper";
-import type { CryptOpt, Fiat } from "@/types";
+import type { Fiat } from "@/types";
 
 import { getArguments, isStructPointer } from "./helpers";
 import type { raw_T, SSA, structDef_T, StructName } from "./raw.type";
-import type { Intermediate } from "./transformations/intermediate.type";
 import {
   transformAdd,
   transformAnd,
@@ -35,6 +34,7 @@ import {
   transformXor,
   transformZext,
 } from "./transformations";
+import type { Intermediate } from "./transformations/intermediate.type";
 import { zextR } from "./transformations/reducers";
 // type fixedArgs = Omit<raw_T, "arguments"> & { arguments: Fiat.FuncArgument };
 

@@ -38,8 +38,7 @@ import {
 import globals from "@/helper/globals";
 import { Model } from "@/model";
 import { Paul, sha1Hash } from "@/paul";
-import { RegisterAllocator } from "@/registerAllocator";
-import type { OptimizerArgs, AnalyseResult } from "@/types";
+import type { AnalyseResult, OptimizerArgs } from "@/types";
 
 import { genStatusLine } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
@@ -289,7 +288,6 @@ export class Optimizer {
               writeString(
                 JSON.stringify({
                   nodes: Model.nodesInTopologicalOrder,
-                  allocs: (RegisterAllocator.getInstance() as any)._allocations,
                 }),
                 path.join(this.args.resultDir, "tested_incorrect.json"),
               );

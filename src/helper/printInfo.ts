@@ -16,11 +16,11 @@
 
 import os from "os";
 
+import type { OptimizerArgs } from "@/types";
+
 import { cy, re } from "./constants";
 import { env } from "./env";
 import { shouldProof, SI } from "./lamdas";
-
-import type { OptimizerArgs } from "@/types";
 
 const { CC, CFLAGS } = env;
 export function printStartInfo({

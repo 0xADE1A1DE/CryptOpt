@@ -19,7 +19,7 @@ import { afterAll, expect, it, vi } from "vitest";
 
 import { Optimizer } from "@/optimizer";
 
-import { getTestArgs, getTestResultsPath, nothing } from "../test-helpers";
+import { getTestArgs, nothing } from "../test-helpers";
 
 const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);

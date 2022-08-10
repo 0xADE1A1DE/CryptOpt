@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import type { Intermediate } from "./intermediate.type";
-
 import { getScalarsAndImmMappedAsConstArg } from "../helpers";
 import type { SSA } from "../raw.type";
+import type { Intermediate } from "./intermediate.type";
 
 export function transformMul(input: SSA): Intermediate {
   if (input.operation !== "mul") {
