@@ -1,5 +1,8 @@
 # CryptOpt
 
+![Unit Tests](https://github.com/0xADE1A1DE/CryptOpt/actions/workflows/check.yml/badge.svg)
+![Code Style](https://github.com/0xADE1A1DE/CryptOpt/actions/workflows/ts-formatting.yml/badge.svg)
+
 1. Follow the instructions [in the INSTALL document](./INSTALL.md).
 1. Run `./run.sh --help` to check if the installation worked.
 1. Run `./run.sh` to see an optimization in action.
