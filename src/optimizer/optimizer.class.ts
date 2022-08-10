@@ -345,7 +345,12 @@ export class Optimizer {
               `_ratio${ratioString.replace(".", "")}`,
               `_seed${paddedSeed}_${this.symbolname}`,
             ].join("");
-            const fullpath = path.join(this.args.resultDir, `${fileNameOptimised}.asm`);
+            const fullpath = path.resolve(
+              this.args.resultDir,
+              this.args.curve,
+              this.args.method,
+              `${fileNameOptimised}.asm`,
+            );
             // write best found solution with headers
             // flip, because we want the last accepted, not the last mutated.
             const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
