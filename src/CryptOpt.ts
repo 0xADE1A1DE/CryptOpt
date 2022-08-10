@@ -16,6 +16,7 @@
 
 import { exec } from "child_process";
 import { hostname } from "os";
+import { basename } from "path";
 
 import {
   writeString,
@@ -36,6 +37,9 @@ import { sha1Hash } from "@/paul";
 import type { CryptoptGlobals, OptimizerArgs } from "@/types";
 
 const { single, bets, betRatio, curve, method, verbose } = parsedArgs;
+if (parsedArgs.resultDir == "") {
+  parsedArgs.resultDir = basename(import.meta.url);
+}
 
 // GENERAL INITIALIZATION
 if (!verbose) {
