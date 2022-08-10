@@ -37,7 +37,7 @@ import {
 } from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
-import { Paul } from "@/paul";
+import { Paul, sha1Hash } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { OptimizerArgs, AnalyseResult } from "@/types";
 
