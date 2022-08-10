@@ -15,10 +15,20 @@
  */
 
 import { exec } from "child_process";
-import fs from "fs";
-import os from "os";
+import { hostname } from "os";
 
-import { cy, env, generateResultFilename, gn, parsedArgs, PRINT_EVERY, rd, re, SI } from "@/helper";
+import {
+  writeString,
+  cy,
+  env,
+  generateResultFilename,
+  gn,
+  parsedArgs,
+  PRINT_EVERY,
+  rd,
+  re,
+  SI,
+} from "@/helper";
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
 import { Optimizer } from "@/optimizer";
@@ -134,7 +144,7 @@ const spaceSeparated = runResults.reduce((arr, { convergence }) => {
 
 const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename(parsedArgs, ["dat", "gp", "pdf"]);
 
-fs.writeFileSync(datFileFull, spaceSeparated.join("\n"));
+writeString(spaceSeparated.join("\n"), datFileFull);
 process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);
 
 console.log(JSON.stringify(times));
@@ -143,12 +153,11 @@ const title = [
   single ? "Single Run" : `Restarts^{${bets}}_{${(offspringEvals / parsedArgs.evals) * 100} %}`,
   `#Mutations ${SI(parsedArgs.evals)}`,
   new Date().toISOString(),
-  os.hostname(),
+  hostname(),
   Object.entries(times).map((k, v) => `Time for ${k}: ${(v / 60).toFixed(2)}min`),
 ].join(", ");
 
-fs.writeFileSync(
-  gpFileFull,
+writeString(
   [
     `#!/usr/bin/env gnuplot\n`,
     `set title "${title}"`,
@@ -168,7 +177,7 @@ fs.writeFileSync(
     "# and plot the matrix with line colors, and a line at y=1 with color 0 (gre)",
     `plot "${datFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 linecolor variable with lines, 1 lc 0`,
   ].join("\n"),
-  { mode: 0o700 },
+  gpFileFull,
 );
 
 process.stdout.write(" Gen Pdf...");

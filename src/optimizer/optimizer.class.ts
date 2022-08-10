@@ -313,11 +313,14 @@ export class Optimizer {
 
             globals.convergence.push(ratioString);
           }
+
+          // Increase  Number of evaluations taken.
           numEvals++;
+
           if (numEvals >= this.args.evals) {
+            // DONE WITH OPTIMISING WRITE EVERYTHING TO DISK AND EXIT.
             globals.time.generateCryptopt =
               (Date.now() - optimistaionStartDate) / 1000 - globals.time.validate;
-            // DONE WITH OPTIMISING WRITE EVERYTHING TO DISK AND EXIT.
             clearInterval(intervalHandle);
 
             console.log("writing current asm");
