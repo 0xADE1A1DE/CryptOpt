@@ -1359,22 +1359,20 @@ export class RegisterAllocator {
     if (stacklength > 0) {
       // CALLER SAVE REGS must be placed at the end.
       const stacksizeInBytes = stacklength * 8;
-      const stacksizeInBytes__REAL = toImm(ALL_XMM_REGISTERS.length * 16 + stacksizeInBytes);
 
-      const xmm2rsp = ALL_XMM_REGISTERS.map((x, i) => ({
-        x,
-        r: `[ rsp + ${toImm(stacksizeInBytes + i * 16)} ]`,
-      }));
+      pre.push(`sub rsp, ${stacksizeInBytes}`);
 
-      pre.push(`sub rsp, ${stacksizeInBytes__REAL}`);
-      pre.push(...xmm2rsp.map(({ r, x }) => `vmovdqu ${r}, ${x}`));
-      post.unshift(`add rsp, ${stacksizeInBytes__REAL} `);
+      post.unshift(`add rsp, ${stacksizeInBytes}`);
       post.unshift(
-        ...this._stack
-          .filter(({ name }) => isCallerSave(name))
-          .map(({ name }, index) => `mov ${name.split(CALLER_SAVE_PREFIX)[1]}, ${toMem(index)} ; pop`),
+        ...this.entriesAllocations
+          .filter(([name]) => isCallerSave(name))
+          .map(([name, allo]) => {
+            const dest = name.split(CALLER_SAVE_PREFIX)[1]; // like rbp
+            const src = allo.store; // like xmm0 or [rsp + 0x08]
+            const instr = isXmmRegister(src) ? "movq" : "mov";
+            return `${instr} ${dest}, ${src}; pop`;
+          }),
       );
-      post.unshift(...xmm2rsp.map(({ r, x }) => `vmovdqu ${x}, ${r}`));
     }
     return {
       stacklength,
