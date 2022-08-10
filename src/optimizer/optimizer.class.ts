@@ -15,7 +15,7 @@
  */
 
 import { execSync } from "child_process";
-import { existsSync, mkdirSync, mkdtempSync, rmSync } from "fs";
+import { existsSync, mkdirSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { cpus, tmpdir } from "os";
 import path from "path";
@@ -53,7 +53,8 @@ export class Optimizer {
   private symbolname: string;
 
   public constructor(private args: OptimizerArgs) {
-    this.libcheckfunctionDirectory = `${tmpdir()}${path.sep}CryptOpt.cache${path.sep}${sha1Hash(Date.now())}`;
+    const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
+    this.libcheckfunctionDirectory = `${tmpdir()}${path.sep}CryptOpt.cache${path.sep}${randomString}`;
     mkdirSync(this.libcheckfunctionDirectory, { recursive: true });
     Paul.seed = args.seed;
     const { measuresuite, symbolname } = init(this.libcheckfunctionDirectory, args);

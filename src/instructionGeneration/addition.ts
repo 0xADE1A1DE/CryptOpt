@@ -280,7 +280,6 @@ function add64(c: CryptOpt.StringOperation): asm[] {
       }
 
       return [
-        comment,
         `; fr__rm_rm_rmf ${c.name[1]} /* COUT */, ${c.name[0]}, ${a_arg1.store}, ${a_arg2.store}, ${a_cin.store}(${a_cin.datatype}) /* CarryIN */`,
         ...fr__rm_rm_rmf(c.name[1] /* COUT */, c.name[0], a_arg1, a_arg2, a_cin /* CarryIN */),
       ];
