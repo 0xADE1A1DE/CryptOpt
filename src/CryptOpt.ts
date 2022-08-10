@@ -16,7 +16,7 @@
 
 import { exec } from "child_process";
 import { hostname } from "os";
-import { basename } from "path";
+import { resolve } from "path";
 
 import {
   writeString,
@@ -38,7 +38,7 @@ import type { CryptoptGlobals, OptimizerArgs } from "@/types";
 
 const { single, bets, betRatio, curve, method, verbose } = parsedArgs;
 if (parsedArgs.resultDir == "") {
-  parsedArgs.resultDir = basename(import.meta.url);
+  parsedArgs.resultDir = resolve(process.cwd(), "results");
 }
 
 // GENERAL INITIALIZATION
