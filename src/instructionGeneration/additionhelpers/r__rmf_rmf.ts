@@ -276,7 +276,7 @@ export function r__m_f(out: string, m0: MemoryAllocation, f1: U1FlagAllocation):
 // allocate a reg(u64 for now, could be put to u8/u2 later); clears CF/OF
 //-seto al, adc al, 0x0, movzx rax, al;
 //---------------
-export function r__f_f(out: string, _r0: U1FlagAllocation, _r1: U1FlagAllocation): asm[] {
+export function r__f_f(out: string): asm[] {
   const ra = getRa();
   const reg = ra.spillFlag(Flags.OF, out);
   if (reg === false) {

@@ -29,7 +29,7 @@
  * They will also take care of the allocation and new allocation of the results. (name of out-flag and out-reg)
  */
 
-import { isByteRegister, isFlag, isMem, isRegister, isXmmRegister } from "@/helper";
+import { isByteRegister, isNotNoU, isFlag, isMem, isRegister, isXmmRegister } from "@/helper";
 import type {
   asm,
   MemoryAllocation,
@@ -97,90 +97,11 @@ export function r__rm_rm_rmf(
   arg1: MemoryAllocation | RegisterAllocation,
   cin: U1Allocation,
 ): asm[] {
-  const reg0 = isRegister(arg0.store);
-  const reg1 = isRegister(arg1.store) || isByteRegister(arg1.store);
-  const cinFlag = isFlag(cin.store);
-  const cinMem = isMem(cin.store);
-  // dont check for register here, since U1RegisterAllocations are not necessarily in rax but rather in al
-
-  //  R + R + RMR
-  if (reg0 && reg1) {
-    if (cinFlag) {
-      return r__r_r_f(
-        out,
-        arg0 as U64RegisterAllocation,
-        arg1 as RegisterAllocation,
-        cin as U1FlagAllocation,
-      );
-    }
-    if (cinMem) {
-      return r__r_r_m(
-        out,
-        arg0 as U64RegisterAllocation,
-        arg1 as RegisterAllocation,
-        cin as U1MemoryAllocation,
-      );
-    }
-    // cin must be in Reg then
-    return r__r_r_r(
-      out,
-      arg0 as U64RegisterAllocation,
-      arg1 as RegisterAllocation,
-      cin as U1RegisterAllocation,
-    );
-  }
-  //  R + M + RMR
-  if (reg0 && !reg1) {
-    if (cinFlag) {
-      return r__r_m_f(out, arg0 as U64RegisterAllocation, arg1 as MemoryAllocation, cin as U1FlagAllocation);
-    }
-    // cin must be in Reg then
-    if (cinMem) {
-      return r__r_m_m(
-        out,
-        arg0 as U64RegisterAllocation,
-        arg1 as MemoryAllocation,
-        cin as U1MemoryAllocation,
-      );
-    }
-    return r__r_m_r(
-      out,
-      arg0 as U64RegisterAllocation,
-      arg1 as MemoryAllocation,
-      cin as U1RegisterAllocation,
-    );
-  }
-  //  M + R + RMR (note switched arg0 and arg0 to r_r_m_x function)
-  if (!reg0 && reg1) {
-    if (cinFlag) {
-      return r__r_m_f(out, arg1 as RegisterAllocation, arg0 as MemoryAllocation, cin as U1FlagAllocation);
-    }
-    if (cinMem) {
-      return r__r_m_m(out, arg1 as RegisterAllocation, arg0 as MemoryAllocation, cin as U1MemoryAllocation);
-    }
-    // cin must be in Reg then
-    return r__r_m_r(out, arg1 as RegisterAllocation, arg0 as MemoryAllocation, cin as U1RegisterAllocation);
-  }
-  //  M + M + RMR
-  if (!reg0 && !reg1) {
-    if (cinFlag) {
-      return r__m_m_f(out, arg1 as MemoryAllocation, arg0 as MemoryAllocation, cin as U1FlagAllocation);
-    }
-    if (cinMem) {
-      return r__m_m_m(out, arg1 as MemoryAllocation, arg0 as MemoryAllocation, cin as U1MemoryAllocation);
-    }
-    // cin must be in Reg then
-    return r__m_m_r(out, arg1 as MemoryAllocation, arg0 as MemoryAllocation, cin as U1RegisterAllocation);
-  }
-
-  throw new Error("arguments are not rrf / rmf / mmf / rrr / rmr / mmr / rrm / rmm / mmm. Abort");
+  return fr__rm_rm_rmf(null, out, arg0, arg1, cin);
 }
 
-// note that this is "the same" function as r__rm_rm_rmf" distinguish-wise.
-// instead of r_x_x_x, fr_x_x_x will be called, and the cout-arg is passed.
-// TODO: remove code-duplication
 export function fr__rm_rm_rmf(
-  cout: string,
+  cout: string | undefined | null,
   out: string,
   arg0: U64Allocation,
   arg1: U64Allocation | U1Allocation,
@@ -191,127 +112,99 @@ export function fr__rm_rm_rmf(
       "not supported. TSNH. either put u1 as arg1 or carry in. if they alreaady are, then implement u1+u1+u1",
     );
   }
+  const hasCout = isNotNoU(cout);
   const reg0 = isRegister(arg0.store);
   const reg1 = isRegister(arg1.store) || isByteRegister(arg1.store);
+
   const cinFlag = isFlag(cin.store);
   const cinMem = isMem(cin.store);
-  // dont check for register here, since U1RegisterAllocations are not necessarily in rax but rather in al
+  const cinXmm = isXmmRegister(cin.store);
+
+  // a bit of a hack... lets see how long it takes until this breaks my neck and I need to implement it properly
+  // the issue is that the flag has been spilled to a byteReg, which has then been spilled to a reg, then to xmm
+  // it still only contains a single bit of information.
+  // to read it again, we need to movq it to an reg, then use it as an u1 (i.e. load flag with add to -1)
+  if (cinXmm) {
+    cin = RegisterAllocator.xmm2reg(cin) as U1RegisterAllocation;
+  }
+
+  const cinReg = isRegister(cin.store) || isByteRegister(cin.store);
 
   //  R + R + RMR
   if (reg0 && reg1) {
+    const a0 = arg0 as U64RegisterAllocation;
+    const a1 = arg1 as RegisterAllocation;
     if (cinFlag) {
-      return fr__r_r_f(
-        cout,
-        out,
-        arg0 as U64RegisterAllocation,
-        arg1 as RegisterAllocation,
-        cin as U1FlagAllocation,
-      );
+      return hasCout
+        ? [`;why? ${cin.store} aint a flag, rihgt?`, ...fr__r_r_f(cout, out, a0, a1, cin as U1FlagAllocation)]
+        : r__r_r_f(out, a0, a1, cin as U1FlagAllocation);
     }
     if (cinMem) {
-      return fr__r_r_m(
-        cout,
-        out,
-        arg0 as U64RegisterAllocation,
-        arg1 as RegisterAllocation,
-        cin as U1MemoryAllocation,
-      );
+      return hasCout
+        ? fr__r_r_m(cout, out, a0, a1, cin as U1MemoryAllocation)
+        : r__r_r_m(out, a0, a1, cin as U1MemoryAllocation);
     }
-    // cin must be in Reg then
-    return fr__r_r_r(
-      cout,
-      out,
-      arg0 as U64RegisterAllocation,
-      arg1 as RegisterAllocation,
-      cin as U1RegisterAllocation,
-    );
+
+    if (cinReg) {
+      return hasCout
+        ? fr__r_r_r(cout, out, a0, a1, cin as U1RegisterAllocation)
+        : r__r_r_r(out, a0, a1, cin as U1RegisterAllocation);
+    }
+    throw new Error("cannot handle cin not in mem/flag/reg");
   }
+
+  //  for the case one arg is in mem, the other one in reg
   //  R + M + RMR
-  if (reg0 && !reg1) {
-    if (cinFlag) {
-      return fr__r_m_f(
-        cout,
-        out,
-        arg0 as U64RegisterAllocation,
-        arg1 as MemoryAllocation,
-        cin as U1FlagAllocation,
-      );
+  if (reg0 !== reg1) {
+    let a0: U64RegisterAllocation;
+    let a1: MemoryAllocation;
+    if (reg0 && !reg1) {
+      a0 = arg0 as U64RegisterAllocation;
+      a1 = arg1 as MemoryAllocation;
+    } /*(!reg0 && reg1)*/ else {
+      // note the flip
+      a0 = arg1 as U64RegisterAllocation;
+      a1 = arg0 as MemoryAllocation;
     }
-    // cin must be in Reg then
-    if (cinMem) {
-      return fr__r_m_m(
-        cout,
-        out,
-        arg0 as U64RegisterAllocation,
-        arg1 as MemoryAllocation,
-        cin as U1MemoryAllocation,
-      );
-    }
-    return fr__r_m_r(
-      cout,
-      out,
-      arg0 as U64RegisterAllocation,
-      arg1 as MemoryAllocation,
-      cin as U1RegisterAllocation,
-    );
-  }
-  //  M + R + RMR (note switched arg0 and arg0 to r_r_m_x function)
-  if (!reg0 && reg1) {
+
     if (cinFlag) {
-      return fr__r_m_f(
-        cout,
-        out,
-        arg1 as RegisterAllocation,
-        arg0 as MemoryAllocation, // cause of error above, we can assume that its a mem
-        cin as U1FlagAllocation,
-      );
+      return hasCout
+        ? fr__r_m_f(cout, out, a0, a1, cin as U1FlagAllocation)
+        : r__r_m_f(out, a0, a1, cin as U1FlagAllocation);
     }
     if (cinMem) {
-      return fr__r_m_m(
-        cout,
-        out,
-        arg1 as RegisterAllocation,
-        arg0 as MemoryAllocation, // cause of error above, we can assume that its a mem
-        cin as U1MemoryAllocation,
-      );
+      return hasCout
+        ? fr__r_m_m(cout, out, a0, a1, cin as U1MemoryAllocation)
+        : r__r_m_m(out, a0, a1, cin as U1MemoryAllocation);
     }
-    // cin must be in Reg then
-    return fr__r_m_r(
-      cout,
-      out,
-      arg1 as RegisterAllocation,
-      arg0 as MemoryAllocation, // cause of error above, we can assume that its a mem
-      cin as U1RegisterAllocation,
-    );
+    if (cinReg) {
+      return hasCout
+        ? fr__r_m_r(cout, out, a0, a1, cin as U1RegisterAllocation)
+        : r__r_m_r(out, a0, a1, cin as U1RegisterAllocation);
+    }
+    throw new Error("cannot handle cin not in mem/flag/reg");
   }
-  //  M + M + RMR
+
+  //  M + R + RMR (  //  M + M + RMR
   if (!reg0 && !reg1) {
+    const a0 = arg0 as MemoryAllocation;
+    const a1 = arg1 as MemoryAllocation;
     if (cinFlag) {
-      return fr__m_m_f(
-        cout,
-        out,
-        arg1 as MemoryAllocation, // cause of error above, we can assume that its a mem
-        arg0 as MemoryAllocation,
-        cin as U1FlagAllocation,
-      );
+      return hasCout
+        ? fr__m_m_f(cout, out, a0, a1, cin as U1FlagAllocation)
+        : r__m_m_f(out, a0, a1, cin as U1FlagAllocation);
     }
     if (cinMem) {
-      return fr__m_m_m(
-        cout,
-        out,
-        arg1 as MemoryAllocation, // cause of error above, we can assume that its a mem
-        arg0 as MemoryAllocation,
-        cin as U1MemoryAllocation,
-      );
+      return hasCout
+        ? fr__m_m_m(cout, out, a0, a1, cin as U1MemoryAllocation)
+        : r__m_m_m(out, a0, a1, cin as U1MemoryAllocation);
     }
-    // cin must be in Reg then
-    return fr__m_m_r(
-      cout,
-      out,
-      arg1 as MemoryAllocation, // cause of error above, we can assume that its a mem
-      arg0 as MemoryAllocation,
-      cin as U1RegisterAllocation,
-    );
+    if (cinReg) {
+      return hasCout
+        ? fr__m_m_r(cout, out, a0, a1, cin as U1RegisterAllocation)
+        : r__m_m_r(out, a0, a1, cin as U1RegisterAllocation);
+    }
+    throw new Error("cannot handle cin not in mem/flag/reg");
   }
   throw new Error("arguments are not rrf / rmf / mmf / rrr / rmr / mmr / rrm / rmm / mmm. Abort");
 }
@@ -353,7 +246,7 @@ export function r__rmf_rmf(out: string, arg0: ValueAllocation, arg1: ValueAlloca
    */
   if (flag0 && flag1) {
     // ff
-    return r__f_f(out, arg0 as U1FlagAllocation, arg1 as U1FlagAllocation);
+    return r__f_f(out);
   }
   if (mem0 && mem1) {
     //mm
