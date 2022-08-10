@@ -16,7 +16,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { C_DI_SPILL_LOCATION,DECISION_IDENTIFIER } from "@/enums";
+import { C_DI_SPILL_LOCATION, DECISION_IDENTIFIER } from "@/enums";
 import { BIAS, Paul } from "@/paul";
 import type { CryptOpt } from "@/types";
 
