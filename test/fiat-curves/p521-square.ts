@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { rm } from "fs";
 import { basename } from "path";
 import { afterAll, expect, it, vi } from "vitest";
 
@@ -26,13 +25,11 @@ const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
 
 vi.useFakeTimers();
-let resultpath = "";
 
 it("optimise", () => {
   return new Promise((resolve, reject) => {
     const filename = basename(import.meta.url);
     const args = getTestArgs(filename);
-    resultpath = getTestResultsPath();
     const opt = new Optimizer(args);
 
     try {
@@ -53,9 +50,6 @@ it("optimise", () => {
 });
 
 afterAll(() => {
-  rm(resultpath, { recursive: true, force: true }, () => {
-    /* intentionally empty */
-  });
   mockLog.mockRestore();
   mockErr.mockRestore();
   vi.useRealTimers();

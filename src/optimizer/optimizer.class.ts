@@ -53,7 +53,7 @@ export class Optimizer {
   private symbolname: string;
 
   public constructor(private args: OptimizerArgs) {
-    this.libcheckfunctionDirectory = `${tmpdir()}${path.sep}CryptOpt.cache`;
+    this.libcheckfunctionDirectory = `${tmpdir()}${path.sep}CryptOpt.cache${path.sep}${sha1Hash(Date.now())}`;
     mkdirSync(this.libcheckfunctionDirectory, { recursive: true });
     Paul.seed = args.seed;
     const { measuresuite, symbolname } = init(this.libcheckfunctionDirectory, args);
