@@ -808,7 +808,7 @@ export class RegisterAllocator {
       // because of AllocationFlags.IN_0_AS_OUT_REGISTER, we want to have a register.
     ) {
       const isByte = isU1(allocation);
-      const inst = isByte ? "movzx" : "mov";
+      const inst = isByte ? "movzx" : isXmmRegister(allocation.store) ? "movq" : "mov";
       // allocate destination register for out[0]
       const backupReg = this.getW(outVarname) as Register;
       // and copy the value
