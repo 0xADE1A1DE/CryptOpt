@@ -22,7 +22,7 @@ import {
   FlagState,
   Register,
 } from "@/enums";
-import { limbify, matchIMM, TEMP_VARNAME } from "@/helper";
+import { limbify, isXmmRegister, matchIMM, TEMP_VARNAME } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
@@ -131,7 +131,12 @@ function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
 
   const [resLoR, resHiR] = allocation.oReg;
   const [arg0R, arg1R] = allocation.in;
-  const argR = arg0R !== Register.rdx ? arg0R : arg1R;
+  let argR = arg0R !== Register.rdx ? arg0R : arg1R;
+
+  // make sure we fix xmm's
+  if (isXmmRegister(argR)) {
+    argR = RegisterAllocator.xmm2reg({ store: argR }).store;
+  }
 
   // if can use mulx
   return [
