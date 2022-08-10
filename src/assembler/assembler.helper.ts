@@ -45,7 +45,7 @@ export function sanityCheckAllocations(c: CryptOpt.DynArgument): void {
         throw new Error(
           `@calculating ${c.name.join("--")}, ${r64} is used twice. ${
             byReg[r64]
-          } and for ${varname}. Allocations: ${ra.allocationString("\n")}`,
+          } and for ${varname}. Allocations: ${ra.allocationString()}`,
         );
       }
       byReg[r64] = varname;
