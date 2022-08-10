@@ -133,43 +133,6 @@ export class Optimizer {
       const optimistaionStartDate = Date.now();
       let accumulatedTimeSpentByMeasuring = 0;
 
-      const writeCurrentAsm = (): string => {
-        console.log("writing current asm");
-        const elapsed = Date.now() - optimistaionStartDate;
-        const paddedSeed = padSeed(Paul.initialSeed);
-
-        const statistics = genStatistics({
-          paddedSeed,
-          ratioString,
-          evals: this.args.evals,
-          elapsed,
-          batchSize,
-          numBatches,
-          acc: accumulatedTimeSpentByMeasuring,
-          numRevert: this.numRevert,
-          numMut: this.numMut,
-        });
-        console.log(statistics);
-
-        const fileNameOptimised = [
-          `${lastGood.toFixed(0)}`,
-          `_ratio${ratioString.replace(".", "")}`,
-          `_seed${paddedSeed}_${this.symbolname}`,
-        ].join("");
-        const fullpath = path.join(this.args.resultDir, `${fileNameOptimised}.asm`);
-        // write best found solution with headers
-        // flip, because we want the last accepted, not the last mutated.
-        const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
-
-        writeString(
-          ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
-            .concat(this.asmStrings[flipped])
-            .concat(statistics)
-            .join("\n"),
-          fullpath,
-        );
-        return fullpath;
-      };
       let currentNameOfTheFunctionThatHasTheMutation = FUNCTIONS.F_A;
       let time = Date.now();
       let show_per_second = "many/s";
@@ -327,6 +290,7 @@ export class Optimizer {
             // print every 10th eval
             // a line every 5% (also to logfile) also write the asm when
             const writeout = numEvals % (this.args.evals / LOG_EVERY) === 0;
+
             const statusline = genStatusLine({
               writeout,
               ...this.args,
@@ -355,7 +319,41 @@ export class Optimizer {
               (Date.now() - optimistaionStartDate) / 1000 - globals.time.validate;
             // DONE WITH OPTIMISING WRITE EVERYTHING TO DISK AND EXIT.
             clearInterval(intervalHandle);
-            const fullpath = writeCurrentAsm();
+
+            console.log("writing current asm");
+            const elapsed = Date.now() - optimistaionStartDate;
+            const paddedSeed = padSeed(Paul.initialSeed);
+
+            const statistics = genStatistics({
+              paddedSeed,
+              ratioString,
+              evals: this.args.evals,
+              elapsed,
+              batchSize,
+              numBatches,
+              acc: accumulatedTimeSpentByMeasuring,
+              numRevert: this.numRevert,
+              numMut: this.numMut,
+            });
+            console.log(statistics);
+
+            const fileNameOptimised = [
+              `${lastGood.toFixed(0)}`,
+              `_ratio${ratioString.replace(".", "")}`,
+              `_seed${paddedSeed}_${this.symbolname}`,
+            ].join("");
+            const fullpath = path.join(this.args.resultDir, `${fileNameOptimised}.asm`);
+            // write best found solution with headers
+            // flip, because we want the last accepted, not the last mutated.
+            const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
+
+            writeString(
+              ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
+                .concat(this.asmStrings[flipped])
+                .concat(statistics)
+                .join("\n"),
+              fullpath,
+            );
 
             if (shouldProof(this.args)) {
               // and proof correct
