@@ -15,10 +15,12 @@
  */
 
 import { cpus } from "os";
+
 import { CHOICE } from "@/enums";
-import { bl, env, cy, gn, pu, rd, re, SI, yl } from "@/helper";
+import { bl, cy, env, gn, pu, rd, re, SI, yl } from "@/helper";
 import { Model } from "@/model";
 import type { AnalyseResult } from "@/types";
+
 const { CC, CFLAGS } = env;
 
 export function genStatusLine(a: {

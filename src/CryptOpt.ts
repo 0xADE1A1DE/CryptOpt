@@ -19,7 +19,6 @@ import { hostname } from "os";
 import { resolve } from "path";
 
 import {
-  writeString,
   cy,
   env,
   generateResultFilename,
@@ -29,6 +28,7 @@ import {
   rd,
   re,
   SI,
+  writeString,
 } from "@/helper";
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
