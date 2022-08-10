@@ -214,7 +214,7 @@ function add64(c: CryptOpt.StringOperation): asm[] {
       }
     }
 
-    // we need to get them both into GP-regs, as we are interested in the COUT-Flag
+    // we need to get all xmm's into GP-regs, as we are interested in the COUT-Flag and we cant observe the cout with vector instructions
     if (c.name[1]) {
       if (isXmmRegister(a_arg1.store)) {
         a_arg1 = RegisterAllocator.xmm2reg(a_arg1);
@@ -250,11 +250,13 @@ function add64(c: CryptOpt.StringOperation): asm[] {
         );
       }
 
-      return fr__rm_rm(c.name[1] /* COUT */, c.name[0], a_arg1, a_arg2);
+      return [";fr__rm_rm", ...fr__rm_rm(c.name[1] /* COUT */, c.name[0], a_arg1, a_arg2)];
     }
 
-    let a_cin = allocations[c.arguments[0]] as U1FlagAllocation;
+    let a_cin = allocations[c.arguments[0]] as U1Allocation;
+
     const both_u1_are_flags = isFlag(a_cin.store) && isFlag(a_arg2.store);
+
     if (!isFlag(a_cin.store) && isFlag(a_arg2.store)) {
       // if the cin has been spilled, but a_arg2 is a flag, then swap
       a_arg2 = allocations[c.arguments[0]] as U1RegisterAllocation | U1MemoryAllocation;
@@ -263,9 +265,9 @@ function add64(c: CryptOpt.StringOperation): asm[] {
     if (c.name[1] === "_") {
       // Three operands, no cout
       if (both_u1_are_flags) {
-        return r__rm_f_f(c.name[0], a_arg1);
+        return [";r__rm_f_f", ...r__rm_f_f(c.name[0], a_arg1)];
       }
-      return r__rm_rm_rmf(c.name[0], a_arg1, a_arg2, a_cin /* CarryIN */);
+      return [";r__rm_rm_f", ...r__rm_rm_rmf(c.name[0], a_arg1, a_arg2, a_cin /* CarryIN */)];
     } else {
       // Three operands, with cout
       if (typeof c.name[1] !== "string") {
@@ -274,13 +276,19 @@ function add64(c: CryptOpt.StringOperation): asm[] {
         );
       }
       if (both_u1_are_flags) {
-        return fr_rm_f_f(c.name[1] /* COUT */, c.name[0], a_arg1);
+        return ["; fr_rm_f_f", ...fr_rm_f_f(c.name[1] /* COUT */, c.name[0], a_arg1)];
       }
-      return fr__rm_rm_rmf(c.name[1] /* COUT */, c.name[0], a_arg1, a_arg2, a_cin /* CarryIN */);
+
+      return [
+        comment,
+        `; fr__rm_rm_rmf ${c.name[1]} /* COUT */, ${c.name[0]}, ${a_arg1.store}, ${a_arg2.store}, ${a_cin.store}(${a_cin.datatype}) /* CarryIN */`,
+        ...fr__rm_rm_rmf(c.name[1] /* COUT */, c.name[0], a_arg1, a_arg2, a_cin /* CarryIN */),
+      ];
     }
   } else {
     const a_arg0 = allocations[c.arguments[0]] as ValueAllocation;
     // two operands, no cout
-    return r__rmf_rmf(c.name[0], a_arg0, a_arg1);
+    //
+    return [`; r__rm_rm_rmf`, ...r__rmf_rmf(c.name[0], a_arg0, a_arg1)];
   }
 }

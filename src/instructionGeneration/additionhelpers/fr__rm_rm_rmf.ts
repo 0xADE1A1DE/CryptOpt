@@ -208,7 +208,7 @@ function fr__r_rm_f(
     r1store = reg;
   }
 
-  return [`${ADX[cin.store]} ${r1store}, ${r0store}`];
+  return [`; in fr__r_rm_f`, `${ADX[cin.store]} ${r1store}, ${r0store}`];
 }
 
 // F, r64 = r64 + rm64 + rm/8
