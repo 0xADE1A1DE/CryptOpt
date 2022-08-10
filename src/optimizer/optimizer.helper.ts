@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+import { cpus } from "os";
 import { CHOICE } from "@/enums";
-import { bl, cy, gn, pu, rd, re, SI, yl } from "@/helper";
+import { bl, env, cy, gn, pu, rd, re, SI, yl } from "@/helper";
 import { Model } from "@/model";
 import type { AnalyseResult } from "@/types";
+const { CC, CFLAGS } = env;
 
 export function genStatusLine(a: {
   writeout: boolean;
@@ -79,4 +81,31 @@ export function genStatusLine(a: {
     `${a.kept ? gn : rd}${SI(a.numEvals)}(${((100 * a.numEvals) / a.evals).toFixed(0).padStart(2)}%)` +
       `${pu}${a.show_per_second}${re}`,
   ].join("|");
+}
+
+export function genStatistics(a: {
+  paddedSeed: string;
+  ratioString: string;
+  evals: number;
+  elapsed: number;
+  batchSize: number;
+  numBatches: number;
+  acc: number;
+  numRevert: { [k: string]: number };
+  numMut: { [k: string]: number };
+}): string[] {
+  return [
+    `; cpu ${cpus()[0].model}`,
+    `; ratio ${a.ratioString}`,
+    `; seed ${a.paddedSeed} `,
+    `; CC / CFLAGS ${CC} / ${CFLAGS} `,
+    `; time needed: ${a.elapsed} ms on ${a.evals} evaluations.`,
+    `; Time spent for assembling and measuring (initial batch_size=${a.batchSize}, initial num_batches=${a.numBatches}): ${a.acc} ms`,
+    `; number of used evaluations: ${a.evals}`,
+    `; Ratio (time for assembling + measure)/(total runtime for ${a.evals} evals): ${a.acc / a.elapsed}`,
+    ...["permutation", "decision"].map((key) => {
+      const r = ((a.numRevert[key] / a.numMut[key]) * 100).toFixed(3);
+      return `; number reverted ${key} / tried ${key}: ${a.numRevert[key]} / ${a.numMut[key]} =${r}%`;
+    }),
+  ];
 }

@@ -17,7 +17,7 @@
 import { execSync } from "child_process";
 import { existsSync, mkdirSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
-import { cpus, tmpdir } from "os";
+import { tmpdir } from "os";
 import path from "path";
 
 import { assemble } from "@/assembler";
@@ -26,7 +26,6 @@ import { CHOICE, FUNCTIONS } from "@/enums";
 import { errorOut, ERRORS } from "@/errors";
 import {
   analyseMeasureResult,
-  env,
   LOG_EVERY,
   padSeed,
   PRINT_EVERY,
@@ -40,10 +39,9 @@ import { Model } from "@/model";
 import { Paul, sha1Hash } from "@/paul";
 import type { AnalyseResult, OptimizerArgs } from "@/types";
 
-import { genStatusLine } from "./optimizer.helper";
+import { genStatistics, genStatusLine } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
 
-const { CC, CFLAGS } = env;
 let choice: CHOICE;
 
 export class Optimizer {
@@ -135,38 +133,26 @@ export class Optimizer {
       const optimistaionStartDate = Date.now();
       let accumulatedTimeSpentByMeasuring = 0;
 
-      const writeCurrentAsm = (number_evaluation?: number): void => {
+      const writeCurrentAsm = (): string => {
         console.log("writing current asm");
         const elapsed = Date.now() - optimistaionStartDate;
-        const evaluation_number = number_evaluation ?? this.args.evals;
         const paddedSeed = padSeed(Paul.initialSeed);
-        const statistics = [
-          `; cpu ${cpus()[0].model}`,
-          `; ratio ${ratioString}`,
-          `; seed ${paddedSeed} `,
-          `; CC / CFLAGS ${CC} / ${CFLAGS} `,
-          `; time needed: ${elapsed} ms on ${evaluation_number} evaluations.`,
-          `; Time spent for assembling and measuring (initial batch_size=${batchSize}, initial num_batches=${numBatches}): ${accumulatedTimeSpentByMeasuring} ms`,
-          `; number of used evaluations: ${evaluation_number}`,
-          `; Ratio (time for assembling + measure)/(total runtime for ${evaluation_number} evals): ${
-            accumulatedTimeSpentByMeasuring / elapsed
-          }`,
-          ...["permutation", "decision"].map(
-            (key) =>
-              `; number reverted ${key} / tried ${key}: ${this.numRevert[key]} / ${this.numMut[key]} =${(
-                (this.numRevert[key] / this.numMut[key]) *
-                100
-              ).toFixed(3)}%`,
-          ),
-        ];
 
+        const statistics = genStatistics({
+          paddedSeed,
+          ratioString,
+          evals: this.args.evals,
+          elapsed,
+          batchSize,
+          numBatches,
+          acc: accumulatedTimeSpentByMeasuring,
+          numRevert: this.numRevert,
+          numMut: this.numMut,
+        });
         console.log(statistics);
-        const { curve, method } = this.args;
-
-        const evalString = number_evaluation ? `_eval${number_evaluation}of${this.args.evals}` : "";
 
         const fileNameOptimised = [
-          `${lastGood.toFixed(0)}${evalString}`,
+          `${lastGood.toFixed(0)}`,
           `_ratio${ratioString.replace(".", "")}`,
           `_seed${paddedSeed}_${this.symbolname}`,
         ].join("");
@@ -182,21 +168,7 @@ export class Optimizer {
             .join("\n"),
           fullpath,
         );
-
-        if (shouldProof(this.args)) {
-          // and proof correct
-          const proofCommandLine = FiatBridge.buildProofCommand(curve, method, fullpath);
-          console.log(`proofing that asm correct with '${proofCommandLine}'`);
-          try {
-            const now = Date.now();
-            execSync(proofCommandLine);
-            globals.time.validate += (Date.now() - now) / 1000;
-          } catch (e) {
-            console.debug(`${proofCommandLine}`);
-            errorOut(ERRORS.proofUnsuccessful);
-          }
-        }
-        console.log("done with that current price of assembly code.");
+        return fullpath;
       };
       let currentNameOfTheFunctionThatHasTheMutation = FUNCTIONS.F_A;
       let time = Date.now();
@@ -383,7 +355,21 @@ export class Optimizer {
               (Date.now() - optimistaionStartDate) / 1000 - globals.time.validate;
             // DONE WITH OPTIMISING WRITE EVERYTHING TO DISK AND EXIT.
             clearInterval(intervalHandle);
-            writeCurrentAsm();
+            const fullpath = writeCurrentAsm();
+
+            if (shouldProof(this.args)) {
+              // and proof correct
+              const proofCmd = FiatBridge.buildProofCommand(this.args.curve, this.args.method, fullpath);
+              console.log(`proofing that asm correct with '${proofCmd}'`);
+              try {
+                const now = Date.now();
+                execSync(proofCmd);
+                globals.time.validate += (Date.now() - now) / 1000;
+              } catch (e) {
+                errorOut(ERRORS.proofUnsuccessful);
+              }
+            }
+            console.log("done with that current price of assembly code.");
             this.cleanLibcheckfunctions();
             console.log("Wonderful. Done with my work. Time for lunch.");
             resolve(0);
