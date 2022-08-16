@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { existsSync } from "fs";
-import { ensureDirSync } from "fs-extra";
+import { existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
 import type { OptimizerArgs } from "@/types";
@@ -43,7 +42,7 @@ export function generateResultFilename(
   if (!existsSync(path)) {
     console.warn(`${path} does not exist. Trying to create it.`);
     try {
-      ensureDirSync(path);
+      mkdirSync(path, { recursive: true });
     } catch (e) {
       console.error(
         `${path} does not exist. And could not be created due to Error:${e}. Create that folder manually and re-run. Exiting.`,

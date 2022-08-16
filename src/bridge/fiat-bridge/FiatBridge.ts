@@ -15,8 +15,7 @@
  */
 
 import { execSync } from "child_process";
-import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, readFileSync } from "fs";
-import { ensureDirSync } from "fs-extra";
+import { mkdirSync, accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 
 import { datadir, env, preprocessFunction } from "@/helper";
@@ -69,7 +68,7 @@ export class FiatBridge implements Bridge {
    */
   public getCryptOptFunction(method: METHOD_T, curve: CURVE_T): CryptOpt.Function {
     if (!existsSync(cacheDir)) {
-      ensureDirSync(cacheDir);
+      mkdirSync(cacheDir, { recursive: true });
     }
     // we want to make sure, that the filename is dependent on the hash of the binary creating it, and on the arguments passed to it.
 

@@ -35,7 +35,6 @@
     "printWidth": 110
   },
   "dependencies": {
-    "fs-extra": "^10.1.0",
     "lodash-es": "^4.17.21",
     "measuresuite": "file:./modules/MeasureSuite",
     "simple-statistics": "^7.7.6",
