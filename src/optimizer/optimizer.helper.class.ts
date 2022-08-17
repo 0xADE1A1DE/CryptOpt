@@ -16,6 +16,7 @@
 
 import { Measuresuite } from "measuresuite";
 import { resolve } from "path";
+import { mkdirSync } from "fs";
 
 import { BRIDGES } from "@/bridge";
 import {
@@ -143,6 +144,9 @@ function createMS(
 }
 
 export function init(tmpDir: string, args: neededArgs): { symbolname: string; measuresuite: Measuresuite } {
+  // Create temp direcotry for the so-files
+  mkdirSync(tmpDir, { recursive: true });
+
   const mapping: {
     [bridge: string]: {
       availableMethods: string[];

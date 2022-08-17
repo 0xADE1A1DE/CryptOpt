@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import fs from "fs";
+import { writeFileSync, mkdirSync } from "fs";
+import { dirname } from "path";
 
 import { ByteRegister, Flags, FUNCTIONS, Register, XmmRegister } from "@/enums";
 import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation } from "@/types";
@@ -234,7 +235,8 @@ export function setToString(s: Set<string>, max = Infinity): string {
 
 export function writeString(filename: string, asmString: string): void {
   console.log(`writing ${asmString.length} chars of asm to '${filename}'`);
-  fs.writeFileSync(filename, asmString);
+  mkdirSync(dirname(filename), { recursive: true });
+  writeFileSync(filename, asmString);
 }
 
 export function limbify(

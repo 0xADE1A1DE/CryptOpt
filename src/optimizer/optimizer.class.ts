@@ -15,7 +15,7 @@
  */
 
 import { execSync } from "child_process";
-import { existsSync, mkdirSync, rmSync } from "fs";
+import { existsSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { tmpdir } from "os";
 import { join, resolve as pathResolve } from "path";
@@ -54,8 +54,6 @@ export class Optimizer {
 
     const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
     this.libcheckfunctionDirectory = join(tmpdir(), "CryptOpt.cache", randomString);
-    mkdirSync(this.libcheckfunctionDirectory, { recursive: true });
-    mkdirSync(this.args.resultDir, { recursive: true });
 
     const { measuresuite, symbolname } = init(this.libcheckfunctionDirectory, args);
 
@@ -349,6 +347,7 @@ export class Optimizer {
               `_ratio${ratioString.replace(".", "")}`,
               `_seed${paddedSeed}_${this.symbolname}`,
             ].join("");
+
             const fullpath = pathResolve(
               this.args.resultDir,
               this.args.curve,
