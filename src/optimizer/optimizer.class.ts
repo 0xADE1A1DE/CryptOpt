@@ -18,7 +18,7 @@ import { execSync } from "child_process";
 import { existsSync, mkdirSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { tmpdir } from "os";
-import path from "path";
+import { join, resolve as pathResolve } from "path";
 
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
@@ -50,11 +50,15 @@ export class Optimizer {
   private symbolname: string;
 
   public constructor(private args: OptimizerArgs) {
-    const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
-    this.libcheckfunctionDirectory = `${tmpdir()}${path.sep}CryptOpt.cache${path.sep}${randomString}`;
-    mkdirSync(this.libcheckfunctionDirectory, { recursive: true });
     Paul.seed = args.seed;
+
+    const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
+    this.libcheckfunctionDirectory = join(tmpdir(), "CryptOpt.cache", randomString);
+    mkdirSync(this.libcheckfunctionDirectory, { recursive: true });
+    mkdirSync(this.args.resultDir, { recursive: true });
+
     const { measuresuite, symbolname } = init(this.libcheckfunctionDirectory, args);
+
     this.measuresuite = measuresuite;
     this.symbolname = symbolname;
 
@@ -345,7 +349,7 @@ export class Optimizer {
               `_ratio${ratioString.replace(".", "")}`,
               `_seed${paddedSeed}_${this.symbolname}`,
             ].join("");
-            const fullpath = path.resolve(
+            const fullpath = pathResolve(
               this.args.resultDir,
               this.args.curve,
               this.args.method,
