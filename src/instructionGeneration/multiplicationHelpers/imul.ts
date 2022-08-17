@@ -24,7 +24,8 @@ export function mul_imm_imul(c: CryptOpt.StringOperation): asm[] {
   const allocation = ra.allocate({
     oReg: c.name,
     in: [c.arguments[0]],
-    allocationFlags: AllocationFlags.SAVE_FLAG_CF | AllocationFlags.SAVE_FLAG_OF,
+    allocationFlags:
+      AllocationFlags.DISALLOW_XMM | AllocationFlags.SAVE_FLAG_CF | AllocationFlags.SAVE_FLAG_OF,
   });
 
   // TODO: Bound checks?

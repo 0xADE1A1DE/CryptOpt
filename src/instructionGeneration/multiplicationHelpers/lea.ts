@@ -49,7 +49,7 @@ export function mul_lea(c: CryptOpt.StringOperation, hex: CryptOpt.HexConstant):
   const allocation = ra.allocate({
     oReg: c.name,
     in: [factor],
-    allocationFlags: AllocationFlags.DISALLOW_MEM,
+    allocationFlags: AllocationFlags.DISALLOW_XMM | AllocationFlags.DISALLOW_MEM,
   });
 
   const resR = allocation.oReg[0];
@@ -97,7 +97,7 @@ export function mul_tmp_lea(c: CryptOpt.StringOperation, hex: CryptOpt.HexConsta
   const allocation = ra.allocate({
     oReg: [TEMP_VARNAME, c.name[0]], //<-----difference here:
     in: [factor],
-    allocationFlags: AllocationFlags.DISALLOW_MEM,
+    allocationFlags: AllocationFlags.DISALLOW_XMM | AllocationFlags.DISALLOW_MEM,
   });
 
   const [tmp, resR] = allocation.oReg;

@@ -48,7 +48,7 @@ function mul_x_shlx(c: CryptOpt.StringOperation, shiftCnt: CryptOpt.HexConstant)
   const allocation = ra.allocate({
     oReg: c.name,
     in: [factor, shiftCnt],
-    allocationFlags: AllocationFlags.DISALLOW_IMM,
+    allocationFlags: AllocationFlags.DISALLOW_XMM | AllocationFlags.DISALLOW_IMM,
   });
 
   const resR = allocation.oReg[0];

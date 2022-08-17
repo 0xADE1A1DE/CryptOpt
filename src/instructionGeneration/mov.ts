@@ -80,7 +80,8 @@ export function conditionalMovZNZ(c: CryptOpt.StringOperation): asm[] {
     const allocation = ra.allocate({
       oReg: c.name,
       in: [zeroVarname, nzVarname],
-      allocationFlags: AllocationFlags.IN_0_AS_OUT_REGISTER | AllocationFlags.DISALLOW_IMM,
+      allocationFlags:
+        AllocationFlags.DISALLOW_XMM | AllocationFlags.IN_0_AS_OUT_REGISTER | AllocationFlags.DISALLOW_IMM,
     });
     return [
       `; the job is: ${c.name[0]} = ${swVarname} !== 0 ? ${zeroVarname}: ${nzVarname}`,
@@ -97,6 +98,7 @@ export function conditionalMovZNZ(c: CryptOpt.StringOperation): asm[] {
       AllocationFlags.SAVE_FLAG_CF |
       AllocationFlags.DISALLOW_MEM | // otherwise we'd need to specify the operand size of memory (for test?! dev not sure any more, should be ob to specify that, right?)
       AllocationFlags.DISALLOW_IMM | // cmov doesn't like imm's
+      AllocationFlags.DISALLOW_XMM |
       AllocationFlags.IN_0_AS_OUT_REGISTER,
   });
   return [

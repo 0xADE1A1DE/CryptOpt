@@ -39,7 +39,10 @@ export function shiftLeft(c: CryptOpt.StringOperation): asm[] {
     oReg: c.name, // length 0
     in: [invar],
     allocationFlags:
-      AllocationFlags.SAVE_FLAG_OF | AllocationFlags.SAVE_FLAG_CF | AllocationFlags.IN_0_AS_OUT_REGISTER,
+      AllocationFlags.DISALLOW_XMM |
+      AllocationFlags.SAVE_FLAG_OF |
+      AllocationFlags.SAVE_FLAG_CF |
+      AllocationFlags.IN_0_AS_OUT_REGISTER,
   });
 
   ra.declareFlagState(Flags.CF, FlagState.KILLED);
@@ -87,7 +90,7 @@ export function shiftRight(c: CryptOpt.StringOperation): asm[] {
       const { oReg } = ra.allocate({
         oReg: outs,
         in: [ins[1]],
-        allocationFlags: AllocationFlags.IN_0_AS_OUT_REGISTER,
+        allocationFlags: AllocationFlags.DISALLOW_XMM | AllocationFlags.IN_0_AS_OUT_REGISTER,
       });
       ra.declare128(c.name[0]);
       console.warn(
@@ -110,7 +113,10 @@ export function shiftRight(c: CryptOpt.StringOperation): asm[] {
         oReg: [outs[0]],
         in: [ins[0]],
         allocationFlags:
-          AllocationFlags.SAVE_FLAG_OF | AllocationFlags.SAVE_FLAG_CF | AllocationFlags.IN_0_AS_OUT_REGISTER,
+          AllocationFlags.DISALLOW_XMM |
+          AllocationFlags.SAVE_FLAG_OF |
+          AllocationFlags.SAVE_FLAG_CF |
+          AllocationFlags.IN_0_AS_OUT_REGISTER,
       });
       ra.declare128(c.name[0]);
       res = [
@@ -133,7 +139,10 @@ export function shiftRight(c: CryptOpt.StringOperation): asm[] {
       oReg: c.name, // length 0
       in: [inVarname],
       allocationFlags:
-        AllocationFlags.SAVE_FLAG_OF | AllocationFlags.SAVE_FLAG_CF | AllocationFlags.IN_0_AS_OUT_REGISTER,
+        AllocationFlags.DISALLOW_XMM |
+        AllocationFlags.SAVE_FLAG_OF |
+        AllocationFlags.SAVE_FLAG_CF |
+        AllocationFlags.IN_0_AS_OUT_REGISTER,
     });
 
     res = [
@@ -154,7 +163,7 @@ export function shiftRightDouble(c: CryptOpt.StringOperation): asm[] {
     ra.allocate({
       oReg: c.name,
       in: [fillFromVarname],
-      allocationFlags: AllocationFlags.IN_0_AS_OUT_REGISTER,
+      allocationFlags: AllocationFlags.DISALLOW_XMM | AllocationFlags.IN_0_AS_OUT_REGISTER,
     });
     return ra.pres.concat(`; (actually a shrd, but with width 64, so just a mov(or rename if at all))`);
   }
@@ -206,6 +215,7 @@ function _shrd(
       AllocationFlags.SAVE_FLAG_OF |
       AllocationFlags.SAVE_FLAG_CF |
       AllocationFlags.IN_0_AS_OUT_REGISTER |
+      AllocationFlags.DISALLOW_XMM |
       AllocationFlags.DISALLOW_MEM,
   });
 

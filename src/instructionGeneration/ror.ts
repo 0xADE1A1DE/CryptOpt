@@ -16,6 +16,7 @@
 
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
+import { AllocationFlags } from "@/enums";
 
 export function ror(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();
@@ -24,6 +25,7 @@ export function ror(c: CryptOpt.StringOperation): asm[] {
   const allocation = ra.allocate({
     oReg: c.name,
     in: [inVarname],
+    allocationFlags: AllocationFlags.DISALLOW_XMM,
   });
 
   const ins =

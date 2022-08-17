@@ -46,7 +46,7 @@ export function limb(c: CryptOpt.StringOperation): asm[] {
     ra.allocate({
       oReg: c.name,
       in: [`${readVar}_${limbNo}`],
-      allocationFlags: AllocationFlags.IN_0_AS_OUT_REGISTER,
+      allocationFlags: AllocationFlags.DISALLOW_XMM | AllocationFlags.IN_0_AS_OUT_REGISTER,
     });
   }
   return [...ra.pres];

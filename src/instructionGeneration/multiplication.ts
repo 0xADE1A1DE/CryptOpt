@@ -93,6 +93,7 @@ function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
       allocationFlags:
         AllocationFlags.IN_0_AS_OUT_REGISTER |
         AllocationFlags.DISALLOW_IMM |
+        AllocationFlags.DISALLOW_XMM |
         AllocationFlags.SAVE_FLAG_OF |
         AllocationFlags.SAVE_FLAG_CF,
     });
@@ -111,7 +112,8 @@ function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
     const allocation = ra.allocate({
       oReg: c.name, // c.name has [lo,hi]
       in: [c.arguments[0]],
-      allocationFlags: AllocationFlags.ONE_IN_MUST_BE_IN_RDX | AllocationFlags.DISALLOW_IMM,
+      allocationFlags:
+        AllocationFlags.DISALLOW_XMM | AllocationFlags.ONE_IN_MUST_BE_IN_RDX | AllocationFlags.DISALLOW_IMM,
     });
     const [resLoR, resHiR] = allocation.oReg;
 
@@ -126,7 +128,8 @@ function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
   const allocation = ra.allocate({
     oReg: c.name, // c.name has [lo,hi]
     in: c.arguments,
-    allocationFlags: AllocationFlags.ONE_IN_MUST_BE_IN_RDX | AllocationFlags.DISALLOW_IMM,
+    allocationFlags:
+      AllocationFlags.DISALLOW_XMM | AllocationFlags.ONE_IN_MUST_BE_IN_RDX | AllocationFlags.DISALLOW_IMM,
   });
 
   const [resLoR, resHiR] = allocation.oReg;
@@ -194,7 +197,7 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm
     const allocation = ra.allocate({
       oReg: [u64loVarname, u64hiVarname],
       in: a_limbs,
-      allocationFlags: AllocationFlags.ONE_IN_MUST_BE_IN_RDX,
+      allocationFlags: AllocationFlags.DISALLOW_XMM | AllocationFlags.ONE_IN_MUST_BE_IN_RDX,
     });
     ra.declare128(c.name[0]);
     const [resLoR, resHiR] = allocation.oReg;
@@ -216,6 +219,7 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm
       allocationFlags:
         AllocationFlags.DONT_USE_IN_REGS_AS_OUT |
         AllocationFlags.ONE_IN_MUST_BE_IN_RDX |
+        AllocationFlags.DISALLOW_XMM |
         AllocationFlags.DISALLOW_IMM,
     });
     ra.declare128(c.name[0]);
@@ -244,6 +248,7 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm
       AllocationFlags.DONT_USE_IN_REGS_AS_OUT |
       AllocationFlags.DISALLOW_MEM |
       AllocationFlags.DISALLOW_IMM |
+      AllocationFlags.DISALLOW_XMM |
       AllocationFlags.ONE_IN_MUST_BE_IN_RDX,
   });
   ra.declare128(c.name[0]);
