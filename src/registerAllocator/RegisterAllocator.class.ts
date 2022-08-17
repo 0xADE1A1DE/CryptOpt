@@ -527,6 +527,21 @@ export class RegisterAllocator {
       // and now we can splice that into the inAllocationsTemp.
       inAllocationsTemp.splice(i, 1, r[0]);
     }
+
+    // If we have any xmm's, and we shouldn't have,
+    if (caf(AllocationFlags.DISALLOW_XMM) && inAllocationsTemp.some((a) => isXmmRegister(a))) {
+      // we go though the current allocations
+      inAllocationsTemp.forEach((store, i, arr) => {
+        // and for each xmm reg
+        if (isXmmRegister(store)) {
+          // we move it to a reg
+          const newReg = this.moveXmmToReg({ store });
+          // and splice that info into the register
+          arr.splice(i, 1, newReg.store);
+        }
+      });
+    }
+
     // now we want to make sure, that, if we need, we read all the same sizes.
     const inAllocations = caf(AllocationFlags.SAME_SIZE_READ)
       ? this._unifySizes(inAllocationsTemp)

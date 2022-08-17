@@ -26,8 +26,9 @@ import {
   Flags,
   FlagState,
   Register,
+  XmmRegister,
 } from "@/enums";
-import { isByteRegister, isMem, isRegister, limbify, limbifyImm } from "@/helper";
+import { isByteRegister, isMem, isRegister, isXmmRegister, limbify, limbifyImm } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
@@ -514,6 +515,46 @@ describe("RegisterAllocator:", () => {
 
       const pres = ra.pres;
       expect(pres.some((p) => p.match(/setc al.*/))).toBe(true);
+    });
+    it("should not return xmm's", () => {
+      (ra as MOCK_RA)._allocations = {
+        out1: { datatype: "u64[n]", store: "rdi" },
+        arg1: { datatype: "u64[n]", store: "rsi" },
+        x65: { datatype: "u64", store: Register.rax },
+        x66: { datatype: "u64", store: XmmRegister.xmm1 },
+      };
+      const c: CryptOpt.StringOperation = {
+        name: ["x68"],
+        datatype: "u64",
+        operation: "mulx",
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [1, ["x65", "x66"]],
+        },
+        decisionsHot: [],
+        arguments: ["x65", "x66"],
+      };
+
+      ra.initNewInstruction(c);
+
+      const allocation = ra.allocate({
+        oReg: limbify(c.name),
+        in: c.arguments,
+        allocationFlags:
+          AllocationFlags.SAME_SIZE_READ |
+          AllocationFlags.IN_0_AS_OUT_REGISTER |
+          AllocationFlags.SAVE_FLAG_CF |
+          AllocationFlags.DISALLOW_XMM |
+          AllocationFlags.SAVE_FLAG_OF,
+      });
+
+      expect(allocation.in).toHaveLength(2);
+      allocation.in.forEach((or) => {
+        expect(isXmmRegister(or)).toBe(false);
+      });
     });
   });
   describe("clobbby clobs", () => {
