@@ -155,7 +155,7 @@ export class Paul {
 
   /**
    * will update its state end return a number between
-   * @param end-1 and @param start=0.
+   * @param end -1 and @param start=0.
    * [start,end), start<=ret<end
    */
   public static chooseBetween(end: number, start = 0, bias = BIAS.UNIFORM): number {
