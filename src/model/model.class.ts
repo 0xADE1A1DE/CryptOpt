@@ -176,6 +176,16 @@ export class Model {
     return this._currentReadOrder;
   }
 
+  // checks the lookup map and and returns the string. Throws is not found
+  public static operationByName(name: string): Readonly<CryptOpt.StringOperation> {
+    // find the Operation according to the name
+    const index = Model._nodeLookupMap.get(name);
+    if (typeof index == "undefined" || index == -1) {
+      throw new Error(`cannot find ${name} in the map. TSNH`);
+    }
+    return Model._nodes[index];
+  }
+
   /*
    * @param candidates is a list of variable names like xNN, argNN, ...
    * returns the one that we, in the current ordering, read last.

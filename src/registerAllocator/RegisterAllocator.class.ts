@@ -339,8 +339,18 @@ export class RegisterAllocator {
       checkToSpill &&
       (matchXD(spareVariableName) || isCallerSave(spareVariableName) || matchArgPrefix(spareVariableName))
     ) {
-      const freeXmm = this.getFreeXmmRegister(); // if we could, let Paul decide where to spill it to.
-      const choice = freeXmm ? Paul.chooseSpillLocation() : C_DI_SPILL_LOCATION.C_DI_MEM;
+      const freeXmm = this.getFreeXmmRegister();
+      // we cant always spill to xmms
+
+      const choice =
+        // first we need a free xmm
+        freeXmm &&
+        // then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
+        matchXD(spareVariableName)
+          ? // then we may ask Paul.
+            Paul.chooseSpillLocation(Model.operationByName(spareVariableName))
+          : // fallback to
+            C_DI_SPILL_LOCATION.C_DI_MEM;
 
       if (choice == C_DI_SPILL_LOCATION.C_DI_MEM) {
         // if its worth to save, save it to mem.

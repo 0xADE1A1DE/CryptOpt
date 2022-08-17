@@ -146,4 +146,13 @@ describe("Model.class", () => {
       expect(Object.values(cur).every((s) => s === false)).toBe(true);
     });
   });
+  describe("operationByName", () => {
+    it("shold throw if the operation, cant be found", () => {
+      expect(() => Model.operationByName("dont exist")).toThrow("cannot find dont exist in the map. TSNH");
+    });
+    it("shold return the operation, which geneates x1 ", () => {
+      const instr = Model.operationByName("x1");
+      expect(instr).toEqual(body.find(({ name }) => name[0] == "x1"));
+    });
+  });
 });

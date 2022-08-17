@@ -34,19 +34,27 @@ export class Paul {
   /**
    * will choose one element of T, without mutating @param arr
    */
-  private static choose<T>(arr: T[], decisionKey: DECISION_IDENTIFIER): T {
-    const d = Paul._decisions;
+  private static choose<T>(
+    arr: T[],
+    decisionKey: DECISION_IDENTIFIER,
+    instruction?: CryptOpt.DynArgument,
+  ): T {
+    if (!instruction) {
+      instruction = Paul.getInstance()._currentInstruction ?? undefined;
+      if (!instruction) throw new Error("there is no instruction in Paul to read/write decicions... TSHN");
+    }
+
     // if we have a decision key and there is something to read from  read and return
-    const decision = d[decisionKey];
+    const decision = instruction.decisions[decisionKey];
     if (!decision) {
       throw new Error(
         `TSNH; shouldnt happen because all appropriate decision should have been initalised e.g. for add, there must be a chosen choise for which flag to use. Check addDecisionProperty-function. ${decisionKey}, ${
-          d[decisionKey]
+          instruction.decisions[decisionKey]
         }, ${JSON.stringify(Paul.getInstance()._currentInstruction)}`,
       );
     }
 
-    Paul.getInstance()._currentInstruction?.decisionsHot.push(decisionKey);
+    instruction.decisionsHot.push(decisionKey);
 
     const idx = decision[0];
     const possibilitiesOfThatSavedDecision = decision[1] as unknown as T[];
@@ -79,14 +87,6 @@ export class Paul {
     }
   }
 
-  private static get _decisions() {
-    const p = Paul.getInstance();
-    if (!p._currentInstruction) {
-      throw new Error("there is no instruction in Paul to read/write decicions... TSHN");
-    }
-    return p._currentInstruction.decisions;
-  }
-
   public static chooseHandleFlagsKK(): C_DI_HANDLE_FLAGS_KK {
     return Paul.choose(
       [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
@@ -94,10 +94,11 @@ export class Paul {
     );
   }
 
-  public static chooseSpillLocation(): C_DI_SPILL_LOCATION {
+  public static chooseSpillLocation(c: Readonly<CryptOpt.StringOperation>): C_DI_SPILL_LOCATION {
     return Paul.choose(
       [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
       DECISION_IDENTIFIER.DI_SPILL_LOCATION,
+      c,
     );
   }
 
