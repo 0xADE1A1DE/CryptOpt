@@ -47,6 +47,7 @@ FL | A different flag `CF`/ `OF` is used as an accumulator
 B& | For a binary-and a different instruction-template is used
 MU | For a multiplication-with-immediate a different instruction-template is used
 IM | A different immediate value is loaded
+SL | Spill location changed spill-to-memory <-> spill-to-xmm
 
 
 ## Understand Output Files
