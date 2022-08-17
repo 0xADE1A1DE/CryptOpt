@@ -118,7 +118,7 @@ export class FiatBridge implements Bridge {
 
     // lets check cached.
     if (!existsSync(cacheDir)) {
-      ensureDirSync(cacheDir);
+      mkdirSync(cacheDir, { recursive: true });
     }
 
     const cCacheFilename = resolve(cacheDir, `${hash}.c`);
