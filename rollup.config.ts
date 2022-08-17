@@ -5,7 +5,6 @@ import copy from "rollup-plugin-copy";
 const external = [
   "child_process",
   "crypto",
-  "fs-extra",
   "fs",
   "lodash-es",
   "measuresuite",
