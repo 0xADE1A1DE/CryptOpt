@@ -213,18 +213,18 @@ export class Optimizer {
             const isInvalid = e instanceof Error && e.message.includes("could not be assembled");
             if (isInvalid || isIncorrect) {
               writeString(
+                join(this.args.resultDir, "tested_incorrect_A.asm"),
                 this.asmStrings[FUNCTIONS.F_A],
-                path.join(this.args.resultDir, "tested_incorrect_A.asm"),
               );
               writeString(
+                join(this.args.resultDir, "tested_incorrect_B.asm"),
                 this.asmStrings[FUNCTIONS.F_B],
-                path.join(this.args.resultDir, "tested_incorrect_B.asm"),
               );
               writeString(
+                join(this.args.resultDir, "tested_incorrect.json"),
                 JSON.stringify({
                   nodes: Model.nodesInTopologicalOrder,
                 }),
-                path.join(this.args.resultDir, "tested_incorrect.json"),
               );
             }
 
@@ -356,11 +356,11 @@ export class Optimizer {
             const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
 
             writeString(
+              fullpath,
               ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
                 .concat(this.asmStrings[flipped])
                 .concat(statistics)
                 .join("\n"),
-              fullpath,
             );
 
             if (shouldProof(this.args)) {

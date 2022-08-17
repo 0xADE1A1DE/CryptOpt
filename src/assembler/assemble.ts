@@ -46,12 +46,12 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
       console.warn({ curOperation: curOp, e, allocs, pres });
       console.error({ curOperation: curOp, e, allocs, pres });
       writeString(
+        `${resultspath}/lastFail.asm`,
         output
           .map((i) => `\t${i}`)
           .concat(Model.order)
           .concat(`ErrorStack: ${e instanceof Error ? e.stack : JSON.stringify(e)}`)
           .join("\n") + `while doing ${JSON.stringify(curOp, undefined, 2)}`,
-        `${resultspath}/lastFail.asm`,
       );
       throw e;
     }

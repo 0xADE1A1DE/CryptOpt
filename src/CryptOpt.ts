@@ -148,7 +148,7 @@ const spaceSeparated = runResults.reduce((arr, { convergence }) => {
 
 const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename(parsedArgs, ["dat", "gp", "pdf"]);
 
-writeString(spaceSeparated.join("\n"), datFileFull);
+writeString(datFileFull, spaceSeparated.join("\n"));
 process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);
 
 console.log(JSON.stringify(times));
@@ -162,6 +162,7 @@ const title = [
 ].join(", ");
 
 writeString(
+  gpFileFull,
   [
     `#!/usr/bin/env gnuplot\n`,
     `set title "${title}"`,
@@ -181,7 +182,6 @@ writeString(
     "# and plot the matrix with line colors, and a line at y=1 with color 0 (gre)",
     `plot "${datFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 linecolor variable with lines, 1 lc 0`,
   ].join("\n"),
-  gpFileFull,
 );
 
 process.stdout.write(" Gen Pdf...");
