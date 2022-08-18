@@ -342,7 +342,7 @@ export class RegisterAllocator {
       const freeXmm = this.getFreeXmmRegister();
       // we cant always spill to xmms
 
-      const choice =
+      let choice =
         // first we need a free xmm
         freeXmm &&
         // then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
@@ -351,6 +351,8 @@ export class RegisterAllocator {
             Paul.chooseSpillLocation(Model.operationByName(spareVariableName))
           : // fallback to
             C_DI_SPILL_LOCATION.C_DI_MEM;
+
+      choice = C_DI_SPILL_LOCATION.C_DI_MEM;
 
       if (choice == C_DI_SPILL_LOCATION.C_DI_MEM) {
         // if its worth to save, save it to mem.
