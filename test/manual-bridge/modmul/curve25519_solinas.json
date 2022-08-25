@@ -2487,12 +2487,12 @@
       "arguments": [
         "0x26",
         {
-          "datatype": "u1",
+          "datatype": "u64",
           "name": [],
           "operation": "static_cast",
           "arguments": [
             {
-              "datatype": "u1",
+              "datatype": "u64",
               "name": [],
               "operation": "static_cast",
               "arguments": ["x131"]
