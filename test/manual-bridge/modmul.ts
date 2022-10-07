@@ -47,7 +47,7 @@ it("optimise", () => {
     args.curve = "";
     args.cFile = someCFilename;
     args.jsonFile = someJsonFilename;
-    args.evals = 1000;
+    args.evals = 10;
     const opt = new Optimizer(args);
     console.warn({ someJsonFilename, someCFilename, resultDir: args.resultDir });
 
