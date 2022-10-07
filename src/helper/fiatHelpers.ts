@@ -96,7 +96,7 @@ function reduceStaticCast(arg: Fiat.Argument): Fiat.Argument {
   const child = arg.arguments[0];
   if (!isDynArgument(child) && arg.name.length === 1 && arg.arguments.length === 1) {
     arg.operation = "=";
-    // no need to check recursive, cince its an out1[0]/x1=static_cast(xN/arg1[1])
+    // no need to check recursive, since its an out1[0]/x1=static_cast(xN/arg1[1])
     return arg;
   }
 

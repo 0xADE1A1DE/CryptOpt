@@ -22,7 +22,7 @@ import {
   FlagState,
   Register,
 } from "@/enums";
-import { isXmmRegister, limbify, matchIMM, TEMP_VARNAME } from "@/helper";
+import { isByteRegister, zx, isXmmRegister, limbify, matchIMM, TEMP_VARNAME } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
@@ -78,6 +78,20 @@ export function mulx(c: CryptOpt.StringOperation): asm[] {
   //   `xchg ${resHiR}, ${Register.rdx}; whatever was in rdx before, can now be read again.`,
   //   `xchg ${resLoR}, ${Register.rax}; restore rax, and save lo in resLo`,
   // ];
+}
+
+// will check that argR is not xmm/byte reg. If so, will issue preinstructions into RA, and return r64
+function makeArgRanR64(argR: string, ra: RegisterAllocator): string {
+  // make sure we fix xmm's
+  if (isXmmRegister(argR)) {
+    return RegisterAllocator.xmm2reg({ store: argR }).store;
+  }
+  if (isByteRegister(argR)) {
+    const { inst, reg } = zx(argR);
+    ra.addToPreInstructions(inst);
+    return reg;
+  }
+  return argR;
 }
 
 function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
@@ -136,10 +150,7 @@ function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
   const [arg0R, arg1R] = allocation.in;
   let argR = arg0R !== Register.rdx ? arg0R : arg1R;
 
-  // make sure we fix xmm's
-  if (isXmmRegister(argR)) {
-    argR = RegisterAllocator.xmm2reg({ store: argR }).store;
-  }
+  argR = makeArgRanR64(argR, ra);
 
   // if can use mulx
   return [
@@ -188,6 +199,7 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm
   }
 
   const isU64_U64 = a_limbs.length === 1 && b_limbs.length == 1;
+  // actually, we should check if the result also tells us that those values are 64bit  (cause it could also be a bit/byte)
 
   //u64^2: square
   if (isU64_U64 && a_limbs[0] == b_limbs[0]) {
@@ -226,7 +238,8 @@ function mulx_lo_lo_128(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm
     const [resLoR, resHiR] = allocation.oReg;
     const [arg0R, arg1R] = allocation.in;
 
-    const argR = arg0R !== Register.rdx ? arg0R : arg1R;
+    let argR = arg0R !== Register.rdx ? arg0R : arg1R;
+    argR = makeArgRanR64(argR, ra);
 
     return [
       ...ra.pres,

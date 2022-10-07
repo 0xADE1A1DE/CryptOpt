@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build and test Measuresuite
+    name: Build and test CryptOpt
     runs-on: ubuntu-latest
 
     steps:
