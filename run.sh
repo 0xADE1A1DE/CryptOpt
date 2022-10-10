@@ -19,5 +19,4 @@
 cd "$(dirname "${0}")" || exit 1
 
 #run
-PATH="${PATH}:$(realpath ./bins/node/bin)" /usr/bin/env node "./dist/CryptOpt.js"
-"${@}"
+PATH="${PATH}:$(realpath ./bins/node/bin)" /usr/bin/env node "./dist/CryptOpt.js" "${@}"
