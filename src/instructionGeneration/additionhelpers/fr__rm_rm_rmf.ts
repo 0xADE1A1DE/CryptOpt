@@ -15,7 +15,19 @@
  */
 
 import { Flags, FlagState, Register } from "@/enums";
-import { ADX, isByteRegister, isFlag, isMem, isU1, SETX, toggleFlag, toImm, zx } from "@/helper";
+import {
+  ADX,
+  SETX,
+  getByteRegFromQwReg,
+  isByteRegister,
+  isFlag,
+  isMem,
+  isRegister,
+  isU1,
+  toImm,
+  toggleFlag,
+  zx,
+} from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
@@ -276,10 +288,14 @@ function fr__r_rm_rm(
     if (isMem(cin.store)) {
       first_summand = `byte ${first_summand}`;
     }
+    if (isRegister(first_summand)) {
+      first_summand = getByteRegFromQwReg(first_summand);
+    }
+
     res.push(
       `add ${first_summand}, ${constant}; load flag from rm/8 into ${flagToUse}, clears other flag. NOTE, if operand1 is not a byte reg, this fails.`,
     );
-    //TODO: consider, adding 'cout' as otherThan, because it'd cause less (maybe? thats why this is a todo.)
+
     if (Model.hasDependants(ra.getVarnameFromStore(cin))) {
       res.push(`${SETX[flagToUse]} ${cin.store}; since that has deps, restore it where ever it was`);
     }
