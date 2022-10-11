@@ -24,6 +24,7 @@ import type { AnalyseResult } from "@/types";
 const { CC, CFLAGS } = env;
 
 export function genStatusLine(a: {
+  bridge?: string;
   writeout: boolean;
   logComment: string;
   curve: string;
@@ -48,7 +49,7 @@ export function genStatusLine(a: {
     .toString()
     .padStart(6);
 
-  const primitive = !a.curve && !a.method ? a.symbolname : `${a.curve}-${a.method}`;
+  const primitive = a.bridge == "manual" ? a.symbolname : `${a.curve}-${a.method}`;
 
   return [
     // general
