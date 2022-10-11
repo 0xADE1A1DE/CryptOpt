@@ -352,8 +352,6 @@ export class RegisterAllocator {
           : // fallback to
             C_DI_SPILL_LOCATION.C_DI_MEM;
 
-      choice = C_DI_SPILL_LOCATION.C_DI_MEM;
-
       if (choice == C_DI_SPILL_LOCATION.C_DI_MEM) {
         // if its worth to save, save it to mem.
         const { isNew, targetMem } = this._varToMemStr(spareVariableName);
