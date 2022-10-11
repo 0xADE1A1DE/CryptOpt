@@ -618,7 +618,9 @@ export class RegisterAllocator {
         datatype: "u64",
         store: Register.rdx,
       };
-      const movInst = isXmmRegister(oldAllocatedStore) ? "movq" : "mov";
+      let movInst = "mov";
+      if (isXmmRegister(oldAllocatedStore)) movInst = "movq";
+      if (isByteRegister(oldAllocatedStore)) movInst = "movzx"; // not using zx() here, because we may want to movzx rdx, r9b
 
       // now check if rdx can be discarded:
       // which it can,
