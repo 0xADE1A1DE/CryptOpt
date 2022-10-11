@@ -552,8 +552,8 @@ describe("RegisterAllocator:", () => {
       });
 
       expect(allocation.in).toHaveLength(2);
-      allocation.in.forEach((or) => {
-        expect(isXmmRegister(or)).toBe(false);
+      allocation.in.forEach((ir) => {
+        expect(isXmmRegister(ir)).toBe(false);
       });
     });
   });
