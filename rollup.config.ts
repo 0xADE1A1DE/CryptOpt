@@ -23,6 +23,7 @@ export default [
       format: "es",
     },
     external,
+    strictDeprecations: true,
     plugins: [
       typescript(),
       terser(),
