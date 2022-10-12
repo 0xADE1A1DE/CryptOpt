@@ -82,6 +82,7 @@ const allocs = {
   x211: { datatype: "u64", store: "r9" },
   x212: { datatype: "u64", store: "r8" },
 } as Allocations;
+import { Paul } from "@/paul";
 
 const allocate = vi.fn();
 const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
@@ -424,7 +425,7 @@ describe("instructionGeneration:add", () => {
     expect(code[0]).toEqual(`lea rax, [ rax + ${xmm2reg_return_store_constant} ]`);
     expect(getCurrentAllocations).toBeCalled();
   });
-  it("should load flag from xmm", () => {
+  it("should load flag to OF from xmm", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>
@@ -457,11 +458,53 @@ describe("instructionGeneration:add", () => {
 
     const code = add(c).filter((a) => !a.startsWith(";"));
     expect(code).toHaveLength(2);
-    // expect(addToPreInstructions).toBeCalledWith("abc");
 
     // I dont really care about the order as long as the allocation was done correctly.
     expect(code[0]).toMatch(/add bl, 0x7F;.*/);
     expect(code[1]).toEqual("adox r9, r8");
+    expect(getCurrentAllocations).toBeCalled();
+  });
+
+  it("should load flag to CF from xmm", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x213", "x214"],
+      datatype: "u64",
+      operation: "addcarryx",
+      decisions: {
+        di_choose_arg: [1, ["x210", "x211", "x212"]],
+        di_flag: [0, [Flags.CF, Flags.OF]],
+        di_handle_flags_kk: [
+          2,
+          [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
+        ],
+        di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x210", "x211", "x212"],
+    };
+
+    // should probably be mocked.
+    Paul.currentInstruction = c;
+
+    const code = add(c).filter((a) => !a.startsWith(";"));
+    expect(code).toHaveLength(2);
+
+    // I dont really care about the order as long as the allocation was done correctly.
+    expect(code[0]).toMatch(/add bl, 0xFF;.*/);
+    expect(code[1]).toEqual("adcx r9, r8");
     expect(getCurrentAllocations).toBeCalled();
   });
 });
