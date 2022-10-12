@@ -47,7 +47,10 @@ if (!verbose) {
     // intentionally empty
   };
 }
-registerExitHooks(parsedArgs);
+
+// to get the symbol name, we create new anonymous optimizer.
+const symbolname = new Optimizer(parsedArgs).getSymbolname();
+registerExitHooks({ ...parsedArgs, symbolname });
 
 type RunResult = { statefile: string; ratio: number; convergence: string[] };
 
@@ -83,14 +86,21 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
 }
 
 async function run(args: OptimizerArgs): Promise<RunResult> {
+  let optimizer: Optimizer;
   try {
-    await new Optimizer(args).optimise();
+    optimizer = new Optimizer(args);
   } catch (e) {
-    console.error(`CryptOpt-Error while optimising:\n`, e);
+    console.error(`CryptOpt-Error while creating the optimizer\n`, e);
+    process.exit(1000);
+  }
+  try {
+    await optimizer.optimise();
+  } catch (e) {
+    console.error(`CryptOpt-Error while optimising\n`, e);
     process.exit(1000);
   }
 
-  const [statefile] = generateResultFilename(args);
+  const [statefile] = generateResultFilename({ ...args, symbolname: optimizer.getSymbolname() });
   Model.persist(statefile);
   const { ratio, convergence } = Model.getState();
   return { statefile, ratio, convergence };
@@ -146,7 +156,11 @@ const spaceSeparated = runResults.reduce((arr, { convergence }) => {
   return arr;
 }, [] as string[]);
 
-const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename(parsedArgs, ["dat", "gp", "pdf"]);
+const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename({ ...parsedArgs, symbolname }, [
+  ".dat",
+  ".gp",
+  ".pdf",
+]);
 
 writeString(datFileFull, spaceSeparated.join("\n"));
 process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);

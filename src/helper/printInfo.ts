@@ -37,7 +37,7 @@ export function printStartInfo({
   process.stdout.write(
     [
       `\nStart`,
-      `on brg-curve-method >>${cy}${symbolname}${re}<<`,
+      `on brg/symbolname>>${cy}${bridge}/${symbolname}${re}<<`,
       `>>${cy}${shouldProof({ bridge, proof }) ? "with" : "without"} proofing${re} correct<<`,
       `on cpu >>${cy}${os.cpus()[0].model}${re}<<`,
       `writing results to>>${cy}${resultDir}${re}<<`,

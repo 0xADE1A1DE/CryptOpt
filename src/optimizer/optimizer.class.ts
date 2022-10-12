@@ -33,6 +33,7 @@ import {
   shouldProof,
   toggleFUNCTIONS,
   writeString,
+  generateResultFilename,
 } from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
@@ -48,6 +49,9 @@ export class Optimizer {
   private measuresuite: Measuresuite;
   private libcheckfunctionDirectory: string;
   private symbolname: string;
+  public getSymbolname(): string {
+    return this.symbolname;
+  }
 
   public constructor(private args: OptimizerArgs) {
     Paul.seed = args.seed;
@@ -123,8 +127,8 @@ export class Optimizer {
     return new Promise<number>((resolve) => {
       console.log("starting optimisation");
       printStartInfo({
-        symbolname: this.symbolname,
         ...this.args,
+        symbolname: this.symbolname,
       });
       let batchSize = 200;
       const numBatches = 31;
@@ -294,22 +298,22 @@ export class Optimizer {
             const writeout = numEvals % (this.args.evals / LOG_EVERY) === 0;
 
             const statusline = genStatusLine({
-              writeout,
               ...this.args,
-              symbolname: this.symbolname,
-              stacklength,
-              batchSize,
-              no_of_instructions: this.no_of_instructions,
               analyseResult,
-              indexGood,
-              indexBad,
-              goodChunks,
               badChunks,
+              batchSize,
               choice,
+              goodChunks,
+              indexBad,
+              indexGood,
               kept,
+              no_of_instructions: this.no_of_instructions,
               numEvals,
               ratioString,
               show_per_second,
+              stacklength,
+              symbolname: this.symbolname,
+              writeout,
             });
             process.stdout.write(statusline);
 
@@ -342,24 +346,16 @@ export class Optimizer {
             });
             console.log(statistics);
 
-            const fileNameOptimised = [
-              `${lastGood.toFixed(0)}`,
-              `_ratio${ratioString.replace(".", "")}`,
-              `_seed${paddedSeed}_${this.symbolname}`,
-            ].join("");
+            const [asmfile] = generateResultFilename({ ...this.args, symbolname: this.symbolname }, [
+              `_ratio${ratioString.replace(".", "")}.asm`,
+            ]);
 
-            const fullpath = pathResolve(
-              this.args.resultDir,
-              this.args.curve,
-              this.args.method,
-              `${fileNameOptimised}.asm`,
-            );
             // write best found solution with headers
             // flip, because we want the last accepted, not the last mutated.
             const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
 
             writeString(
-              fullpath,
+              asmfile,
               ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
                 .concat(this.asmStrings[flipped])
                 .concat(statistics)
@@ -368,7 +364,7 @@ export class Optimizer {
 
             if (shouldProof(this.args)) {
               // and proof correct
-              const proofCmd = FiatBridge.buildProofCommand(this.args.curve, this.args.method, fullpath);
+              const proofCmd = FiatBridge.buildProofCommand(this.args.curve, this.args.method, asmfile);
               console.log(`proofing that asm correct with '${proofCmd}'`);
               try {
                 const now = Date.now();

@@ -23,21 +23,19 @@ import { padSeed } from "./lamdas";
 
 export function generateResultFilename(
   {
-    curve,
-    bridge,
-    method,
     resultDir,
+    bridge,
     seed,
-  }: Pick<OptimizerArgs, "curve" | "bridge" | "method" | "resultDir" | "seed">,
-  suff = ["json"],
+    symbolname,
+  }: Pick<OptimizerArgs, "resultDir" | "bridge" | "seed"> & {
+    symbolname: string;
+  },
+  suff = [".json"],
 ): string[] {
-  let c = curve;
-  if (bridge && bridge != "fiat") {
-    c = `${bridge}-${c}`;
-  }
-
-  const resFolder = resultDir ?? resolve(`${process.cwd()}/results`);
-  const path = resolve(resFolder, c, method);
+  const path =
+    resultDir && resultDir !== ""
+      ? resolve(resultDir, bridge, symbolname)
+      : resolve(`${process.cwd()}/results`, bridge, symbolname);
 
   if (!existsSync(path)) {
     console.warn(`${path} does not exist. Trying to create it.`);
@@ -52,5 +50,5 @@ export function generateResultFilename(
   }
 
   const padded = padSeed(seed);
-  return suff.map((s) => resolve(path, `seed${padded}.${s}`).toString());
+  return suff.map((s) => resolve(path, `seed${padded}${s}`).toString());
 }
