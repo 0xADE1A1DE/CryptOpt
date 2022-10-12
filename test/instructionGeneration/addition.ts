@@ -26,7 +26,6 @@ import {
 } from "@/enums";
 import { add } from "@/instructionGeneration/addition";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
-import { Model } from "@/model";
 
 // this not consistent in within itself (multiple vars in one single reg).
 // Certain vars but is only used certain test
@@ -88,13 +87,6 @@ const allocate = vi.fn();
 const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
 const flagState = vi.fn();
 const spillFlag = vi.fn();
-function mockatpi(p: string) {
-  if (!("pres" in mockatpi.prototype)) {
-    mockatpi.prototype.pres = [];
-  }
-  mockatpi.prototype.pres.push(p);
-}
-const addToPreInstructions = vi.fn().mockImplementation(mockatpi);
 const addToClobbers = vi.fn();
 const declareVarForFlag = vi.fn();
 
@@ -110,7 +102,7 @@ vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
       getInstance: () => {
         return {
           addToClobbers,
-          addToPreInstructions,
+          addToPreInstructions: vi.fn(),
           allocate,
           backupIfStoreHasDependencies,
           declare128: vi.fn().mockImplementation((name: string) => (allocs[name] = { datatype: "u128" })),
