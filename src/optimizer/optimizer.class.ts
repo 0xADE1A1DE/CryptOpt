@@ -18,7 +18,7 @@ import { execSync } from "child_process";
 import { existsSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { tmpdir } from "os";
-import { join, resolve as pathResolve } from "path";
+import { join } from "path";
 
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
