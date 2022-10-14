@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { AllocationFlags } from "@/enums";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
-import { AllocationFlags } from "@/enums";
 
 export function ror(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();

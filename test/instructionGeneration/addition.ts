@@ -25,6 +25,7 @@ import {
   Register,
 } from "@/enums";
 import { add } from "@/instructionGeneration/addition";
+import { Paul } from "@/paul";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
 
 // this not consistent in within itself (multiple vars in one single reg).
@@ -82,7 +83,6 @@ const allocs = {
   x211: { datatype: "u64", store: "r9" },
   x212: { datatype: "u64", store: "r8" },
 } as Allocations;
-import { Paul } from "@/paul";
 
 const allocate = vi.fn();
 const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
@@ -140,7 +140,7 @@ vi.mock("@/model/model.class.ts", async () => {
   return {
     Model: {
       ...actual.Model,
-      hasDependants: vi.fn().mockImplementation((depVarname: string) => false),
+      hasDependants: vi.fn().mockImplementation((_depVarname: string) => false),
     },
   };
 });

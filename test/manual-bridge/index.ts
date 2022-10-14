@@ -26,7 +26,6 @@ const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
 
 vi.useFakeTimers();
-const resultpath = "";
 const symbol = "stairwayToHeaven";
 
 const someCFilename = writeC();
@@ -41,7 +40,7 @@ describe("manualBridge", () => {
     args.jsonFile = someJsonFilename;
     args.evals = 1000;
     expect(() => {
-      const opt = new Optimizer(args).optimise();
+      new Optimizer(args).optimise();
     }).to.throw();
   });
 

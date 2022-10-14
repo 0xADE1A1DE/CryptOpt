@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 import { afterAll, expect, it, vi } from "vitest";
 
 import { Optimizer } from "@/optimizer";

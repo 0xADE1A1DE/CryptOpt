@@ -71,11 +71,11 @@ import type {
   CryptOpt,
   imm,
   mem,
+  OptimizerArgs,
   PointerAllocation,
   RegisterAllocation,
   U1FlagAllocation,
   ValueAllocation,
-  OptimizerArgs,
 } from "@/types";
 
 import { populateClobbers } from "./RegisterAllocator.helper";
@@ -354,7 +354,7 @@ export class RegisterAllocator {
       const freeXmm = this.getFreeXmmRegister();
       // we cant always spill to xmms
 
-      let choice =
+      const choice =
         this.canXmm &&
         // second we need a free xmm
         freeXmm &&

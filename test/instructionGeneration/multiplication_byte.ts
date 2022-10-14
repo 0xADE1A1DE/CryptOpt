@@ -17,7 +17,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { AllocationFlags, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Register, ByteRegister } from "@/enums";
+import { AllocationFlags, ByteRegister,C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Register } from "@/enums";
 import { mulx } from "@/instructionGeneration/multiplication";
 import type { AllocationReq, AllocationRes, asm } from "@/types";
 

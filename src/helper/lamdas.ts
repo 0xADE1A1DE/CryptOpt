@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { writeFileSync, mkdirSync } from "fs";
+import { mkdirSync,writeFileSync } from "fs";
 import { dirname } from "path";
 
 import { ByteRegister, Flags, FUNCTIONS, Register, XmmRegister } from "@/enums";

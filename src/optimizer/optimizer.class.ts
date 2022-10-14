@@ -26,6 +26,7 @@ import { CHOICE, FUNCTIONS } from "@/enums";
 import { errorOut, ERRORS } from "@/errors";
 import {
   analyseMeasureResult,
+  generateResultFilename,
   LOG_EVERY,
   padSeed,
   PRINT_EVERY,
@@ -33,16 +34,15 @@ import {
   shouldProof,
   toggleFUNCTIONS,
   writeString,
-  generateResultFilename,
 } from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
 import { Paul, sha1Hash } from "@/paul";
+import { RegisterAllocator } from "@/registerAllocator";
 import type { AnalyseResult, OptimizerArgs } from "@/types";
 
 import { genStatistics, genStatusLine } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
-import { RegisterAllocator } from "@/registerAllocator";
 
 let choice: CHOICE;
 
@@ -134,7 +134,6 @@ export class Optimizer {
       });
       let batchSize = 200;
       const numBatches = 31;
-      let lastGood = Infinity;
       let ratioString = "";
       let numEvals = 0;
 
@@ -282,8 +281,6 @@ export class Optimizer {
 
           const goodChunks = analyseResult.chunks[indexGood];
           const badChunks = analyseResult.chunks[indexBad];
-
-          lastGood = analyseResult.rawMedian[indexGood];
 
           ratioString = globals.currentRatio /*aka: new ratio*/
             .toFixed(4);

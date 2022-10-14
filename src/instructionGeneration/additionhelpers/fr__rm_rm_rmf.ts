@@ -17,15 +17,15 @@
 import { Flags, FlagState, Register } from "@/enums";
 import {
   ADX,
-  SETX,
   getByteRegFromQwReg,
   isByteRegister,
   isFlag,
   isMem,
   isRegister,
   isU1,
-  toImm,
+  SETX,
   toggleFlag,
+  toImm,
   zx,
 } from "@/helper";
 import { Model } from "@/model";
