@@ -42,6 +42,7 @@ export function getTestArgs(filename: string): OptimizerArgs {
     cyclegoal: 100,
     logComment: "",
     proof: false,
+    bridge: "fiat",
     curve,
     method,
     verbose: false,

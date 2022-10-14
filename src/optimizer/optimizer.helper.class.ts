@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { mkdirSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { resolve } from "path";
-import { mkdirSync } from "fs";
 
 import { BRIDGES } from "@/bridge";
 import {

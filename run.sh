@@ -15,7 +15,8 @@
 # limitations under the License.
 #
 
-BUILT="$(dirname "${0}")/dist/CryptOpt.js"
+# go into this working directory. Everything is relative from there
+cd "$(dirname "${0}")" || exit 1
 
 #run
-PATH="${PATH}:$(realpath './bins/node/bin')" /usr/bin/env node "${BUILT}" "${@}"
+PATH="${PATH}:$(realpath ./bins/node/bin)" /usr/bin/env node "./dist/CryptOpt.js" "${@}"

@@ -22,7 +22,7 @@ describe("default argParse", () => {
   const defaultArgs = {
     curve: "curve25519",
     method: "square",
-    bridge: "",
+    bridge: "fiat",
     jsonFile: "",
     cFile: "",
     verbose: false,

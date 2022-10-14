@@ -27,7 +27,19 @@ const { CC, CFLAGS } = env;
 export class ManualBridge implements Bridge {
   private _coFunction: CryptOpt.Function;
   constructor(filepathJSON: string, private filepathC: string) {
-    const parsed = JSON.parse(readFileSync(filepathJSON).toString());
+    if (!existsSync(filepathJSON)) {
+      throw new Error(`cannot find '${filepathJSON}' as a JSON file.`);
+    }
+    if (!existsSync(filepathC)) {
+      throw new Error(`cannot find '${filepathC}' as a C file.`);
+    }
+    let parsed = JSON.parse(readFileSync(filepathJSON).toString());
+    if (Array.isArray(parsed)) {
+      console.warn(
+        `The file ${filepathJSON} contains an array. Will treat the first element as the function to use. Better to only have one JS-object in the file.`,
+      );
+      parsed = parsed[0];
+    }
     this._coFunction = preprocessFunction(parsed);
 
     // r.body = r.body.filter((i) => i.name[0].startsWith("x"));

@@ -16,26 +16,26 @@ A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primi
 While optimizing, CryptOpt will output the current status of the optimization.
 Each line has this format:
 ```
-curve25519-square|0-10| 14|bs  181|#inst: 140|cyclΔ     70|G  58 cycl σ  0|B  59 cycl σ  0|L  55|l/g 0.9519| P|P[ -14/   0/  14/ -11]|D[MU/ 31/ 59]| 90.0( 1%)  60/s
+fiat_curve25519_carry_square|0-10| 14|bs  181|#inst: 140|cyclΔ     70|G  58 cycl σ  0|B  59 cycl σ  0|L  55|l/g 0.9519| P|P[ -14/   0/  14/ -11]|D[MU/ 31/ 59]| 90.0( 1%)  60/s
 ```
 Lets break this down:
 
 Field                 |Example    | Comment
 --|--|--
-Primitive             | curve25519-square		| Format is `<BRIDGE>-<CURVE>-<METHOD>` (BRIDGE omitted if used with Fiat)
-Comment               | 0-10                    | Arbitrary comment. Usually used in Population Mode. Then, it means Bet `0` from `10`, (`10` begin the `run`)
-Stack size            | 14	                 	| How many spills to memory there are. E.g. `6` for all spills of the six callee-saved registers
-Batch Size            | bs  181		            | `BS` in the paper, How big is the batch. i.e. how many iterations of Primitive are counted
-Instr. Count          | #inst: 140		        | How many instructions are used to implement the primitive
-Raw Cycle Delta       | cyclΔ     70		    | Measure both batches `nob=31` times, take difference of medians. Based on this a mutation is kept or not.
-Cycles +stddev (good) | G  58 cycl σ  0		    | Number of cycles for the `good` candidate, scaled by `bs` i.e. per on *one* iteration. Also states the stdDev of the `nob` measurements
-Cycles +stddev (bad)  | B  59 cycl σ  0		    | Same, but for the `bad` candidate
-Cycles Library        | L  55		            | Cycles that the CC-Compiled version takes
-Ratio                 | l/g 0.9519              | Ratio of cycles lib / cycles good. i.e. 55 / 58 -> 0.9519 (uses the non-scaled counts) This is green if the ratio is `>1` which means that CryptOpt Code is faster than CC's.
-Mutation              |  P		                | Which mutation has been applied. **P**ermuation or **D**ecision. (Permutation means mutation in operation order; Decision means which template to use, or how to load operands.)
-P-Mutation-Detail     | P[ -14/   0/  14/ -11]  | Details on last P-Mutation. [steps to go back / steps to go forward / absolute index of operation to move / applied relative movement ]
-D-Mutation-Detail     | D[MU/ 31/ 59]		    | Details on last D-Mutation. [new chosen template / absolute index of operation to change decision / number of operations with changeable decisions ]
-Progress, speed       |  90.0( 1%)  60/s        | Number of the current Mutation, then in Percent, then how many mutations per second can be evaluated. This is green if the mutation is kept.
+Symbol                | `fiat_curve25519_carry_square`	| The symbol being optimized.
+Comment               | 0-10                            | Arbitrary comment. Usually used in Population Mode. Then, it means Bet `0` from `10`, (`10` being the `run`)
+Stack size            | 14	                 	        | How many spills to memory there are. E.g. `6` for all spills of the six callee-saved registers
+Batch Size            | bs  181		                    | `BS` in the paper, How big is the batch. i.e. how many iterations of Primitive are counted
+Instr. Count          | #inst: 140		                | How many instructions are used to implement the primitive
+Raw Cycle Delta       | cyclΔ     70		            | Measure both batches `nob=31` times, take difference of medians. Based on this a mutation is kept or not.
+Cycles +stddev (good) | G  58 cycl σ  0		            | Number of cycles for the `good` candidate, scaled by `bs` i.e. per on *one* iteration. Also states the stdDev of the `nob` measurements
+Cycles +stddev (bad)  | B  59 cycl σ  0		            | Same, but for the `bad` candidate
+Cycles Library        | L  55		                    | Cycles that the CC-Compiled version takes
+Ratio                 | l/g 0.9519                      | Ratio of cycles lib / cycles good. i.e. 55 / 58 -> 0.9519 (uses the non-scaled counts) This is green if the ratio is `>1` which means that CryptOpt Code is faster than CC's.
+Mutation              |  P		                        | Which mutation has been applied. **P**ermuation or **D**ecision. (Permutation means mutation in operation order; Decision means which template to use, or how to load operands.)
+P-Mutation-Detail     | P[ -14/   0/  14/ -11]          | Details on last P-Mutation. [steps to go back / steps to go forward / absolute index of operation to move / applied relative movement ]
+D-Mutation-Detail     | D[MU/ 31/ 59]		            | Details on last D-Mutation. [new chosen template / absolute index of operation to change decision / number of operations with changeable decisions ]
+Progress, speed       |  90.0( 1%)  60/s                | Number of the current Mutation, then in Percent, then how many mutations per second can be evaluated. This is green if the mutation is kept.
 
 More on the *D-Mutation*-Details:
 
@@ -52,11 +52,11 @@ SL | Spill location changed spill-to-memory <-> spill-to-xmm
 
 ## Understand Output Files
 
-While Optimizing, CryptOpt will generate files in the `./results/<CURVE>/<METHOD>` folder.
+While Optimizing, CryptOpt will generate files in the `./results/<BRIDGE>/<SYMBOL>` folder (adjustable with `--resultDir` parameter to `./run.sh`).
 
 CryptOpt writes out intermediate ASM-files whenever *it finishes a bet* and an additional file when finished the *run*.
 CryptOpt also generates the internal state (in `*.json` files) of the optimization for each *bet*-outcome.
-The directory also contains a `*.dat` file with `l/g` value every time it is printed to the terminal.
+The directory also contains a `*.dat` (space separated) file with rows for every bet/run containing the `l/g` value every time it is printed to the terminal.
 From that `*.dat` file, the generated `*.gp` file will generate the `*.pdf` file, which shows the optimization in progress.
 
 ## Play around w/ Fiat
@@ -72,19 +72,19 @@ Parameter    | default     | possible / typical values | description
 --cyclegoal  | 10000       | 1, 100, 100000            | How many cycles to measure, and adjust batch size `bs` accordingly
 --bets       | 10          | 10, 30, 100               | How many 'bets' for the bet-and-run heuristic
 --betRatio   | 0.2         | 0.1, 0.3                  | The share from parameter `--evals`, which are spent for all bets, in per cent (i.e. 0.2 means 20% of --evals will be used for the bet part, and 80% for the final run-part)
---resultDir  | ./results   | /tmp/myresults            | The directory under which `<CURVE>/<METHOD>` will be created and the result files will be stored
---no-proof   |             | --no-proof, --proof       | [en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
+--resultDir  | ./results   | /tmp/myresults            | The directory under which `<BRIDGE>/<SYMBOL>` will be created and the result files will be stored
+--no-proof   |             | --no-proof, --proof       | [dis|en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
 
 For more information check `./run.sh --help`
 
-As next example, use `CC=clang ./run.sh --curve p256 --method mul --evals 10k` to generate an optimized version for NIST P-256 multiply and compare the function with `clang`.
+As next example, use `CC=clang ./run.sh --curve p256 --method mul --evals 10k` to generate an optimized version for NIST P-256 multiply and compare the function with `clang`-compiled version of the C-equivalent.
 
 ## Play around w/ Bitcoin
 
 1. Run `./run.sh --bridge bitcoin-core --curve secp256k1 --method mul --bets 5`  
 This will try 5 different *bets* for the primitive *mul* of *libsecp256k1*.
 
-1. Find the result files (`*.asm`,`*.pdf`) for this run in `./results/bitcoin-core-secp256k1/mul`
+1. Find the result files (`*.asm`,`*.pdf`) for this run in `./results/bitcoin-core/secp256k1_fe_sqr_inner/`
 
 
 ## Acknowledgements

@@ -16,8 +16,16 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { C_DI_HANDLE_FLAGS_KK, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Flags, FlagState } from "@/enums";
+import {
+  C_DI_HANDLE_FLAGS_KK,
+  C_DI_SPILL_LOCATION,
+  DECISION_IDENTIFIER,
+  Flags,
+  FlagState,
+  Register,
+} from "@/enums";
 import { add } from "@/instructionGeneration/addition";
+import { Paul } from "@/paul";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
 
 // this not consistent in within itself (multiple vars in one single reg).
@@ -69,24 +77,33 @@ const allocs = {
 
   x200: { datatype: "u64", store: "rax" },
   x201: { datatype: "u64", store: "xmm2" },
+
+  // say a flag has been spilled to xmm it'll be pulled back to r64,
+  x210: { datatype: "u1", store: "xmm2" },
+  x211: { datatype: "u64", store: "r9" },
+  x212: { datatype: "u64", store: "r8" },
 } as Allocations;
+
 const allocate = vi.fn();
 const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
 const flagState = vi.fn();
 const spillFlag = vi.fn();
-const addToPreInstructions = vi.fn();
 const addToClobbers = vi.fn();
 const declareVarForFlag = vi.fn();
 
 const backupIfStoreHasDependencies = vi.fn();
+const xmm2reg_return_store_constant = Register.rbx;
 vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
     RegisterAllocator: {
-      xmm2reg: vi.fn().mockImplementation((_a: ValueAllocation) => ({ store: "rbx", datatype: "u64" })),
+      xmm2reg: vi.fn().mockImplementation((_a: ValueAllocation) => ({
+        store: xmm2reg_return_store_constant,
+        datatype: "u64",
+      })),
       getInstance: () => {
         return {
           addToClobbers,
-          addToPreInstructions,
+          addToPreInstructions: vi.fn(),
           allocate,
           backupIfStoreHasDependencies,
           declare128: vi.fn().mockImplementation((name: string) => (allocs[name] = { datatype: "u128" })),
@@ -106,8 +123,24 @@ vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
           }),
           pres: [],
           spillFlag,
+          getVarnameFromStore: vi
+            .fn()
+            .mockImplementation(
+              (needle: string) => Object.entries(allocs).find(([_varname, sto]) => sto.store == needle)?.[0],
+            ),
         };
       },
+    },
+  };
+});
+// this will only mock the 'hasDependants' function
+// see https://vitest.dev/guide/mocking.html: "Mock part of a Module"
+vi.mock("@/model/model.class.ts", async () => {
+  const actual = await vi.importActual<typeof import("@/model/model.class")>("@/model/model.class.ts");
+  return {
+    Model: {
+      ...actual.Model,
+      hasDependants: vi.fn().mockImplementation((_depVarname: string) => false),
     },
   };
 });
@@ -119,6 +152,7 @@ describe("instructionGeneration:add", () => {
       return varname.store;
     },
   );
+
   it("shold add two u128 to one u128 using provided flag-choice", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
@@ -388,7 +422,89 @@ describe("instructionGeneration:add", () => {
     const code = add(c).filter((a) => !a.startsWith(";"));
     expect(code).toHaveLength(1);
     // I dont really care about the order as long as the allocation was done correctly.
-    expect(code[0]).toEqual("lea rax, [ rax + rbx ]");
+    expect(code[0]).toEqual(`lea rax, [ rax + ${xmm2reg_return_store_constant} ]`);
+    expect(getCurrentAllocations).toBeCalled();
+  });
+  it("should load flag to OF from xmm", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x213", "x214"],
+      datatype: "u64",
+      operation: "addcarryx",
+      decisions: {
+        di_choose_arg: [1, ["x210", "x211", "x212"]],
+        di_flag: [1, [Flags.CF, Flags.OF]],
+        di_handle_flags_kk: [
+          2,
+          [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
+        ],
+        di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x210", "x211", "x212"],
+    };
+
+    const code = add(c).filter((a) => !a.startsWith(";"));
+    expect(code).toHaveLength(2);
+
+    // I dont really care about the order as long as the allocation was done correctly.
+    expect(code[0]).toMatch(/add bl, 0x7F;.*/);
+    expect(code[1]).toEqual("adox r9, r8");
+    expect(getCurrentAllocations).toBeCalled();
+  });
+
+  it("should load flag to CF from xmm", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x213", "x214"],
+      datatype: "u64",
+      operation: "addcarryx",
+      decisions: {
+        di_choose_arg: [1, ["x210", "x211", "x212"]],
+        di_flag: [0, [Flags.CF, Flags.OF]],
+        di_handle_flags_kk: [
+          2,
+          [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
+        ],
+        di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x210", "x211", "x212"],
+    };
+
+    // should probably be mocked.
+    Paul.currentInstruction = c;
+
+    const code = add(c).filter((a) => !a.startsWith(";"));
+    expect(code).toHaveLength(2);
+
+    // I dont really care about the order as long as the allocation was done correctly.
+    expect(code[0]).toMatch(/add bl, 0xFF;.*/);
+    expect(code[1]).toEqual("adcx r9, r8");
     expect(getCurrentAllocations).toBeCalled();
   });
 });

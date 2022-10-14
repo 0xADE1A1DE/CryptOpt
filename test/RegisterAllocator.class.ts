@@ -552,9 +552,51 @@ describe("RegisterAllocator:", () => {
       });
 
       expect(allocation.in).toHaveLength(2);
-      allocation.in.forEach((or) => {
-        expect(isXmmRegister(or)).toBe(false);
+      allocation.in.forEach((ir) => {
+        expect(isXmmRegister(ir)).toBe(false);
       });
+    });
+
+    it("should zx, if the operand is a ByteRegister and has been chosen to be moved to rdx", () => {
+      (ra as MOCK_RA)._allocations = {
+        out1: { datatype: "u64[n]", store: "rdi" },
+        arg1: { datatype: "u64[n]", store: "rsi" },
+        x30: { datatype: "u8", store: ByteRegister.r9b },
+        // x30: { datatype: "u64", store: Register.r9 },
+        x44: { datatype: "u64", store: Register.rax },
+      };
+      const c: CryptOpt.StringOperation = {
+        name: ["x40", "x41"],
+        datatype: "u64",
+        operation: "mulx",
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          di_choose_arg: [0, ["x30", "x44"]],
+        },
+        decisionsHot: [],
+        arguments: ["x30", "x44"],
+      };
+
+      ra.initNewInstruction(c);
+
+      const allocation = ra.allocate({
+        oReg: c.name,
+        in: c.arguments,
+        allocationFlags: AllocationFlags.ONE_IN_MUST_BE_IN_RDX,
+      });
+
+      expect(allocation.in).toHaveLength(2);
+      allocation.in.forEach((ir) => {
+        expect(isByteRegister(ir)).toBe(false);
+      });
+      // must be movzx
+      const pres = ra.pres;
+      expect(pres).not.include("mov rdx, r9b; x30 to rdx");
+      expect(pres).to.include("movzx rdx, r9b; x30 to rdx");
+      // expect(ra.pres).toHaveLength("movzx rdx, r9b; x30 to rdx");
     });
   });
   describe("clobbby clobs", () => {

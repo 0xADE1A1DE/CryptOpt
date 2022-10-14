@@ -15,7 +15,7 @@
  */
 
 import { execSync } from "child_process";
-import { mkdirSync, accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, readFileSync } from "fs";
+import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
 import { datadir, env, preprocessFunction } from "@/helper";

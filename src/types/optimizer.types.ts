@@ -24,8 +24,9 @@ export type OptimizerArgs = {
   logComment: string;
   proof: boolean;
   verbose: boolean;
-  bridge?: string;
+  bridge: string;
   cFile?: string;
   jsonFile?: string;
   resultDir: string;
+  xmm?: boolean;
 };

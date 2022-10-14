@@ -47,9 +47,9 @@ export const parsedArgs = y
   })
   .option("bridge", {
     string: true,
-    default: "",
+    default: "fiat",
     describe: `The specified method will be searched in this order: ${BRIDGES}. If there is ambiguities, the choice of bridge can be specified. Then, the method is only searched in respective bridge. (Errors out, if not found.)\nIf --bridge gets assigned 'manual', one must specify --cFile and --jsonFile.`,
-    choices: ["", ...BRIDGES],
+    choices: BRIDGES,
   })
   .option("jsonFile", {
     string: true,
@@ -109,6 +109,13 @@ export const parsedArgs = y
     default: true,
     describe:
       "If this is set, it will proof the solution correct with fiat-bridge in addition to comparing the results with the C-compiled solution. Disable with --no-proof",
+    boolean: true,
+  })
+  .option("xmm", {
+    alias: "x",
+    default: false,
+    describe:
+      "If this is set, CryptOpt will optimize with spilling into vector registers rather than spilling solely into memory.",
     boolean: true,
   })
   .option("readState", {
