@@ -75,6 +75,7 @@ import type {
   RegisterAllocation,
   U1FlagAllocation,
   ValueAllocation,
+  OptimizerArgs,
 } from "@/types";
 
 import { populateClobbers } from "./RegisterAllocator.helper";
@@ -90,6 +91,7 @@ function assertValueAllocation(a: Allocation): asserts a is ValueAllocation | Po
 // produce<T extends ProduceConditions, U extends { [key in keyof T]: any }>(conditions: T, input: any): Promise<U> | U
 export class RegisterAllocator {
   private static _instance: RegisterAllocator | null;
+  private static _options: OptimizerArgs | null = null;
   private _preInstructions: asm[] = [];
   private _ALL_REGISTERS: Register[] = [];
   private _allocations: Allocations = {};
@@ -151,6 +153,16 @@ export class RegisterAllocator {
     return ra;
   }
 
+  public static set options(op: OptimizerArgs) {
+    RegisterAllocator._options = op;
+  }
+
+  private get canXmm(): boolean {
+    if (RegisterAllocator._options?.xmm) {
+      return RegisterAllocator._options.xmm == true;
+    }
+    return false;
+  }
   private constructor() {
     RegisterAllocator._instance = this;
     RegisterAllocator.reset();
@@ -343,7 +355,8 @@ export class RegisterAllocator {
       // we cant always spill to xmms
 
       let choice =
-        // first we need a free xmm
+        this.canXmm &&
+        // second we need a free xmm
         freeXmm &&
         // then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
         matchXD(spareVariableName)

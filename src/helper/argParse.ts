@@ -111,6 +111,13 @@ export const parsedArgs = y
       "If this is set, it will proof the solution correct with fiat-bridge in addition to comparing the results with the C-compiled solution. Disable with --no-proof",
     boolean: true,
   })
+  .option("xmm", {
+    alias: "x",
+    default: false,
+    describe:
+      "If this is set, CryptOpt will optimize with spilling into vector registers rather than spilling solely into memory.",
+    boolean: true,
+  })
   .option("readState", {
     string: true,
     describe: "this must be a filename to a JSON, which has a state (to, body).",

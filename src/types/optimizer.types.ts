@@ -28,4 +28,5 @@ export type OptimizerArgs = {
   cFile?: string;
   jsonFile?: string;
   resultDir: string;
+  xmm?: boolean;
 };

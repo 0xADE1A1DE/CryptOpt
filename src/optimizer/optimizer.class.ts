@@ -42,6 +42,7 @@ import type { AnalyseResult, OptimizerArgs } from "@/types";
 
 import { genStatistics, genStatusLine } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
+import { RegisterAllocator } from "@/registerAllocator";
 
 let choice: CHOICE;
 
@@ -69,6 +70,7 @@ export class Optimizer {
     if (args.readState) {
       Model.import(args.readState);
     }
+    RegisterAllocator.options = args;
   }
 
   private no_of_instructions = -1;
