@@ -1,3 +1,6 @@
 [submodule "modules/MeasureSuite"]
 	path = modules/MeasureSuite
 	url = https://github.com/0xADE1A1DE/MeasureSuite
+[submodule "modules/scripts"]
+	path = modules/scripts
+	url = https://github.com/dderjoel/CryptOpt-Scripts
