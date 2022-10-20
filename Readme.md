@@ -73,7 +73,7 @@ Parameter    | default     | possible / typical values | description
 --bets       | 10          | 10, 30, 100               | How many 'bets' for the bet-and-run heuristic
 --betRatio   | 0.2         | 0.1, 0.3                  | The share from parameter `--evals`, which are spent for all bets, in per cent (i.e. 0.2 means 20% of --evals will be used for the bet part, and 80% for the final run-part)
 --resultDir  | ./results   | /tmp/myresults            | The directory under which `<BRIDGE>/<SYMBOL>` will be created and the result files will be stored
---no-proof   |             | --no-proof, --proof       | [dis|en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
+--no-proof   |             | --no-proof, --proof       | [dis\|en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
 
 For more information check `./run.sh --help`
 
