@@ -124,7 +124,7 @@ export class BitcoinCoreBridge implements Bridge {
     return 1;
   }
 
-  public argwidth(c: string, m: METHOD_T): number {
+  public argwidth(_c: string, m: METHOD_T): number {
     switch (m) {
       case "mul":
       case "square":
@@ -136,7 +136,7 @@ export class BitcoinCoreBridge implements Bridge {
     }
     throw new Error(`unsupported method ${m}`);
   }
-  public bounds(c: string, m: METHOD_T): CryptOpt.HexConstant[] {
+  public bounds(_c: string, m: METHOD_T): CryptOpt.HexConstant[] {
     // from https://github.com/bitcoin-core/secp256k1/blob/423b6d19d373f1224fd671a982584d7e7900bc93/src/field_5x52_int128_impl.h#L162
 
     let bits = [] as number[]; // for field's
