@@ -17,7 +17,7 @@ const external = [
 ];
 export default [
   {
-    input: "src/CryptOpt.ts",
+    input: ["src/CryptOpt.ts", "src/CountCycle.ts"],
     output: {
       dir: "dist",
       format: "es",
