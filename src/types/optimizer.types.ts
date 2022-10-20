@@ -24,7 +24,7 @@ export type OptimizerArgs = {
   logComment: string;
   proof: boolean;
   verbose: boolean;
-  bridge: string;
+  bridge: "fiat" | "manual" | "bitcoin-core";
   cFile?: string;
   jsonFile?: string;
   resultDir: string;

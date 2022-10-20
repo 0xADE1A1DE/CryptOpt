@@ -48,8 +48,9 @@ export const parsedArgs = y
   .option("bridge", {
     string: true,
     default: "fiat",
-    describe: `The specified method will be searched in this order: ${BRIDGES}. If there is ambiguities, the choice of bridge can be specified. Then, the method is only searched in respective bridge. (Errors out, if not found.)\nIf --bridge gets assigned 'manual', one must specify --cFile and --jsonFile.`,
+    describe: `If --bridge gets assigned 'manual', one must specify --cFile and --jsonFile, rather than cuvrve/method.`,
     choices: BRIDGES,
+    coerce: (s: string) => s as "fiat" | "manual" | "bitcoin-core",
   })
   .option("jsonFile", {
     string: true,
