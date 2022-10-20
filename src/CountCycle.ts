@@ -38,7 +38,7 @@ let tries = 100; // we should never need that many, but to avoid an infinite loo
 
 const [, , asmFilename, cFilename, jsonFilename] = process.argv;
 if (!asmFilename) {
-  console.error("must provide at least one asmFilename as first parameter");
+  console.error("Must provide at least one asmFilename as first parameter");
   process.exit(-1);
 }
 const seed = Number(
@@ -47,6 +47,12 @@ const seed = Number(
     .reverse()[0]
     .match(/seed(?<seed>[0-9]+)_ratio(?<radio>[0-9])+\.asm/)?.groups?.seed,
 );
+
+if (isNaN(seed)) {
+  console.error("the filename is not off the right format. Must match /seed[0-9]+_ratio[0-9]+.asm/ .");
+  process.exit(-1);
+}
+
 main(seed);
 
 //
@@ -61,6 +67,10 @@ function main(seed: number) {
   do {
     // do one sample
     const sample1 = doSample(ms, 2 * MAX_SAMLPESIZE, asmString);
+    if (typeof sample1 == "number") {
+      shout(sample1);
+      process.exit(0);
+    }
     const sample2 = [] as number[];
 
     // randomly split it
@@ -102,7 +112,8 @@ function createMS(asmstring: string, seed: number): Measuresuite {
     .find((e) => e.includes("GLOBAL"))
     ?.match(/\s*GLOBAL (?<symbol>.*)/)?.groups?.symbol;
   if (!symbol) {
-    throw new Error("cannot find symbol in asmstring.");
+    console.error("Cannot find any symbol in asmstring. Must match /\\s*GLOBAL (?<symbol>.*)/");
+    process.exit(-1);
   }
 
   const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
@@ -112,6 +123,13 @@ function createMS(asmstring: string, seed: number): Measuresuite {
       ...KNOWN_SYMBOLS[symbol],
       seed,
     }).measuresuite;
+  }
+
+  if ([jsonFilename, cFilename].some((f) => !(f && fs.existsSync(f)))) {
+    console.error(
+      "json and or c file names are invalid. Make sure that the first three parameters point to asm-file, c-file and json-file resp.",
+    );
+    process.exit(-1);
   }
 
   // --> manual bridge
@@ -132,7 +150,7 @@ function silence() {
   return backup;
 }
 
-function doSample(ms: Measuresuite, size: number, asmstring: string): number[] {
+function doSample(ms: Measuresuite, size: number, asmstring: string): number[] | number {
   const resultCycleMedians: number[] = [];
 
   for (let i = 0; i < size; i++) {
@@ -148,11 +166,11 @@ function doSample(ms: Measuresuite, size: number, asmstring: string): number[] {
       console.error(
         "Measure was executed without throwing an error, but the result is null-ish. This should not happen. Exiting",
       );
-      process.exit(1);
+      process.exit(-1);
     }
     if (!result.stats.checkResult) {
       console.error("Wrong result");
-      process.exit(1);
+      process.exit(-1);
     }
 
     const allAs = result.times.map((t) => t[0]); // a
@@ -162,8 +180,7 @@ function doSample(ms: Measuresuite, size: number, asmstring: string): number[] {
 
   if (Stats.sampleStandardDeviation(resultCycleMedians) == 0) {
     // if there is no variance at all, then we can just return this value
-    console.log(resultCycleMedians[0]);
-    process.exit(0);
+    return resultCycleMedians[0];
   }
   return resultCycleMedians;
 }
