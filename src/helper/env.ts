@@ -15,12 +15,11 @@
  */
 
 import { defaults } from "lodash-es";
-import { resolve } from "path";
-import { cwd } from "process";
+import { resolve, dirname } from "path";
 
 export const env = defaults(process.env, {
   CC: "gcc",
   CFLAGS: "-march=native -mtune=native -O3",
 });
 
-export const datadir = resolve(cwd(), "dist", "data");
+export const datadir = resolve(dirname(import.meta.url), "data");
