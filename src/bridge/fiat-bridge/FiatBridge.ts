@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { execSync } from "child_process";
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
@@ -33,6 +32,7 @@ import {
   SHA256SUMS,
 } from "./constants";
 import { BINS } from "./enums";
+import { lockAndRun } from "../bridge.helper";
 
 const cwd = resolve(datadir, "fiat-bridge");
 
@@ -75,17 +75,17 @@ export class FiatBridge implements Bridge {
     const { cmd, hash } = this.buildCommand(curve, method, "JSON");
     const jsonCacheFilename = resolve(cacheDir, `${hash}.json`);
 
-    let fiatBuffer: Buffer;
-    if (existsSync(jsonCacheFilename)) {
-      console.log(`reading json-fiat: ${jsonCacheFilename}`);
-      fiatBuffer = readFileSync(jsonCacheFilename);
-    } else {
-      const command = `${cmd} | jq -s .[0] | tee ${jsonCacheFilename}`;
-      console.log(`executing cmd to generate fiat: ${command}`);
-      fiatBuffer = execSync(command);
+    if (!existsSync(jsonCacheFilename)) {
+      const command = `data=$(${cmd} | jq -s .[0]); cat <<<"\${data}" > ${jsonCacheFilename}`;
+      console.log(`cmd to generate fiat: ${command}`);
+      lockAndRun(jsonCacheFilename, command);
     }
 
-    const fiat = JSON.parse(fiatBuffer.toString()) as Fiat.FiatFunction;
+    console.log(`reading json-fiat: ${jsonCacheFilename}`);
+    const jsonBuffer = readFileSync(jsonCacheFilename);
+    console.log(`json-fiat-Bufferllengh: ${jsonBuffer.length}b`);
+    const jsonString = jsonBuffer.toString();
+    const fiat = JSON.parse(jsonString) as Fiat.FiatFunction;
     const cryptOpt = preprocessFunction(fiat);
     return cryptOpt;
   }
@@ -100,21 +100,13 @@ export class FiatBridge implements Bridge {
     method: METHOD_T,
     curve: CURVE_T,
     ccOverwrite: string | undefined = undefined,
-    force = true,
+    force = false,
   ): string {
+    const cc = ccOverwrite ?? CC; // this is being used for the x-val, where in one session of the FiatBridge, the CC chagnes
     const { cmd, methodname, hash } = this.buildCommand(curve, method, "C");
     if (!force && existsSync(filename)) {
       return methodname;
     }
-
-    const cc = ccOverwrite ?? CC; // this is being used for the x-val, where in one session of the FiatBridge, the CC chagnes
-
-    const compileFromFile = (file: string) => {
-      const command = `${cc} ${CFLAGS} -fPIC -shared -o ${filename} ${file}`;
-      console.log(`executing cmd to generate machinecode: ${command}`);
-      execSync(command);
-      return methodname;
-    };
 
     // lets check cached.
     if (!existsSync(cacheDir)) {
@@ -123,15 +115,20 @@ export class FiatBridge implements Bridge {
 
     const cCacheFilename = resolve(cacheDir, `${hash}.c`);
 
-    // if the cache-file does not exist, write it.
+    // if the c-cache-file does not exist, write it.
     if (!existsSync(cCacheFilename)) {
-      const command = `${cmd} > ${cCacheFilename}`;
-      console.log(`executing cmd to generate c-file: ${command}`);
-      execSync(command);
+      // create cCacheFilename
+      const command = `data=$(${cmd}); cat <<<"\${data}" > ${cCacheFilename}`;
+      console.log(`cmd to generate c-cache file: ${command}`);
+      lockAndRun(cCacheFilename, command);
     }
 
-    // then we can compile from it.
-    return compileFromFile(cCacheFilename);
+    // then we can compile from the c file.
+    const command = `${cc} ${CFLAGS} -fPIC -shared -o ${filename} ${cCacheFilename}`;
+    console.log(`cmd to generate machinecode: ${command}`);
+    lockAndRun(filename, command);
+
+    return methodname;
   }
 
   /**

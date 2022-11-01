@@ -11,7 +11,9 @@ const external = [
   "os",
   "path",
   "process",
+  "proper-lockfile",
   "simple-statistics",
+  "url",
   "yargs",
   "yargs/helpers",
 ];
