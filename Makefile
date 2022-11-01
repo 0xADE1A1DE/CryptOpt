@@ -16,7 +16,7 @@ ROOT           := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 NODE_DIR       := $(ROOT)/bins/node
 NODE           := $(ROOT)/bins/node/bin/node
-NODE_VERSION   := 18.10.0
+NODE_VERSION   := 19.0.0
 
 PATH           := $(PATH):$(NODE_DIR)/bin
 
