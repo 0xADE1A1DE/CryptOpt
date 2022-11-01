@@ -28,6 +28,46 @@ FIAT_CURVE25519_SOLINAS_FIAT_EXTENSION typedef unsigned __int128
 #error "This code only works on a two's complement system"
 #endif
 
+#if !defined(FIAT_CURVE25519_SOLINAS_NO_ASM) &&                                \
+    (defined(__GNUC__) || defined(__clang__))
+static __inline__ uint64_t
+fiat_curve25519_solinas_value_barrier_u64(uint64_t a) {
+  __asm__("" : "+r"(a) : /* no inputs */);
+  return a;
+}
+#else
+#endif
+
+/*
+ * The function fiat_curve25519_solinas_cmovznz_u64 is a single-word conditional
+ * move.
+ *
+ * Postconditions:
+ *   out1 = (if arg1 = 0 then arg2 else arg3)
+ *
+ * Input Bounds:
+ *   arg1: [0x0 ~> 0x1]
+ *   arg2: [0x0 ~> 0xffffffffffffffff]
+ *   arg3: [0x0 ~> 0xffffffffffffffff]
+ * Output Bounds:
+ *   out1: [0x0 ~> 0xffffffffffffffff]
+ */
+
+static FIAT_CURVE25519_SOLINAS_FIAT_INLINE void
+fiat_curve25519_solinas_cmovznz_u64(uint64_t *out1,
+                                    fiat_curve25519_solinas_uint1 arg1,
+                                    uint64_t arg2, uint64_t arg3) {
+  fiat_curve25519_solinas_uint1 x1;
+  uint64_t x2;
+  uint64_t x3;
+  x1 = (!(!arg1));
+  x2 = ((fiat_curve25519_solinas_uint1)(0x0 - x1) &
+        UINT64_C(0xffffffffffffffff));
+  x3 = ((fiat_curve25519_solinas_value_barrier_u64(x2) & arg3) |
+        (fiat_curve25519_solinas_value_barrier_u64((~x2)) & arg2));
+  *out1 = x3;
+}
+
 /*
  * The function fiat_curve25519_solinas_addcarryx_u64 is an addition with carry.
  *
@@ -345,13 +385,12 @@ void fiat_curve25519_solinas_mulmod(uint64_t out1[4], const uint64_t arg1[4],
   fiat_curve25519_solinas_addcarryx_u64(&x126, &x127, x125, x115, 0x0);
   fiat_curve25519_solinas_addcarryx_u64(&x128, &x129, x127, x117, 0x0);
   fiat_curve25519_solinas_addcarryx_u64(&x130, &x131, x129, x119, 0x0);
-  fiat_curve25519_solinas_mulx_u64(&x132, &x133, UINT8_C(0x26), x131);
-  fiat_curve25519_solinas_addcarryx_u64(&x134, &x135, 0x0, x124, x132);
-  fiat_curve25519_solinas_addcarryx_u64(&x136, &x137, x135, x126, 0x0);
-  fiat_curve25519_solinas_addcarryx_u64(&x138, &x139, x137, x128, 0x0);
-  fiat_curve25519_solinas_addcarryx_u64(&x140, &x141, x139, x130, 0x0);
+
+  fiat_curve25519_solinas_cmovznz_u64(&x132, x131, UINT8_C(0x0), UINT8_C(0x26));
+  x134 = x132 + x124;
+
   out1[0] = x134;
-  out1[1] = x136;
-  out1[2] = x138;
-  out1[3] = x140;
+  out1[1] = x126;
+  out1[2] = x128;
+  out1[3] = x130;
 }
