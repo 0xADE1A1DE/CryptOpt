@@ -331,9 +331,9 @@ void fiat_curve25519_solinas_mulmod(uint64_t out1[4], const uint64_t arg1[4],
   fiat_curve25519_solinas_mulx_u64(&x100, &x101, UINT8_C(0x26), x88);
   fiat_curve25519_solinas_addcarryx_u64(&x102, &x103, 0x0, x82, x98);
   fiat_curve25519_solinas_addcarryx_u64(&x104, &x105, x103, x84, x96);
-  fiat_curve25519_solinas_mulx_u64(&x106, &x107, UINT8_C(0x26), x94);
+  fiat_curve25519_solinas_mulx_u64(&x106, &x111, UINT8_C(0x26), x94);
   fiat_curve25519_solinas_addcarryx_u64(&x108, &x109, x105, x86, x106);
-  fiat_curve25519_solinas_mulx_u64(&x110, &x111, UINT8_C(0x26), x94);
+  /** fiat_curve25519_solinas_mulx_u64(&x110, &x111, UINT8_C(0x26), x94); */
   x112 = (x109 + x111);
   fiat_curve25519_solinas_addcarryx_u64(&x113, &x114, 0x0, x31, x100);
   fiat_curve25519_solinas_addcarryx_u64(&x115, &x116, x114, x102, x101);

@@ -1960,7 +1960,7 @@
     },
     {
       "datatype": "(auto)",
-      "name": ["x106", "_"],
+      "name": ["x106", "x111"],
       "operation": "mulx",
       "parameters": {
         "size": 64
@@ -2026,30 +2026,6 @@
               "name": [],
               "operation": "static_cast",
               "arguments": ["x106"]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "datatype": "(auto)",
-      "name": ["_", "x111"],
-      "operation": "mulx",
-      "parameters": {
-        "size": 64
-      },
-      "arguments": [
-        "0x26",
-        {
-          "datatype": "u64",
-          "name": [],
-          "operation": "static_cast",
-          "arguments": [
-            {
-              "datatype": "u64",
-              "name": [],
-              "operation": "static_cast",
-              "arguments": ["x94"]
             }
           ]
         }
