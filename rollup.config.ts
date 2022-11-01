@@ -1,6 +1,6 @@
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 
 const external = [
   "child_process",
