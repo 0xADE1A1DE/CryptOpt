@@ -23,4 +23,12 @@ export const env = defaults(process.env, {
   CFLAGS: "-march=native -mtune=native -O3",
 });
 
-export const datadir = resolve(dirname(fileURLToPath(import.meta.url)), "data");
+const me = fileURLToPath(import.meta.url);
+
+// for this to work however, one must have executed `make build` at least once.
+export const datadir =
+  process.env.VITEST == "true"
+    ? // in test, we are in './src/helper/env.ts'
+      resolve(dirname(me), "..", "..", "dist", "data")
+    : // in prod, me is './dist/optimizer.helper.class-hash.js'
+      resolve(dirname(me), "data");
