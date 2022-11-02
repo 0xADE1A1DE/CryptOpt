@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import { execSync } from "child_process";
 import { existsSync, readFileSync } from "fs";
 import { groupBy } from "lodash-es";
 import { resolve } from "path";
@@ -94,7 +94,7 @@ export class BitcoinCoreBridge implements Bridge {
     }
 
     const opts = createExecOpts();
-    const command = `make -C ${cwd} ${filename}`;
+    const command = `make -C ${cwd} all`; // to get scalar.c / field.c
     console.log(`cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
 
     try {
@@ -102,6 +102,9 @@ export class BitcoinCoreBridge implements Bridge {
       // we need to all lock at the same thing.
       // if we'd lock at the `filename` everybody locks to some temporary file
       lockAndRunOrReturn(cwd, command, opts);
+
+      // then create the so files. we dont need locks for this.
+      execSync(`make -C ${cwd} ${filename}`, opts);
     } catch (e) {
       errorOut(ERRORS.bcbMakeFail);
     }
