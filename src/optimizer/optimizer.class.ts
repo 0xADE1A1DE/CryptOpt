@@ -15,7 +15,7 @@
  */
 
 import { execSync } from "child_process";
-import { existsSync, rmSync } from "fs";
+import { existsSync, rmSync, appendFileSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { tmpdir } from "os";
 import { join } from "path";
@@ -368,7 +368,9 @@ export class Optimizer {
               try {
                 const now = Date.now();
                 execSync(proofCmd);
-                globals.time.validate += (Date.now() - now) / 1000;
+                const timeForValidation = (Date.now() - now) / 1000;
+                appendFileSync(asmfile, `; validated in ${timeForValidation}ms`);
+                globals.time.validate += timeForValidation;
               } catch (e) {
                 errorOut(ERRORS.proofUnsuccessful);
               }
