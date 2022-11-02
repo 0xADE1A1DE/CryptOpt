@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-import { execSync } from "child_process";
 import { existsSync, readFileSync } from "fs";
 import { groupBy } from "lodash-es";
 import { resolve } from "path";
 
-import { ERRORS } from "@/errors";
+import { errorOut, ERRORS } from "@/errors";
 import { datadir, env, preprocessFunction } from "@/helper";
 import type { CryptOpt } from "@/types";
 
 import { Bridge } from "../bridge.interface";
+import { lockAndRunOrReturn } from "../bridge.helper";
+
 import { AVAILABLE_METHODS, METHOD_DETAILS, METHOD_T } from "./constants";
 import { BCBPreprocessor } from "./preprocess";
 import type { raw_T, structDef_T } from "./raw.type";
@@ -94,13 +95,12 @@ export class BitcoinCoreBridge implements Bridge {
 
     const opts = createExecOpts();
     const command = `make -C ${cwd} ${filename}`;
+    console.log(`cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
 
-    console.log(`executing cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
     try {
-      execSync(command, opts);
+      lockAndRunOrReturn(filename, command, opts);
     } catch (e) {
-      console.error(ERRORS.bcbMakeFail.msg);
-      process.exit(ERRORS.bcbMakeFail.exitCode);
+      errorOut(ERRORS.bcbMakeFail);
     }
 
     return METHOD_DETAILS[method].name;

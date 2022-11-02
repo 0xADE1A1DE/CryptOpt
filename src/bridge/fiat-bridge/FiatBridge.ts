@@ -32,7 +32,7 @@ import {
   SHA256SUMS,
 } from "./constants";
 import { BINS } from "./enums";
-import { lockAndRun } from "../bridge.helper";
+import { lockAndRunOrReturn } from "../bridge.helper";
 
 const cwd = resolve(datadir, "fiat-bridge");
 
@@ -78,7 +78,7 @@ export class FiatBridge implements Bridge {
     if (!existsSync(jsonCacheFilename)) {
       const command = `data=$(${cmd} | jq -s .[0]); cat <<<"\${data}" > ${jsonCacheFilename}`;
       console.log(`cmd to generate fiat: ${command}`);
-      lockAndRun(jsonCacheFilename, command);
+      lockAndRunOrReturn(jsonCacheFilename, command);
     }
 
     console.log(`reading json-fiat: ${jsonCacheFilename}`);
@@ -120,13 +120,13 @@ export class FiatBridge implements Bridge {
       // create cCacheFilename
       const command = `data=$(${cmd}); cat <<<"\${data}" > ${cCacheFilename}`;
       console.log(`cmd to generate c-cache file: ${command}`);
-      lockAndRun(cCacheFilename, command);
+      lockAndRunOrReturn(cCacheFilename, command);
     }
 
     // then we can compile from the c file.
     const command = `${cc} ${CFLAGS} -fPIC -shared -o ${filename} ${cCacheFilename}`;
     console.log(`cmd to generate machinecode: ${command}`);
-    lockAndRun(filename, command);
+    lockAndRunOrReturn(filename, command);
 
     return methodname;
   }
