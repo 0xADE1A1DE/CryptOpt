@@ -98,7 +98,10 @@ export class BitcoinCoreBridge implements Bridge {
     console.log(`cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
 
     try {
-      lockAndRunOrReturn(filename, command, opts);
+      // yeah.
+      // we need to all lock at the same thing.
+      // if we'd lock at the `filename` everybody locks to some temporary file
+      lockAndRunOrReturn(cwd, command, opts);
     } catch (e) {
       errorOut(ERRORS.bcbMakeFail);
     }
