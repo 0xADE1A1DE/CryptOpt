@@ -41,4 +41,6 @@ export const KNOWN_SYMBOLS: {
   fiat_secp256k1_square: { bridge: "fiat", method: "square", curve: "secp256k1" },
 
   // bitcoin curve
+  secp256k1_fe_mul_inner: { bridge: "bitcoin-core", method: "mul", curve: "secp256k1" },
+  secp256k1_fe_sqr_inner: { bridge: "bitcoin-core", method: "square", curve: "secp256k1" },
 };
