@@ -136,7 +136,6 @@ export const parsedArgs = y
       "This describes how many cycles one measurement should take. The batch size will be adjusted dynamically.",
   })
   .option("evals", {
-    number: true,
     alias: "e",
     default: "10k",
     describe:
