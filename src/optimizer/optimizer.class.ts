@@ -369,7 +369,7 @@ export class Optimizer {
                 const now = Date.now();
                 execSync(proofCmd, { shell: "/usr/bin/bash" });
                 const timeForValidation = (Date.now() - now) / 1000;
-                appendFileSync(asmfile, `; validated in ${timeForValidation}ms`);
+                appendFileSync(asmfile, `\n; validated in ${timeForValidation}s\n`);
                 globals.time.validate += timeForValidation;
               } catch (e) {
                 errorOut(ERRORS.proofUnsuccessful);
