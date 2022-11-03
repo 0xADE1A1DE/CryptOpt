@@ -2,7 +2,7 @@ import { lockSync, checkSync } from "proper-lockfile";
 import { execSync } from "child_process";
 import type { ExecSyncOptions } from "child_process";
 // if we dont get the lock, this function will wait until the lock is gone and return.
-export function lockAndRunOrReturn(filename: string, cmd: string, opts?: ExecSyncOptions): void {
+export function lockAndRunOrReturn(filename: string, cmd: string, opts: ExecSyncOptions = {}): void {
   try {
     //  try to get lock
     const release = lockSync(filename, { realpath: false });

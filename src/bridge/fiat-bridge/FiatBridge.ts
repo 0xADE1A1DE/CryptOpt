@@ -78,7 +78,7 @@ export class FiatBridge implements Bridge {
     if (!existsSync(jsonCacheFilename)) {
       const command = `data=$(${cmd} | jq -s .[0]); cat <<<"\${data}" > ${jsonCacheFilename}`;
       console.log(`cmd to generate fiat: ${command}`);
-      lockAndRunOrReturn(jsonCacheFilename, command);
+      lockAndRunOrReturn(jsonCacheFilename, command, { shell: "/usr/bin/bash" }); // we need the shell to understand the <<< redirect
     }
 
     console.log(`reading json-fiat: ${jsonCacheFilename}`);
@@ -120,13 +120,13 @@ export class FiatBridge implements Bridge {
       // create cCacheFilename
       const command = `data=$(${cmd}); cat <<<"\${data}" > ${cCacheFilename}`;
       console.log(`cmd to generate c-cache file: ${command}`);
-      lockAndRunOrReturn(cCacheFilename, command);
+      lockAndRunOrReturn(cCacheFilename, command, { shell: "/usr/bin/bash" }); // we need the shell to understand the <<< redirect
     }
 
     // then we can compile from the c file.
     const command = `${cc} ${CFLAGS} -fPIC -shared -o ${filename} ${cCacheFilename}`;
     console.log(`cmd to generate machinecode: ${command}`);
-    lockAndRunOrReturn(filename, command);
+    lockAndRunOrReturn(filename, command, { shell: "/usr/bin/bash" });
 
     return methodname;
   }

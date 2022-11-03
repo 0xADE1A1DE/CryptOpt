@@ -367,7 +367,7 @@ export class Optimizer {
               console.log(`proofing that asm correct with '${proofCmd}'`);
               try {
                 const now = Date.now();
-                execSync(proofCmd);
+                execSync(proofCmd, { shell: "/usr/bin/bash" });
                 const timeForValidation = (Date.now() - now) / 1000;
                 appendFileSync(asmfile, `; validated in ${timeForValidation}ms`);
                 globals.time.validate += timeForValidation;

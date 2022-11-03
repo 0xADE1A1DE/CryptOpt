@@ -32,7 +32,7 @@ import type { raw_T, structDef_T } from "./raw.type";
 const cwd = resolve(datadir, "bitcoin-core-bridge");
 
 const createExecOpts = () => {
-  const c = { env, cwd };
+  const c = { env, cwd, shell: "/usr/bin/bash" };
   c.env.CFLAGS = `-DUSE_ASM_X86_64 ${c.env.CFLAGS}`;
   return c;
 };
