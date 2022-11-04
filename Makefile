@@ -43,7 +43,7 @@ $(BUILT_CRYPTOPT): $(NODE) $(BUILT_MS) $(shell find ./src -type f -name '*ts')
 	@test -e "$(@)" && touch $(@) && echo "Sucessfully built CryptOpt. :)"
 
 check: $(BUILT_CRYPTOPT)
-	PATH=$(PATH) npm run test
+	PATH=$(PATH) npm run test-no-watch
 
 clean:
 	rm -rf ./dist ./coverage

@@ -23,6 +23,7 @@
   "homepage": "https://github.com/0xADE1AIDE/CryptOpt#readme",
   "scripts": {
     "test": "vitest",
+    "test-no-wait": "vitest --watch false",
     "test-cov": " vitest --coverage",
     "lint-check": "eslint .",
     "lint-fix": "eslint . --fix",
