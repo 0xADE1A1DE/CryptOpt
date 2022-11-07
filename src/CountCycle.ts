@@ -1,7 +1,8 @@
 /**
- * This script takes one or two argument:
+ * This script takes one or three argument:
  * one argument
  *      - a path to an asm-file, implementing a known/supported method or
+ *      - a symbol name to measure with libObly
  * three arguments
  *      - path to  asm-file
  *      - path to    c-file
@@ -18,14 +19,13 @@
  **/
 
 import { tmpdir } from "os";
-import { join } from "path";
+import { join, basename } from "path";
 import * as Stats from "simple-statistics";
 import fs from "fs";
 
 import { sha1Hash } from "@/paul";
 import { analyseRow, ttable, CONF_IDX } from "@/helper";
 import { Measuresuite } from "measuresuite";
-import type { MeasureResult } from "measuresuite";
 import { init } from "@/optimizer/optimizer.helper.class";
 import { KNOWN_SYMBOLS } from "@/bridge";
 
@@ -36,33 +36,38 @@ const BATCH_SIZE = 400; // bs in the paper
 
 let tries = 100; // we should never need that many, but to avoid an infinite loop
 
-const [, , asmFilename, cFilename, jsonFilename] = process.argv;
-if (!asmFilename) {
-  console.error("Must provide at least one asmFilename as first parameter");
-  process.exit(-1);
-}
-const seed = Number(
-  asmFilename
-    .split("/")
-    .reverse()[0]
-    .match(/seed(?<seed>[0-9]+)_ratio(?<radio>[0-9])+\.asm/)?.groups?.seed,
-);
-
-if (isNaN(seed)) {
-  console.error("the filename is not off the right format. Must match /seed[0-9]+_ratio[0-9]+.asm/ .");
-  process.exit(-1);
-}
-
-main(seed);
-
+main();
 //
 // Functions
 // below
 //
-function main(seed: number) {
+function main() {
   const shout = silence();
-  const asmString = fs.readFileSync(asmFilename).toString();
-  const ms = createMS(asmString, seed);
+  const [, , param_one, cFilename, jsonFilename] = process.argv;
+
+  if (!param_one) {
+    console.error("Must provide at least one asmFilename or symbolName as first parameter");
+    process.exit(-1);
+  }
+
+  let seed = Date.now();
+  let asmString: string | null = null;
+  let symbol: string | undefined;
+  if (fs.existsSync(param_one)) {
+    seed = Number(basename(param_one).match(/seed(?<seed>[0-9]+)_ratio(?<radio>[0-9])+\.asm/)?.groups?.seed);
+
+    if (isNaN(seed)) {
+      console.error("The filename is not in the right format. Must match /seed[0-9]+_ratio[0-9]+.asm/ .");
+      process.exit(-1);
+    }
+
+    asmString = fs.readFileSync(param_one).toString();
+    symbol = getSymbol(asmString);
+  } else {
+    // otherwise param_one must have been a symbol
+    symbol = param_one;
+  }
+  const ms = createMS(symbol, seed, cFilename, jsonFilename);
   // TESTING
   do {
     // do one sample
@@ -102,11 +107,11 @@ function main(seed: number) {
       shout(mean);
       return;
     }
-    fs.appendFileSync("/tmp/cycle_count-retry.log", `${Date()}${asmFilename},${tries}\n`);
+    fs.appendFileSync("/tmp/cycle_count-retry.log", `${Date()}${param_one},${tries}\n`);
   } while (tries--);
 }
 
-function createMS(asmstring: string, seed: number): Measuresuite {
+function getSymbol(asmstring: string): string | never {
   const symbol = asmstring
     .split("\n")
     .find((e) => e.includes("GLOBAL"))
@@ -115,7 +120,10 @@ function createMS(asmstring: string, seed: number): Measuresuite {
     console.error("Cannot find any symbol in asmstring. Must match /\\s*GLOBAL (?<symbol>.*)/");
     process.exit(-1);
   }
+  return symbol;
+}
 
+function createMS(symbol: string, seed: number, jsonFilename: string, cFilename: string): Measuresuite {
   const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
   const cacheDir = join(tmpdir(), "CryptOpt.CountCycle.cache", randomString);
   if (symbol in KNOWN_SYMBOLS) {
@@ -150,31 +158,27 @@ function silence() {
   return backup;
 }
 
-function doSample(ms: Measuresuite, size: number, asmstring: string): number[] | number {
+function doSample(ms: Measuresuite, size: number, asmstring: string | null): number[] | number {
   const resultCycleMedians: number[] = [];
 
   for (let i = 0; i < size; i++) {
-    let result: MeasureResult | null = null;
-
+    let cycles: number[] = [];
     try {
-      result = ms.measure(asmstring, asmstring, BATCH_SIZE, NUMBER_OF_BATCHES);
+      if (asmstring == null) {
+        cycles = ms.measureLibOnly(BATCH_SIZE, NUMBER_OF_BATCHES) || [];
+      } else {
+        const result = ms.measure(asmstring, asmstring, BATCH_SIZE, NUMBER_OF_BATCHES);
+        if (!result?.stats.checkResult) {
+          console.error("No / Wrong result");
+          process.exit(-1);
+        }
+        cycles = result.times.map((t) => t[0]); // a
+      }
     } catch (e) {
       console.error("execution of measure failed.", e);
     }
 
-    if (!result) {
-      console.error(
-        "Measure was executed without throwing an error, but the result is null-ish. This should not happen. Exiting",
-      );
-      process.exit(-1);
-    }
-    if (!result.stats.checkResult) {
-      console.error("Wrong result");
-      process.exit(-1);
-    }
-
-    const allAs = result.times.map((t) => t[0]); // a
-    const { median } = analyseRow(allAs).post;
+    const { median } = analyseRow(cycles).post;
     resultCycleMedians.push(median);
   }
 
