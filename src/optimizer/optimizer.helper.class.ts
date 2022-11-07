@@ -140,7 +140,7 @@ function createMS(
 }
 
 export function init(tmpDir: string, args: neededArgs): { symbolname: string; measuresuite: Measuresuite } {
-  // Create temp direcotry for the so-files
+  // Create temp directory for the so-files
   mkdirSync(tmpDir, { recursive: true });
 
   const sharedObjectFilename = resolve(
@@ -148,20 +148,19 @@ export function init(tmpDir: string, args: neededArgs): { symbolname: string; me
     `libcheckfunctions-s${args.seed}-b${args.bridge}-p${process.pid}.so`,
   );
 
+  let r: ret;
   switch (args.bridge) {
-    case "manual": {
-      const a = initManual(sharedObjectFilename, args);
-      return createMS(a, sharedObjectFilename);
-    }
-    case "fiat": {
-      const a = initFiat(sharedObjectFilename, args);
-      return createMS(a, sharedObjectFilename);
-    }
-    case "bitcoin-core": {
-      const a = initBitcoinCore(sharedObjectFilename, args);
-      return createMS(a, sharedObjectFilename);
-    }
+    case "manual":
+      r = initManual(sharedObjectFilename, args);
+      break;
+    case "fiat":
+      r = initFiat(sharedObjectFilename, args);
+      break;
+    case "bitcoin-core":
+      r = initBitcoinCore(sharedObjectFilename, args);
+      break;
     default:
       throw new Error("Bridge is specified, but not valid.");
   }
+  return createMS(r, sharedObjectFilename);
 }
