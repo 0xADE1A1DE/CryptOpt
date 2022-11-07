@@ -18,7 +18,7 @@ import { execSync } from "child_process";
 import { existsSync, rmSync, appendFileSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { tmpdir } from "os";
-import { join } from "path";
+import { join, resolve as pathResolve } from "path";
 
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
@@ -48,7 +48,7 @@ let choice: CHOICE;
 
 export class Optimizer {
   private measuresuite: Measuresuite;
-  private libcheckfunctionDirectory: string;
+  private libcheckfunctionDirectory: string; // aka. /tmp/CryptOpt.cache/yolo123
   private symbolname: string;
   public getSymbolname(): string {
     return this.symbolname;
@@ -158,11 +158,15 @@ export class Optimizer {
         this.no_of_instructions = filteredInstructions.length;
 
         // and depening on the silent-opt use filtered or the verbose ones for the string
-        this.asmStrings[currentNameOfTheFunctionThatHasTheMutation] = (
-          !this.args.verbose ? filteredInstructions : code
-        ).join("\n");
-        // check if this was the first round
+        if (this.args.verbose) {
+          const c = code.join("\n");
+          writeString(pathResolve(this.libcheckfunctionDirectory, "current.asm"), c);
+          this.asmStrings[currentNameOfTheFunctionThatHasTheMutation] = c;
+        } else {
+          this.asmStrings[currentNameOfTheFunctionThatHasTheMutation] = filteredInstructions.join("\n");
+        }
 
+        // check if this was the first round
         if (numEvals == 0) {
           // then point to fB and continue, write first
           if (this.asmStrings[FUNCTIONS.F_A].includes("undefined")) {
