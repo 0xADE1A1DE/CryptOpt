@@ -91,8 +91,8 @@ function main() {
     console.error(`StdDev: ${std1}; ${std2}`);
 
     const tvalue = Stats.tTestTwoSample(sample1, sample2);
-    if (!tvalue) {
-      console.error("t-value shall not be zero.");
+    if (tvalue == null) {
+      console.error("t-value shall not be null.");
       process.exit(1);
     }
 
