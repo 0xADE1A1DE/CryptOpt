@@ -288,26 +288,45 @@ export function r__f_f(out: string): asm[] {
   if (cfDep && ofDep) {
     throw new Error("currently only supported that one flag can have further deps");
   }
-  if (cfDep) {
-    // cf hasDeps, of doesnt matter
-    const breg = ra.spillFlag(Flags.CF, out);
+
+  if (cfDep && !ofDep) {
+    // cf hasDeps, of does not
+    const breg = ra.spillFlag(Flags.CF, out); //breg will contain the final result. (we give 'out' as a param)
     if (!breg) {
       throw Error("how can breg be false now?");
     }
     const { reg, inst } = zx(breg);
     const zero = ra.loadImmToReg64("0x0");
     ra.declareFlagState(Flags.OF, FlagState.ZERO);
-    ra.declareFlagState(Flags.CF, FlagState.KILLED);
+    // keep reference in ra that CF actually still has the flag for further processing
+    ra.declareFlagState(Flags.CF, FlagState.ALIVE);
     // add OF to this
     return [inst, `adox ${reg}, ${zero}; spilled cf, zxed it, + 0 + of`];
-  } else {
-    // of has deps, cf has none
-    const breg = ra.spillFlag(Flags.OF, out);
-    if (breg === false) {
-      throw new Error("OF-Flag was not alive. TSNH.");
+  }
+
+  if (!cfDep && ofDep) {
+    // cf no deps, of does
+    const breg = ra.spillFlag(Flags.OF); // breg will contain the spilled value, not giving out
+    if (!breg) {
+      throw Error("how can breg be false now?");
     }
+    const outreg = ra.getW(out);
+
     ra.declareFlagState(Flags.OF, FlagState.ZERO);
     ra.declareFlagState(Flags.CF, FlagState.ZERO);
-    return [`adc ${breg}, 0x0; r<-f+f`, zx(breg).inst];
+    // add spilled OF to this
+    return [
+      `movzx ${outreg}, ${breg}; OF in dest`,
+      `adc ${outreg}, 0x0; spilled of to r/8, zxed it, adc 0 to out`,
+    ];
   }
+
+  // none have deps
+  const breg = ra.spillFlag(Flags.OF, out);
+  if (breg === false) {
+    throw new Error("OF-Flag was not alive. TSNH.");
+  }
+  ra.declareFlagState(Flags.OF, FlagState.ZERO);
+  ra.declareFlagState(Flags.CF, FlagState.ZERO);
+  return [`adc ${breg}, 0x0; r<-f+f`, zx(breg).inst];
 }
