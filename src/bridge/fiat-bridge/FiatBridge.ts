@@ -141,7 +141,7 @@ export class FiatBridge implements Bridge {
     method: METHOD_T,
     lang: "C" | "JSON",
   ): { cmd: string; methodname: string; hash: string } {
-    const { binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { limbwidth, magnitude, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
 
     const binWithPath = resolve(cwd, binary);
     FiatBridge.check(curve, method, binWithPath, lang);
@@ -162,10 +162,17 @@ export class FiatBridge implements Bridge {
     const hashFiatBinaries = readFileSync(sha256sumsFile).toString();
 
     let cmd = "";
-    if (binary == BINS.unsaturated) {
-      cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${prime}' ${required_function}`;
-    } else {
-      cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'               '${prime}' ${required_function}`;
+    switch (binary) {
+      case BINS.dettman:
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function}`;
+        break;
+      case BINS.unsaturated:
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}'                '${prime}'              ${required_function}`;
+        break;
+      case BINS.wbw_montgomery:
+      case BINS.solinas:
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'                              '${prime}'              ${required_function}`;
+        break;
     }
 
     // now generate the hash
@@ -178,7 +185,7 @@ export class FiatBridge implements Bridge {
    */
 
   public static buildProofCommand(curve: CURVE_T, method: METHOD_T, hintsFilename: string): string {
-    const { binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { limbwidth, magnitude, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
     const binWithPath = resolve(cwd, binary);
 
     FiatBridge.check(curve, method, binWithPath);
@@ -196,10 +203,14 @@ export class FiatBridge implements Bridge {
     const hintstring = `--hints-file ${hintsFilename}`;
 
     switch (binary) {
+      case BINS.dettman:
+        CODE_PROOF_ARGS += ` --extra-rewrite-rule or-to-add`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function} ${hintstring}`;
       case BINS.unsaturated:
         CODE_PROOF_ARGS += ` --tight-bounds-mul-by 1.000001`;
         return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${prime}' ${required_function} ${hintstring}`;
       case BINS.wbw_montgomery:
+      case BINS.solinas:
         return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'               '${prime}' ${required_function} ${hintstring}`;
     }
   }

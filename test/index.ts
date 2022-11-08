@@ -49,7 +49,7 @@ describe("full tests fiat", () => {
 
     expect(() => {
       new Optimizer(Object.assign({}, args, { curve: "INVALIDCURVE", method: "square" }));
-    }).toThrow(/Cannot destructure property 'binary' of '.*' as it is undefined./);
+    }).toThrow(/Cannot destructure property '.*' of '.*' as it is undefined./);
   });
 
   afterAll(() => {

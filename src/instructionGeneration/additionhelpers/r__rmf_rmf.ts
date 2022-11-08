@@ -274,15 +274,40 @@ export function r__m_f(out: string, m0: MemoryAllocation, f1: U1FlagAllocation):
 
 // reg = CF + OF
 // allocate a reg(u64 for now, could be put to u8/u2 later); clears CF/OF
+// depending on if/which  flag has dependencies
+// spill one and adX the other
 //-seto al, adc al, 0x0, movzx rax, al;
 //---------------
 export function r__f_f(out: string): asm[] {
   const ra = getRa();
-  const reg = ra.spillFlag(Flags.OF, out);
-  if (reg === false) {
-    throw new Error("OF-Flag was not alive. TSNH.");
+  const cfName = ra.getVarnameFromStore({ store: Flags.CF });
+  const ofName = ra.getVarnameFromStore({ store: Flags.OF });
+  const cfDep = Model.hasDependants(cfName);
+  const ofDep = Model.hasDependants(ofName);
+
+  if (cfDep && ofDep) {
+    throw new Error("currently only supported that one flag can have further deps");
   }
-  ra.declareFlagState(Flags.OF, FlagState.ZERO);
-  ra.declareFlagState(Flags.CF, FlagState.ZERO);
-  return [`adc ${reg}, 0x0; r<-f+f`, zx(reg).inst];
+  if (cfDep) {
+    // cf hasDeps, of doesnt matter
+    const breg = ra.spillFlag(Flags.CF, out);
+    if (!breg) {
+      throw Error("how can breg be false now?");
+    }
+    const { reg, inst } = zx(breg);
+    const zero = ra.loadImmToReg64("0x0");
+    ra.declareFlagState(Flags.OF, FlagState.ZERO);
+    ra.declareFlagState(Flags.CF, FlagState.KILLED);
+    // add OF to this
+    return [inst, `adox ${reg}, ${zero}; spilled cf, zxed it, + 0 + of`];
+  } else {
+    // of has deps, cf has none
+    const breg = ra.spillFlag(Flags.OF, out);
+    if (breg === false) {
+      throw new Error("OF-Flag was not alive. TSNH.");
+    }
+    ra.declareFlagState(Flags.OF, FlagState.ZERO);
+    ra.declareFlagState(Flags.CF, FlagState.ZERO);
+    return [`adc ${breg}, 0x0; r<-f+f`, zx(breg).inst];
+  }
 }

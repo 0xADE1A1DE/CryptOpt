@@ -23,6 +23,7 @@ export const SHA256SUMS = "sha256sums"; // the one created in the Makefile
 
 export const AVAILABLE_CURVES = [
   "curve25519",
+  "curve25519_solinas",
   "p224",
   "p256",
   "p384",
@@ -31,6 +32,7 @@ export const AVAILABLE_CURVES = [
   "p521",
   "poly1305",
   "secp256k1",
+  "secp256k1_dettman",
 ];
 export const AVAILABLE_METHODS = ["square", "mul", "add", "sub"];
 
@@ -45,12 +47,16 @@ export const METHOD_DETAILS: {
     name: {
       [BINS.unsaturated]: "carry_add",
       [BINS.wbw_montgomery]: "add",
+      [BINS.solinas]: "",
+      [BINS.dettman]: "",
     },
   },
   sub: {
     name: {
       [BINS.unsaturated]: "carry_sub",
       [BINS.wbw_montgomery]: "sub",
+      [BINS.solinas]: "",
+      [BINS.dettman]: "",
     },
   },
   mul: {
@@ -58,12 +64,16 @@ export const METHOD_DETAILS: {
     name: {
       [BINS.unsaturated]: "carry_mul",
       [BINS.wbw_montgomery]: "mul",
+      [BINS.solinas]: "mul",
+      [BINS.dettman]: "mul",
     },
   },
   square: {
     name: {
       [BINS.unsaturated]: "carry_square",
       [BINS.wbw_montgomery]: "square",
+      [BINS.solinas]: "square",
+      [BINS.dettman]: "square",
     },
   },
 };
@@ -75,6 +85,8 @@ export const CURVE_DETAILS: {
     prime: string;
     binary: BINS;
     bounds: string[];
+    magnitude?: number; // only used in dettman
+    limbwidth?: number; // only used in dettman
   };
 } = {
   curve25519: {
@@ -89,6 +101,13 @@ export const CURVE_DETAILS: {
       "0x18000000000000",
       "0x18000000000000",
     ],
+  },
+  curve25519_solinas: {
+    argwidth: 4,
+    bitwidth: 64,
+    prime: "2^255 - 19",
+    binary: BINS.solinas,
+    bounds: ["0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff"],
   },
   p224: {
     bitwidth: 64,
@@ -177,6 +196,17 @@ export const CURVE_DETAILS: {
     argwidth: 4,
     bitwidth: 64,
     prime: "2^256 - 2^32 - 977",
+    binary: BINS.wbw_montgomery,
+    bounds: ["0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff"],
+  },
+
+  // /tmp/dettman_multiplication dettman 64 5 52 '2^256 - 4294968273' 1 mul --hints-file ${f} --no-wide-int --output-asm /dev/null --output /dev/null && echo $f ok
+  secp256k1_dettman: {
+    argwidth: 5,
+    bitwidth: 64,
+    magnitude: 1,
+    limbwidth: 52,
+    prime: "2^256 - 4294968273",
     binary: BINS.wbw_montgomery,
     bounds: ["0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff"],
   },
