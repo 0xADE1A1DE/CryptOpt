@@ -40,7 +40,7 @@ RUN cd /root/fiat-crypto && \
         make -j2 -C /root/fiat-crypto standalone-ocaml
 
 # get and install CryptOpt
-RUN git clone --jobs 3 --recurse-submodules --single-branch https://github.com/0xADE1A1DE/CryptOpt /root/CryptOpt
+RUN git clone --jobs 3 --recurse-submodules  https://github.com/0xADE1A1DE/CryptOpt /root/CryptOpt
 RUN cd /root/CryptOpt && \
         git checkout dev && \
         make
