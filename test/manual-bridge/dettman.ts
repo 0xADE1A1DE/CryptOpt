@@ -68,7 +68,7 @@ it("optimise", () => {
 
 afterAll(() => {
   // readFileSync(resultpath);
-  console.warn(resultpath);
+  console.log(resultpath);
   // rm(resultpath, { recursive: true, force: true }, () => nothing);
   mockLog.mockRestore();
   mockErr.mockRestore();

@@ -15,12 +15,14 @@
  */
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AllocationFlags, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Register } from "@/enums";
 import { mulx } from "@/instructionGeneration/multiplication";
 import type { AllocationReq, AllocationRes, Allocations, asm } from "@/types";
+import { nothing } from "../test-helpers";
 
+const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
 const allocate = vi.fn();
 const getCurrentAllocations = vi.fn();
 const declare128 = vi.fn();
@@ -476,5 +478,9 @@ describe("instructionGeneration:mulx", () => {
       expect(getCurrentAllocations).toBeCalled();
       expect(allocate).toBeCalled();
     });
+  });
+  afterAll(() => {
+    mockLog.mockRestore();
+    vi.useRealTimers();
   });
 });
