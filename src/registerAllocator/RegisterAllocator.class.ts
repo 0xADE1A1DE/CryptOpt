@@ -987,7 +987,9 @@ export class RegisterAllocator {
     };
     if (isFlag(setcc)) {
       const flag = setcc;
-      this._preInstructions.push(`${SETX[setcc]} ${bytereg}; spill ${flag} ${nameOfVar} to reg (${reg})`);
+      this._preInstructions.push(
+        `${SETX[setcc]} ${bytereg}; spill ${flag} ${nameOfVar}${this._flags[flag] || "-"} to reg (${reg})`,
+      );
       this.declareFlagState(flag, FlagState.KILLED);
     } else {
       if (!setcc.startsWith("set")) {
