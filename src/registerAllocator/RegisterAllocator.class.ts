@@ -1014,6 +1014,10 @@ export class RegisterAllocator {
     if (!nameOfVar) {
       nameOfVar = this._flags[flag];
     }
+    if (!nameOfVar) {
+      // I think this happens, When flag was `_` from the last operation and has been scrapped by the cleanup.
+      return false;
+    }
     if (!Model.hasDependants(nameOfVar)) {
       this._preInstructions.push(
         `;should save ${flag}(${nameOfVar}) but as it has not dependents, we just ignore it.`,
