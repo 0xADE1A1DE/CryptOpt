@@ -33,7 +33,7 @@ $(NODE):
 	curl -L https://nodejs.org/dist/v$(NODE_VERSION)/node-v$(NODE_VERSION)-linux-x64.tar.xz | tar --extract --xz --directory ./bins
 	mv -f ./bins/node-v$(NODE_VERSION)-linux-x64 "$(NODE_DIR)"
 
-$(BUILT_MS): $(NODE) $(shell find ./modules/MeasureSuite -type f -name '*ts')
+$(BUILT_MS): $(NODE) $(shell find ./modules/MeasureSuite -type f -name '*.ts' -or -name '*.c')
 	@test -d ./modules/MeasureSuite || echo "MeasureSuite is not there. Please init by updating git submodules" >&2
 	CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm clean-install
 	@touch $(^) $(@)
