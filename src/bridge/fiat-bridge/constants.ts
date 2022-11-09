@@ -34,7 +34,7 @@ export const AVAILABLE_CURVES = [
   "secp256k1",
   "secp256k1_dettman",
 ];
-export const AVAILABLE_METHODS = ["square", "mul", "add", "sub"];
+export const AVAILABLE_METHODS = ["square", "mul", "mul2", "add", "sub"];
 
 export const METHOD_DETAILS: {
   [f in METHOD_T]: {
@@ -66,6 +66,14 @@ export const METHOD_DETAILS: {
       [BINS.wbw_montgomery]: "mul",
       [BINS.solinas]: "mul",
       [BINS.dettman]: "mul",
+    },
+  },
+  mul2: {
+    name: {
+      [BINS.unsaturated]: "",
+      [BINS.wbw_montgomery]: "",
+      [BINS.solinas]: "mul2",
+      [BINS.dettman]: "",
     },
   },
   square: {

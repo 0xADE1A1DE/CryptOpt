@@ -44,12 +44,14 @@ export class FiatBridge implements Bridge {
     if (!AVAILABLE_METHODS.includes(m)) {
       throw new Error(`unsupported method ${m}`);
     }
+    if (m === "mul2") return 4;
     if (m === "square") return 1;
     // add, sub, mul
     return 2;
   }
 
-  public argnumout(_m: METHOD_T): number {
+  public argnumout(m: METHOD_T): number {
+    if (m === "mul2") return 2;
     return 1;
   }
 
