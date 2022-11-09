@@ -19,6 +19,7 @@ import { defaults } from "lodash-es";
 import { AllocationFlags, Flags, FlagState } from "@/enums";
 import { limbify, matchIMM, matchXD } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
+import { Model } from "@/model";
 import { AllocationRes, asm, CryptOpt } from "@/types";
 
 // assumes, that arg[2] is always val_imm
@@ -189,10 +190,18 @@ export function shiftRightDouble(c: CryptOpt.StringOperation): asm[] {
         // now we need to make the high limb sar'ed
         const hi_limb_reg = allocation.oReg[1];
         ra.declare128(c.name[0]);
-        return asm.concat(
-          `mov ${hi_limb_reg}, ${shiftWidth}; abusing out reg for imm to sarx`,
-          `sarx ${hi_limb_reg}, ${allocation.in[1]}, ${hi_limb_reg}; hi-limb`,
+
+        // TODO: If fillFromVarname has deps, use sarx (and get shiftWidth via allocate), if nor, use sar (no mov)
+        const code = asm.concat(
+          `mov ${hi_limb_reg}, ${allocation.in[1]}`,
+          `sar ${hi_limb_reg}, ${shiftWidth}; hi-limb`,
         );
+        return code;
+
+        // return asm.concat(
+        //   `mov ${hi_limb_reg}, ${shiftWidth}; abusing out reg for imm to sarx`,
+        //   `sarx ${hi_limb_reg}, ${allocation.in[1]}, ${hi_limb_reg}; hi-limb`,
+        // );
       } else {
         throw new Error("unsuppoted");
       }
