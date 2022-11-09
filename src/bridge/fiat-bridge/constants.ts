@@ -208,6 +208,12 @@ export const CURVE_DETAILS: {
     limbwidth: 52,
     prime: "2^256 - 4294968273",
     binary: BINS.wbw_montgomery,
-    bounds: ["0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff"],
+    bounds: [
+      "0x1ffffffffffffe",
+      "0x1ffffffffffffe",
+      "0x1ffffffffffffe",
+      "0x1ffffffffffffe",
+      "0x1fffffffffffe",
+    ],
   },
 };
