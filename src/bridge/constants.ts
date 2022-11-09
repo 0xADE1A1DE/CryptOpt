@@ -24,6 +24,7 @@ export const KNOWN_SYMBOLS: {
   fiat_curve25519_carry_mul: { bridge: "fiat", method: "mul", curve: "curve25519" },
   fiat_curve25519_carry_square: { bridge: "fiat", method: "square", curve: "curve25519" },
   fiat_curve25519_solinas_mul: { bridge: "fiat", method: "mul", curve: "curve25519_solinas" },
+  fiat_curve25519_solinas_mul2: { bridge: "fiat", method: "mul2", curve: "curve25519_solinas" },
   fiat_curve25519_solinas_square: { bridge: "fiat", method: "square", curve: "curve25519_solinas" },
   fiat_p224_mul: { bridge: "fiat", method: "mul", curve: "p224" },
   fiat_p224_square: { bridge: "fiat", method: "square", curve: "p224" },
