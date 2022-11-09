@@ -184,6 +184,16 @@ export class Optimizer {
           let analyseResult: AnalyseResult | undefined;
           try {
             console.log("let the measurements begin!");
+            if (this.args.verbose) {
+              writeString(
+                pathResolve(this.libcheckfunctionDirectory, "currentA.asm"),
+                this.asmStrings[FUNCTIONS.F_A],
+              );
+              writeString(
+                pathResolve(this.libcheckfunctionDirectory, "currentB.asm"),
+                this.asmStrings[FUNCTIONS.F_B],
+              );
+            }
             // here we need the barriers
             const results = this.measuresuite.measure(
               this.asmStrings[FUNCTIONS.F_A],
