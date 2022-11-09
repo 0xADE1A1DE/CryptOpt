@@ -64,6 +64,7 @@ vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
             /**intentionally empty */
           },
           zext,
+          lazyMov,
           declareDatatypeForVar,
         };
       },
@@ -496,5 +497,61 @@ describe("instructionGeneration:and", () => {
     expect(getCurrentAllocations).toBeCalled();
     expect(allocate).toBeCalled();
     expect(declareDatatypeForVar).toBeCalledWith("x68", "u1");
+  });
+  it("should lazyMov low limb if the AND is 128bit with 0xffffffffffffffff", () => {
+    getCurrentAllocations.mockImplementation(() => {
+      return {
+        x131: { datatype: "u128" },
+        x131_0: { datatype: "u64", store: Register.r10 },
+        x131_1: { datatype: "u64", store: Register.r11 },
+      } as Allocations;
+    });
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x132"],
+      datatype: "u64",
+      operation: "&",
+      decisions: {
+        di_choose_arg: [1, ["x131", "0xffffffffffffffff"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x131", "0xffffffffffffffff"],
+    };
+    const code = bitwiseOp(c);
+    expect(code).toHaveLength(1);
+    expect(getCurrentAllocations).toBeCalled();
+    expect(lazyMov).toBeCalledWith(`${c.arguments[0]}_0`, c.name[0]);
+    expect(code[0]).toMatch(/;.*/);
+  });
+  it("should lazyMov if the AND is 64bit with 0xffffffffffffffff (64bits)", () => {
+    getCurrentAllocations.mockImplementation(() => {
+      return {
+        x131: { datatype: "u64", store: Register.r11 },
+      } as Allocations;
+    });
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x132"],
+      datatype: "u64",
+      operation: "&",
+      decisions: {
+        di_choose_arg: [1, ["x131", "0xffffffffffffffff"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x131", "0xffffffffffffffff"],
+    };
+    const code = bitwiseOp(c);
+    expect(code).toHaveLength(1);
+    expect(lazyMov).toBeCalledWith(c.arguments[0], c.name[0]);
+    expect(getCurrentAllocations).toBeCalled();
+    expect(code[0]).toMatch(/;.*/);
   });
 });
