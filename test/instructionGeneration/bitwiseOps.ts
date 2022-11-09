@@ -32,21 +32,25 @@ import { Paul } from "@/paul";
 import type { AllocationReq, Allocations, CryptOpt } from "@/types";
 
 let paulChooseAndSpy: SpyInstance;
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn();
+const declare128 = vi.fn();
+const zext = vi.fn();
+const lazyMov = vi.fn();
+const declareDatatypeForVar = vi.fn();
 
 beforeAll(() => {
   paulChooseAndSpy = vi.spyOn(Paul, "chooseInstructionAND");
 });
 beforeEach(() => {
   paulChooseAndSpy.mockClear();
+  allocate.mockClear();
+  getCurrentAllocations.mockClear();
+  declareDatatypeForVar.mockClear();
 });
 afterAll(() => {
   paulChooseAndSpy.mockRestore();
 });
-const allocate = vi.fn();
-const getCurrentAllocations = vi.fn();
-const declare128 = vi.fn();
-const zext = vi.fn();
-const declareDatatypeForVar = vi.fn();
 
 vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
   return {
@@ -452,7 +456,6 @@ describe("instructionGeneration:and", () => {
     expect(allocate).toBeCalled();
   });
   it("should call declareDatatypeForVar, if  all args were u1 -> result is u1, too ", () => {
-    declareDatatypeForVar.mockClear();
     allocate.mockImplementation((req: AllocationReq) => {
       const [oReg0] = req.oReg;
       const [in0, in1] = req.in;
