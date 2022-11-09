@@ -1446,7 +1446,8 @@ export class RegisterAllocator {
       throw new Error(`${name} cannot be in allocation aleady`);
     }
     if (
-      limbify(name).some((limb) => !(limb in this._allocations) || this._allocations[limb].datatype !== "u64")
+      // limbify(name).some((limb) => !(limb in this._allocations) || this._allocations[limb].datatype !== "u64")
+      limbify(name).some((limb) => !(limb in this._allocations))
     ) {
       throw new Error(
         `all limbs from ${name} must be in allocation with u64 ${JSON.stringify(
