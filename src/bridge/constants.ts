@@ -41,6 +41,7 @@ export const KNOWN_SYMBOLS: {
   fiat_poly1305_carry_mul: { bridge: "fiat", method: "mul", curve: "poly1305" },
   fiat_poly1305_carry_square: { bridge: "fiat", method: "square", curve: "poly1305" },
   fiat_secp256k1_mul: { bridge: "fiat", method: "mul", curve: "secp256k1" },
+  fiat_secp256k1_dettman_mul: { bridge: "fiat", method: "mul", curve: "secp256k1_dettman" },
   fiat_secp256k1_square: { bridge: "fiat", method: "square", curve: "secp256k1" },
 
   // bitcoin curve
