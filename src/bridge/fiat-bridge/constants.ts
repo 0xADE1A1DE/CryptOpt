@@ -215,7 +215,7 @@ export const CURVE_DETAILS: {
     magnitude: 1,
     limbwidth: 52,
     prime: "2^256 - 4294968273",
-    binary: BINS.wbw_montgomery,
+    binary: BINS.dettman,
     bounds: [
       "0x1ffffffffffffe",
       "0x1ffffffffffffe",
