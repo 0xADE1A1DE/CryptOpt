@@ -192,16 +192,16 @@ export function shiftRightDouble(c: CryptOpt.StringOperation): asm[] {
         ra.declare128(c.name[0]);
 
         // TODO: If fillFromVarname has deps, use sarx (and get shiftWidth via allocate), if nor, use sar (no mov)
-        const code = asm.concat(
-          `mov ${hi_limb_reg}, ${allocation.in[1]}`,
-          `sar ${hi_limb_reg}, ${shiftWidth}; hi-limb`,
-        );
-        return code;
-
-        // return asm.concat(
-        //   `mov ${hi_limb_reg}, ${shiftWidth}; abusing out reg for imm to sarx`,
-        //   `sarx ${hi_limb_reg}, ${allocation.in[1]}, ${hi_limb_reg}; hi-limb`,
+        // const code = asm.concat(
+        //   `mov ${hi_limb_reg}, ${allocation.in[1]}`,
+        //   `sar ${hi_limb_reg}, ${shiftWidth}; hi-limb`,
         // );
+        // return code;
+
+        return asm.concat(
+          `mov ${hi_limb_reg}, ${shiftWidth}; abusing out reg for imm to sarx`,
+          `sarx ${hi_limb_reg}, ${allocation.in[1]}, ${hi_limb_reg}; hi-limb`,
+        );
       } else {
         throw new Error("unsuppoted");
       }
