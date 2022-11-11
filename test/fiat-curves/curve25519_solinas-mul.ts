@@ -21,8 +21,8 @@ import { Optimizer } from "@/optimizer";
 
 import { getTestArgs, nothing } from "../test-helpers";
 
-const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
-const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
+// const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
+// const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
 
 vi.useFakeTimers();
 
@@ -36,13 +36,11 @@ it("optimise", () => {
       expect(() =>
         opt.optimise().then((code) => {
           expect(code).toEqual(0);
-          expect(mockErr).not.toHaveBeenCalled();
           resolve(0);
         }),
       ).not.toThrow();
       vi.runAllTimers();
     } catch (e) {
-      mockErr.mockRestore();
       console.error(e);
       reject(e);
     }
@@ -50,7 +48,5 @@ it("optimise", () => {
 });
 
 afterAll(() => {
-  mockLog.mockRestore();
-  mockErr.mockRestore();
   vi.useRealTimers();
 });
