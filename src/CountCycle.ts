@@ -18,16 +18,16 @@
  *
  **/
 
-import { tmpdir } from "os";
-import { join, basename } from "path";
-import * as Stats from "simple-statistics";
 import fs from "fs";
-
-import { sha1Hash } from "@/paul";
-import { analyseRow, ttable, CONF_IDX } from "@/helper";
 import { Measuresuite } from "measuresuite";
-import { init } from "@/optimizer/optimizer.helper.class";
+import { tmpdir } from "os";
+import { basename, join } from "path";
+import * as Stats from "simple-statistics";
+
 import { KNOWN_SYMBOLS } from "@/bridge";
+import { analyseRow, CONF_IDX, ttable } from "@/helper";
+import { init } from "@/optimizer/optimizer.helper.class";
+import { sha1Hash } from "@/paul";
 
 // this number specifies how many data points are in each sample.
 const MAX_SAMLPESIZE = 10;

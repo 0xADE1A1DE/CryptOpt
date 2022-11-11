@@ -15,7 +15,7 @@
  */
 
 import { execSync } from "child_process";
-import { existsSync, rmSync, appendFileSync } from "fs";
+import { appendFileSync, existsSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { tmpdir } from "os";
 import { join, resolve as pathResolve } from "path";

@@ -15,15 +15,15 @@
  */
 
 import { Flags } from "@/enums";
-export * from "./const/RegisterConstants";
-export * from "./const/mul_di_mapping";
-export * from "./const/llvm_mapping";
-export * from "./const/conf_table";
+import type { CryptOpt } from "@/types";
 
 import { LSB_MAPPING } from "./const/LSB_mapping";
-export { LSB_MAPPING };
 
-import type { CryptOpt } from "@/types";
+export * from "./const/conf_table";
+export * from "./const/llvm_mapping";
+export * from "./const/mul_di_mapping";
+export * from "./const/RegisterConstants";
+export { LSB_MAPPING };
 
 export const COMPILERS = ["gcc", "clang"];
 

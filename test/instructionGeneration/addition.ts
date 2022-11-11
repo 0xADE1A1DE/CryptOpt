@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  ByteRegister,
   C_DI_HANDLE_FLAGS_KK,
   C_DI_SPILL_LOCATION,
   DECISION_IDENTIFIER,
   Flags,
   FlagState,
   Register,
-  ByteRegister,
 } from "@/enums";
-import { Model } from "@/model";
 import { add } from "@/instructionGeneration/addition";
+import { Model } from "@/model";
 import { Paul } from "@/paul";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
 
@@ -89,7 +90,7 @@ const allocs = {
   x250: { datatype: "u1", store: Flags.CF },
   x251: { datatype: "u1", store: Flags.OF },
 } as Allocations;
-
+type MOCK_MODEL = any;
 const allocate = vi.fn();
 const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
 const flagState = vi.fn();
@@ -547,7 +548,7 @@ describe("instructionGeneration:add", () => {
     const flagSpillMockReg__64: Register = Register.r11;
     spillFlag.mockClear().mockImplementation((_flag) => flagSpillMockReg);
     // here, the CF shall have deps
-    (Model.hasDependants as any).mockImplementation((name: string) => allocs[name].store == Flags.CF);
+    (Model.hasDependants as MOCK_MODEL).mockImplementation((name: string) => allocs[name].store == Flags.CF);
 
     const code = add(c).filter((a) => !a.startsWith(";"));
     expect(code).toHaveLength(2);

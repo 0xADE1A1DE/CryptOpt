@@ -21,6 +21,7 @@ import { datadir, env, preprocessFunction } from "@/helper";
 import { sha256Hash } from "@/paul";
 import type { CryptOpt, Fiat } from "@/types";
 
+import { lockAndRunOrReturn } from "../bridge.helper";
 import { Bridge } from "../bridge.interface";
 import {
   AVAILABLE_CURVES,
@@ -32,7 +33,6 @@ import {
   SHA256SUMS,
 } from "./constants";
 import { BINS } from "./enums";
-import { lockAndRunOrReturn } from "../bridge.helper";
 
 const cwd = resolve(datadir, "fiat-bridge");
 

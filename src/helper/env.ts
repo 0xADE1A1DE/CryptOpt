@@ -15,7 +15,7 @@
  */
 
 import { defaults } from "lodash-es";
-import { resolve, dirname } from "path";
+import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 export const env = defaults(process.env, {

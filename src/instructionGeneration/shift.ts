@@ -19,7 +19,6 @@ import { defaults } from "lodash-es";
 import { AllocationFlags, Flags, FlagState } from "@/enums";
 import { limbify, matchIMM, matchXD } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import { Model } from "@/model";
 import { AllocationRes, asm, CryptOpt } from "@/types";
 
 // assumes, that arg[2] is always val_imm

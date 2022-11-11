@@ -19,7 +19,7 @@ import { Measuresuite } from "measuresuite";
 import { resolve } from "path";
 
 import { BRIDGES } from "@/bridge";
-import { BitcoinCoreBridge, AVAILABLE_METHODS } from "@/bridge/bitcoin-core-bridge";
+import { AVAILABLE_METHODS, BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
 import { CURVE_DETAILS, CURVE_T, FiatBridge, METHOD_T } from "@/bridge/fiat-bridge";
 import { ManualBridge } from "@/bridge/manual-bridge";
 import { Model } from "@/model";
