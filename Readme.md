@@ -93,6 +93,7 @@ This will try 5 different *bets* for the primitive *mul* of *libsecp256k1*.
 * the ARC Discovery Early Career Researcher Award  DE200101577
 * the ARC Discovery Projects DP200102364 and DP210102670
 * The Blavatnik ICRC at Tel-Aviv University  
+* Data61, CSIRO
 * the National Science Foundation under grants CNS-1954712 and CNS-2130671
 * the National Science Foundation Expedition on the Science of Deep Specification (award CCF-1521584)
 * the Phoenix HPC service at the University of Adelaide
