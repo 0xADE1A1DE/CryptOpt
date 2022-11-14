@@ -1,3 +1,5 @@
-theme: cayman
+theme: jekyll-theme-cayman
 title: "CryptOpt: Verified Compilation with Random Program Search for Cryptographic Primitives"
 description: An Automatic Optimizer for Cryptographic Primitives.
+show_downloads: true
+google_analytics:
