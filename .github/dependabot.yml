@@ -8,7 +8,7 @@ updates:
     ignore: 
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
- - package-ecosystem: "gitsubmodule"
+  - package-ecosystem: "gitsubmodule"
     directory: "/modules"
     schedule:
       interval: "daily"
