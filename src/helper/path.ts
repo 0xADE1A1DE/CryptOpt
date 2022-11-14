@@ -38,7 +38,7 @@ export function generateResultFilename(
       : resolve(`${process.cwd()}/results`, bridge, symbolname);
 
   if (!existsSync(path)) {
-    console.warn(`${path} does not exist. Trying to create it.`);
+    console.log(`${path} does not exist. Trying to create it.`);
     try {
       mkdirSync(path, { recursive: true });
     } catch (e) {

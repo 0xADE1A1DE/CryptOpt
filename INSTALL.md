@@ -10,9 +10,9 @@ The main entry point is the `./run.sh` script.
 ## With Docker
 
 1. [Install Docker](https://docs.docker.com/get-docker).
-1. Download and extract the tarball or clone this repository, then change into the directory containing the `Docerfile`
+1. Download and extract the tarball or clone this repository, then change into the directory containing the `Dockerfile`
 1. Build Container  
-Build the container with `docker . -t cryptopt`. (`.` is the *build context*. It's the path containing the `Dockerfile`)
+Build the container with `docker build . -t cryptopt`. (`.` is the *build context*. It's the path containing the `Dockerfile`)
 This will take a while. (Maybe around 1-2 hours, depending on Internet bandwidth and machine) (Note: It is expected that the some output is red. This is warnings of the build process piped to stderr).
 The build was successful if it ends with `Sucessfully tagged cryptopt:latest`
 The build command will create a container image tagged `cryptopt`, where all the dependencies are installed and the projects are built, ready to go.
@@ -26,7 +26,7 @@ It will require internet access to download the (Node.js) runtime and dependenci
 
 1. Install dependencies (will install globally) (c.f. Dockerfile `apt install` command(s))
 1. Install [AssemblyLine](https://github.com/0xADE1A1DE/Assemblyline) (will install globally)
-1. Clone the repo with `--recurse-submodules` to also clone [MeasureSuite](https://github.com/0xADE1A1DE/MeasureSuite).
+1. Clone the repo with `--recurse-submodules` to also clone submodules like [MeasureSuite](https://github.com/0xADE1A1DE/MeasureSuite).
 1. Enable performance counters `echo "1" | sudo tee /proc/sys/kernel/perf_event_paranoid` (MeasureSuite will otherwise fall back to use `RDTSCP` to count cycles)
 1. Build CryptOpt with `make all`.
 CryptOpt already contains pre-built binaries for fiat-crypto.

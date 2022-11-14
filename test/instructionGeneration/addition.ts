@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  ByteRegister,
   C_DI_HANDLE_FLAGS_KK,
   C_DI_SPILL_LOCATION,
   DECISION_IDENTIFIER,
@@ -25,6 +27,7 @@ import {
   Register,
 } from "@/enums";
 import { add } from "@/instructionGeneration/addition";
+import { Model } from "@/model";
 import { Paul } from "@/paul";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
 
@@ -82,14 +85,19 @@ const allocs = {
   x210: { datatype: "u1", store: "xmm2" },
   x211: { datatype: "u64", store: "r9" },
   x212: { datatype: "u64", store: "r8" },
-} as Allocations;
 
+  // u64 = u1 + u1 but one u1 is still needed elsewehere
+  x250: { datatype: "u1", store: Flags.CF },
+  x251: { datatype: "u1", store: Flags.OF },
+} as Allocations;
+type MOCK_MODEL = any;
 const allocate = vi.fn();
 const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
 const flagState = vi.fn();
 const spillFlag = vi.fn();
 const addToClobbers = vi.fn();
 const declareVarForFlag = vi.fn();
+const getW = vi.fn();
 
 const backupIfStoreHasDependencies = vi.fn();
 const xmm2reg_return_store_constant = Register.rbx;
@@ -117,17 +125,16 @@ vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
           initNewInstruction: () => {
             /**intentionally empty */
           },
+          getW,
           loadImmToReg64: vi.fn().mockImplementation((name: string) => {
             if (name in allocs) return allocs[name].store;
             else throw { name, allocs };
           }),
           pres: [],
           spillFlag,
-          getVarnameFromStore: vi
-            .fn()
-            .mockImplementation(
-              (needle: string) => Object.entries(allocs).find(([_varname, sto]) => sto.store == needle)?.[0],
-            ),
+          getVarnameFromStore: vi.fn().mockImplementation((needle: { store: string }) => {
+            return Object.entries(allocs).find(([_varname, sto]) => sto.store == needle.store)?.[0];
+          }),
         };
       },
     },
@@ -365,7 +372,6 @@ describe("instructionGeneration:add", () => {
           [Flags.OF]: FlagState.KILLED,
         } as { [f in Flags]: FlagState }),
     );
-    // getVarnameFromStore()
 
     const c: CryptOpt.StringOperation = {
       name: ["x112" /*limb*/, "x113" /*carry*/],
@@ -506,5 +512,149 @@ describe("instructionGeneration:add", () => {
     expect(code[0]).toMatch(/add bl, 0xFF;.*/);
     expect(code[1]).toEqual("adcx r9, r8");
     expect(getCurrentAllocations).toBeCalled();
+  });
+  it("should spill the not needed flag CF has deps", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.ALIVE,
+          [Flags.OF]: FlagState.ALIVE,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x259"],
+      datatype: "u64",
+      operation: "+",
+      decisions: {
+        di_choose_arg: [1, ["x250", "x251"]],
+        di_flag: [0, [Flags.CF, Flags.OF]],
+        di_handle_flags_kk: [
+          2,
+          [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
+        ],
+        di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x250", "x251"],
+    };
+
+    const flagSpillMockReg: ByteRegister = ByteRegister.r11b;
+    const flagSpillMockReg__64: Register = Register.r11;
+    spillFlag.mockClear().mockImplementation((_flag) => flagSpillMockReg);
+    // here, the CF shall have deps
+    (Model.hasDependants as MOCK_MODEL).mockImplementation((name: string) => allocs[name].store == Flags.CF);
+
+    const code = add(c).filter((a) => !a.startsWith(";"));
+    expect(code).toHaveLength(2);
+
+    expect(spillFlag).toBeCalledWith(Flags.CF, c.name[0]); //=> will be spilled to flagSpillMockReg
+    expect(code[0]).toBe(`movzx ${flagSpillMockReg__64}, ${flagSpillMockReg}`);
+    expect(code[1]).toEqual(`adox ${flagSpillMockReg__64}, r8; spilled cf, zxed it, + 0 + of`);
+    // and r8 is the 0x0 from allocs
+  });
+  it("should spill the not needed flag OF has deps", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.ALIVE,
+          [Flags.OF]: FlagState.ALIVE,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const myLovelyReg = Register.rsi;
+    getW.mockClear().mockImplementation((_name: string) => {
+      return myLovelyReg;
+    });
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x259"],
+      datatype: "u64",
+      operation: "+",
+      decisions: {
+        di_choose_arg: [1, ["x250", "x251"]],
+        di_flag: [0, [Flags.CF, Flags.OF]],
+        di_handle_flags_kk: [
+          2,
+          [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
+        ],
+        di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x250", "x251"],
+    };
+
+    const flagSpillMockReg: ByteRegister = ByteRegister.r11b;
+    spillFlag.mockClear().mockImplementation((_flag) => flagSpillMockReg);
+
+    // here, the OF shall have deps
+    (Model.hasDependants as any).mockImplementation((name: string) => {
+      return allocs[name].store == Flags.OF;
+    });
+
+    const code = add(c).filter((a) => !a.startsWith(";"));
+    expect(code).toHaveLength(2);
+
+    expect(spillFlag).toBeCalledWith(Flags.OF); //=> will be spilled to flagSpillMockReg
+    expect(getW).toBeCalledWith(c.name[0]); // dest
+    expect(code[0]).toEqual(`movzx ${myLovelyReg}, ${flagSpillMockReg}; OF in dest`);
+    expect(code[1]).toEqual(`adc ${myLovelyReg}, 0x0; spilled of to r/8, zxed it, adc 0 to out`);
+  });
+
+  it("should spill OF, when none have deps", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.ALIVE,
+          [Flags.OF]: FlagState.ALIVE,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      name: ["x259"],
+      datatype: "u64",
+      operation: "+",
+      decisions: {
+        di_choose_arg: [1, ["x250", "x251"]],
+        di_flag: [0, [Flags.CF, Flags.OF]],
+        di_handle_flags_kk: [
+          2,
+          [C_DI_HANDLE_FLAGS_KK.C_ADD, C_DI_HANDLE_FLAGS_KK.C_XOR_ADX, C_DI_HANDLE_FLAGS_KK.C_TEST_ADX],
+        ],
+        di_choose_imm: [0, ["0x0", "-0x1"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+      arguments: ["x250", "x251"],
+    };
+
+    const flagSpillMockReg: ByteRegister = ByteRegister.r11b;
+    const flagSpillMockReg__64: Register = Register.r11;
+    spillFlag.mockClear().mockImplementation((_flag) => flagSpillMockReg);
+
+    (Model.hasDependants as any).mockImplementation((_name: string) => {
+      return false; // none have deps in this test
+    });
+
+    const code = add(c).filter((a) => !a.startsWith(";"));
+    expect(code).toHaveLength(2);
+
+    expect(spillFlag).toBeCalledWith(Flags.OF, c.name[0]); //=> will be spilled to flagSpillMockReg
+    expect(code[0]).toEqual(`adc ${flagSpillMockReg}, 0x0; r<-f+f`);
+    expect(code[1]).toEqual(`movzx ${flagSpillMockReg__64}, ${flagSpillMockReg}`);
   });
 });

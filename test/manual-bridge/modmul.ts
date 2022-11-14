@@ -49,7 +49,7 @@ it("optimise", () => {
     args.jsonFile = someJsonFilename;
     args.evals = 10;
     const opt = new Optimizer(args);
-    console.warn({ someJsonFilename, someCFilename, resultDir: args.resultDir });
+    console.log({ someJsonFilename, someCFilename, resultDir: args.resultDir });
 
     try {
       opt.optimise().then((code) => {

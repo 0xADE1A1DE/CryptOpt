@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { execSync } from "child_process";
 import { existsSync, readFileSync } from "fs";
 import { groupBy } from "lodash-es";
 import { resolve } from "path";
 
-import { ERRORS } from "@/errors";
+import { errorOut, ERRORS } from "@/errors";
 import { datadir, env, preprocessFunction } from "@/helper";
 import type { CryptOpt } from "@/types";
 
+import { lockAndRunOrReturn } from "../bridge.helper";
 import { Bridge } from "../bridge.interface";
 import { AVAILABLE_METHODS, METHOD_DETAILS, METHOD_T } from "./constants";
 import { BCBPreprocessor } from "./preprocess";
@@ -31,7 +31,7 @@ import type { raw_T, structDef_T } from "./raw.type";
 const cwd = resolve(datadir, "bitcoin-core-bridge");
 
 const createExecOpts = () => {
-  const c = { env, cwd };
+  const c = { env, cwd, shell: "/usr/bin/bash" };
   c.env.CFLAGS = `-DUSE_ASM_X86_64 ${c.env.CFLAGS}`;
   return c;
 };
@@ -93,14 +93,19 @@ export class BitcoinCoreBridge implements Bridge {
     }
 
     const opts = createExecOpts();
-    const command = `make -C ${cwd} ${filename}`;
+    const command = `make -C ${cwd} all`; // to get scalar.c / field.c
+    console.log(`cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
 
-    console.log(`executing cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
     try {
-      execSync(command, opts);
+      // yeah.
+      // we need to all lock at the same thing.
+      // if we'd lock at the `filename` everybody locks to some temporary file
+      lockAndRunOrReturn(cwd, command, opts);
+
+      // then create the so files. we dont need locks for this.
+      execSync(`make -C ${cwd} ${filename}`, opts);
     } catch (e) {
-      console.error(ERRORS.bcbMakeFail.msg);
-      process.exit(ERRORS.bcbMakeFail.exitCode);
+      errorOut(ERRORS.bcbMakeFail);
     }
 
     return METHOD_DETAILS[method].name;
@@ -124,7 +129,7 @@ export class BitcoinCoreBridge implements Bridge {
     return 1;
   }
 
-  public argwidth(c: string, m: METHOD_T): number {
+  public argwidth(_c: string, m: METHOD_T): number {
     switch (m) {
       case "mul":
       case "square":
@@ -136,7 +141,7 @@ export class BitcoinCoreBridge implements Bridge {
     }
     throw new Error(`unsupported method ${m}`);
   }
-  public bounds(c: string, m: METHOD_T): CryptOpt.HexConstant[] {
+  public bounds(_c: string, m: METHOD_T): CryptOpt.HexConstant[] {
     // from https://github.com/bitcoin-core/secp256k1/blob/423b6d19d373f1224fd671a982584d7e7900bc93/src/field_5x52_int128_impl.h#L162
 
     let bits = [] as number[]; // for field's

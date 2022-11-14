@@ -987,7 +987,9 @@ export class RegisterAllocator {
     };
     if (isFlag(setcc)) {
       const flag = setcc;
-      this._preInstructions.push(`${SETX[setcc]} ${bytereg}; spill ${flag} ${nameOfVar} to reg (${reg})`);
+      this._preInstructions.push(
+        `${SETX[setcc]} ${bytereg}; spill ${flag} ${nameOfVar}${this._flags[flag] || "-"} to reg (${reg})`,
+      );
       this.declareFlagState(flag, FlagState.KILLED);
     } else {
       if (!setcc.startsWith("set")) {
@@ -1011,6 +1013,10 @@ export class RegisterAllocator {
     }
     if (!nameOfVar) {
       nameOfVar = this._flags[flag];
+    }
+    if (!nameOfVar) {
+      // I think this happens, When flag was `_` from the last operation and has been scrapped by the cleanup.
+      return false;
     }
     if (!Model.hasDependants(nameOfVar)) {
       this._preInstructions.push(
@@ -1444,7 +1450,8 @@ export class RegisterAllocator {
       throw new Error(`${name} cannot be in allocation aleady`);
     }
     if (
-      limbify(name).some((limb) => !(limb in this._allocations) || this._allocations[limb].datatype !== "u64")
+      // limbify(name).some((limb) => !(limb in this._allocations) || this._allocations[limb].datatype !== "u64")
+      limbify(name).some((limb) => !(limb in this._allocations))
     ) {
       throw new Error(
         `all limbs from ${name} must be in allocation with u64 ${JSON.stringify(

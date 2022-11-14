@@ -113,7 +113,7 @@ export class ManualBridge implements Bridge {
 
     //compile it
     const command = `${cc} ${CFLAGS} -x c -fPIC -shared -o ${filename} ${this.filepathC}`;
-    console.debug(`executing cmd to generate machinecode: ${command}`);
+    console.log(`executing cmd to generate machinecode: ${command}`);
     execSync(command);
 
     // remove the tmp-stuff

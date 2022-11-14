@@ -33,13 +33,24 @@ import type { asm, CryptOpt } from "@/types";
 export function bitwiseOp(c: CryptOpt.StringOperation): asm[] {
   switch (c.operation) {
     case "&": {
+      const ra = RegisterAllocator.getInstance();
+      // saneity check
+      if (c.arguments[1] == "0xffffffffffffffff" && c.datatype == "u64") {
+        //  maybe we should rewrite this operation as a limb[0] in the preprocessing
+        let src = c.arguments[0];
+        if (ra.getCurrentAllocations()[src].datatype == "u128") {
+          ra.declareDatatypeForVar(c.arguments[0] as CryptOpt.VarnameNL, "u64");
+          src = limbify(src)[0];
+        }
+        ra.lazyMov(src, c.name[0]);
+        return [`;lazyMov'ed ${c.name[0]}<-${src} (becaue an and with all 64bits is... lets say redundant)`];
+      }
       const decision = c.decisions[DECISION_IDENTIFIER.DI_INSTRUCTION_AND];
       if (!decision) {
         // if there is no decision, which may be the case for AND-s with imms, which are not bzhi-able 'fallback' to AND
         return and(c);
       }
       let choice: C_DI_INSTRUCTION_AND;
-      const ra = RegisterAllocator.getInstance();
       const allocs = ra.getCurrentAllocations();
 
       const bitmask = c.arguments[1]; // 0x1ffffff

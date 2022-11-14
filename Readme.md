@@ -16,18 +16,18 @@ A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primi
 While optimizing, CryptOpt will output the current status of the optimization.
 Each line has this format:
 ```
-fiat_curve25519_carry_square|0-10| 14|bs  181|#inst: 140|cyclΔ     70|G  58 cycl σ  0|B  59 cycl σ  0|L  55|l/g 0.9519| P|P[ -14/   0/  14/ -11]|D[MU/ 31/ 59]| 90.0( 1%)  60/s
+fiat_curve25519_carry_square|1/10| 14|bs  181|#inst: 140|cyclΔ     70|G  58 cycl σ  0|B  59 cycl σ  0|L  55|l/g 0.9519| P|P[ -14/   0/  14/ -11]|D[MU/ 31/ 59]| 90.0( 1%)  60/s
 ```
 Lets break this down:
 
 Field                 |Example    | Comment
 --|--|--
 Symbol                | `fiat_curve25519_carry_square`	| The symbol being optimized.
-Comment               | 0-10                            | Arbitrary comment. Usually used in Population Mode. Then, it means Bet `0` from `10`, (`10` being the `run`)
+Comment               | 1/10                            | Arbitrary comment. Usually used in Bet-n-run mode. Then, it means bet `1` from `10`, after that it'll say `run`.
 Stack size            | 14	                 	        | How many spills to memory there are. E.g. `6` for all spills of the six callee-saved registers
-Batch Size            | bs  181		                    | `BS` in the paper, How big is the batch. i.e. how many iterations of Primitive are counted
-Instr. Count          | #inst: 140		                | How many instructions are used to implement the primitive
-Raw Cycle Delta       | cyclΔ     70		            | Measure both batches `nob=31` times, take difference of medians. Based on this a mutation is kept or not.
+Batch Size            | bs  181		                    | `BS` in the paper, How big is the batch. i.e. how many iterations of *Symbol* are counted
+Instr. Count          | #inst: 140		                | How many instructions are used to implement the *Symbol*
+Raw Cycle Delta       | cyclΔ     70		            | Measure both batches `nob=31` times, take difference of medians. (This is that delta). Based on this a mutation is kept or not.
 Cycles +stddev (good) | G  58 cycl σ  0		            | Number of cycles for the `good` candidate, scaled by `bs` i.e. per on *one* iteration. Also states the stdDev of the `nob` measurements
 Cycles +stddev (bad)  | B  59 cycl σ  0		            | Same, but for the `bad` candidate
 Cycles Library        | L  55		                    | Cycles that the CC-Compiled version takes
@@ -73,7 +73,7 @@ Parameter    | default     | possible / typical values | description
 --bets       | 10          | 10, 30, 100               | How many 'bets' for the bet-and-run heuristic
 --betRatio   | 0.2         | 0.1, 0.3                  | The share from parameter `--evals`, which are spent for all bets, in per cent (i.e. 0.2 means 20% of --evals will be used for the bet part, and 80% for the final run-part)
 --resultDir  | ./results   | /tmp/myresults            | The directory under which `<BRIDGE>/<SYMBOL>` will be created and the result files will be stored
---no-proof   |             | --no-proof, --proof       | [dis|en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
+--no-proof   |             | --no-proof, --proof       | [dis\|en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
 
 For more information check `./run.sh --help`
 
@@ -84,7 +84,7 @@ As next example, use `CC=clang ./run.sh --curve p256 --method mul --evals 10k` t
 1. Run `./run.sh --bridge bitcoin-core --curve secp256k1 --method mul --bets 5`  
 This will try 5 different *bets* for the primitive *mul* of *libsecp256k1*.
 
-1. Find the result files (`*.asm`,`*.pdf`) for this run in `./results/bitcoin-core/secp256k1_fe_sqr_inner/`
+1. Find the result files (`*.asm`,`*.pdf`) for this run in `./results/bitcoin-core/secp256k1_fe_mul_inner/`
 
 
 ## Acknowledgements

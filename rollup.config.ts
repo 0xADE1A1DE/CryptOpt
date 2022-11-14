@@ -1,6 +1,6 @@
+import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
-import { terser } from "rollup-plugin-terser";
 
 const external = [
   "child_process",
@@ -11,13 +11,15 @@ const external = [
   "os",
   "path",
   "process",
+  "proper-lockfile",
   "simple-statistics",
+  "url",
   "yargs",
   "yargs/helpers",
 ];
 export default [
   {
-    input: "src/CryptOpt.ts",
+    input: ["src/CryptOpt.ts", "src/CountCycle.ts"],
     output: {
       dir: "dist",
       format: "es",

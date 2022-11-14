@@ -4,4 +4,4 @@ bins
 results
 coverage
 .cache
-
+.vimspector.json

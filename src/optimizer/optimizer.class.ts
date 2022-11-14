@@ -15,10 +15,10 @@
  */
 
 import { execSync } from "child_process";
-import { existsSync, rmSync } from "fs";
+import { appendFileSync, existsSync, rmSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { tmpdir } from "os";
-import { join } from "path";
+import { join, resolve as pathResolve } from "path";
 
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
@@ -48,7 +48,7 @@ let choice: CHOICE;
 
 export class Optimizer {
   private measuresuite: Measuresuite;
-  private libcheckfunctionDirectory: string;
+  private libcheckfunctionDirectory: string; // aka. /tmp/CryptOpt.cache/yolo123
   private symbolname: string;
   public getSymbolname(): string {
     return this.symbolname;
@@ -158,11 +158,15 @@ export class Optimizer {
         this.no_of_instructions = filteredInstructions.length;
 
         // and depening on the silent-opt use filtered or the verbose ones for the string
-        this.asmStrings[currentNameOfTheFunctionThatHasTheMutation] = (
-          !this.args.verbose ? filteredInstructions : code
-        ).join("\n");
-        // check if this was the first round
+        if (this.args.verbose) {
+          const c = code.join("\n");
+          writeString(pathResolve(this.libcheckfunctionDirectory, "current.asm"), c);
+          this.asmStrings[currentNameOfTheFunctionThatHasTheMutation] = c;
+        } else {
+          this.asmStrings[currentNameOfTheFunctionThatHasTheMutation] = filteredInstructions.join("\n");
+        }
 
+        // check if this was the first round
         if (numEvals == 0) {
           // then point to fB and continue, write first
           if (this.asmStrings[FUNCTIONS.F_A].includes("undefined")) {
@@ -180,6 +184,16 @@ export class Optimizer {
           let analyseResult: AnalyseResult | undefined;
           try {
             console.log("let the measurements begin!");
+            if (this.args.verbose) {
+              writeString(
+                pathResolve(this.libcheckfunctionDirectory, "currentA.asm"),
+                this.asmStrings[FUNCTIONS.F_A],
+              );
+              writeString(
+                pathResolve(this.libcheckfunctionDirectory, "currentB.asm"),
+                this.asmStrings[FUNCTIONS.F_B],
+              );
+            }
             // here we need the barriers
             const results = this.measuresuite.measure(
               this.asmStrings[FUNCTIONS.F_A],
@@ -367,8 +381,10 @@ export class Optimizer {
               console.log(`proofing that asm correct with '${proofCmd}'`);
               try {
                 const now = Date.now();
-                execSync(proofCmd);
-                globals.time.validate += (Date.now() - now) / 1000;
+                execSync(proofCmd, { shell: "/usr/bin/bash" });
+                const timeForValidation = (Date.now() - now) / 1000;
+                appendFileSync(asmfile, `\n; validated in ${timeForValidation}s\n`);
+                globals.time.validate += timeForValidation;
               } catch (e) {
                 errorOut(ERRORS.proofUnsuccessful);
               }

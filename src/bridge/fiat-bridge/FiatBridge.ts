@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { execSync } from "child_process";
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
@@ -22,6 +21,7 @@ import { datadir, env, preprocessFunction } from "@/helper";
 import { sha256Hash } from "@/paul";
 import type { CryptOpt, Fiat } from "@/types";
 
+import { lockAndRunOrReturn } from "../bridge.helper";
 import { Bridge } from "../bridge.interface";
 import {
   AVAILABLE_CURVES,
@@ -44,12 +44,14 @@ export class FiatBridge implements Bridge {
     if (!AVAILABLE_METHODS.includes(m)) {
       throw new Error(`unsupported method ${m}`);
     }
+    if (m === "mul2") return 4;
     if (m === "square") return 1;
     // add, sub, mul
     return 2;
   }
 
-  public argnumout(_m: METHOD_T): number {
+  public argnumout(m: METHOD_T): number {
+    if (m === "mul2") return 2;
     return 1;
   }
 
@@ -75,17 +77,17 @@ export class FiatBridge implements Bridge {
     const { cmd, hash } = this.buildCommand(curve, method, "JSON");
     const jsonCacheFilename = resolve(cacheDir, `${hash}.json`);
 
-    let fiatBuffer: Buffer;
-    if (existsSync(jsonCacheFilename)) {
-      console.log(`reading json-fiat: ${jsonCacheFilename}`);
-      fiatBuffer = readFileSync(jsonCacheFilename);
-    } else {
-      const command = `${cmd} | jq -s .[0] | tee ${jsonCacheFilename}`;
-      console.log(`executing cmd to generate fiat: ${command}`);
-      fiatBuffer = execSync(command);
+    if (!existsSync(jsonCacheFilename)) {
+      const command = `data=$(${cmd} | jq -s .[0]); cat <<<"\${data}" > ${jsonCacheFilename}`;
+      console.log(`cmd to generate fiat: ${command}`);
+      lockAndRunOrReturn(jsonCacheFilename, command, { shell: "/usr/bin/bash" }); // we need the shell to understand the <<< redirect
     }
 
-    const fiat = JSON.parse(fiatBuffer.toString()) as Fiat.FiatFunction;
+    console.log(`reading json-fiat: ${jsonCacheFilename}`);
+    const jsonBuffer = readFileSync(jsonCacheFilename);
+    console.log(`json-fiat-Bufferllengh: ${jsonBuffer.length}b`);
+    const jsonString = jsonBuffer.toString();
+    const fiat = JSON.parse(jsonString) as Fiat.FiatFunction;
     const cryptOpt = preprocessFunction(fiat);
     return cryptOpt;
   }
@@ -100,21 +102,13 @@ export class FiatBridge implements Bridge {
     method: METHOD_T,
     curve: CURVE_T,
     ccOverwrite: string | undefined = undefined,
-    force = true,
+    force = false,
   ): string {
+    const cc = ccOverwrite ?? CC; // this is being used for the x-val, where in one session of the FiatBridge, the CC chagnes
     const { cmd, methodname, hash } = this.buildCommand(curve, method, "C");
     if (!force && existsSync(filename)) {
       return methodname;
     }
-
-    const cc = ccOverwrite ?? CC; // this is being used for the x-val, where in one session of the FiatBridge, the CC chagnes
-
-    const compileFromFile = (file: string) => {
-      const command = `${cc} ${CFLAGS} -fPIC -shared -o ${filename} ${file}`;
-      console.log(`executing cmd to generate machinecode: ${command}`);
-      execSync(command);
-      return methodname;
-    };
 
     // lets check cached.
     if (!existsSync(cacheDir)) {
@@ -123,15 +117,20 @@ export class FiatBridge implements Bridge {
 
     const cCacheFilename = resolve(cacheDir, `${hash}.c`);
 
-    // if the cache-file does not exist, write it.
+    // if the c-cache-file does not exist, write it.
     if (!existsSync(cCacheFilename)) {
-      const command = `${cmd} > ${cCacheFilename}`;
-      console.log(`executing cmd to generate c-file: ${command}`);
-      execSync(command);
+      // create cCacheFilename
+      const command = `data=$(${cmd}); cat <<<"\${data}" > ${cCacheFilename}`;
+      console.log(`cmd to generate c-cache file: ${command}`);
+      lockAndRunOrReturn(cCacheFilename, command, { shell: "/usr/bin/bash" }); // we need the shell to understand the <<< redirect
     }
 
-    // then we can compile from it.
-    return compileFromFile(cCacheFilename);
+    // then we can compile from the c file.
+    const command = `${cc} ${CFLAGS} -fPIC -shared -o ${filename} ${cCacheFilename}`;
+    console.log(`cmd to generate machinecode: ${command}`);
+    lockAndRunOrReturn(filename, command, { shell: "/usr/bin/bash" });
+
+    return methodname;
   }
 
   /**
@@ -144,7 +143,7 @@ export class FiatBridge implements Bridge {
     method: METHOD_T,
     lang: "C" | "JSON",
   ): { cmd: string; methodname: string; hash: string } {
-    const { binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { limbwidth, magnitude, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
 
     const binWithPath = resolve(cwd, binary);
     FiatBridge.check(curve, method, binWithPath, lang);
@@ -165,10 +164,17 @@ export class FiatBridge implements Bridge {
     const hashFiatBinaries = readFileSync(sha256sumsFile).toString();
 
     let cmd = "";
-    if (binary == BINS.unsaturated) {
-      cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${prime}' ${required_function}`;
-    } else {
-      cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'               '${prime}' ${required_function}`;
+    switch (binary) {
+      case BINS.dettman:
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function}`;
+        break;
+      case BINS.unsaturated:
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}'                '${prime}'              ${required_function}`;
+        break;
+      case BINS.wbw_montgomery:
+      case BINS.solinas:
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'                              '${prime}'              ${required_function}`;
+        break;
     }
 
     // now generate the hash
@@ -181,7 +187,7 @@ export class FiatBridge implements Bridge {
    */
 
   public static buildProofCommand(curve: CURVE_T, method: METHOD_T, hintsFilename: string): string {
-    const { binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { limbwidth, magnitude, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
     const binWithPath = resolve(cwd, binary);
 
     FiatBridge.check(curve, method, binWithPath);
@@ -199,10 +205,14 @@ export class FiatBridge implements Bridge {
     const hintstring = `--hints-file ${hintsFilename}`;
 
     switch (binary) {
+      case BINS.dettman:
+        CODE_PROOF_ARGS += ` --extra-rewrite-rule or-to-add`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function} ${hintstring}`;
       case BINS.unsaturated:
         CODE_PROOF_ARGS += ` --tight-bounds-mul-by 1.000001`;
         return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${prime}' ${required_function} ${hintstring}`;
       case BINS.wbw_montgomery:
+      case BINS.solinas:
         return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'               '${prime}' ${required_function} ${hintstring}`;
     }
   }

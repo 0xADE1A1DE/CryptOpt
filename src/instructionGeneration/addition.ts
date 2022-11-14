@@ -99,9 +99,10 @@ function add128(c: CryptOpt.StringOperation): asm[] {
 
       const asmlo = add64(cLo);
       asmlo.unshift(...RegisterAllocator.getInstance().pres);
-      //and now, since the desination is a u128, we want to set the carry to a u64
-      ra.loadVarToReg(ohi, "movzx");
-      asmlo.push(...RegisterAllocator.getInstance().pres);
+      // //and now, since the destination is a u128, we want to set the carry to a u64
+      // ra.loadVarToReg(ohi, "movzx");
+      // asmlo.push(...RegisterAllocator.getInstance().pres);
+      asmlo.push(`;; did not spill ${ohi} to reg, I think others can do that when needed.`);
       asmlo.push(";;;done with asmlo, there is no asmhi");
       acc.push(...asmlo);
 
