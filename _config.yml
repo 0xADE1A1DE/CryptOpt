@@ -3,3 +3,6 @@ title: "CryptOpt: Verified Compilation with Random Program Search for Cryptograp
 description: An Automatic Optimizer for Cryptographic Primitives.
 show_downloads: true
 google_analytics:
+github:
+  zip_url:
+  tar_url:
