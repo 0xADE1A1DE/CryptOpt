@@ -52,6 +52,9 @@ deepclean: clean
 	rm -rf ./bins ./node_modules
 	$(MAKE) deepclean -C ./modules/MeasureSuite
 
+install-zsh:
+	install -v $(ROOT)/completion/_cryptopt /usr/local/share/zsh/site-functions && echo -e "Installed successfully\nRestart your shell to enjoy\n"
+
 BUNDLE_FILES:=$(shell find . -type f ! -path './bundle*' -a ! -path '*node_modules*' -a ! -path '*results*' -a ! -path '*.git*' -a ! -path './bins/*' -a ! -path './modules/MeasureSuite/build/*' -a ! -path '*dist*')
 
 dist: bundle.tar.gz bundle.zip
