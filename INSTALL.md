@@ -4,8 +4,8 @@ We recommend using the Docker based setup.
 If you want to actually use CryptOpt for production, the results can typically be improved by running it bare metal.
 See below install instructions.
 
-The main entry point is the `./run.sh` script.
-`./run.sh --help` gives options.
+The main entry point is the `./CryptOpt` script, the `--help` option gives options.
+You can `sudo make install-zsh`, if you want to get `zsh` completion.
 
 ## With Docker
 

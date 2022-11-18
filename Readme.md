@@ -4,8 +4,8 @@
 ![Code Style](https://github.com/0xADE1A1DE/CryptOpt/actions/workflows/ts-formatting.yml/badge.svg)
 
 1. Follow the instructions [in the INSTALL document](./INSTALL.md).
-1. Run `./run.sh --help` to check if the installation worked.
-1. Run `./run.sh` to see an optimization in action.
+1. Run `./CryptOpt --help` to check if the installation worked.
+1. Run `./CryptOpt` to see an optimization in action.
 
 ## Research Paper
 
@@ -52,7 +52,7 @@ SL | Spill location changed spill-to-memory <-> spill-to-xmm
 
 ## Understand Output Files
 
-While Optimizing, CryptOpt will generate files in the `./results/<BRIDGE>/<SYMBOL>` folder (adjustable with `--resultDir` parameter to `./run.sh`).
+While Optimizing, CryptOpt will generate files in the `./results/<BRIDGE>/<SYMBOL>` folder (adjustable with `--resultDir` parameter to `./CryptOpt`).
 
 CryptOpt writes out intermediate ASM-files whenever *it finishes a bet* and an additional file when finished the *run*.
 CryptOpt also generates the internal state (in `*.json` files) of the optimization for each *bet*-outcome.
@@ -75,13 +75,13 @@ Parameter    | default     | possible / typical values | description
 --resultDir  | ./results   | /tmp/myresults            | The directory under which `<BRIDGE>/<SYMBOL>` will be created and the result files will be stored
 --no-proof   |             | --no-proof, --proof       | [dis\|en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
 
-For more information check `./run.sh --help`
+For more information check `./CryptOpt --help`
 
-As next example, use `CC=clang ./run.sh --curve p256 --method mul --evals 10k` to generate an optimized version for NIST P-256 multiply and compare the function with `clang`-compiled version of the C-equivalent.
+As next example, use `CC=clang ./CryptOpt --curve p256 --method mul --evals 10k` to generate an optimized version for NIST P-256 multiply and compare the function with `clang`-compiled version of the C-equivalent.
 
 ## Play around w/ Bitcoin
 
-1. Run `./run.sh --bridge bitcoin-core --curve secp256k1 --method mul --bets 5`  
+1. Run `./CryptOpt --bridge bitcoin-core --curve secp256k1 --method mul --bets 5`  
 This will try 5 different *bets* for the primitive *mul* of *libsecp256k1*.
 
 1. Find the result files (`*.asm`,`*.pdf`) for this run in `./results/bitcoin-core/secp256k1_fe_mul_inner/`

@@ -10,8 +10,8 @@
 ## Tool chain
 
 CryptOpt is written in [TypeScript](https://www.typescriptlang.org/), a typed superset of JavaScript.
-`./build.sh` gets the Node runtime, triggers MeasureSuite compilation and triggers the transpilation of CryptOpt to JavaScript and then bundles with `rollup` to one file `dist/CryptOpt.js`.
-`./run.sh` serves as a wrapper script, essentially calling `node ./dist/CryptOpt.js` with the local node version.
+`make all` in the root directory gets the Node runtime, triggers MeasureSuite compilation, triggers the transpilation of CryptOpt to JavaScript and then bundles with `rollup` to files in `dist/{CryptOpt,CountCycle,...}.js`.
+`./CryptOpt` serves as a wrapper script, essentially calling `node ./dist/CryptOpt.js` with the local node version.
 The optimization then runs in the Chrome V8 engine through Node.js.
 
 ## Files
