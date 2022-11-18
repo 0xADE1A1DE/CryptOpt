@@ -30,7 +30,7 @@ describe("default argParse", () => {
     betRatio: 0.2,
     single: false,
     proof: true,
-    logComment: "---",
+    logComment: "",
     cyclegoal: 10000,
     evals: 10000,
   };

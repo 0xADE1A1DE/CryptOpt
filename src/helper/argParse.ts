@@ -125,7 +125,7 @@ export const parsedArgs = y
   })
   .option("logComment", {
     string: true,
-    default: "---",
+    default: "",
     describe: "May provide a hint of any kind to be printed on the status line",
   })
   .option("cyclegoal", {
