@@ -27,7 +27,7 @@ The `asm`-file is the output Assembly file with the generated code; the `<RATIO>
 
 CryptOpt is dependent on `MeasureSuite`. In a nutshell, CryptOpt gives `MeasureSuite` two assembly strings and `MeasureSuite` will then evaluate them in our adapted R3-Validation fashion.
 It itself is written in C, but provides TypeScript bindings.
-It also depends on [AssemblyLine](https://github.com/0XADE1A1DE/Assemblyline) (*An ultra-lightweight C library and binary for generating machine code of x86_64 assembly language and executing on the fly*) to generate and execute machine code.
+It also depends on [AssemblyLine](https://0XADE1A1DE.github.io/Assemblyline) (*An ultra-lightweight C library and binary for generating machine code of x86_64 assembly language and executing on the fly*) to generate and execute machine code.
 
 ## How does it work then?
 
