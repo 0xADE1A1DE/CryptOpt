@@ -5,3 +5,5 @@ results
 coverage
 .cache
 .vimspector.json
+bundle.zip
+bundle.tar.gz

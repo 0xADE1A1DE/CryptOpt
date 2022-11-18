@@ -46,9 +46,18 @@ check: $(BUILT_CRYPTOPT)
 	PATH=$(PATH) npm run test-no-watch
 
 clean:
-	rm -rf ./dist ./coverage
+	rm -rf ./dist ./coverage ./bundle.tar.gz ./bundle.zip
 
 deepclean: clean
 	rm -rf ./bins ./node_modules
 	$(MAKE) deepclean -C ./modules/MeasureSuite
 
+BUNDLE_FILES:=$(shell find . -type f ! -path './bundle*' -a ! -path '*node_modules*' -a ! -path '*results*' -a ! -path '*.git*' -a ! -path './bins/*' -a ! -path './modules/MeasureSuite/build/*' -a ! -path '*dist*')
+
+dist: bundle.tar.gz bundle.zip
+
+bundle.tar.gz: $(BUNDLE_FILES)
+	tar czvf ${@} $(^)
+
+bundle.zip: $(BUNDLE_FILES)
+	zip ${@} $(^)
