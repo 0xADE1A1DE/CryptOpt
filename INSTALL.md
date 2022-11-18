@@ -1,16 +1,17 @@
 # Overview 
 
-We recommend using the Docker based setup.
+We recommend using the Docker based setup to play around with CryptOpt.
 If you want to actually use CryptOpt for production, the results can typically be improved by running it bare metal.
 See below install instructions.
 
 The main entry point is the `./CryptOpt` script, the `--help` option gives options.
 You can `sudo make install-zsh`, if you want to get `zsh` completion.
 
+
 ## With Docker
 
 1. [Install Docker](https://docs.docker.com/get-docker).
-1. Download and extract the tarball or clone this repository, then change into the directory containing the `Dockerfile`
+1. Download and extract the tarball or clone this repository recursively, then change into the directory containing the `Dockerfile`
 1. Build Container  
 Build the container with `docker build . -t cryptopt`. (`.` is the *build context*. It's the path containing the `Dockerfile`)
 This will take a while. (Maybe around 1-2 hours, depending on Internet bandwidth and machine) (Note: It is expected that the some output is red. This is warnings of the build process piped to stderr).
