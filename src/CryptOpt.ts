@@ -65,7 +65,7 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
     const args = {
       ...parsedArgs,
       evals,
-      logComment: `${i}/${bets}`,
+      logComment: `${parsedArgs.logComment} ${i}/${bets}`,
       seed: derivedSeed,
     };
     console.log("running a bet with ", JSON.stringify(args, undefined, 2));
@@ -114,7 +114,7 @@ const offspringEvals = allocatedToPopulation / bets; // each of the offspring
 if (single) {
   const fullArgs = {
     ...parsedArgs,
-    logComment: "run",
+    logComment: `${parsedArgs.logComment} run`,
   };
   const singleRun = await run(fullArgs);
   runResults = [singleRun];
@@ -123,7 +123,7 @@ if (single) {
   const [bestRun] = runResults;
   const fullArgs = {
     ...parsedArgs,
-    logComment: "run",
+    logComment: `${parsedArgs.logComment} run`,
     evals: parsedArgs.evals - allocatedToPopulation,
     readState: bestRun.statefile,
   };

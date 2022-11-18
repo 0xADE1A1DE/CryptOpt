@@ -34,21 +34,33 @@ $(NODE):
 	mv -f ./bins/node-v$(NODE_VERSION)-linux-x64 "$(NODE_DIR)"
 
 $(BUILT_MS): $(NODE) $(shell find ./modules/MeasureSuite -type f -name '*.ts' -or -name '*.c')
-	@test -d ./modules/MeasureSuite || echo "MeasureSuite is not there. Please init by updating git submodules" >&2
+	@test -d ./modules/MeasureSuite || echo "Can't find MeasureSuite :(. Please make sure you are on the expected branch and init by updating git submodules (git submodule update --init)" >&2
 	CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm clean-install
 	@touch $(^) $(@)
 
 $(BUILT_CRYPTOPT): $(NODE) $(BUILT_MS) $(shell find ./src -type f -name '*ts')
 	PATH=$(PATH) npm run pack
-	@test -e "$(@)" && touch $(@) && echo "Sucessfully built CryptOpt. :)"
+	@test -e "$(@)" && touch $(@) && echo "Successfully built CryptOpt. :)"
 
 check: $(BUILT_CRYPTOPT)
 	PATH=$(PATH) npm run test-no-watch
 
 clean:
-	rm -rf ./dist ./coverage
+	rm -rf ./dist ./coverage ./bundle.tar.gz ./bundle.zip
 
 deepclean: clean
 	rm -rf ./bins ./node_modules
 	$(MAKE) deepclean -C ./modules/MeasureSuite
 
+install-zsh:
+	install -v $(ROOT)/completion/_cryptopt /usr/local/share/zsh/site-functions && echo -e "Installed successfully\nRestart your shell to enjoy\n"
+
+BUNDLE_FILES:=$(shell find . -type f ! -path './bundle*' -a ! -path '*node_modules*' -a ! -path '*results*' -a ! -path '*.git*' -a ! -path './bins/*' -a ! -path './modules/MeasureSuite/build/*' -a ! -path '*dist*')
+
+dist: bundle.tar.gz bundle.zip
+
+bundle.tar.gz: $(BUNDLE_FILES)
+	tar czvf ${@} $(^)
+
+bundle.zip: $(BUNDLE_FILES)
+	zip ${@} $(^)

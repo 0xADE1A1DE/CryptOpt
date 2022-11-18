@@ -22,11 +22,11 @@ ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # general deps, fiat deps, cryptopt deps
-RUN apt install -y git make vim tar \
+RUN apt install -y git make vim tar zsh \
         coq jq libcoq-ocaml-dev make ocaml-findlib \
         autoconf clang curl g++ gcc gnuplot-nox libtool nasm pkg-config poppler-utils tmux
 
-ENV asmlineversion 1.3.1
+ENV asmlineversion 1.3.2
 RUN curl -L https://github.com/0xADE1A1DE/AssemblyLine/releases/download/v${asmlineversion}/assemblyline-${asmlineversion}.tar.gz |\
         tar -xzf- -C /tmp/ && \
         cd /tmp/assemblyline-${asmlineversion} && ./configure && \

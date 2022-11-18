@@ -1,0 +1,68 @@
+#compdef co cryptopt CryptOpt
+
+# Copyright 2022 University of Adelaide
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+_arguments -S -s \
+    '(--bridge)--bridge=[Bridge]:bridge:->bridges' \
+    '(-c --curve -j --jsonFile -f --cFile)'{-c,--curve=}'[Curve]:curve:->curves' \
+    '(-m --method -j --jsonFile -f --cFile)'{-m,--method=}'[Method]:method:->methods' \
+    '(-j --jsonFile -c --curve -m --method)'{-j,--jsonFile=}'[JSON-CODE, must --bridge manual]:json:_files -g \*.json' \
+    '(-f --cFile -c --curve -m --method)'{-f,--cFile=}'[C-CODE must --bridge manual]:cfile:_files -g \*.c' \
+    '--readState=[Continue from this State file]:statejson:_files -g \*.json' \
+    '--resultDir=[Where to safe the result-files (assembly, pdfs, ...)]:directory:_path_files -/' \
+    '(-e --evals)'{-e=,--evals=}'[Budget, in # of mutations to evaluate]:evals:' \
+    '(-b --bets -r --betRatio)--single[no bets. Short for --bets=1 --betRatio=1]:single:' \
+    '(-b --bets)'{-b,--bets=}'[number of Bets]:bets:' \
+    '(-r --betRatio)'{-r,--betRatio=}'[Ratio of how many evals to spend on bets.]:br:' \
+    '--cyclegoal=[Number of cycles to measure, adjusts batch size dynamically]:cg:' \
+    '--logComment=[Hint displayed during optimization]:lc:' \
+    '(--no-proof --proof)'{--no-proof,--proof}'[Dis-/En ables proofing. Default on with fiat, default off elsewhere]:proof:' \
+    '(-v --verbose)'{-v,--verbose}'[Write a lot of log messages]:verbose' \
+    '(-x --xmm)'{-x,--xmm}'[Enable spilling to xmm]:xmm' \
+    '(-s --seed)'{-s,--seed=}'[Seed to start the randomness with\[number\]]:seed' \
+    '(-h,--help)'{-h,--help}'[Help]:get help prompt' \
+    '(--version)'{-v,--version}'[Version]:Version information' \
+    && ret=0
+case "$state" in 
+	bridges)
+		_values  'bridge' \
+			'fiat[Fiat Bridge]' \
+			'bitcoin-core[Bitcoin Core Bridge (must specify -c secp256k1)]' \
+			'manual[Manual Bridge (must specify -j and -f)]' \
+		;;
+	methods)
+		_values  'method' \
+			'mul[Multiplication]' \
+			'square[Square]' \
+		;;
+	curves)
+		_values 'curve' \
+			'curve25519[p=2^255 - 19;                       Unsaturated Solinas]' \
+			'curve25519_solinas[p=2^255 - 19;                       Saturated Solinas]'\
+  			'p224[p=2^224 - 2^96 + 1;                 Wbw Montgomery]' \
+  			'p256[p=2^256 - 2^224 + 2^192 + 2^96 - 1; Wbw Montgomery]' \
+  			'p384[p=2^384 - 2^128 - 2^96 + 2^32 - 1;  Wbw Montgomery]' \
+  			'p434[p=2^216 * 3^137 - 1;                Wbw Montgomery]' \
+  			'p448_solinas[p=2^448 - 2^224 - 1;                Unsaturated Solinas]' \
+  			'p521[p=2^521 - 1;                        Unsaturated Solinas]' \
+  			'poly1305[p=2^130 - 5;                        Unsaturated Solinas]' \
+  			'secp256k1[p=2^256 - 2^32 - 977;               Wbw Montgomery]' \
+  			'secp256k1_dettman[p=2^256 - 4294968273;               Unsaturated Dettman]' \
+		;;
+esac
+
+
+return 0

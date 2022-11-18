@@ -1,0 +1,8 @@
+theme: jekyll-theme-cayman
+title: "CryptOpt: Verified Compilation with Random Program Search for Cryptographic Primitives"
+description: An Automatic Optimizer for Cryptographic Primitives.
+show_downloads: true
+google_analytics:
+github:
+  zip_url: https://github.com/0xADE1A1DE/CryptOpt/releases/download/0.0.1/bundle.zip
+  tar_url: https://github.com/0xADE1A1DE/CryptOpt/releases/download/0.0.1/bundle.tar.gz

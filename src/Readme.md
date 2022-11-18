@@ -10,8 +10,8 @@
 ## Tool chain
 
 CryptOpt is written in [TypeScript](https://www.typescriptlang.org/), a typed superset of JavaScript.
-`./build.sh` gets the Node runtime, triggers MeasureSuite compilation and triggers the transpilation of CryptOpt to JavaScript and then bundles with `rollup` to one file `dist/CryptOpt.js`.
-`./run.sh` serves as a wrapper script, essentially calling `node ./dist/CryptOpt.js` with the local node version.
+`make all` in the root directory gets the Node runtime, triggers MeasureSuite compilation, triggers the transpilation of CryptOpt to JavaScript and then bundles with `rollup` to files in `dist/{CryptOpt,CountCycle,...}.js`.
+`./CryptOpt` serves as a wrapper script, essentially calling `node ./dist/CryptOpt.js` with the local node version.
 The optimization then runs in the Chrome V8 engine through Node.js.
 
 ## Files
@@ -27,7 +27,7 @@ The `asm`-file is the output Assembly file with the generated code; the `<RATIO>
 
 CryptOpt is dependent on `MeasureSuite`. In a nutshell, CryptOpt gives `MeasureSuite` two assembly strings and `MeasureSuite` will then evaluate them in our adapted R3-Validation fashion.
 It itself is written in C, but provides TypeScript bindings.
-It also depends on [AssemblyLine](https://github.com/0XADE1A1DE/Assemblyline) (*An ultra-lightweight C library and binary for generating machine code of x86_64 assembly language and executing on the fly*) to generate and execute machine code.
+It also depends on [AssemblyLine](https://0XADE1A1DE.github.io/Assemblyline) (*An ultra-lightweight C library and binary for generating machine code of x86_64 assembly language and executing on the fly*) to generate and execute machine code.
 
 ## How does it work then?
 

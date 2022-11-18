@@ -15,8 +15,17 @@
 # limitations under the License.
 #
 
-# go into this working directory. Everything is relative from there
-cd "$(dirname "${0}")" || exit 1
+# die on error
+set -e
+
+# If you place this script into your $PATH, change this variable to
+# where CryptOpt has been unpacked to
+INSTALLDIR="$(dirname "${0}")"
+
+# go into the Install directory. Everything is relative from there
+cd "${INSTALLDIR}"
 
 #run
-PATH="${PATH}:$(realpath ./bins/node/bin)" /usr/bin/env node "./dist/CryptOpt.js" "${@}"
+PATH="${PATH}:$(realpath ./bins/node/bin)" \
+  /usr/bin/env node \
+  "./dist/CryptOpt.js" "${@}"

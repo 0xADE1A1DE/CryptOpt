@@ -106,7 +106,6 @@ export const parsedArgs = y
     default: "",
   })
   .option("proof", {
-    alias: "n",
     default: true,
     describe:
       "If this is set, it will proof the solution correct with fiat-bridge in addition to comparing the results with the C-compiled solution. Disable with --no-proof",
