@@ -49,7 +49,7 @@ if (!verbose) {
 }
 
 // to get the symbol name, we create new anonymous optimizer.
-const symbolname = new Optimizer(parsedArgs).getSymbolname();
+const symbolname = new Optimizer(parsedArgs).getSymbolname(true);
 registerExitHooks({ ...parsedArgs, symbolname });
 
 type RunResult = { statefile: string; ratio: number; convergence: string[] };
