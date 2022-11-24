@@ -50,7 +50,10 @@ export class Optimizer {
   private measuresuite: Measuresuite;
   private libcheckfunctionDirectory: string; // aka. /tmp/CryptOpt.cache/yolo123
   private symbolname: string;
-  public getSymbolname(): string {
+  public getSymbolname(deleteCache = false): string {
+    if (deleteCache) {
+      this.cleanLibcheckfunctions();
+    }
     return this.symbolname;
   }
 
