@@ -75,6 +75,7 @@ function main() {
     const sample1 = doSample(ms, 2 * MAX_SAMLPESIZE, asmString);
     if (typeof sample1 == "number") {
       shout(sample1);
+      fs.rmSync(cacheDir, { recursive: true, force: true });
       process.exit(0);
     }
     const sample2 = [] as number[];
@@ -106,13 +107,11 @@ function main() {
       // calculate the mean of both samples
       const mean = Stats.mean(sample1.concat(sample2));
       shout(mean);
+      fs.rmSync(cacheDir, { recursive: true, force: true });
       return;
     }
     fs.appendFileSync("/tmp/cycle_count-retry.log", `${Date()}${param_one},${tries}\n`);
   } while (tries--);
-  if (fs.existsSync(cacheDir)) {
-    fs.rmdirSync(cacheDir);
-  }
 }
 
 function getSymbol(asmstring: string): string | never {
