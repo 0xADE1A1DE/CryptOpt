@@ -67,7 +67,7 @@ function main() {
     // otherwise param_one must have been a symbol
     symbol = param_one;
   }
-  const ms = createMS(symbol, seed, cFilename, jsonFilename);
+  const { cacheDir, ms } = createMS(symbol, seed, cFilename, jsonFilename);
   // TESTING
   do {
     // do one sample
@@ -109,6 +109,9 @@ function main() {
     }
     fs.appendFileSync("/tmp/cycle_count-retry.log", `${Date()}${param_one},${tries}\n`);
   } while (tries--);
+  if (fs.existsSync(cacheDir)) {
+    fs.rmdirSync(cacheDir);
+  }
 }
 
 function getSymbol(asmstring: string): string | never {
@@ -123,14 +126,20 @@ function getSymbol(asmstring: string): string | never {
   return symbol;
 }
 
-function createMS(symbol: string, seed: number, jsonFilename: string, cFilename: string): Measuresuite {
+function createMS(
+  symbol: string,
+  seed: number,
+  jsonFilename: string,
+  cFilename: string,
+): { cacheDir: string; ms: Measuresuite } {
   const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
   const cacheDir = join(tmpdir(), "CryptOpt.CountCycle.cache", randomString);
   if (symbol in KNOWN_SYMBOLS) {
-    return init(cacheDir, {
+    const ms = init(cacheDir, {
       ...KNOWN_SYMBOLS[symbol],
       seed,
     }).measuresuite;
+    return { ms, cacheDir };
   }
 
   if ([jsonFilename, cFilename].some((f) => !(f && fs.existsSync(f)))) {
@@ -141,13 +150,13 @@ function createMS(symbol: string, seed: number, jsonFilename: string, cFilename:
   }
 
   // --> manual bridge
-  return init(cacheDir, {
+  const ms = init(cacheDir, {
     bridge: "manual",
     jsonFile: jsonFilename,
     cFile: cFilename,
     seed,
   }).measuresuite;
-  //
+  return { ms, cacheDir };
 }
 
 function silence() {
