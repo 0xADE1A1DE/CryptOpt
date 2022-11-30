@@ -4,7 +4,7 @@
  *      - a path to an asm-file, implementing a known/supported method or
  *      - a symbol name to measure with libObly
  * three arguments
- *      - path to  asm-file
+ *      -            symbol
  *      - path to    c-file
  *      - path to json-file
  *      both implementing the same method.
@@ -67,7 +67,8 @@ function main() {
     // otherwise param_one must have been a symbol
     symbol = param_one;
   }
-  const { cacheDir, ms } = createMS(symbol, seed, cFilename, jsonFilename);
+  const cacheDir = createCache();
+  const ms = createMS(cacheDir, symbol, seed, cFilename, jsonFilename);
   // TESTING
   do {
     // do one sample
@@ -127,19 +128,17 @@ function getSymbol(asmstring: string): string | never {
 }
 
 function createMS(
+  cacheDir: string,
   symbol: string,
   seed: number,
   jsonFilename: string,
   cFilename: string,
-): { cacheDir: string; ms: Measuresuite } {
-  const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
-  const cacheDir = join(tmpdir(), "CryptOpt.CountCycle.cache", randomString);
+): Measuresuite {
   if (symbol in KNOWN_SYMBOLS) {
-    const ms = init(cacheDir, {
+    return init(cacheDir, {
       ...KNOWN_SYMBOLS[symbol],
       seed,
     }).measuresuite;
-    return { ms, cacheDir };
   }
 
   if ([jsonFilename, cFilename].some((f) => !(f && fs.existsSync(f)))) {
@@ -150,13 +149,12 @@ function createMS(
   }
 
   // --> manual bridge
-  const ms = init(cacheDir, {
+  return init(cacheDir, {
     bridge: "manual",
     jsonFile: jsonFilename,
     cFile: cFilename,
     seed,
   }).measuresuite;
-  return { ms, cacheDir };
 }
 
 function silence() {
@@ -165,6 +163,11 @@ function silence() {
     // *wink* https://www.youtube.com/watch?v=GBvfiCdk-jc
   };
   return backup;
+}
+
+function createCache(): string {
+  const randomString = sha1Hash(Math.ceil(Date.now() * Math.random())).toString(36);
+  return join(tmpdir(), "CryptOpt.CountCycle.cache", randomString);
 }
 
 function doSample(ms: Measuresuite, size: number, asmstring: string | null): number[] | number {
