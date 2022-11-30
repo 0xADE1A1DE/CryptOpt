@@ -29,8 +29,8 @@
     "lint-fix": "eslint . --fix",
     "format-check": "npx prettier --check \"./**/*.ts\" \"!./dist\"",
     "format-fix": "npx prettier -w \"./**/*.ts\" \"!./dist\"",
-    "pack": "rollup --config rollup.config.ts",
-    "pack-w": "rollup --config rollup.config.ts -w"
+    "pack": "rollup --config rollup.config.js",
+    "pack-w": "rollup --config rollup.config.js -w"
   },
   "prettier": {
     "trailingComma": "all",
@@ -61,7 +61,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "prettier": "^2.7.1",
-    "rollup": "^2.79.1",
+    "rollup": "^3.5.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-shell": "^1.0.8",
     "tslib": "^2.4.1",
