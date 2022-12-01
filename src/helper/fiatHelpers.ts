@@ -16,7 +16,7 @@
 
 // get the operations/dataypes with this helper cmd
 // grep operation -r *.json |tr -s '[[:space:]]' |  cut -d":" -f 3 | sed -e 's/,/|/' |sort |uniq
-import { groupBy } from "lodash-es";
+import { cloneDeep, groupBy } from "lodash-es";
 
 import {
   C_DI_HANDLE_FLAGS_KK,
@@ -66,11 +66,14 @@ export function preprocessFunction(func: Fiat.FiatFunction): CryptOpt.Function {
   // inline unnecessary multiple mul-imms. x2=arg1[1] *2; x3=x2*2 -> x3=arg1[1]*4
   const fourFifthProcessed = mergeMulImm(threeQuartersProcessed);
 
-  // filter out the operations, which are creating variables, which are not used. The only ones allowed to be 'unused' are matchArg i.e. out1[1]
-  const fiveSixthProcessed = filterDeadOps(fourFifthProcessed);
+  // reduce common sub-expressions
+  const fiveSixthProcessed = reduceCSE(fourFifthProcessed);
 
-  // and add decisionsproperties where due
-  const body = fiveSixthProcessed.map(addDecisionProperty) as CryptOpt.StringOperation[]; // decisionsproperty should be added last.
+  // filter out the operations, which are creating variables, which are not used. The only ones allowed to be 'unused' are matchArg i.e. out1[1]
+  const sixSeventhProcessed = filterDeadOps(fiveSixthProcessed);
+
+  // and add decisionsproperties where necessary
+  const body = sixSeventhProcessed.map(addDecisionProperty) as CryptOpt.StringOperation[]; // decisionsproperty should be added last.
 
   // types
   body.forEach(assertStringArguments);
@@ -388,4 +391,57 @@ function filterDeadOps(args: Fiat.DynArgument[]): Fiat.DynArgument[] {
         a.arguments.includes(n.name[0] as Fiat.ConstArgument),
     ),
   );
+}
+
+function reduceCSE(args: Fiat.DynArgument[]): Fiat.DynArgument[] {
+  debugger;
+  const genKey = (arg: Fiat.DynArgument): string => {
+    const start = arg.parameters ? JSON.stringify(arg.parameters) : "";
+    return start + arg.datatype + arg.arguments.join(arg.operation);
+  };
+  const genValue = (arg: Fiat.DynArgument): Fiat.DynArgument["name"] => arg.name;
+
+  // console.error(JSON.stringify(args, undefined, 2));
+
+  const db = new Map<string, Fiat.DynArgument["name"]>();
+
+  let changed = false;
+  do {
+    changed = false;
+    db.clear();
+    // read working copy
+    const copy = cloneDeep(args.filter((a) => a.name.length));
+    copy.forEach((arg, i) => {
+      const k = genKey(arg);
+      // this is the expression, which already computed arg
+      const first = db.get(k);
+      // we've potentially found .
+
+      // for now, we only want to replace cse's which have the same reference modes. I think this is implicit by design when using fiat.
+      // i.e. we dont want to replace x10 = x1 + x2 and (x20,x21)=addcarryx(x1,x2). Becasue x10 is probably u123 and x20,x21 are u64... possible but not required just yet.
+      if (first && first.length === arg.name.length) {
+        // we want to replace all occurances of usages of seconds'name with the one from the first
+        args.forEach((c) => {
+          c.arguments.forEach((a, aIndex) => {
+            args[i].name.forEach((n, nameIndex) => {
+              const repl = first[nameIndex]; // replace with
+              if (a == n && isXD(repl)) {
+                changed = true;
+                console.log(
+                  `replacing ${a.padStart(7)} with ${repl.padStart(7)} in ${c.name.join("--")}=${genKey(
+                    c,
+                  )} \t ${k}`,
+                );
+                c.arguments[aIndex] = repl;
+              }
+            });
+          });
+        });
+      } else {
+        db.set(genKey(arg), genValue(arg));
+      }
+    });
+  } while (changed);
+
+  return args;
 }
