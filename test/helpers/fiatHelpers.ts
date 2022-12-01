@@ -399,4 +399,53 @@ describe("preprocessFunction", () => {
       expect(alternatives).toHaveLength(2);
     });
   });
+  it("should find CSE", () => {
+    const input = Object.assign({}, Object.assign({}, boilerplate), {
+      body: [
+        {
+          // keep this to make sure that they dont end up missing
+          name: ["x1"],
+          arguments: ["arg1[7]", "arg2[7]"],
+          operation: "*",
+          datatype: "u128",
+        },
+        {
+          name: ["x13"],
+          arguments: ["arg1[7]", "arg2[7]"],
+          operation: "*",
+          datatype: "u128",
+        },
+        {
+          name: ["x3"],
+          arguments: ["x13", "x1"],
+          operation: "+",
+          datatype: "u128",
+        },
+        {
+          name: ["x4"],
+          arguments: ["x3", "0xffffffffffffffff"],
+          operation: "&",
+          datatype: "u64",
+        },
+        {
+          name: ["x5"],
+          arguments: ["x3", "64"],
+          operation: ">>",
+          datatype: "u64",
+        },
+        createOut("x4"),
+        createOut("x5"),
+      ],
+    });
+
+    // input has 7 ops
+    expect(input.body).toHaveLength(7);
+    const result = preprocessFunction(input).body;
+    // after processing, we should find that x1 and x13 are the same
+    expect(result).toHaveLength(6);
+
+    const plus = result.find((o) => o.operation == "+");
+    expect(plus).toBeTruthy();
+    expect(plus?.arguments[0]).toEqual(plus?.arguments[1]);
+  });
 });
