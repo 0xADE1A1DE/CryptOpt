@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { defaults, zip } from "lodash-es";
+import { defaults } from "lodash-es";
 import * as Stats from "simple-statistics";
 
 import type {
@@ -24,6 +24,8 @@ import type {
   numTripel,
   QuickStats,
 } from "@/types";
+import { errorOut, ERRORS } from "@/errors";
+import { AsmFunctionSummary } from "modules/MeasureSuite/ts/src/measure.interface";
 
 /**
  * @param result - the result to analyse
@@ -33,7 +35,7 @@ import type {
  */
 export function analyseMeasureResult(
   result: MeasureResult | null,
-  options: AnalyseMeasureResultOptions = {},
+  options: AnalyseMeasureResultOptions,
 ): AnalyseResult {
   // assign default values
   defaults(options, { checkCorrectness: true });
@@ -42,17 +44,20 @@ export function analyseMeasureResult(
     throw new Error("measure returned, but results is nullish. TSNH.");
   }
 
-  if (options.checkCorrectness === true && result.stats.checkResult === false) {
+  if (options.checkCorrectness && result.stats.incorrect !== 0) {
     console.error(
-      `\nTested incorrect.
-            countA: ${result.stats.countA}/${result.stats.numBatches},
-            countB: ${result.stats.countB}/${result.stats.numBatches}.
-            Have a look at status runorder:  ${result.stats.runOrder}, the last one was the cause of the incorrectness`,
+      `Number ${result.stats.incorrect} did not calculate the same as the previous one. (Shared object is loaded as id '0') You probably want to diff them. Here:`,
+      `diff (Resultdir = ${options.resultDir})/tested_incorrect_*.asm`,
     );
-    throw new Error("tested_incorrect");
+    throw Error("tested_incorrect");
   }
 
-  const [ca, cb, cc] = zip(...result.times).map(analyseRow);
+  if (result.cycles.length == 0 || result.cycles.some((c) => c.length == 0)) {
+    console.error(JSON.stringify(result));
+    errorOut(ERRORS.measureInsufficientData);
+  }
+
+  const [cc, ca, cb] = result.cycles.map(analyseRow);
   const rawMedian: numTripel = [ca.pre.median, cb.pre.median, cc.pre.median];
 
   if (rawMedian.some(isNaN)) {
@@ -65,7 +70,7 @@ export function analyseMeasureResult(
 
   const noOutlierStddev: numTripel = [ca.post.stddev, cb.post.stddev, cc.post.stddev];
 
-  const scale = (cyc: number): number => cyc / result.stats.batchSize;
+  const scale = (cyc: number): number => cyc / options.batchSize;
 
   return {
     rawMedian,
@@ -79,10 +84,11 @@ export function analyseMeasureResult(
     noOutlierBatchSizeScaledStddev: noOutlierStddev.map(scale) as numTripel,
 
     numOutliers: [ca.pre.n - ca.post.n, ca.pre.n - ca.post.n, ca.pre.n - ca.post.n],
-    numBatches: [result.stats.countA, result.stats.countB],
 
-    chunks: [result.stats.chunksA, result.stats.chunksB],
-    correct: result.stats.checkResult,
+    chunks: result.functions
+      .filter(({ type }) => type == "ASM")
+      .map((f) => (f as AsmFunctionSummary).chunks) as [number, number],
+    correct: result.stats.incorrect !== 0,
     rawResult: result,
   };
 }

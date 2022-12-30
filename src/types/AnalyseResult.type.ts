@@ -37,12 +37,13 @@ export interface AnalyseResult {
   numOutliers: numTripel;
 
   chunks: [chunksA: number, chunksB: number];
-  numBatches: [chunksA: number, chunksB: number];
 
   correct: boolean;
   rawResult: MeasureResult; // hopefully just for debug/dev purposes
 }
 
 export interface AnalyseMeasureResultOptions {
+  batchSize: number;
   checkCorrectness?: boolean;
+  resultDir?: string;
 }

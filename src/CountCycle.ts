@@ -184,19 +184,16 @@ function doSampleAsm(ms: Measuresuite, size: number, asmstring: string): { asm: 
 
   for (let i = 0; i < size; i++) {
     try {
-      const result = ms.measure(asmstring, asmstring, BATCH_SIZE, NUMBER_OF_BATCHES);
-      if (!result?.stats.checkResult) {
+      const result = ms.measure(BATCH_SIZE, NUMBER_OF_BATCHES, [asmstring]);
+      if (result?.stats.incorrect !== 0) {
         console.error("No / Wrong result");
         process.exit(-1);
       }
 
-      const medianA = analyseRow(result.times.map((t) => t[0])).post.median;
+      const medianA = analyseRow(result.cycles[1]).post.median;
       resultCycleMedians.asm.push(medianA);
 
-      const medianB = analyseRow(result.times.map((t) => t[1])).post.median;
-      resultCycleMedians.asm.push(medianB);
-
-      const medianC = analyseRow(result.times.map((t) => t[2])).post.median;
+      const medianC = analyseRow(result.cycles[0]).post.median;
       resultCycleMedians.check.push(medianC);
     } catch (e) {
       console.error("execution of measure failed.", e);
@@ -210,7 +207,7 @@ function doSampleLibonly(ms: Measuresuite, size: number): number[] {
   const resultCycleMedians: number[] = [];
   for (let i = 0; i < size; i++) {
     try {
-      const cycles = ms.measureLibOnly(BATCH_SIZE, NUMBER_OF_BATCHES) ?? [];
+      const cycles = ms.measure(BATCH_SIZE, NUMBER_OF_BATCHES)?.cycles?.[0] ?? [];
       const { median } = analyseRow(cycles).post;
       resultCycleMedians.push(median);
     } catch (e) {

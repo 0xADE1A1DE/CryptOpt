@@ -16,12 +16,12 @@ ROOT           := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 NODE_DIR       := $(ROOT)/bins/node
 NODE           := $(ROOT)/bins/node/bin/node
-NODE_VERSION   := 19.1.0
+NODE_VERSION   := 19.3.0
 
 PATH           := $(PATH):$(NODE_DIR)/bin
 
 BUILT_CRYPTOPT := $(ROOT)/dist/CryptOpt.js
-BUILT_MS       := ./modules/MeasureSuite/dist/measureaddon.node
+BUILT_MS       := ./modules/MeasureSuite/ts/dist/measuresuite.node
 
 .PHONY: all build check clean deepclean
 
@@ -50,7 +50,8 @@ clean:
 
 deepclean: clean
 	rm -rf ./bins ./node_modules
-	$(MAKE) deepclean -C ./modules/MeasureSuite
+	$(MAKE) deepclean -C ./modules/MeasureSuite/lib
+	$(MAKE) clean -C ./modules/MeasureSuite
 
 install-zsh:
 	install -v $(ROOT)/completion/_cryptopt /usr/local/share/zsh/site-functions && echo -e "Installed successfully\nRestart your shell to enjoy\n"
