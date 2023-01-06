@@ -35,7 +35,7 @@ $(NODE):
 
 $(BUILT_MS): $(NODE) $(shell find ./modules/MeasureSuite -type f -name '*.ts' -or -name '*.c')
 	@test -d ./modules/MeasureSuite || echo "Can't find MeasureSuite :(. Please make sure you are on the expected branch and init by updating git submodules (git submodule update --init)" >&2
-	CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm clean-install
+	CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm $$(test -e ./package-lock.json && echo 'clean-install' || echo "install")
 	@touch $(^) $(@)
 
 $(BUILT_CRYPTOPT): $(NODE) $(BUILT_MS) $(shell find ./src -type f -name '*ts')
@@ -49,7 +49,7 @@ clean:
 	rm -rf ./dist ./coverage ./bundle.tar.gz ./bundle.zip
 
 deepclean: clean
-	rm -rf ./bins ./node_modules
+	rm -rf ./bins ./node_modules package-lock.json
 	$(MAKE) deepclean -C ./modules/MeasureSuite/lib
 	$(MAKE) clean -C ./modules/MeasureSuite
 
