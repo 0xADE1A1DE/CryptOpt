@@ -16,7 +16,6 @@
 
 import { uniq } from "lodash-es";
 import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
 
 import { AVAILABLE_METHODS as BITCOIN_CORE_METHODS } from "@/bridge/bitcoin-core-bridge/constants";
 import { BRIDGES } from "@/bridge/constants";
@@ -26,10 +25,10 @@ import {
 } from "@/bridge/fiat-bridge/constants";
 import { errorOut, ERRORS } from "@/errors";
 
-const y = await yargs(hideBin(process.argv));
+const y = await yargs(process.argv.slice(2));
 
 export const parsedArgs = y
-  .scriptName("./run.sh")
+  .scriptName("./CryptOpt")
   .usage("$0 [OPTION]...")
   .option("curve", {
     string: true,
