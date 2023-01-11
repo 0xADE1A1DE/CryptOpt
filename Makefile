@@ -18,7 +18,7 @@ NODE_DIR       := $(ROOT)/bins/node
 NODE           := $(ROOT)/bins/node/bin/node
 NODE_VERSION   := 18.13.0
 
-PATH           := $(PATH):$(NODE_DIR)/bin
+PATH           := $(NODE_DIR)/bin:$(PATH)
 
 BUILT_CRYPTOPT := $(ROOT)/dist/CryptOpt.js
 
