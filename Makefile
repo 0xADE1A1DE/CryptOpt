@@ -16,7 +16,7 @@ ROOT           := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 NODE_DIR       := $(ROOT)/bins/node
 NODE           := $(ROOT)/bins/node/bin/node
-NODE_VERSION   := 19.4.0
+NODE_VERSION   := 18.13.0
 
 PATH           := $(PATH):$(NODE_DIR)/bin
 
@@ -33,8 +33,10 @@ $(NODE):
 	mv -f ./bins/node-v$(NODE_VERSION)-linux-x64 "$(NODE_DIR)"
 
 $(BUILT_CRYPTOPT): $(NODE) $(shell find ./src -type f -name '*ts')
-	PATH=$(PATH) npm $$(test -e ./package-lock.json && echo 'clean-install' || echo "install")
-	PATH=$(PATH) npm run bundle
+	@echo "Installing dependencies"
+	@CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm $$(test -e ./package-lock.json && echo 'clean-install' || echo "install")
+	@echo "Building CryptOpt"
+	@PATH=$(PATH) npm run bundle
 	@test -e "$(@)" && touch $(@) && echo "Successfully built CryptOpt. :)"
 
 check: $(BUILT_CRYPTOPT)
