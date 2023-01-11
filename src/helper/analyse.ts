@@ -25,7 +25,7 @@ import type {
   QuickStats,
 } from "@/types";
 import { errorOut, ERRORS } from "@/errors";
-import { AsmFunctionSummary } from "modules/MeasureSuite/ts/src/measure.interface";
+import type { AsmFunctionSummary } from "measuresuite";
 
 /**
  * @param result - the result to analyse

@@ -27,7 +27,7 @@ It will require internet access to download the (Node.js) runtime and dependenci
 
 1. Install dependencies (will install globally) (c.f. Dockerfile `apt install` command(s))
 1. Install [AssemblyLine](https://0xADE1A1DE.github.io/Assemblyline) (will install globally)
-1. Clone the repo with `--recurse-submodules` to also clone submodules like [MeasureSuite](https://github.com/0xADE1A1DE/MeasureSuite).
+1. Clone the repo with `--recurse-submodules` to also clone submodules for a bunch of useful scripts.
 1. Enable performance counters `echo "1" | sudo tee /proc/sys/kernel/perf_event_paranoid` (MeasureSuite will otherwise fall back to use `RDTSCP` to count cycles)
 1. Build CryptOpt with `make all`.
 CryptOpt already contains pre-built binaries for fiat-crypto.

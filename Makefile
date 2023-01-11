@@ -16,12 +16,11 @@ ROOT           := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 NODE_DIR       := $(ROOT)/bins/node
 NODE           := $(ROOT)/bins/node/bin/node
-NODE_VERSION   := 19.3.0
+NODE_VERSION   := 19.4.0
 
 PATH           := $(PATH):$(NODE_DIR)/bin
 
 BUILT_CRYPTOPT := $(ROOT)/dist/CryptOpt.js
-BUILT_MS       := ./modules/MeasureSuite/ts/dist/measuresuite.node
 
 .PHONY: all build check clean deepclean
 
@@ -33,13 +32,9 @@ $(NODE):
 	curl -L https://nodejs.org/dist/v$(NODE_VERSION)/node-v$(NODE_VERSION)-linux-x64.tar.xz | tar --extract --xz --directory ./bins
 	mv -f ./bins/node-v$(NODE_VERSION)-linux-x64 "$(NODE_DIR)"
 
-$(BUILT_MS): $(NODE) $(shell find ./modules/MeasureSuite -type f -name '*.ts' -or -name '*.c')
-	@test -d ./modules/MeasureSuite || echo "Can't find MeasureSuite :(. Please make sure you are on the expected branch and init by updating git submodules (git submodule update --init)" >&2
-	CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm $$(test -e ./package-lock.json && echo 'clean-install' || echo "install")
-	@touch $(^) $(@)
-
-$(BUILT_CRYPTOPT): $(NODE) $(BUILT_MS) $(shell find ./src -type f -name '*ts')
-	PATH=$(PATH) npm run pack
+$(BUILT_CRYPTOPT): $(NODE) $(shell find ./src -type f -name '*ts')
+	PATH=$(PATH) npm $$(test -e ./package-lock.json && echo 'clean-install' || echo "install")
+	PATH=$(PATH) npm run bundle
 	@test -e "$(@)" && touch $(@) && echo "Successfully built CryptOpt. :)"
 
 check: $(BUILT_CRYPTOPT)
@@ -50,13 +45,11 @@ clean:
 
 deepclean: clean
 	rm -rf ./bins ./node_modules package-lock.json
-	$(MAKE) deepclean -C ./modules/MeasureSuite/lib
-	$(MAKE) clean -C ./modules/MeasureSuite
 
 install-zsh:
 	install -v $(ROOT)/completion/_cryptopt /usr/local/share/zsh/site-functions && echo -e "Installed successfully\nRestart your shell to enjoy\n"
 
-BUNDLE_FILES:=$(shell find . -type f ! -path './bundle*' -a ! -path '*node_modules*' -a ! -path '*results*' -a ! -path '*.git*' -a ! -path './bins/*' -a ! -path './modules/MeasureSuite/build/*' -a ! -path '*dist*')
+BUNDLE_FILES:=$(shell find . -type f ! -path './bundle*' -a ! -path '*node_modules*' -a ! -path '*results*' -a ! -path '*.git*' -a ! -path './bins/*' -a ! -path '*dist*')
 
 dist: bundle.tar.gz bundle.zip
 
