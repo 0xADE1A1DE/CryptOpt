@@ -204,12 +204,7 @@ export class Optimizer {
             ]);
             console.log("well done guys. The results are in!");
 
-            try {
-              analyseResult = analyseMeasureResult(results, { batchSize, resultDir: this.args.resultDir });
-            } catch (e) {
-              console.error(JSON.stringify(results));
-              errorOut(ERRORS.measureCannotAnalyze);
-            }
+            analyseResult = analyseMeasureResult(results, { batchSize, resultDir: this.args.resultDir });
 
             //TODO increase numBatches, if the times have a big stddeviation
             //TODO change batchSize if the avg number is batchSize *= avg(times)/goal ; goal=10000 cycles

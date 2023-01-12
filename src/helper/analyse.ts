@@ -41,7 +41,8 @@ export function analyseMeasureResult(
   defaults(options, { checkCorrectness: true });
 
   if (!result) {
-    throw new Error("measure returned, but results is nullish. TSNH.");
+    console.error("measure returned, but results is nullish. TSNH.");
+    errorOut(ERRORS.measureCannotAnalyze);
   }
 
   if (options.checkCorrectness && result.stats.incorrect !== 0) {
@@ -49,6 +50,7 @@ export function analyseMeasureResult(
       `Number ${result.stats.incorrect} did not calculate the same as the previous one. (Shared object is loaded as id '0') You probably want to diff them. Here:`,
       `diff (Resultdir = ${options.resultDir})/tested_incorrect_*.asm`,
     );
+    console.error(JSON.stringify(result));
     throw Error("tested_incorrect");
   }
 
