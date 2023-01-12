@@ -32,9 +32,11 @@ $(NODE):
 	curl -L https://nodejs.org/dist/v$(NODE_VERSION)/node-v$(NODE_VERSION)-linux-x64.tar.xz | tar --extract --xz --directory ./bins
 	mv -f ./bins/node-v$(NODE_VERSION)-linux-x64 "$(NODE_DIR)"
 
-$(BUILT_CRYPTOPT): $(NODE) $(shell find ./src -type f -name '*ts')
+node_modules: 
 	@echo "Installing dependencies"
 	@CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm $$(test -e ./package-lock.json && echo 'clean-install' || echo "install")
+
+$(BUILT_CRYPTOPT): $(NODE) node_modules $(shell find ./src -type f -name '*ts')
 	@echo "Building CryptOpt"
 	@PATH=$(PATH) npm run bundle
 	@test -e "$(@)" && touch $(@) && echo "Successfully built CryptOpt. :)"
