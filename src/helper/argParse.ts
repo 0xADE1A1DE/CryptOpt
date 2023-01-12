@@ -47,7 +47,7 @@ export const parsedArgs = y
   .option("bridge", {
     string: true,
     default: "fiat",
-    describe: `If --bridge gets assigned 'manual', one must specify --cFile and --jsonFile, rather than cuvrve/method.`,
+    describe: `If --bridge gets assigned 'manual', one must specify --cFile and --jsonFile, rather than curve/method.`,
     choices: BRIDGES,
     coerce: (s: string) => s as "fiat" | "manual" | "bitcoin-core",
   })
