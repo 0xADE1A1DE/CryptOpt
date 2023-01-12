@@ -85,7 +85,7 @@ export class FiatBridge implements Bridge {
 
     console.log(`reading json-fiat: ${jsonCacheFilename}`);
     const jsonBuffer = readFileSync(jsonCacheFilename);
-    console.log(`json-fiat-Bufferllengh: ${jsonBuffer.length}b`);
+    console.log(`json-fiat-Buffer length: ${jsonBuffer.length}b`);
     const jsonString = jsonBuffer.toString();
     const fiat = JSON.parse(jsonString) as Fiat.FiatFunction;
     const cryptOpt = preprocessFunction(fiat);

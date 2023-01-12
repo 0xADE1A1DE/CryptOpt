@@ -27,7 +27,7 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
   const ra = RegisterAllocator.reset();
 
   const output = ra.pres;
-  // right ater the construction in ra.pres will be prosa comments for which arg is in which reg
+  // right ater the construction in ra.pres will be prose comments for which arg is in which reg
 
   console.log("initializing Model.");
   Model.startNewImplementation();

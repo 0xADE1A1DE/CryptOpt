@@ -365,7 +365,7 @@ export class Optimizer {
                 appendFileSync(asmfile, `\n; validated in ${timeForValidation}s\n`);
                 globals.time.validate += timeForValidation;
               } catch (e) {
-                console.error(`tried to proove correct. didnt work. I tried ${proofCmd}`);
+                console.error(`tried to prove correct. didnt work. I tried ${proofCmd}`);
                 errorOut(ERRORS.proofUnsuccessful);
               }
             }
