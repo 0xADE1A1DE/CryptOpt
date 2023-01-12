@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
-    "measuresuite": "^2.0.0",
+    "measuresuite": "^2.0.1-beta.1",
     "proper-lockfile": "^4.1.2",
     "simple-statistics": "^7.8.0",
     "yargs": "^17.6.2"
@@ -53,11 +53,11 @@
     "@types/yargs": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
-    "@vitest/coverage-c8": "^0.27.0",
+    "@vitest/coverage-c8": "^0.27.1",
     "c8": "^7.12.0",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-import": "^2.27.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "prettier": "^2.8.2",
@@ -68,7 +68,7 @@
     "typescript": "^4.9.4",
     "vite": "^4.0.4",
     "vite-tsconfig-paths": "^4.0.3",
-    "vitest": "^0.27.0"
+    "vitest": "^0.27.1"
   },
   "eslintConfig": {
     "root": true,
