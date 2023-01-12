@@ -15,8 +15,10 @@
  */
 
 import { defaults } from "lodash-es";
+import type { AsmFunctionSummary } from "measuresuite";
 import * as Stats from "simple-statistics";
 
+import { errorOut, ERRORS } from "@/errors";
 import type {
   AnalyseMeasureResultOptions,
   AnalyseResult,
@@ -24,8 +26,6 @@ import type {
   numTripel,
   QuickStats,
 } from "@/types";
-import { errorOut, ERRORS } from "@/errors";
-import type { AsmFunctionSummary } from "measuresuite";
 
 /**
  * @param result - the result to analyse

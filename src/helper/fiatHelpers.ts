@@ -394,7 +394,6 @@ function filterDeadOps(args: Fiat.DynArgument[]): Fiat.DynArgument[] {
 }
 
 function reduceCSE(args: Fiat.DynArgument[]): Fiat.DynArgument[] {
-  debugger;
   const genKey = (arg: Fiat.DynArgument): string => {
     const start = arg.parameters ? JSON.stringify(arg.parameters) : "";
     return start + arg.datatype + arg.arguments.join(arg.operation);
