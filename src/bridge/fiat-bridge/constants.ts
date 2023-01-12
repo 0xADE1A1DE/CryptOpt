@@ -16,8 +16,8 @@
 
 import { BINS } from "./enums";
 
-export type CURVE_T = typeof AVAILABLE_CURVES[number];
-export type METHOD_T = typeof AVAILABLE_METHODS[number];
+export type CURVE_T = (typeof AVAILABLE_CURVES)[number];
+export type METHOD_T = (typeof AVAILABLE_METHODS)[number];
 
 export const SHA256SUMS = "sha256sums"; // the one created in the Makefile
 

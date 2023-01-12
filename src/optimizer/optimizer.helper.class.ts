@@ -25,7 +25,7 @@ import { ManualBridge } from "@/bridge/manual-bridge";
 import { Model } from "@/model";
 
 interface needComms {
-  bridge: typeof BRIDGES[number];
+  bridge: (typeof BRIDGES)[number];
   seed: number;
 }
 interface needFiat extends needComms {
@@ -40,7 +40,7 @@ interface needManual extends needComms {
 }
 interface needBitcoinCore extends needComms {
   bridge: "bitcoin-core";
-  method: typeof AVAILABLE_METHODS[number];
+  method: (typeof AVAILABLE_METHODS)[number];
 }
 
 type neededArgs = needFiat | needManual | needBitcoinCore;

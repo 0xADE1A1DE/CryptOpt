@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export type METHOD_T = typeof AVAILABLE_METHODS[number];
+export type METHOD_T = (typeof AVAILABLE_METHODS)[number];
 
 export const AVAILABLE_METHODS = ["square", "mul", "reduce", "scmul"];
 
