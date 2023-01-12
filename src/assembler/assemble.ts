@@ -44,10 +44,12 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
       let allocs = ra.getCurrentAllocations();
       allocs = Object.fromEntries(Object.entries(allocs).sort(([e1], [e2]) => e1.localeCompare(e2)));
 
-      console.warn({ curOperation: curOp, e, allocs, pres });
-      console.error({ curOperation: curOp, e, allocs, pres });
+      const failfile = `${resultspath}/lastFail.asm`;
+      console.warn({ curOperation: curOp, e, allocs, pres, failfile });
+      console.error({ curOperation: curOp, e, allocs, pres, failfile });
+
       writeString(
-        `${resultspath}/lastFail.asm`,
+        failfile,
         output
           .map((i) => `\t${i}`)
           .concat(Model.order)
