@@ -198,33 +198,14 @@ export class Optimizer {
               );
             }
             // here we need the barriers
-            const results = this.measuresuite.measure(
+            const results = this.measuresuite.measure(batchSize, numBatches, [
               this.asmStrings[FUNCTIONS.F_A],
               this.asmStrings[FUNCTIONS.F_B],
-              batchSize,
-              numBatches,
-            );
+            ]);
             console.log("well done guys. The results are in!");
 
-            if (!results) {
-              throw new Error("MeasureSuite did not yield results.");
-            }
-            if (!results.stats.checkResult) {
-              const ro = results.stats.runOrder;
-              console.error(
-                `${ro.charAt(ro.length - 1)} was incorrect: ${ro}. You probably want to diff them. Here:`,
-                `diff ${this.args.resultDir}/tested_incorrect_*.asm`,
-              );
-              throw Error("tested_incorrect");
-            }
-
-            if (results.times.length == 0) {
-              console.error(JSON.stringify(results));
-              errorOut(ERRORS.measureInsufficientData);
-            }
-
             try {
-              analyseResult = analyseMeasureResult(results);
+              analyseResult = analyseMeasureResult(results, { batchSize, resultDir: this.args.resultDir });
             } catch (e) {
               console.error(JSON.stringify(results));
               errorOut(ERRORS.measureCannotAnalyze);
@@ -389,6 +370,7 @@ export class Optimizer {
                 appendFileSync(asmfile, `\n; validated in ${timeForValidation}s\n`);
                 globals.time.validate += timeForValidation;
               } catch (e) {
+                console.error(`tried to proove correct. didnt work. I tried ${proofCmd}`);
                 errorOut(ERRORS.proofUnsuccessful);
               }
             }

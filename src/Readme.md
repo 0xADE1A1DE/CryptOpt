@@ -2,7 +2,7 @@
 
 ## Overall directory structure
 
-- `modules`: git-submodules. Currently contains [0xADE1A1DE/MeasureSuite](https://github.com/0xADE1A1DE/MeasureSuite).
+- `modules`: git-submodules. Currently contains a bunch of scripts.
 - `src`: source files for CryptOpt
 - `src/bridge`: We call a class, which provides a `JSON`-format of the input function and generates machine code a **Bridge**. Those are in this folder, currently supported are `fiat-bridge` and `bitcoin-core-bridge`. Additionally an experimental `manual-bridge`, where one can specify a C and JSON source file to run the optimization on.
 - `test`: unit and e2e-tests
@@ -10,7 +10,7 @@
 ## Tool chain
 
 CryptOpt is written in [TypeScript](https://www.typescriptlang.org/), a typed superset of JavaScript.
-`make all` in the root directory gets the Node runtime, triggers MeasureSuite compilation, triggers the transpilation of CryptOpt to JavaScript and then bundles with `rollup` to files in `dist/{CryptOpt,CountCycle,...}.js`.
+`make all` in the root directory gets the Node runtime, installed dependencies, triggers the transpilation of CryptOpt to JavaScript and then bundles with `rollup` to files in `dist/{CryptOpt, CountCycle, ...}.js`.
 `./CryptOpt` serves as a wrapper script, essentially calling `node ./dist/CryptOpt.js` with the local node version.
 The optimization then runs in the Chrome V8 engine through Node.js.
 
@@ -25,9 +25,10 @@ The `asm`-file is the output Assembly file with the generated code; the `<RATIO>
 
 ## Dependencies
 
-CryptOpt is dependent on `MeasureSuite`. In a nutshell, CryptOpt gives `MeasureSuite` two assembly strings and `MeasureSuite` will then evaluate them in our adapted R3-Validation fashion.
-It itself is written in C, but provides TypeScript bindings.
-It also depends on [AssemblyLine](https://0XADE1A1DE.github.io/Assemblyline) (*An ultra-lightweight C library and binary for generating machine code of x86_64 assembly language and executing on the fly*) to generate and execute machine code.
+CryptOpt uses the npm package [measuresuite](https://www.npmjs.com/package/measuresuite).
+In a nutshell, CryptOpt gives MeasureSuite two assembly strings which will then evaluate them in an adapted R3-Validation fashion.
+Because CryptOpt uses MeasureSuite with assembly strings, this project
+also depends on [AssemblyLine](https://0XADE1A1DE.github.io/Assemblyline) (*An ultra-lightweight C library and binary for generating machine code of x86_64 assembly language and executing on the fly*) to generate and execute machine code.
 
 ## How does it work then?
 

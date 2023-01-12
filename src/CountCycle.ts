@@ -71,47 +71,57 @@ function main() {
   const ms = createMS(cacheDir, symbol, seed, cFilename, jsonFilename);
   // TESTING
   do {
-    // do one sample
-    const sample1 = doSample(ms, 2 * MAX_SAMLPESIZE, asmString);
-    if (typeof sample1 == "number") {
-      shout(sample1);
-      fs.rmSync(cacheDir, { recursive: true, force: true });
-      process.exit(0);
-    }
-    const sample2 = [] as number[];
-
-    // randomly split it
-    for (let i = 0; i < MAX_SAMLPESIZE; i++) {
-      const randomIndex = Math.floor(Math.random() * sample1.length);
-      const [randomSample] = sample1.splice(randomIndex, 1);
-      sample2.push(randomSample);
-    }
-
-    // get the stats
-    const std1 = Stats.sampleStandardDeviation(sample1);
-    const std2 = Stats.sampleStandardDeviation(sample2);
-    console.error(`StdDev: ${std1}; ${std2}`);
-
-    const tvalue = Stats.tTestTwoSample(sample1, sample2);
-    if (tvalue == null) {
-      console.error("t-value shall not be null.");
-      process.exit(1);
+    let result = "";
+    if (asmString == null) {
+      // do it twice the size
+      const data = doSampleLibonly(ms, 2 * MAX_SAMLPESIZE);
+      const checkMean = roboustMean(data);
+      if (checkMean !== -1) {
+        result = checkMean.toString();
+      }
+    } else {
+      const { asm, check } = doSampleAsm(ms, MAX_SAMLPESIZE, asmString);
+      const checkMean = roboustMean(check);
+      const asmMean = roboustMean(asm);
+      if (checkMean !== -1 && asmMean !== -1) {
+        result = `${asmMean} ${checkMean}`;
+      }
     }
 
-    // check the stats
-    const critical_value = ttable[sample1.length][CONF_IDX.conf_005];
-    if (tvalue < critical_value) {
-      //  Distribution are not significantly different For conf. interval 99.5%
-      //  which is what we want, so we can trust the measurement.
-
-      // calculate the mean of both samples
-      const mean = Stats.mean(sample1.concat(sample2));
-      shout(mean);
+    if (result) {
+      shout(result);
       fs.rmSync(cacheDir, { recursive: true, force: true });
       return;
     }
+
     fs.appendFileSync("/tmp/cycle_count-retry.log", `${Date()}${param_one},${tries}\n`);
   } while (tries--);
+}
+
+function roboustMean(data: number[]): number {
+  const data2 = [] as number[];
+  for (let i = 0; i < data.length / 2; i++) {
+    const randomIndex = Math.floor(Math.random() * data.length);
+    const [randomSample] = data.splice(randomIndex, 1);
+    data2.push(randomSample);
+  }
+
+  const tvalue = Stats.tTestTwoSample(data, data2);
+  if (tvalue == null) {
+    console.error("t-value shall not be null.");
+    process.exit(1);
+  }
+
+  // check the stats
+  const critical_value = ttable[data2.length][CONF_IDX.conf_005];
+  if (tvalue < critical_value) {
+    //  Distribution are not significantly different For conf. interval 99.5%
+    //  which is what we want, so we can trust the measurement.
+
+    // calculate the mean of both samples and return
+    return Stats.mean(data.concat(data2));
+  }
+  return -1;
 }
 
 function getSymbol(asmstring: string): string | never {
@@ -169,33 +179,40 @@ function createCache(): string {
   return join(tmpdir(), "CryptOpt.CountCycle.cache", randomString);
 }
 
-function doSample(ms: Measuresuite, size: number, asmstring: string | null): number[] | number {
-  const resultCycleMedians: number[] = [];
+function doSampleAsm(ms: Measuresuite, size: number, asmstring: string): { asm: number[]; check: number[] } {
+  const resultCycleMedians = { asm: [] as number[], check: [] as number[] };
 
   for (let i = 0; i < size; i++) {
-    let cycles: number[] = [];
     try {
-      if (asmstring == null) {
-        cycles = ms.measureLibOnly(BATCH_SIZE, NUMBER_OF_BATCHES) || [];
-      } else {
-        const result = ms.measure(asmstring, asmstring, BATCH_SIZE, NUMBER_OF_BATCHES);
-        if (!result?.stats.checkResult) {
-          console.error("No / Wrong result");
-          process.exit(-1);
-        }
-        cycles = result.times.map((t) => t[0]); // a
+      const result = ms.measure(BATCH_SIZE, NUMBER_OF_BATCHES, [asmstring]);
+      if (result?.stats.incorrect !== 0) {
+        console.error("No / Wrong result");
+        process.exit(-1);
       }
+
+      const medianA = analyseRow(result.cycles[1]).post.median;
+      resultCycleMedians.asm.push(medianA);
+
+      const medianC = analyseRow(result.cycles[0]).post.median;
+      resultCycleMedians.check.push(medianC);
     } catch (e) {
       console.error("execution of measure failed.", e);
     }
-
-    const { median } = analyseRow(cycles).post;
-    resultCycleMedians.push(median);
   }
 
-  if (Stats.sampleStandardDeviation(resultCycleMedians) == 0) {
-    // if there is no variance at all, then we can just return this value
-    return resultCycleMedians[0];
+  return resultCycleMedians;
+}
+
+function doSampleLibonly(ms: Measuresuite, size: number): number[] {
+  const resultCycleMedians: number[] = [];
+  for (let i = 0; i < size; i++) {
+    try {
+      const cycles = ms.measure(BATCH_SIZE, NUMBER_OF_BATCHES)?.cycles?.[0] ?? [];
+      const { median } = analyseRow(cycles).post;
+      resultCycleMedians.push(median);
+    } catch (e) {
+      console.error("execution of measure failed.", e);
+    }
   }
   return resultCycleMedians;
 }

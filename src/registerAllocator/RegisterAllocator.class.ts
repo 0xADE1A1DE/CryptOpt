@@ -917,7 +917,9 @@ export class RegisterAllocator {
       // Therefore the old allocation of the var, the memory address technically, is still valid, but the allocation entry has been lost.
       // thus, its better to use the target reg as a return value
       this._preInstructions.push(
-        `nop ; this is experimental. Moving ${varname} to reg in moveOneMemToReg function. since all args are the same, returning basically only that reg ${theChosenOne}.`,
+        `;nop ; this is experimental. Moving ${varname} to reg in moveOneMemToReg function. since all args are the same, returning basically only that reg ${JSON.stringify(
+          theChosenOne,
+        )}.`,
       );
       return [
         this._allocations[varname] as RegisterAllocation,
