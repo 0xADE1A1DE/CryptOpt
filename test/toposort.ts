@@ -67,20 +67,26 @@ describe("toposort", () => {
       node_N.name.forEach((a) => expect(a.startsWith("out1")).toBe(true));
     });
   });
-  describe("should make correct order for secp256k1-reduce", () => {
-    const f = new BitcoinCoreBridge().getCryptOptFunction("reduce");
-    const nodes = f.body;
 
-    const order = toposort(nodes);
-
-    const node_0 = nodes[order[0]];
-    const node_N = nodes[order[order.length - 1]];
-
-    it("should not schedule any node with xNN in the args as first element ", () => {
-      expect(node_0.arguments.some((a) => matchXD(a))).toBe(false);
-    });
-    it("must schedule an out1 as the last node", () => {
-      node_N.name.forEach((a) => expect(a.startsWith("out1")).toBe(true));
-    });
+  it("should throw for  secp256k1-reduce", () => {
+    expect(() => new BitcoinCoreBridge().getCryptOptFunction("reduce")).toThrow();
   });
+
+  // removed because reduce is disabled for now
+  // describe("should make correct order for secp256k1-reduce", () => {
+  //   const f = new BitcoinCoreBridge().getCryptOptFunction("reduce");
+  //   const nodes = f.body;
+  //
+  //   const order = toposort(nodes);
+  //
+  //   const node_0 = nodes[order[0]];
+  //   const node_N = nodes[order[order.length - 1]];
+  //
+  //   it("should not schedule any node with xNN in the args as first element ", () => {
+  //     expect(node_0.arguments.some((a) => matchXD(a))).toBe(false);
+  //   });
+  //   it("must schedule an out1 as the last node", () => {
+  //     node_N.name.forEach((a) => expect(a.startsWith("out1")).toBe(true));
+  //   });
+  // });
 });
