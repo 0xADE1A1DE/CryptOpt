@@ -1007,4 +1007,39 @@ describe("RegisterAllocator:", () => {
       expect(allocs.x1.datatype).toBe("u1");
     });
   });
+  describe("InitNewInstruction should mark flags as killed", () => {
+    it("should have _ as alive in CF", () => {
+      (ra as MOCK_RA)._allocations = {
+        _: { datatype: "u1", store: "CF" },
+      };
+      (ra as MOCK_RA)._flagState = {
+        [Flags.CF]: FlagState.ALIVE,
+        [Flags.OF]: FlagState.KILLED,
+      };
+
+      let flagState = ra.flagStateString();
+      console.debug(2, flagState);
+      // initial condition
+      expect(flagState).toBe("CF: ALIVE (_),OF: KILLED (undefined)");
+
+      // operation does not matter here.
+      ra.initNewInstruction({
+        name: ["x29"],
+        datatype: "u64",
+        operation: "<<",
+        arguments: ["x11", "0x1"],
+        decisions: {
+          [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+            0,
+            [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+          ],
+          [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [1, ["x11", "0x1"]],
+        },
+        decisionsHot: [] as string[],
+      });
+      flagState = ra.flagStateString();
+
+      expect(flagState).toBe("CF: KILLED (undefined),OF: KILLED (undefined)");
+    });
+  });
 });

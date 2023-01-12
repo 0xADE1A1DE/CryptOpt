@@ -1247,7 +1247,7 @@ export class RegisterAllocator {
 
   public flagStateString(): string {
     return Object.entries(this._flagState)
-      .map(([flag, state]) => `${flag}: ${FlagState[state]}`)
+      .map(([flag, state]) => `${flag}: ${FlagState[state]} (${this._flags[flag as Flags]})`)
       .join(",");
   }
 
@@ -1392,6 +1392,12 @@ export class RegisterAllocator {
             ` interesting. That should not happen usually, that _ or TEMP_VARNAME (${TEMP_VARNAME}) is in memory ${store} and not in a register... one may want to investigate.`,
           );
         }
+
+        if (isFlag(store)) {
+          // then we need to mark it as killed
+          this._flagState[store] = FlagState.KILLED;
+        }
+
         delete this._allocations[varname];
       }
     });
