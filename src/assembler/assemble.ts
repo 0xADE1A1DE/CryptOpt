@@ -40,8 +40,9 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
       sanityCheckAllocations(curOp);
     } catch (e) {
       const ra = RegisterAllocator.getInstance();
-      const allocs = ra.getCurrentAllocations();
       const pres = ra.pres;
+      let allocs = ra.getCurrentAllocations();
+      allocs = Object.fromEntries(Object.entries(allocs).sort(([e1], [e2]) => e1.localeCompare(e2)));
 
       console.warn({ curOperation: curOp, e, allocs, pres });
       console.error({ curOperation: curOp, e, allocs, pres });
