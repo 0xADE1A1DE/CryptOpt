@@ -26,7 +26,7 @@ export function registerExitHooks(args: Parameters<typeof generateResultFilename
     if (exitcode == 0) {
       process.stdout.write(`\nDone Success. ${cy}${new Date().toISOString()}${re}\n`);
     } else {
-      process.stderr.write(`\nDone with code: ${exitcode}\n`);
+      process.stderr.write(`\nDone with code: ${exitcode} (statefile: ${stateFileName})\n`);
     }
     Model.persist(stateFileName);
     process.stdout.write("exiting.\n");
