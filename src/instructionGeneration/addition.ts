@@ -256,6 +256,9 @@ function add64(c: CryptOpt.StringOperation): asm[] {
 
     let a_cin = allocations[c.arguments[0]] as U1Allocation;
 
+    if (!a_cin) {
+      throw new Error(`cannot read arg0=${c.arguments[0]} from allocations. TSNH.`);
+    }
     const both_u1_are_flags = isFlag(a_cin.store) && isFlag(a_arg2.store);
 
     if (!isFlag(a_cin.store) && isFlag(a_arg2.store)) {
