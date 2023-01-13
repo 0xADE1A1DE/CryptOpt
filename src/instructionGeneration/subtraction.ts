@@ -46,7 +46,7 @@ export function sub(c: CryptOpt.StringOperation): asm[] {
   }
 
   const ra = RegisterAllocator.getInstance();
-  ra.initNewInstruction(c);
+  // ra.initNewInstruction moved to ./InstructionGenerator to have the comment right.
   const allocations = ra.getCurrentAllocations();
   // sort the var names
   const [resVarname, carryoutVarname] = c.name;

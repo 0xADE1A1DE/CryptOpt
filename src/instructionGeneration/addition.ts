@@ -33,8 +33,8 @@ import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_f_f, r__rm_rm_rmf, r__rmf_rm
 
 export function add(c: CryptOpt.StringOperation): asm[] {
   // Step 1 Find out, what to do and get allocations: highlevel
-  const ra = RegisterAllocator.getInstance();
-  ra.initNewInstruction(c);
+
+  // ra.initNewInstruction moved to ./InstructionGenerator to have the comment right.
   if (c.datatype == "u64") {
     return add64(c);
   } else if (c.datatype == "u128") {
