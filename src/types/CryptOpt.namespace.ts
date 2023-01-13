@@ -21,12 +21,14 @@ import {
   DECISION_IDENTIFIER,
   Flags,
 } from "@/enums";
+import { parsedArgs } from "@/helper";
 
 import { Fiat } from "./fiat.namespace";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CryptOpt {
   export type StateFile = {
+    parsedArgs: typeof parsedArgs;
     to: number[];
     body: StringOperation[];
     ratio: number;

@@ -15,6 +15,7 @@
  */
 
 import { Model } from "@/model";
+import { CryptOpt } from "@/types";
 
 import { cy, re } from "./constants";
 import { generateResultFilename } from "./path";
@@ -28,7 +29,7 @@ export function registerExitHooks(args: Parameters<typeof generateResultFilename
     } else {
       process.stderr.write(`\nDone with code: ${exitcode} (statefile: ${stateFileName})\n`);
     }
-    Model.persist(stateFileName);
+    Model.persist(stateFileName, args as unknown as CryptOpt.StateFile["parsedArgs"]);
     process.stdout.write("exiting.\n");
     process.exit(exitcode);
   });

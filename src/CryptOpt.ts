@@ -16,6 +16,7 @@
 
 import { exec } from "child_process";
 import { hostname } from "os";
+import { readFileSync } from "fs";
 import { resolve } from "path";
 
 import {
@@ -23,7 +24,7 @@ import {
   env,
   generateResultFilename,
   gn,
-  parsedArgs,
+  parsedArgs as parsedArgsFromCli,
   PRINT_EVERY,
   rd,
   re,
@@ -34,7 +35,16 @@ import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
 import { Optimizer } from "@/optimizer";
 import { sha1Hash } from "@/paul";
-import type { CryptoptGlobals, OptimizerArgs } from "@/types";
+import type { CryptOpt, CryptoptGlobals, OptimizerArgs } from "@/types";
+
+// overwrite every parsed arg if we shall do so
+let parsedArgs = parsedArgsFromCli;
+if (parsedArgsFromCli.readState) {
+  const stateFile: CryptOpt.StateFile = JSON.parse(readFileSync(parsedArgsFromCli.readState).toString());
+  if (stateFile.parsedArgs) {
+    parsedArgs = stateFile.parsedArgs;
+  }
+}
 
 const { single, bets, betRatio, curve, method, verbose } = parsedArgs;
 if (parsedArgs.resultDir == "") {
@@ -101,7 +111,7 @@ async function run(args: OptimizerArgs): Promise<RunResult> {
   }
 
   const [statefile] = generateResultFilename({ ...args, symbolname: optimizer.getSymbolname() });
-  Model.persist(statefile);
+  Model.persist(statefile, parsedArgs);
   const { ratio, convergence } = Model.getState();
   return { statefile, ratio, convergence };
 }

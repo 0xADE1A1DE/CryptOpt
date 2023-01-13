@@ -67,7 +67,7 @@ export class Model {
     return Model._instance;
   }
 
-  public static getState(): CryptOpt.StateFile {
+  public static getState() {
     return {
       to: Model._order,
       body: Model._nodes,
@@ -82,8 +82,14 @@ export class Model {
     };
   }
 
-  public static persist(filename: fs.PathLike) {
-    fs.writeFileSync(filename, JSON.stringify(Model.getState()));
+  public static persist(filename: fs.PathLike, parsedArgs: CryptOpt.StateFile["parsedArgs"]) {
+    fs.writeFileSync(
+      filename,
+      JSON.stringify({
+        ...Model.getState(),
+        parsedArgs,
+      }),
+    );
     filename = filename.toString();
     if (filename.includes("results")) {
       filename = "RES" + filename.split("results")[1];
