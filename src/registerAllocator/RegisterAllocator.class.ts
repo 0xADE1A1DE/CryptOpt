@@ -1247,7 +1247,7 @@ export class RegisterAllocator {
 
   public flagStateString(): string {
     return Object.entries(this._flagState)
-      .map(([flag, state]) => `${flag}: ${FlagState[state]} (${this._flags[flag as Flags]})`)
+      .map(([flag, state]) => `${flag}: ${FlagState[state]} (${this._flags[flag as Flags] ?? "N/A"})`)
       .join(",");
   }
 
