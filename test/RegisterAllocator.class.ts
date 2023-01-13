@@ -1020,7 +1020,7 @@ describe("RegisterAllocator:", () => {
       let flagState = ra.flagStateString();
       console.debug(2, flagState);
       // initial condition
-      expect(flagState).toBe("CF: ALIVE (_),OF: KILLED (undefined)");
+      expect(flagState).toBe("CF: ALIVE (_),OF: KILLED (N/A)");
 
       // operation does not matter here.
       ra.initNewInstruction({
@@ -1039,7 +1039,7 @@ describe("RegisterAllocator:", () => {
       });
       flagState = ra.flagStateString();
 
-      expect(flagState).toBe("CF: KILLED (undefined),OF: KILLED (undefined)");
+      expect(flagState).toBe("CF: KILLED (N/A),OF: KILLED (N/A)");
     });
   });
 });
