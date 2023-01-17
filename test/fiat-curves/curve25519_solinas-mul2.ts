@@ -22,12 +22,11 @@ import { Optimizer } from "@/optimizer";
 import { getTestArgs, nothing } from "../test-helpers";
 
 const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
-// const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
+const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
 
 vi.useFakeTimers();
 
-// skip for now until the proof works
-it.skip("optimise", () => {
+it("optimise", () => {
   return new Promise((resolve, reject) => {
     const filename = basename(import.meta.url);
     const args = getTestArgs(filename);
@@ -53,6 +52,6 @@ it.skip("optimise", () => {
 
 afterAll(() => {
   mockLog.mockRestore();
-  // mockErr.mockRestore();
+  mockErr.mockRestore();
   vi.useRealTimers();
 });

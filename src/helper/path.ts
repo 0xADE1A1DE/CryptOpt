@@ -42,9 +42,9 @@ export function generateResultFilename(
     try {
       mkdirSync(path, { recursive: true });
     } catch (e) {
-      console.error(
-        `${path} does not exist. And could not be created due to Error:${e}. Create that folder manually and re-run. Exiting.`,
-      );
+      const msg = `${path} does not exist. And could not be created due to Error:${e}. Create that folder manually and re-run. Exiting.`;
+      console.error(msg);
+      console.debug(msg);
       process.exit(2);
     }
   }
