@@ -15,8 +15,8 @@
  */
 
 import { exec } from "child_process";
-import { hostname } from "os";
 import { readFileSync } from "fs";
+import { hostname } from "os";
 import { resolve } from "path";
 
 import {
