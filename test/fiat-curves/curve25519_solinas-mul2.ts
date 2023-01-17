@@ -32,6 +32,7 @@ it("optimise", () => {
     const args = getTestArgs(filename);
     args.evals = 1000;
     args.seed = 888980710;
+    args.proof = false;
     const opt = new Optimizer(args);
 
     try {
