@@ -56,6 +56,7 @@ import {
   fr__r_r_m,
   fr__r_r_r,
 } from "./fr__rm_rm_rmf";
+import { r__f_f, r__m_f, r__m_m, r__r_f, r__r_m, r__r_r } from "./r__rmf_rmf";
 import {
   r__m_m_f,
   r__m_m_m,
@@ -67,7 +68,6 @@ import {
   r__r_r_m,
   r__r_r_r,
 } from "./r__rm_rm_rmf";
-import { r__f_f, r__m_f, r__m_m, r__r_f, r__r_m, r__r_r } from "./r__rmf_rmf";
 
 export function fr__rm_rm(cout: string, out: string, arg0: ValueAllocation, arg1: ValueAllocation): asm[] {
   if (isFlag(arg0.store) || isFlag(arg1.store)) {
@@ -136,7 +136,10 @@ export function fr__rm_rm_rmf(
     const a1 = arg1 as RegisterAllocation;
     if (cinFlag) {
       return hasCout
-        ? [`;why? ${cin.store} aint a flag, rihgt?`, ...fr__r_r_f(cout, out, a0, a1, cin as U1FlagAllocation)]
+        ? [
+            `;why? ${cin.store} ain't a flag, right?`,
+            ...fr__r_r_f(cout, out, a0, a1, cin as U1FlagAllocation),
+          ]
         : r__r_r_f(out, a0, a1, cin as U1FlagAllocation);
     }
     if (cinMem) {
