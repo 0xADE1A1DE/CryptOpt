@@ -22,7 +22,7 @@ import { Optimizer } from "@/optimizer";
 import { getTestArgs, nothing } from "../test-helpers";
 
 const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
-const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
+// const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
 
 vi.useFakeTimers();
 
@@ -53,6 +53,6 @@ it.skip("optimise", () => {
 
 afterAll(() => {
   mockLog.mockRestore();
-  mockErr.mockRestore();
+  // mockErr.mockRestore();
   vi.useRealTimers();
 });
