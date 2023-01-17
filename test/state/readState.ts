@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
+import { readFileSync } from "fs";
 import { dirname, resolve as pathResolve } from "path";
-import { afterAll, expect, it, vi } from "vitest";
 import { fileURLToPath } from "url";
+import { afterAll, expect, it, vi } from "vitest";
 
 import { Optimizer } from "@/optimizer";
 
-import { nothing } from "../test-helpers";
-import { readFileSync } from "fs";
+import { nothing, getTestResultsPath } from "../test-helpers";
 
 const mockLog = vi.spyOn(console, "log").mockImplementation(nothing);
 const mockErr = vi.spyOn(console, "error").mockImplementation(nothing);
@@ -33,6 +33,7 @@ it("optimise", () => {
     const dir = dirname(fileURLToPath(import.meta.url));
     const statefile = pathResolve(dir, "./seed0000000688561254.json");
     const args = JSON.parse(readFileSync(statefile).toString()).parsedArgs;
+    args.resultDir = getTestResultsPath();
     args.readState = statefile;
     expect(args).toBeTruthy();
     const opt = new Optimizer(args);
