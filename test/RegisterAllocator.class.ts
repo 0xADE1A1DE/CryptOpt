@@ -1018,7 +1018,7 @@ describe("RegisterAllocator:", () => {
       };
 
       let flagState = ra.flagStateString();
-      console.debug(2, flagState);
+
       // initial condition
       expect(flagState).toBe("CF: ALIVE (_),OF: KILLED (N/A)");
 
