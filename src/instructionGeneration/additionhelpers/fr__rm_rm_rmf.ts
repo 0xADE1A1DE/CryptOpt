@@ -23,10 +23,11 @@ import {
   isMem,
   isRegister,
   isU1,
+  isU64,
   SETX,
   toggleFlag,
   toImm,
-  zx,
+  zx
 } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
@@ -40,7 +41,7 @@ import type {
   U1MemoryAllocation,
   U1RegisterAllocation,
   U64Allocation,
-  U64RegisterAllocation,
+  U64RegisterAllocation
 } from "@/types";
 
 export function fr_rm_f_f(cout: string, out: string, arg0: U64Allocation): asm[] {
@@ -212,6 +213,11 @@ function fr__r_rm_f(
     r0store = reg;
   }
 
+  if (isMem(r1.store) && isU64(r1)) {
+    // then we might as well read from that mem and store into r0
+    r0store = ra.backupIfStoreHasDependencies(r0, out);
+    return [`; in fr__r_rm_f`, `${ADX[cin.store]} ${r0store}, ${r1.store}`];
+  }
   let r1store = ra.backupIfStoreHasDependencies(r1, out);
   // prob, rarely going to happen
   if (isByteRegister(r1store)) {
