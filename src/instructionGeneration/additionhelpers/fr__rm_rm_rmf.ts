@@ -27,7 +27,7 @@ import {
   SETX,
   toggleFlag,
   toImm,
-  zx
+  zx,
 } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
@@ -41,7 +41,7 @@ import type {
   U1MemoryAllocation,
   U1RegisterAllocation,
   U64Allocation,
-  U64RegisterAllocation
+  U64RegisterAllocation,
 } from "@/types";
 
 export function fr_rm_f_f(cout: string, out: string, arg0: U64Allocation): asm[] {
