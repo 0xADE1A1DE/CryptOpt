@@ -31,7 +31,7 @@ export const ARG_PREFIX = "arg"; // prefix as in arg1[3]
 export const OUT_PREFIX = "out"; // prefix as in out2[2]
 export const ARG_REGEX = RegExp(`^(?<base>(${ARG_PREFIX}|${OUT_PREFIX})\\d+)\\[(?<offset>\\d+)\\]$`);
 export const ARG_PREFIX_REGEX = RegExp(`^(${ARG_PREFIX}|${OUT_PREFIX})\\d+$`);
-export const MEM_REGEX = RegExp(`\\[ (?<base>\\S{2,3}) \\+ (?<offset>0x[0-f]+) \\]`, "i");
+export const MEM_REGEX = RegExp(`\\[ (?<base>\\S{2,3}) (\\+|-) (?<offset>0x[0-f]+) \\]`, "i");
 export const XD_REGEX = /^x(\d+)(_\d)?$/;
 export const IMM_VAL_PREFIX = "imm_val";
 export const IMM_REGEX = /^-?(0x[0-F]+|[0-9]+)$/i;
@@ -75,6 +75,8 @@ export const SETX = {
   [Flags.CF]: "setc",
   [Flags.OF]: "seto",
 };
+// results in [rsp-16*8]
+export const STACK_OFFSET_IN_ELEMENTS = 16;
 
 // Colors
 export const rd = "\x1b[31m";

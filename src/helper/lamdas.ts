@@ -53,7 +53,12 @@ export function toImm(val: string | number): imm {
 }
 // gets the memorylocation for a given offset
 export function toMem(offset: number | string, base: Register = Register.rsp): mem {
-  return `[ ${base} + 0x${(Number(offset) * 8).toString(16)} ]`;
+  offset = Number(offset) * 8;
+  if (offset < 0) {
+    return `[ ${base} - 0x${(-offset).toString(16)} ]`;
+  } else {
+    return `[ ${base} + 0x${offset.toString(16)} ]`;
+  }
 }
 
 export function matchXD(variable: string | null | undefined): RegExpMatchArray | null {

@@ -34,6 +34,7 @@ import {
   IMM_VAL_PREFIX,
   LSB_MAPPING,
   SETX,
+  STACK_OFFSET_IN_ELEMENTS,
   TEMP_VARNAME,
 } from "@/helper/constants";
 import {
@@ -1284,6 +1285,7 @@ export class RegisterAllocator {
           }) - 1;
         this.addToPreInstructions(`; stacking up for ${varname}`);
       }
+      varname_index -= STACK_OFFSET_IN_ELEMENTS;
       return { isNew, targetMem: toMem(varname_index, Register.rsp) };
     } else {
       // not of the form of a 'variable', so maybe its argument as in arg1[3]
