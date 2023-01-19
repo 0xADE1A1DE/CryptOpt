@@ -38,9 +38,9 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
-    "measuresuite": "^2.0.1-beta.1",
+    "measuresuite": "^2.0.1",
     "proper-lockfile": "^4.1.2",
-    "simple-statistics": "^7.8.0",
+    "simple-statistics": "^7.8.2",
     "yargs": "^17.6.2"
   },
   "devDependencies": {
@@ -50,17 +50,17 @@
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^18.11.18",
     "@types/proper-lockfile": "^4.1.2",
-    "@types/yargs": "^17.0.19",
-    "@typescript-eslint/eslint-plugin": "^5.48.1",
-    "@typescript-eslint/parser": "^5.48.1",
-    "@vitest/coverage-c8": "^0.27.1",
+    "@types/yargs": "^17.0.20",
+    "@typescript-eslint/eslint-plugin": "^5.48.2",
+    "@typescript-eslint/parser": "^5.48.2",
+    "@vitest/coverage-c8": "^0.27.2",
     "c8": "^7.12.0",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-import": "^2.27.2",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-simple-import-sort": "^8.0.0",
-    "prettier": "^2.8.2",
+    "eslint-plugin-simple-import-sort": "^9.0.0",
+    "prettier": "^2.8.3",
     "rollup": "^3.10.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-shell": "^1.0.9",
@@ -68,7 +68,7 @@
     "typescript": "^4.9.4",
     "vite": "^4.0.4",
     "vite-tsconfig-paths": "^4.0.3",
-    "vitest": "^0.27.1"
+    "vitest": "^0.27.2"
   },
   "eslintConfig": {
     "root": true,
