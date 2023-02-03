@@ -253,9 +253,9 @@ export class Optimizer {
           let kept: boolean;
 
           if (
-            // A is better and A is new
+            // A is not worse and A is new
             (meanrawA <= meanrawB && currentFunctionIsA()) ||
-            // or B is better and B is new
+            // or B is not worse and B is new
             (meanrawA >= meanrawB && !currentFunctionIsA())
           ) {
             console.log("kept    mutation");
