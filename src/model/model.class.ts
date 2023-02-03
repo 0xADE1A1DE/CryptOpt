@@ -355,7 +355,7 @@ export class Model {
       [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: "SL",
     } as { [c in DECISION_IDENTIFIER]: string };
 
-    Model.decisionStats = `D[${a[key]}/${cands}/${from}]`;
+    Model.decisionStats = `D[${a[key]}/${candidateIdx.toString().padStart(3)}/${cands}/${from}]`;
 
     const dec = candidate.decisions[key];
     if (!dec) {

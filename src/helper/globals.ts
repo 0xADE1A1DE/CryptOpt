@@ -25,5 +25,6 @@ const globals: CryptoptGlobals = {
     generateFiat: 0,
     generateCryptopt: 0,
   },
+  mutationLog: [],
 };
 export default globals;

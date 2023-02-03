@@ -41,7 +41,7 @@ import { Paul, sha1Hash } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { AnalyseResult, OptimizerArgs } from "@/types";
 
-import { genStatistics, genStatusLine } from "./optimizer.helper";
+import { genStatistics, genStatusLine, logMutation } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
 
 let choice: CHOICE;
@@ -69,6 +69,9 @@ export class Optimizer {
     this.symbolname = symbolname;
 
     globals.convergence = [];
+    globals.mutationLog = [
+      "evaluation,choice,kept,PdetailsBackForwardChosenstepsWaled,DdetailsKindNumhotNumall",
+    ];
     // load a saved state if necessary
     if (args.readState) {
       Model.import(args.readState);
@@ -284,6 +287,8 @@ export class Optimizer {
             show_per_second = (per_second_counter + "/s").padStart(6);
             per_second_counter = 0;
           }
+
+          logMutation({ choice, kept, numEvals });
           if (numEvals % PRINT_EVERY == 0) {
             // print every 10th eval
             // a line every 5% (also to logfile) also write the asm when
@@ -338,31 +343,35 @@ export class Optimizer {
             });
             console.log(statistics);
 
-            const [asmfile] = generateResultFilename({ ...this.args, symbolname: this.symbolname }, [
-              `_ratio${ratioString.replace(".", "")}.asm`,
-            ]);
+            const [asmFile, mutationsCsvFile] = generateResultFilename(
+              { ...this.args, symbolname: this.symbolname },
+              [`_ratio${ratioString.replace(".", "")}.asm`, `.csv`],
+            );
 
             // write best found solution with headers
             // flip, because we want the last accepted, not the last mutated.
             const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
 
             writeString(
-              asmfile,
+              asmFile,
               ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
                 .concat(this.asmStrings[flipped])
                 .concat(statistics)
                 .join("\n"),
             );
 
+            // writing the CSV
+            writeString(mutationsCsvFile, globals.mutationLog.join("\n"));
+
             if (shouldProof(this.args)) {
               // and proof correct
-              const proofCmd = FiatBridge.buildProofCommand(this.args.curve, this.args.method, asmfile);
+              const proofCmd = FiatBridge.buildProofCommand(this.args.curve, this.args.method, asmFile);
               console.log(`proofing that asm correct with '${proofCmd}'`);
               try {
                 const now = Date.now();
                 execSync(proofCmd, { shell: "/usr/bin/bash" });
                 const timeForValidation = (Date.now() - now) / 1000;
-                appendFileSync(asmfile, `\n; validated in ${timeForValidation}s\n`);
+                appendFileSync(asmFile, `\n; validated in ${timeForValidation}s\n`);
                 globals.time.validate += timeForValidation;
               } catch (e) {
                 console.error(`tried to prove correct. didnt work. I tried ${proofCmd}`);
