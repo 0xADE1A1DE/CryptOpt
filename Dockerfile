@@ -42,7 +42,7 @@ RUN cd /root/fiat-crypto && \
 # get and install CryptOpt
 RUN git clone --jobs 3 --recurse-submodules  https://github.com/0xADE1A1DE/CryptOpt /root/CryptOpt
 RUN cd /root/CryptOpt && \
-        git checkout dev && \
+        git checkout main && \
         make
 
 WORKDIR /root/CryptOpt
