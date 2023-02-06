@@ -36,13 +36,13 @@ RUN curl -L https://github.com/0xADE1A1DE/AssemblyLine/releases/download/v${asml
 # get and install fiat-crypto
 RUN git clone --jobs 3 --recurse-submodules --single-branch https://github.com/mit-plv/fiat-crypto /root/fiat-crypto
 RUN cd /root/fiat-crypto && \
-        git checkout popl-2023-cryptopt-initial-submission && \
+        git checkout --recurse-submodules popl-2023-cryptopt-initial-submission && \
         make -j2 -C /root/fiat-crypto standalone-ocaml
 
 # get and install CryptOpt
 RUN git clone --jobs 3 --recurse-submodules  https://github.com/0xADE1A1DE/CryptOpt /root/CryptOpt
 RUN cd /root/CryptOpt && \
-        git checkout main && \
+        git checkout --recurse-submodules main && \
         make
 
 WORKDIR /root/CryptOpt
