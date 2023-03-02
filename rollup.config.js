@@ -1,5 +1,6 @@
-import terser from "@rollup/plugin-terser";
+import strip from "@rollup/plugin-strip";
 import typescript from "@rollup/plugin-typescript";
+import terser from "@rollup/plugin-terser";
 import copy from "rollup-plugin-copy";
 
 const external = [
@@ -17,6 +18,7 @@ const external = [
   "yargs",
   "yargs/helpers",
 ];
+
 export default [
   {
     input: ["src/CryptOpt.ts", "src/CountCycle.ts"],
@@ -27,8 +29,12 @@ export default [
     external,
     strictDeprecations: true,
     plugins: [
+      strip({
+        include: ["**/*.ts"],
+        functions: "DEBUG" in process.env ? [] : ["Logger.log"],
+      }),
       typescript(),
-      terser(),
+      "DEBUG" in process.env ? undefined : terser(),
       copy({
         targets: [
           {

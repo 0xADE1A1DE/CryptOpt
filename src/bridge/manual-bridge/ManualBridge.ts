@@ -18,6 +18,7 @@ import { execSync } from "child_process";
 import { existsSync, readFileSync } from "fs";
 
 import { env, matchArg, preprocessFunction } from "@/helper";
+import Logger from "@/helper/Logger.class";
 import type { CryptOpt } from "@/types";
 
 import { Bridge } from "../bridge.interface";
@@ -113,7 +114,7 @@ export class ManualBridge implements Bridge {
 
     //compile it
     const command = `${cc} ${CFLAGS} -x c -fPIC -shared -o ${filename} ${this.filepathC}`;
-    console.log(`executing cmd to generate machinecode: ${command}`);
+    Logger.log(`executing cmd to generate machinecode: ${command}`);
     execSync(command);
 
     // remove the tmp-stuff

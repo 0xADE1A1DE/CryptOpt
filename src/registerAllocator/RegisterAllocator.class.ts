@@ -24,7 +24,7 @@ import {
   Flags,
   FlagState,
   Register,
-  XmmRegister,
+  XmmRegister
 } from "@/enums";
 import {
   ALL_XMM_REGISTERS,
@@ -35,7 +35,7 @@ import {
   LSB_MAPPING,
   SETX,
   STACK_OFFSET_IN_ELEMENTS,
-  TEMP_VARNAME,
+  TEMP_VARNAME
 } from "@/helper/constants";
 import {
   delimbify,
@@ -58,8 +58,9 @@ import {
   setToString,
   toImm,
   toMem,
-  zx,
+  zx
 } from "@/helper/lamdas";
+import Logger from "@/helper/Logger.class";
 import { getByteRegFromQwReg, getQwRegFromByteReg } from "@/helper/reg-conversion";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
@@ -76,7 +77,7 @@ import type {
   PointerAllocation,
   RegisterAllocation,
   U1FlagAllocation,
-  ValueAllocation,
+  ValueAllocation
 } from "@/types";
 
 import { populateClobbers } from "./RegisterAllocator.helper";
@@ -101,9 +102,9 @@ export class RegisterAllocator {
   private _flagState: {
     [f in Flags]: FlagState;
   } = {
-    [Flags.CF]: FlagState.KILLED,
-    [Flags.OF]: FlagState.KILLED,
-  };
+      [Flags.CF]: FlagState.KILLED,
+      [Flags.OF]: FlagState.KILLED,
+    };
 
   public static getInstance(): RegisterAllocator {
     if (RegisterAllocator._instance) {
@@ -112,7 +113,7 @@ export class RegisterAllocator {
     return new RegisterAllocator();
   }
   public static reset(): RegisterAllocator {
-    console.log("getting RA instance");
+    Logger.log("getting RA instance");
     const ra = RegisterAllocator.getInstance();
     ra._preInstructions = [];
     ra._stack = [];
@@ -129,7 +130,7 @@ export class RegisterAllocator {
     ];
     // this loop initializes the 'allocations'-member field to the arguments which have been passed to the method.
     // Other Registers are considered `empty` and will be overwritten (callersave are pushed / popped to/from stack)
-    console.log("setting up args in calling convention to registers");
+    Logger.log("setting up args in calling convention to registers");
     Model.methodParametes.map(({ name, datatype }) => {
       const reg = _CALLING_CONVENTION_REGISTER_ORDER.shift();
       if (!reg) {
@@ -144,7 +145,7 @@ export class RegisterAllocator {
       };
       ra._preInstructions.push(`; ${reg} contains ${name}`);
     });
-    console.log("setting up callersaves");
+    Logger.log("setting up callersaves");
     CALLER_SAVE_REGISTERS.map((register) => {
       ra._allocations[`${CALLER_SAVE_PREFIX}${register}`] = { datatype: "u64", store: register };
     });
@@ -173,7 +174,7 @@ export class RegisterAllocator {
    * Will return a register declared to the @param variableName or false, if no FR was available
    */
   public getFreeRegister(variableName: string): Register | false {
-    this.addToPreInstructions(this.allocationString());
+    this.addToPreInstructions(Logger.log(this.allocationString()) ?? "");
     const allocatedRegs = this.valuesAllocations
       .map(({ store }) => store)
       .filter((r) => isRegister(r) || isByteRegister(r)) as Array<ByteRegister | Register>;
@@ -198,7 +199,7 @@ export class RegisterAllocator {
    * will not persist to _this._allocatons
    */
   private getFreeXmmRegister(): XmmRegister | false {
-    this.addToPreInstructions(this.allocationString());
+    this.addToPreInstructions(Logger.log(this.allocationString()) ?? "");
     const allocatedXmms = this.valuesAllocations
       .map(({ store }) => store)
       .filter((r) => isXmmRegister(r)) as XmmRegister[];
@@ -285,6 +286,7 @@ export class RegisterAllocator {
 
     if (spareVariableName) {
       const valueacc = this._allocations[spareVariableName] as ValueAllocation;
+
       this.addToPreInstructions(
         `; freeing ${spareVariableName} (${valueacc.store}) no dependants anymore`,
         // `If you dont trust me: here: clobbers: ${ this.clobbers }; allocs: ${JSON.stringify(this.allocations)}`
@@ -297,6 +299,7 @@ export class RegisterAllocator {
       );
       if (spareVariableName) {
         const valuealloc = this._allocations[spareVariableName] as ValueAllocation;
+
         this.addToPreInstructions(
           `; freeing ${spareVariableName} (${valuealloc.store}, since all are neeed, but this one is just an immediate value.`,
           // `.. so im fine with sparing it. If you dont trust me(rly?): here: clobbers: ${ this.clobbers }; and allocs:${JSON.stringify(this.allocations)}`
@@ -336,11 +339,13 @@ export class RegisterAllocator {
         spareVariableName = Model.chooseSpillValue(candidates);
       }
       this.addToPreInstructions(
-        [
-          `; freeing, i.e. spilling ${spareVariableName}, because I am out of ideas`,
-          `; allocs: ${allocs.map((a) => `${a}(${this._allocations[a].store})`).join(" ,")}`,
-          `; clobs ${setToString(clobs)}; will spare: ${spareVariableName} `,
-        ].join("\n"),
+        Logger.log(
+          [
+            `; freeing, i.e. spilling ${spareVariableName}, because I am out of ideas`,
+            `; allocs: ${allocs.map((a) => `${a}(${this._allocations[a].store})`).join(" ,")}`,
+            `; clobs ${setToString(clobs)}; will spare: ${spareVariableName} `,
+          ].join("\n"),
+        ) ?? "",
       );
 
       checkToSpill = true;
@@ -357,14 +362,14 @@ export class RegisterAllocator {
 
       const choice =
         this.canXmm &&
-        // second we need a free xmm
-        freeXmm &&
-        // then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
-        matchXD(spareVariableName)
+          // second we need a free xmm
+          freeXmm &&
+          // then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
+          matchXD(spareVariableName)
           ? // then we may ask Paul.
-            Paul.chooseSpillLocation(Model.operationByName(spareVariableName))
+          Paul.chooseSpillLocation(Model.operationByName(spareVariableName))
           : // fallback to
-            C_DI_SPILL_LOCATION.C_DI_MEM;
+          C_DI_SPILL_LOCATION.C_DI_MEM;
 
       if (choice == C_DI_SPILL_LOCATION.C_DI_MEM) {
         // if its worth to save, save it to mem.
@@ -726,7 +731,7 @@ export class RegisterAllocator {
           !this._clobbers.has(this.getVarnameFromStore({ store: inA })) &&
           !Model.hasDependants(allocationReq.in[i]),
       ) as Register[];
-      this.addToPreInstructions(`; currently considered reusable: ${reusable.join(", ")}`);
+      this.addToPreInstructions(Logger.log(`; currently considered reusable: ${reusable.join(", ")}`) ?? "");
       // now for each protentially reusable register,
       reusable.forEach((r, i) => {
         if (!isRegister(r)) {
@@ -760,7 +765,7 @@ export class RegisterAllocator {
       }
     }
 
-    this._preInstructions.push(this.allocationString());
+    this.addToPreInstructions(Logger.log(this.allocationString()) ?? "");
 
     return {
       oReg,
@@ -838,10 +843,12 @@ export class RegisterAllocator {
         }
       }
     }
+
     this.addToPreInstructions(
-      `; to calculate ${outVarname}, ill backup ${inVarname} from (${
-        allocation.store
-      }) if it has deps. has it: ${hasDeps}: ${setToString(deps)}`,
+      Logger.log(
+        `; to calculate ${outVarname}, ill backup ${inVarname} from (${allocation.store
+        }) if it has deps. has it: ${hasDeps}: ${setToString(deps)}`,
+      ) ?? "",
     );
     if (
       hasDeps || // if it has deps, then back it up
@@ -854,14 +861,15 @@ export class RegisterAllocator {
       const backupReg = this.getW(outVarname) as Register;
       // and copy the value
 
-      const comment = `${outVarname}, copying ${inVarname} here, cause ${inVarname} is needed in a reg. It has those deps: ${setToString(
-        deps,
-        10,
-      )}, current hard deps: ${setToString(Model.hardDependencies, 4)}`;
+      const comment = Logger.log(
+        `${outVarname}, copying ${inVarname} here, cause ${inVarname} is needed in a reg. It has those deps: ${setToString(
+          deps,
+          10,
+        )}, current hard deps: ${setToString(Model.hardDependencies, 4)}`,
+      );
       this._preInstructions.push(
-        `${inst} ${backupReg}, ${isByte && isMem(allocation.store) ? "byte " : ""}${
-          allocation.store
-        };${comment}`,
+        `${inst} ${backupReg}, ${isByte && isMem(allocation.store) ? "byte " : ""}${allocation.store
+        };${comment ?? ""}`,
       );
       return backupReg;
     } else {
@@ -918,9 +926,11 @@ export class RegisterAllocator {
       // Therefore the old allocation of the var, the memory address technically, is still valid, but the allocation entry has been lost.
       // thus, its better to use the target reg as a return value
       this._preInstructions.push(
-        `;nop ; this is experimental. Moving ${varname} to reg in moveOneMemToReg function. since all args are the same, returning basically only that reg ${JSON.stringify(
-          theChosenOne,
-        )}.`,
+        Logger.log(
+          `;nop ; this is experimental. Moving ${varname} to reg in moveOneMemToReg function. since all args are the same, returning basically only that reg ${JSON.stringify(
+            theChosenOne,
+          )}.`,
+        ) ?? "",
       );
       return [
         this._allocations[varname] as RegisterAllocation,
@@ -947,8 +957,7 @@ export class RegisterAllocator {
     }
     if (findings.length !== 0 || throwIfNotFound) {
       throw new Error(
-        `Tried to find the name of data being stored at ${storeNeedle}, but found ${
-          findings.length
+        `Tried to find the name of data being stored at ${storeNeedle}, but found ${findings.length
         }: ${JSON.stringify(findings)} instead of ONE in the current Allocations. TSNH. Abort.`,
       );
     } else {
@@ -990,9 +999,10 @@ export class RegisterAllocator {
     };
     if (isFlag(setcc)) {
       const flag = setcc;
-      this._preInstructions.push(
-        `${SETX[setcc]} ${bytereg}; spill ${flag} ${nameOfVar}${this._flags[flag] || "-"} to reg (${reg})`,
-      );
+
+      const comment = Logger.log(`spill ${flag} ${nameOfVar}${this._flags[flag] || "-"} to reg (${reg})`);
+
+      this._preInstructions.push(`${SETX[setcc]} ${bytereg};${comment ?? ""}`);
       this.declareFlagState(flag, FlagState.KILLED);
     } else {
       if (!setcc.startsWith("set")) {
@@ -1135,8 +1145,7 @@ export class RegisterAllocator {
       };
     }
     this._preInstructions.push(
-      `inc ${store}; OF<-0x0, preserve CF (debug 7; load -3, increase it, ${
-        save ? "save it as -2" : "discard the information #workaround"
+      `inc ${store}; OF<-0x0, preserve CF (debug 7; load -3, increase it, ${save ? "save it as -2" : "discard the information #workaround"
       }). #last resort`,
     );
 
@@ -1390,7 +1399,7 @@ export class RegisterAllocator {
       if (varname in this._allocations) {
         const { store } = this._allocations[varname] as ValueAllocation;
         if (isMem(store)) {
-          console.log(
+          Logger.log(
             ` interesting. That should not happen usually, that _ or TEMP_VARNAME (${TEMP_VARNAME}) is in memory ${store} and not in a register... one may want to investigate.`,
           );
         }

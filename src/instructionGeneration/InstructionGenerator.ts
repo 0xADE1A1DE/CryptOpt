@@ -15,6 +15,7 @@
  */
 
 import { assertStringNames } from "@/helper";
+import Logger from "@/helper/Logger.class";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
@@ -42,25 +43,30 @@ export const getInstruction = (o: CryptOpt.StringOperation): asm[] => {
     case "+":
     case "addcarryx": {
       RegisterAllocator.getInstance().initNewInstruction(o);
-      const comment = [
-        `\n`,
-        `; add:`,
-        `; ${RegisterAllocator.getInstance().flagStateString()}`,
-        `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-add(${o.arguments.join(",")})`,
-      ];
+      let comment =
+        Logger.log([
+          `\n`,
+          `; add:`,
+          `; ${RegisterAllocator.getInstance().flagStateString()}`,
+          `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-add(${o.arguments.join(",")})`,
+        ].join("\n"));
+      comment ??= ""
       const instructions = add(o);
-      return [...comment, ...RegisterAllocator.getInstance().pres, ...instructions];
+
+      return [comment, ...RegisterAllocator.getInstance().pres, ...instructions];
     }
     case "subborrowx": {
       RegisterAllocator.getInstance().initNewInstruction(o);
-      const comment = [
+      let comment = Logger.log([
         `\n`,
         `; sub:`,
         `; ${RegisterAllocator.getInstance().flagStateString()}`,
-        `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-sub(${o.arguments.join(",")})`,
-      ];
+        `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-sub(${o.arguments.join(",")})`,].join("\n")
+      );
+      comment ??= ""
+
       const instructions = sub(o);
-      return [...comment, ...RegisterAllocator.getInstance().pres, ...instructions];
+      return [comment, ...RegisterAllocator.getInstance().pres, ...instructions];
     }
     case "<<":
       return shiftLeft(o);

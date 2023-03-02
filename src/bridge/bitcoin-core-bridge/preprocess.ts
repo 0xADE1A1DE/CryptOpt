@@ -17,6 +17,7 @@
 import { groupBy } from "lodash-es";
 
 import { matchArgPrefix } from "@/helper";
+import Logger from "@/helper/Logger.class";
 import type { Fiat } from "@/types";
 
 import { getArguments, isStructPointer } from "./helpers";
@@ -45,7 +46,7 @@ export class BCBPreprocessor {
   public constructor(private structDef: structDef_T[]) {}
 
   public preprocessRaw(raw: Readonly<raw_T>): Fiat.FiatFunction {
-    console.log(`BCB: preprocessRaw'ing ${raw.operation}`);
+    Logger.log(`BCB: preprocessRaw'ing ${raw.operation}`);
     const fixed = this.fixArguments(raw);
     let body = fixed.body;
 

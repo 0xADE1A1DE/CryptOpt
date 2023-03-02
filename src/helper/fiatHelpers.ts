@@ -26,6 +26,7 @@ import {
   DECISION_IDENTIFIER,
   Flags,
 } from "@/enums";
+import Logger from "@/helper/Logger.class";
 import { Paul } from "@/paul/Paul.class";
 import type { CryptOpt, Fiat } from "@/types";
 
@@ -426,7 +427,7 @@ function reduceCSE(args: Fiat.DynArgument[]): Fiat.DynArgument[] {
               const repl = first[nameIndex]; // replace with
               if (a == n && isXD(repl)) {
                 changed = true;
-                console.log(
+                Logger.log(
                   `replacing ${a.padStart(7)} with ${repl.padStart(7)} in ${c.name.join("--")}=${genKey(
                     c,
                   )} \t ${k}`,

@@ -20,6 +20,7 @@ import { resolve } from "path";
 
 import { errorOut, ERRORS } from "@/errors";
 import { datadir, env, preprocessFunction } from "@/helper";
+import Logger from "@/helper/Logger.class";
 import type { CryptOpt } from "@/types";
 
 import { lockAndRunOrReturn } from "../bridge.helper";
@@ -94,7 +95,7 @@ export class BitcoinCoreBridge implements Bridge {
 
     const opts = createExecOpts();
     const command = `make -C ${cwd} all`; // to get scalar.c / field.c
-    console.log(`cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
+    Logger.log(`cmd to generate machinecode: ${command} w opts: ${JSON.stringify(opts)}`);
 
     try {
       // yeah.

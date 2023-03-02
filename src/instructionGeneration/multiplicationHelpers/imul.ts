@@ -15,6 +15,7 @@
  */
 
 import { AllocationFlags, Flags, FlagState } from "@/enums";
+import Logger from "@/helper/Logger.class";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
@@ -37,6 +38,6 @@ export function mul_imm_imul(c: CryptOpt.StringOperation): asm[] {
   return [
     ...ra.pres,
     `imul ${resR}, ${arg0R}, ${c.arguments[1]}; ${c.name[0]} <- ${c.arguments[0]} * ${c.arguments[1]}`,
-    `;${ra.flagStateString()}`,
+    Logger.log(`;${ra.flagStateString()}`) ?? "",
   ];
 }

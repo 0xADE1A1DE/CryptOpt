@@ -23,6 +23,7 @@ import {
   assertStringArguments,
   bl,
   cy,
+  DI_ABBRV,
   isCallerSave,
   limbify,
   matchArg,
@@ -30,9 +31,10 @@ import {
   rd,
   re,
   TEMP_VARNAME,
-  toposort,
+  toposort
 } from "@/helper";
 import globals from "@/helper/globals";
+import Logger from "@/helper/Logger.class";
 import { BIAS, Paul } from "@/paul";
 import type { CryptOpt } from "@/types";
 
@@ -131,11 +133,12 @@ export class Model {
     Model._nodeLookupMap = nodeLookupMap(Model._nodes);
     Model._neededBy = createDependencyRelation(Model._nodes, Model._nodeLookupMap).neededBy;
     Model._order = toposort(Model._nodes);
-    console.log(Model._order.join(" @ "));
-    const s = Model.nodesInTopologicalOrder
-      .map((n) => `${n.name.join("--").padStart(15)} = ${n.arguments.join(` ${n.operation} `)}`)
-      .join("\n");
-    console.log(s);
+    Logger.log(Model._order.join(" @ "));
+    Logger.log(
+      Model.nodesInTopologicalOrder
+        .map((n) => `${n.name.join("--").padStart(15)} = ${n.arguments.join(` ${n.operation} `)}`)
+        .join("\n"),
+    );
   }
 
   public static get methodParametes(): methodParam[] {
@@ -282,15 +285,12 @@ export class Model {
     m._currentReadOrderIsValid = false;
     // indexes.length == 0; // invalidate read-cache if there was anything mutated.
 
-    const astr = Model._nodes[a].name.join("--").padStart(11);
-    const bstr = Model._nodes[b].name.join("--").padStart(11);
-
-    console.log(
-      `mutated (min${min}, max${max}, ch${chosen}, par${partner}) PERMUTATION:${astr}-->>${bstr} distance: ${
-        chosen - partner
-      }`,
+    Logger.log(
+      `mutated (min${min}, max${max}, ch${chosen}, par${partner}) PERMUTATION:${Model._nodes[a].name
+        .join("--")
+        .padStart(11)}-->>${Model._nodes[b].name.join("--").padStart(11)} distance: ${chosen - partner}`,
     );
-    console.log(
+    Logger.log(
       `currentOrder: ${Model.nodesInTopologicalOrder
         .map((n) => n.name.join("--") + rd + "<-" + re + n.arguments.join(n.operation))
         .join(` ${bl}@${re} `)}`,
@@ -323,10 +323,10 @@ export class Model {
       }
       return prev;
     }, [] as number[]);
-    console.log(`DECISION Mutation, which will be chosen from ${candidateIndexes.join("-")}.`);
+    Logger.log(`DECISION Mutation, which will be chosen from ${candidateIndexes.join("-")}.`);
 
     if (candidateIndexes.length === 0) {
-      console.log("DECISION Mutation has been requested, but there was no hot decisions.");
+      Logger.log("DECISION Mutation has been requested, but there was no hot decisions.");
       return false;
     }
 
@@ -369,7 +369,7 @@ export class Model {
     }
 
     // and set new choice
-    console.log(`mutated DECISION ${candidate.name.join("--")}[${key}]:${dec[0]} to: ${choice}`);
+    Logger.log(`mutated DECISION ${candidate.name.join("--")}[${key}]:${dec[0]} to: ${choice}`);
     // TS hack with the ??; we woulnt be here if the decisionss at _key are undefined
     (candidate.decisions[key] ?? [0])[0] = choice;
 

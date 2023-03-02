@@ -30,7 +30,7 @@ _arguments -S -s \
     '--cyclegoal=[Number of cycles to measure, adjusts batch size dynamically]:cg:' \
     '--logComment=[Hint displayed during optimization]:lc:' \
     '(--no-proof --proof)'{--no-proof,--proof}'[Dis-/En ables proofing. Default on with fiat, default off elsewhere]:proof:' \
-    '(-v --verbose)'{-v,--verbose}'[Write a lot of log messages]:verbose' \
+    '(-v --verbose)'{-v,--verbose}'[Write a lot of log messages (if compiled with DEBUG=1)]:verbose' \
     '(-x --xmm)'{-x,--xmm}'[Enable spilling to xmm]:xmm' \
     '(-s --seed)'{-s,--seed=}'[Seed to start the randomness with\[number\]]:seed' \
     '(-h,--help)'{-h,--help}'[Help]:get help prompt' \
