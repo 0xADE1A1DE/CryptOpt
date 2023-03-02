@@ -136,7 +136,10 @@ export function fr__rm_rm_rmf(
     const a1 = arg1 as RegisterAllocation;
     if (cinFlag) {
       return hasCout
-        ? [`;why? ${cin.store} aint a flag, rihgt?`, ...fr__r_r_f(cout, out, a0, a1, cin as U1FlagAllocation)]
+        ? [
+            `;why? ${cin.store} ain't a flag, right?`,
+            ...fr__r_r_f(cout, out, a0, a1, cin as U1FlagAllocation),
+          ]
         : r__r_r_f(out, a0, a1, cin as U1FlagAllocation);
     }
     if (cinMem) {

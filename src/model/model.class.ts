@@ -23,6 +23,7 @@ import {
   assertStringArguments,
   bl,
   cy,
+  DI_ABBRV,
   isCallerSave,
   limbify,
   matchArg,
@@ -30,9 +31,10 @@ import {
   rd,
   re,
   TEMP_VARNAME,
-  toposort,
+  toposort
 } from "@/helper";
 import globals from "@/helper/globals";
+import Logger from "@/helper/Logger.class";
 import { BIAS, Paul } from "@/paul";
 import type { CryptOpt } from "@/types";
 
@@ -131,11 +133,12 @@ export class Model {
     Model._nodeLookupMap = nodeLookupMap(Model._nodes);
     Model._neededBy = createDependencyRelation(Model._nodes, Model._nodeLookupMap).neededBy;
     Model._order = toposort(Model._nodes);
-    console.log(Model._order.join(" @ "));
-    const s = Model.nodesInTopologicalOrder
-      .map((n) => `${n.name.join("--").padStart(15)} = ${n.arguments.join(` ${n.operation} `)}`)
-      .join("\n");
-    console.log(s);
+    Logger.log(Model._order.join(" @ "));
+    Logger.log(
+      Model.nodesInTopologicalOrder
+        .map((n) => `${n.name.join("--").padStart(15)} = ${n.arguments.join(` ${n.operation} `)}`)
+        .join("\n"),
+    );
   }
 
   public static get methodParametes(): methodParam[] {
@@ -235,10 +238,9 @@ export class Model {
     m.backupbody();
 
     // console.log(`mutatePermutation; candidateIndexes: ${candidates.join(",")}`);
-    //
 
     const chosen = Paul.chooseBetween(Model._order.length);
-    // const index = Paul.pick(candidates);
+
     // mutate
     const candidateIDX = Model._order[chosen];
     if (isNaN(candidateIDX)) {
@@ -283,15 +285,12 @@ export class Model {
     m._currentReadOrderIsValid = false;
     // indexes.length == 0; // invalidate read-cache if there was anything mutated.
 
-    const astr = Model._nodes[a].name.join("--").padStart(11);
-    const bstr = Model._nodes[b].name.join("--").padStart(11);
-
-    console.log(
-      `mutated (min${min}, max${max}, ch${chosen}, par${partner}) PERMUTATION:${astr}-->>${bstr} distance: ${
-        chosen - partner
-      }`,
+    Logger.log(
+      `mutated (min${min}, max${max}, ch${chosen}, par${partner}) PERMUTATION:${Model._nodes[a].name
+        .join("--")
+        .padStart(11)}-->>${Model._nodes[b].name.join("--").padStart(11)} distance: ${chosen - partner}`,
     );
-    console.log(
+    Logger.log(
       `currentOrder: ${Model.nodesInTopologicalOrder
         .map((n) => n.name.join("--") + rd + "<-" + re + n.arguments.join(n.operation))
         .join(` ${bl}@${re} `)}`,
@@ -324,10 +323,10 @@ export class Model {
       }
       return prev;
     }, [] as number[]);
-    console.log(`DECISION Mutation, which will be chosen from ${candidateIndexes.join("-")}.`);
+    Logger.log(`DECISION Mutation, which will be chosen from ${candidateIndexes.join("-")}.`);
 
     if (candidateIndexes.length === 0) {
-      console.log("DECISION Mutation has been requested, but there was no hot decisions.");
+      Logger.log("DECISION Mutation has been requested, but there was no hot decisions.");
       return false;
     }
 
@@ -345,17 +344,7 @@ export class Model {
       ? keys[0]
       : keys[Paul.chooseBetween(keys.length)]) as unknown as DECISION_IDENTIFIER;
 
-    const a = {
-      [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: "AR",
-      [DECISION_IDENTIFIER.DI_HANDLE_FLAGS_KK]: "KK",
-      [DECISION_IDENTIFIER.DI_FLAG]: "FL",
-      [DECISION_IDENTIFIER.DI_INSTRUCTION_AND]: "B&",
-      [DECISION_IDENTIFIER.DI_CHOOSE_IMM]: "IM",
-      [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: "MU",
-      [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: "SL",
-    } as { [c in DECISION_IDENTIFIER]: string };
-
-    Model.decisionStats = `D[${a[key]}/${cands}/${from}]`;
+    Model.decisionStats = `D[${DI_ABBRV[key]}/${candidateIdx.toString().padStart(3)}/${cands}/${from}]`;
 
     const dec = candidate.decisions[key];
     if (!dec) {
@@ -380,7 +369,7 @@ export class Model {
     }
 
     // and set new choice
-    console.log(`mutated DECISION ${candidate.name.join("--")}[${key}]:${dec[0]} to: ${choice}`);
+    Logger.log(`mutated DECISION ${candidate.name.join("--")}[${key}]:${dec[0]} to: ${choice}`);
     // TS hack with the ??; we woulnt be here if the decisionss at _key are undefined
     (candidate.decisions[key] ?? [0])[0] = choice;
 

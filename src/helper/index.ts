@@ -16,6 +16,7 @@
 
 export * from "./analyse";
 export * from "./argParse";
+export * from "./const/statusline";
 export * from "./constants";
 export * from "./env";
 export * from "./fiatHelpers";

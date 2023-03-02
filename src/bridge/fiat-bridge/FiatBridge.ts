@@ -18,6 +18,7 @@ import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync
 import { resolve } from "path";
 
 import { datadir, env, preprocessFunction } from "@/helper";
+import Logger from "@/helper/Logger.class";
 import { sha256Hash } from "@/paul";
 import type { CryptOpt, Fiat } from "@/types";
 
@@ -79,13 +80,13 @@ export class FiatBridge implements Bridge {
 
     if (!existsSync(jsonCacheFilename)) {
       const command = `data=$(${cmd} | jq -s .[0]); cat <<<"\${data}" > ${jsonCacheFilename}`;
-      console.log(`cmd to generate fiat: ${command}`);
+      Logger.log(`cmd to generate fiat: ${command}`);
       lockAndRunOrReturn(jsonCacheFilename, command, { shell: "/usr/bin/bash" }); // we need the shell to understand the <<< redirect
     }
 
-    console.log(`reading json-fiat: ${jsonCacheFilename}`);
+    Logger.log(`reading json-fiat: ${jsonCacheFilename}`);
     const jsonBuffer = readFileSync(jsonCacheFilename);
-    console.log(`json-fiat-Buffer length: ${jsonBuffer.length}b`);
+    Logger.log(`json-fiat-Buffer length: ${jsonBuffer.length}b`);
     const jsonString = jsonBuffer.toString();
     const fiat = JSON.parse(jsonString) as Fiat.FiatFunction;
     const cryptOpt = preprocessFunction(fiat);
@@ -121,13 +122,13 @@ export class FiatBridge implements Bridge {
     if (!existsSync(cCacheFilename)) {
       // create cCacheFilename
       const command = `data=$(${cmd}); cat <<<"\${data}" > ${cCacheFilename}`;
-      console.log(`cmd to generate c-cache file: ${command}`);
+      Logger.log(`cmd to generate c-cache file: ${command}`);
       lockAndRunOrReturn(cCacheFilename, command, { shell: "/usr/bin/bash" }); // we need the shell to understand the <<< redirect
     }
 
     // then we can compile from the c file.
     const command = `${cc} ${CFLAGS} -fPIC -shared -o ${filename} ${cCacheFilename}`;
-    console.log(`cmd to generate machinecode: ${command}`);
+    Logger.log(`cmd to generate machinecode: ${command}`);
     lockAndRunOrReturn(filename, command, { shell: "/usr/bin/bash" });
 
     return methodname;

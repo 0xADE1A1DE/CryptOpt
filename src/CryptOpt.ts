@@ -15,8 +15,8 @@
  */
 
 import { exec } from "child_process";
-import { hostname } from "os";
 import { readFileSync } from "fs";
+import { hostname } from "os";
 import { resolve } from "path";
 
 import {
@@ -29,13 +29,15 @@ import {
   rd,
   re,
   SI,
-  writeString,
+  writeString
 } from "@/helper";
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
 import { Optimizer } from "@/optimizer";
 import { sha1Hash } from "@/paul";
 import type { CryptOpt, CryptoptGlobals, OptimizerArgs } from "@/types";
+
+import Logger from "./helper/Logger.class";
 
 // overwrite every parsed arg if we shall do so
 let parsedArgs = parsedArgsFromCli;
@@ -50,13 +52,19 @@ const { single, bets, betRatio, curve, method, verbose } = parsedArgs;
 if (parsedArgs.resultDir == "") {
   parsedArgs.resultDir = resolve(process.cwd(), "results");
 }
-
 // GENERAL INITIALIZATION
 if (!verbose) {
   console.log = () => {
     // intentionally empty
   };
 }
+// Idea is: if you want debug messages, you want to compile with DEBUG and run with --verbose, 
+// compile with DEBUG | run with --verbose | outcome
+//         0          |          0         |      no debug msg while running, and not in asm
+//         0          |          1         |      no debug msg while running, and not in asm
+//         1          |          0         |      no debug msg while running, but additional info in asm
+//         1          |          1         | many(!) debug msg while running, and not in asm
+
 
 // to get the symbol name, we create new anonymous optimizer.
 const symbolname = new Optimizer(parsedArgs).getSymbolname(true);
@@ -78,14 +86,14 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
       logComment: `${parsedArgs.logComment} ${i}/${bets}`,
       seed: derivedSeed,
     };
-    console.log("running a bet with ", JSON.stringify(args, undefined, 2));
+    Logger.log("running a bet with " + JSON.stringify(args, undefined, 2));
     const runResult = await run(args);
     runRes.push(runResult);
   }
 
   runRes.sort((a, b) => b.ratio - a.ratio); // note: reverse sort
 
-  console.log(
+  Logger.log(
     [
       `Done finding good SEEEDs.`,
       `Starting final optimization now.`,
@@ -175,7 +183,7 @@ const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename({ ...parse
 writeString(datFileFull, spaceSeparated.join("\n"));
 process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);
 
-console.log(JSON.stringify(times));
+Logger.log(JSON.stringify(times));
 const title = [
   `${curve.replace("_", "\\\\_")}-${method}`,
   single ? "Single Run" : `Restarts^{${bets}}_{${(offspringEvals / parsedArgs.evals) * 100} %}`,

@@ -15,6 +15,7 @@
  */
 
 import { writeString } from "@/helper";
+import Logger from "@/helper/Logger.class";
 import { getInstruction } from "@/instructionGeneration/InstructionGenerator";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
@@ -23,13 +24,13 @@ import type { asm, CryptOpt } from "@/types";
 import { sanityCheckAllocations } from "./assembler.helper";
 
 export function assemble(resultspath: string): { stacklength: number; code: asm[] } {
-  console.log("initializing RA.");
+  Logger.log("initializing RA.");
   const ra = RegisterAllocator.reset();
 
   const output = ra.pres;
   // right ater the construction in ra.pres will be prose comments for which arg is in which reg
 
-  console.log("initializing Model.");
+  Logger.log("initializing Model.");
   Model.startNewImplementation();
   let curOp: CryptOpt.StringOperation | null = null;
   while ((curOp = Model.nextOperation())) {
@@ -37,7 +38,7 @@ export function assemble(resultspath: string): { stacklength: number; code: asm[
       const ins = getInstruction(curOp);
 
       output.push(...ins);
-      sanityCheckAllocations(curOp);
+      Logger.log(sanityCheckAllocations(curOp)); // bit of a hack to remove it in non-debug mode
     } catch (e) {
       const ra = RegisterAllocator.getInstance();
       const pres = ra.pres;

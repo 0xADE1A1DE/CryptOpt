@@ -16,7 +16,7 @@ A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primi
 While optimizing, CryptOpt will output the current status of the optimization.
 Each line has this format:
 ```
-fiat_curve25519_carry_square|1/10| 14|bs  181|#inst: 140|cyclΔ     70|G  58 cycl σ  0|B  59 cycl σ  0|L  55|l/g 0.9519| P|P[ -14/   0/  14/ -11]|D[MU/ 31/ 59]| 90.0( 1%)  60/s
+fiat_curve25519_carry_square|1/10| 14|bs  181|#inst: 140|cyclΔ     70|G  58 cycl σ  0|B  59 cycl σ  0|L  55|l/g 0.9519| P|P[ -14/   0/  14/ -11]|D[MU/  1/ 31/ 59]| 90.0( 1%)  60/s
 ```
 Lets break this down:
 
@@ -34,7 +34,7 @@ Cycles Library        | L  55		                    | Cycles that the CC-Compiled
 Ratio                 | l/g 0.9519                      | Ratio of cycles lib / cycles good. i.e. 55 / 58 -> 0.9519 (uses the non-scaled counts) This is green if the ratio is `>1` which means that CryptOpt Code is faster than CC's.
 Mutation              |  P		                        | Which mutation has been applied. **P**ermuation or **D**ecision. (Permutation means mutation in operation order; Decision means which template to use, or how to load operands.)
 P-Mutation-Detail     | P[ -14/   0/  14/ -11]          | Details on last P-Mutation. [steps to go back / steps to go forward / absolute index of operation to move / applied relative movement ]
-D-Mutation-Detail     | D[MU/ 31/ 59]		            | Details on last D-Mutation. [new chosen template / absolute index of operation to change decision / number of operations with changeable decisions ]
+D-Mutation-Detail     | D[MU/  1/ 31/ 59]		        | Details on last D-Mutation. [new chosen template / absolute index of operation to change decision / number of operations with changeable decisions / number of operations with decisions]
 Progress, speed       |  90.0( 1%)  60/s                | Number of the current Mutation, then in Percent, then how many mutations per second can be evaluated. This is green if the mutation is kept.
 
 More on the *D-Mutation*-Details:
@@ -58,6 +58,7 @@ CryptOpt writes out intermediate ASM-files whenever *it finishes a bet* and an a
 CryptOpt also generates the internal state (in `*.json` files) of the optimization for each *bet*-outcome.
 The directory also contains a `*.dat` (space separated) file with rows for every bet/run containing the `l/g` value every time it is printed to the terminal.
 From that `*.dat` file, the generated `*.gp` file will generate the `*.pdf` file, which shows the optimization in progress.
+Additionally, (currently WIP) there is a `*.csv` file logging all the mutations and which ones were kept.
 
 ## Play around w/ Fiat
 

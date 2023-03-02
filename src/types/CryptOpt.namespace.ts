@@ -16,6 +16,7 @@
 
 import {
   C_DI_HANDLE_FLAGS_KK,
+  C_DI_INSTRUCTION_AND,
   C_DI_MULTIPLICATION_IMM,
   C_DI_SPILL_LOCATION,
   DECISION_IDENTIFIER,
@@ -85,7 +86,7 @@ export namespace CryptOpt {
       [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [number, string[]]; // probably len 2 or three (rdx or add(a,b,c))
       [DECISION_IDENTIFIER.DI_HANDLE_FLAGS_KK]?: [number, C_DI_HANDLE_FLAGS_KK[]];
       [DECISION_IDENTIFIER.DI_CHOOSE_IMM]?: [number, string[]]; // probably len 2 ["0x0", "-0x1"]
-      [DECISION_IDENTIFIER.DI_INSTRUCTION_AND]?: [number, string[]]; // probably len 2  bzhi / and
+      [DECISION_IDENTIFIER.DI_INSTRUCTION_AND]?: [number, C_DI_INSTRUCTION_AND[]]; // probably len 2  bzhi / and
       [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]?: [number, C_DI_MULTIPLICATION_IMM[]]; //
       [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [number, C_DI_SPILL_LOCATION[]];
     };

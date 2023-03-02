@@ -1,6 +1,8 @@
 import type { ExecSyncOptions } from "child_process";
 import { execSync } from "child_process";
 import { checkSync, lockSync } from "proper-lockfile";
+
+import Logger from "@/helper/Logger.class";
 // if we dont get the lock, this function will wait until the lock is gone and return.
 export function lockAndRunOrReturn(filename: string, cmd: string, opts: ExecSyncOptions = {}): void {
   try {
@@ -9,7 +11,7 @@ export function lockAndRunOrReturn(filename: string, cmd: string, opts: ExecSync
 
     try {
       // if we've gotten the lock,
-      console.log(`executing cmd ${cmd} with opts ${JSON.stringify(opts)}`);
+      Logger.log(`executing cmd ${cmd} with opts ${JSON.stringify(opts)}`);
       // execute the command
       execSync(cmd, opts);
     } catch (e1) {
@@ -23,7 +25,7 @@ export function lockAndRunOrReturn(filename: string, cmd: string, opts: ExecSync
     const flockError = e2 as { code: string; file: string };
     if ("code" in flockError && flockError.code == "ELOCKED") {
       // did not get the lock
-      console.log(`could not get lock on ${filename} (which is ok)`);
+      Logger.log(`could not get lock on ${filename} (which is ok)`);
     } else {
       console.error("lockAndRun errored: ");
       console.warn(e2);
@@ -32,11 +34,11 @@ export function lockAndRunOrReturn(filename: string, cmd: string, opts: ExecSync
 
     // else, we got to wait for another proc to release the lock
     while (checkSync(filename, { realpath: false })) {
-      console.log(`${filename} is locked. waiting...${Date()}`);
+      Logger.log(`${filename} is locked. waiting...${Date()}`);
 
       // TODO: how can this be done more nicely ...
       execSync("sleep 1");
     }
-    console.log(`${filename} is no longer locked. returning...${Date()}`);
+    Logger.log(`${filename} is no longer locked. returning...${Date()}`);
   }
 }

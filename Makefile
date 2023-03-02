@@ -45,7 +45,7 @@ check: $(BUILT_CRYPTOPT)
 	PATH=$(PATH) npm run test-no-watch
 
 clean:
-	rm -rf ./dist ./coverage ./bundle.tar.gz ./bundle.zip
+	@rm -rf ./dist ./coverage ./bundle.tar.gz ./bundle.zip
 
 deepclean: clean
 	rm -rf ./bins ./node_modules package-lock.json

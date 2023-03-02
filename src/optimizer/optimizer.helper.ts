@@ -18,6 +18,7 @@ import { cpus } from "os";
 
 import { CHOICE } from "@/enums";
 import { bl, cy, env, gn, pu, rd, re, SI, yl } from "@/helper";
+import globals from "@/helper/globals";
 import { Model } from "@/model";
 import type { AnalyseResult } from "@/types";
 
@@ -106,4 +107,18 @@ export function genStatistics(a: {
       return `; number reverted ${key} / tried ${key}: ${a.numRevert[key]} / ${a.numMut[key]} =${r}%`;
     }),
   ];
+}
+export function logMutation({
+  choice,
+  kept,
+  numEvals,
+}: {
+  choice: CHOICE;
+  numEvals: number;
+  kept: boolean;
+}): void {
+  const pDetails = choice == " P" ? Model.permutationStats : "                      ";
+  const dDetails = choice == "D " ? Model.decisionStats : "             ";
+
+  globals.mutationLog.push([numEvals, choice.trim(), kept ? 1 : 0, pDetails, dDetails].join(","));
 }

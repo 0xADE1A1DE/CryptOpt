@@ -210,7 +210,7 @@ function add64(c: CryptOpt.StringOperation): asm[] {
           store: reg,
         };
       } else {
-        console.debug(c, allocations);
+        console.error(c, allocations);
         throw new Error("undefined behavior. What can possibly be in c.arguments[2] then?");
       }
     }

@@ -36,12 +36,13 @@ import {
   writeString,
 } from "@/helper";
 import globals from "@/helper/globals";
+import Logger from "@/helper/Logger.class";
 import { Model } from "@/model";
 import { Paul, sha1Hash } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { AnalyseResult, OptimizerArgs } from "@/types";
 
-import { genStatistics, genStatusLine } from "./optimizer.helper";
+import { genStatistics, genStatusLine, logMutation } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
 
 let choice: CHOICE;
@@ -69,6 +70,9 @@ export class Optimizer {
     this.symbolname = symbolname;
 
     globals.convergence = [];
+    globals.mutationLog = [
+      "evaluation,choice,kept,PdetailsBackForwardChosenstepsWaled,DdetailsKindNumhotNumall",
+    ];
     // load a saved state if necessary
     if (args.readState) {
       Model.import(args.readState);
@@ -99,7 +103,7 @@ export class Optimizer {
     if (random) {
       choice = Paul.pick([CHOICE.PERMUTE, CHOICE.DECISION]);
     }
-    console.log("Mutationalita");
+    Logger.log("Mutationalita");
     switch (choice) {
       case CHOICE.PERMUTE: {
         Model.mutatePermutation();
@@ -130,7 +134,7 @@ export class Optimizer {
 
   public optimise() {
     return new Promise<number>((resolve) => {
-      console.log("starting optimisation");
+      Logger.log("starting optimisation");
       printStartInfo({
         ...this.args,
         symbolname: this.symbolname,
@@ -153,10 +157,10 @@ export class Optimizer {
           this.mutate();
         }
 
-        console.log("assembling");
+        Logger.log("assembling");
         const { code, stacklength } = assemble(this.args.resultDir);
 
-        console.log("now we have the current string in the object, filtering");
+        Logger.log("now we have the current string in the object, filtering");
         const filteredInstructions = code.filter((line) => line && !line.startsWith(";") && line !== "\n");
         this.no_of_instructions = filteredInstructions.length;
 
@@ -186,7 +190,7 @@ export class Optimizer {
 
           let analyseResult: AnalyseResult | undefined;
           try {
-            console.log("let the measurements begin!");
+            Logger.log("let the measurements begin!");
             if (this.args.verbose) {
               writeString(
                 pathResolve(this.libcheckfunctionDirectory, "currentA.asm"),
@@ -202,7 +206,9 @@ export class Optimizer {
               this.asmStrings[FUNCTIONS.F_A],
               this.asmStrings[FUNCTIONS.F_B],
             ]);
-            console.log("well done guys. The results are in!");
+            Logger.log("well done guys. The results are in!");
+
+            accumulatedTimeSpentByMeasuring += Date.now() - now_measure;
 
             analyseResult = analyseMeasureResult(results, { batchSize, resultDir: this.args.resultDir });
 
@@ -237,8 +243,6 @@ export class Optimizer {
             errorOut(ERRORS.measureGeneric);
           }
 
-          accumulatedTimeSpentByMeasuring += Date.now() - now_measure;
-
           const [meanrawA, meanrawB, meanrawCheck] = analyseResult.rawMedian;
 
           batchSize = Math.ceil((Number(this.args.cyclegoal) / meanrawCheck) * batchSize);
@@ -248,17 +252,17 @@ export class Optimizer {
 
           const currentFunctionIsA = () => currentNameOfTheFunctionThatHasTheMutation === FUNCTIONS.F_A;
 
-          console.log(currentFunctionIsA() ? "New".padEnd(10) : "New".padStart(10));
+          Logger.log(currentFunctionIsA() ? "New".padEnd(10) : "New".padStart(10));
 
           let kept: boolean;
 
           if (
-            // A is better and A is new
+            // A is not worse and A is new
             (meanrawA <= meanrawB && currentFunctionIsA()) ||
-            // or B is better and B is new
+            // or B is not worse and B is new
             (meanrawA >= meanrawB && !currentFunctionIsA())
           ) {
-            console.log("kept    mutation");
+            Logger.log("kept    mutation");
             kept = true;
             currentNameOfTheFunctionThatHasTheMutation = toggleFUNCTIONS(
               currentNameOfTheFunctionThatHasTheMutation,
@@ -284,6 +288,8 @@ export class Optimizer {
             show_per_second = (per_second_counter + "/s").padStart(6);
             per_second_counter = 0;
           }
+
+          logMutation({ choice, kept, numEvals });
           if (numEvals % PRINT_EVERY == 0) {
             // print every 10th eval
             // a line every 5% (also to logfile) also write the asm when
@@ -321,7 +327,7 @@ export class Optimizer {
               (Date.now() - optimistaionStartDate) / 1000 - globals.time.validate;
             clearInterval(intervalHandle);
 
-            console.log("writing current asm");
+            Logger.log("writing current asm");
             const elapsed = Date.now() - optimistaionStartDate;
             const paddedSeed = padSeed(Paul.initialSeed);
 
@@ -336,42 +342,46 @@ export class Optimizer {
               numRevert: this.numRevert,
               numMut: this.numMut,
             });
-            console.log(statistics);
+            Logger.log(statistics);
 
-            const [asmfile] = generateResultFilename({ ...this.args, symbolname: this.symbolname }, [
-              `_ratio${ratioString.replace(".", "")}.asm`,
-            ]);
+            const [asmFile, mutationsCsvFile] = generateResultFilename(
+              { ...this.args, symbolname: this.symbolname },
+              [`_ratio${ratioString.replace(".", "")}.asm`, `.csv`],
+            );
 
             // write best found solution with headers
             // flip, because we want the last accepted, not the last mutated.
             const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
 
             writeString(
-              asmfile,
+              asmFile,
               ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
                 .concat(this.asmStrings[flipped])
                 .concat(statistics)
                 .join("\n"),
             );
 
+            // writing the CSV
+            writeString(mutationsCsvFile, globals.mutationLog.join("\n"));
+
             if (shouldProof(this.args)) {
               // and proof correct
-              const proofCmd = FiatBridge.buildProofCommand(this.args.curve, this.args.method, asmfile);
-              console.log(`proofing that asm correct with '${proofCmd}'`);
+              const proofCmd = FiatBridge.buildProofCommand(this.args.curve, this.args.method, asmFile);
+              Logger.log(`proofing that asm correct with '${proofCmd}'`);
               try {
                 const now = Date.now();
                 execSync(proofCmd, { shell: "/usr/bin/bash" });
                 const timeForValidation = (Date.now() - now) / 1000;
-                appendFileSync(asmfile, `\n; validated in ${timeForValidation}s\n`);
+                appendFileSync(asmFile, `\n; validated in ${timeForValidation}s\n`);
                 globals.time.validate += timeForValidation;
               } catch (e) {
                 console.error(`tried to prove correct. didnt work. I tried ${proofCmd}`);
                 errorOut(ERRORS.proofUnsuccessful);
               }
             }
-            console.log("done with that current price of assembly code.");
+            Logger.log("done with that current price of assembly code.");
             this.cleanLibcheckfunctions();
-            console.log("Wonderful. Done with my work. Time for lunch.");
+            Logger.log("Wonderful. Done with my work. Time for lunch.");
             resolve(0);
           }
         }
@@ -382,9 +392,9 @@ export class Optimizer {
   private cleanLibcheckfunctions() {
     if (existsSync(this.libcheckfunctionDirectory)) {
       try {
-        console.log(`Removing lib check functions in '${this.libcheckfunctionDirectory}'`);
+        Logger.log(`Removing lib check functions in '${this.libcheckfunctionDirectory}'`);
         rmSync(this.libcheckfunctionDirectory, { recursive: true });
-        console.log(`removed ${this.libcheckfunctionDirectory}`);
+        Logger.log(`removed ${this.libcheckfunctionDirectory}`);
       } catch (e) {
         console.error(e);
         throw e;

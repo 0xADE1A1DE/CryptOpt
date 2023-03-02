@@ -23,4 +23,5 @@ export interface CryptoptGlobals {
     generateFiat: number;
     generateCryptopt: number;
   };
+  mutationLog: string[]; // csv-parts (numEval, choice, kept)
 }

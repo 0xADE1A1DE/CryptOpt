@@ -16,6 +16,7 @@
 
 import { AllocationFlags } from "@/enums";
 import { isImm } from "@/helper";
+import Logger from "@/helper/Logger.class";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
 
@@ -57,6 +58,6 @@ function mul_x_shlx(c: CryptOpt.StringOperation, shiftCnt: CryptOpt.HexConstant)
   return [
     ...ra.pres,
     `shlx ${resR}, ${arg0R}, ${immR}; ${c.name[0]} <- ${factor} * ${c.arguments[1]} (shlx does not change the flags)`,
-    `;${ra.flagStateString()}`,
+    Logger.log(`;${ra.flagStateString()}`) ?? "",
   ];
 }

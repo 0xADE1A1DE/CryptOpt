@@ -23,6 +23,7 @@ import {
   Register,
 } from "@/enums";
 import { isByteRegister, isXmmRegister, limbify, matchIMM, TEMP_VARNAME, zx } from "@/helper";
+import Logger from "@/helper/Logger.class";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { asm, CryptOpt } from "@/types";
@@ -96,7 +97,7 @@ function makeArgRanR64(argR: string, ra: RegisterAllocator): string {
 
 function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
   if (c.name.length === 1) {
-    console.log("will truncate result to 64bit");
+    Logger.log("will truncate result to 64bit");
     // TODO: what about arg[1] in oReg?
     // extra case for arg[0]^2
     //

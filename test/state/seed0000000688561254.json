@@ -1,0 +1,1941 @@
+{
+  "to": [
+    53, 11, 14, 55, 13, 6, 10, 4, 61, 5, 57, 0, 63, 52, 12, 49, 9, 15, 50, 51, 3, 1, 35, 59, 60, 42, 56, 58,
+    8, 54, 72, 78, 16, 19, 62, 64, 65, 68, 73, 7, 84, 91, 23, 24, 66, 85, 69, 29, 2, 17, 67, 79, 70, 86, 30,
+    74, 75, 20, 18, 80, 21, 81, 22, 87, 88, 25, 92, 26, 93, 94, 27, 28, 95, 121, 71, 76, 82, 122, 31, 36, 89,
+    32, 33, 96, 34, 37, 77, 120, 83, 123, 90, 124, 127, 97, 119, 38, 39, 128, 129, 40, 41, 125, 126, 130, 131,
+    132, 43, 133, 134, 135, 44, 45, 136, 145, 137, 46, 138, 47, 143, 48, 105, 99, 100, 107, 101, 108, 103, 98,
+    102, 104, 109, 110, 106, 111, 112, 113, 114, 115, 141, 116, 144, 140, 142, 117, 146, 118, 139
+  ],
+  "body": [
+    {
+      "datatype": "u64",
+      "name": ["x1", "x2"],
+      "operation": "mulx",
+      "arguments": ["arg1[3]", "arg2[3]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg1[3]", "arg2[3]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x3", "x4"],
+      "operation": "mulx",
+      "arguments": ["arg1[3]", "arg2[2]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg1[3]", "arg2[2]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x5", "x6"],
+      "operation": "mulx",
+      "arguments": ["arg1[3]", "arg2[1]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[3]", "arg2[1]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x7", "x8"],
+      "operation": "mulx",
+      "arguments": ["arg1[3]", "arg2[0]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[3]", "arg2[0]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x9", "x10"],
+      "operation": "mulx",
+      "arguments": ["arg1[2]", "arg2[3]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[2]", "arg2[3]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x11", "x12"],
+      "operation": "mulx",
+      "arguments": ["arg1[2]", "arg2[2]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[2]", "arg2[2]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x13", "x14"],
+      "operation": "mulx",
+      "arguments": ["arg1[2]", "arg2[1]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg1[2]", "arg2[1]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x15", "x16"],
+      "operation": "mulx",
+      "arguments": ["arg1[2]", "arg2[0]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg1[2]", "arg2[0]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x17", "x18"],
+      "operation": "mulx",
+      "arguments": ["arg1[1]", "arg2[3]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[1]", "arg2[3]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x19", "x20"],
+      "operation": "mulx",
+      "arguments": ["arg1[1]", "arg2[2]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg1[1]", "arg2[2]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x21", "x22"],
+      "operation": "mulx",
+      "arguments": ["arg1[1]", "arg2[1]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[1]", "arg2[1]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x23", "x24"],
+      "operation": "mulx",
+      "arguments": ["arg1[1]", "arg2[0]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg1[1]", "arg2[0]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x25", "x26"],
+      "operation": "mulx",
+      "arguments": ["arg1[0]", "arg2[3]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[0]", "arg2[3]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x27", "x28"],
+      "operation": "mulx",
+      "arguments": ["arg1[0]", "arg2[2]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg1[0]", "arg2[2]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x29", "x30"],
+      "operation": "mulx",
+      "arguments": ["arg1[0]", "arg2[1]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[0]", "arg2[1]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x31", "x32"],
+      "operation": "mulx",
+      "arguments": ["arg1[0]", "arg2[0]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg1[0]", "arg2[0]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x33", "x34"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x28", "x7"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x0", "x28", "x7"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x35", "x36"],
+      "operation": "addcarryx",
+      "arguments": ["x34", "x26", "x5"],
+      "decisions": {
+        "di_choose_arg": [1, ["x34", "x26", "x5"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x37"],
+      "operation": "+",
+      "arguments": ["x36", "x18"],
+      "decisions": {
+        "di_choose_arg": [0, ["x36", "x18"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x38", "x39"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x33", "x13"],
+      "decisions": {
+        "di_choose_arg": [2, ["0x0", "x33", "x13"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x40", "x41"],
+      "operation": "addcarryx",
+      "arguments": ["x39", "x35", "x8"],
+      "decisions": {
+        "di_choose_arg": [2, ["x39", "x35", "x8"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x42", "x43"],
+      "operation": "addcarryx",
+      "arguments": ["x41", "x37", "0x0"],
+      "decisions": {
+        "di_choose_arg": [1, ["x41", "x37", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x44"],
+      "operation": "+",
+      "arguments": ["x43", "x10"],
+      "decisions": {
+        "di_choose_arg": [1, ["x43", "x10"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x45", "x46"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x30", "x15"],
+      "decisions": {
+        "di_choose_arg": [2, ["0x0", "x30", "x15"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x47", "x48"],
+      "operation": "addcarryx",
+      "arguments": ["x46", "x38", "x16"],
+      "decisions": {
+        "di_choose_arg": [2, ["x46", "x38", "x16"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x49", "x50"],
+      "operation": "addcarryx",
+      "arguments": ["x48", "x40", "x11"],
+      "decisions": {
+        "di_choose_arg": [1, ["x48", "x40", "x11"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag", "di_choose_imm"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x51", "x52"],
+      "operation": "addcarryx",
+      "arguments": ["x50", "x42", "x3"],
+      "decisions": {
+        "di_choose_arg": [2, ["x50", "x42", "x3"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x53", "x54"],
+      "operation": "addcarryx",
+      "arguments": ["x52", "x44", "0x0"],
+      "decisions": {
+        "di_choose_arg": [0, ["x52", "x44", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x55"],
+      "operation": "+",
+      "arguments": ["x54", "x2"],
+      "decisions": {
+        "di_choose_arg": [1, ["x54", "x2"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x56", "x57"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x45", "x21"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x0", "x45", "x21"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x58", "x59"],
+      "operation": "addcarryx",
+      "arguments": ["x57", "x47", "x19"],
+      "decisions": {
+        "di_choose_arg": [1, ["x57", "x47", "x19"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x60", "x61"],
+      "operation": "addcarryx",
+      "arguments": ["x59", "x49", "x14"],
+      "decisions": {
+        "di_choose_arg": [1, ["x59", "x49", "x14"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg", "di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x62", "x63"],
+      "operation": "addcarryx",
+      "arguments": ["x61", "x51", "x6"],
+      "decisions": {
+        "di_choose_arg": [1, ["x61", "x51", "x6"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x64", "x65"],
+      "operation": "addcarryx",
+      "arguments": ["x63", "x53", "0x0"],
+      "decisions": {
+        "di_choose_arg": [2, ["x63", "x53", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x66", "_"],
+      "operation": "addcarryx",
+      "arguments": ["x65", "x55", "0x0"],
+      "decisions": {
+        "di_choose_arg": [0, ["x65", "x55", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x68", "x69"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x32", "x23"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x0", "x32", "x23"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_handle_flags_kk", "di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x70", "x71"],
+      "operation": "addcarryx",
+      "arguments": ["x69", "x56", "x24"],
+      "decisions": {
+        "di_choose_arg": [2, ["x69", "x56", "x24"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg", "di_flag", "di_choose_imm"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x72", "x73"],
+      "operation": "addcarryx",
+      "arguments": ["x71", "x58", "x22"],
+      "decisions": {
+        "di_choose_arg": [2, ["x71", "x58", "x22"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x74", "x75"],
+      "operation": "addcarryx",
+      "arguments": ["x73", "x60", "x17"],
+      "decisions": {
+        "di_choose_arg": [1, ["x73", "x60", "x17"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg", "di_flag", "di_choose_imm"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x76", "x77"],
+      "operation": "addcarryx",
+      "arguments": ["x75", "x62", "x9"],
+      "decisions": {
+        "di_choose_arg": [2, ["x75", "x62", "x9"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x78", "x79"],
+      "operation": "addcarryx",
+      "arguments": ["x77", "x64", "x1"],
+      "decisions": {
+        "di_choose_arg": [1, ["x77", "x64", "x1"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x80", "_"],
+      "operation": "addcarryx",
+      "arguments": ["x79", "x66", "0x0"],
+      "decisions": {
+        "di_choose_arg": [1, ["x79", "x66", "0x0"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x82", "x83"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x68", "x29"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x0", "x68", "x29"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x84", "x85"],
+      "operation": "addcarryx",
+      "arguments": ["x83", "x70", "x27"],
+      "decisions": {
+        "di_choose_arg": [1, ["x83", "x70", "x27"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg", "di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x86", "x87"],
+      "operation": "addcarryx",
+      "arguments": ["x85", "x72", "x25"],
+      "decisions": {
+        "di_choose_arg": [0, ["x85", "x72", "x25"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x88", "x89"],
+      "operation": "addcarryx",
+      "arguments": ["x87", "x74", "x20"],
+      "decisions": {
+        "di_choose_arg": [1, ["x87", "x74", "x20"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x90", "x91"],
+      "operation": "addcarryx",
+      "arguments": ["x89", "x76", "x12"],
+      "decisions": {
+        "di_choose_arg": [0, ["x89", "x76", "x12"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x92", "x93"],
+      "operation": "addcarryx",
+      "arguments": ["x91", "x78", "x4"],
+      "decisions": {
+        "di_choose_arg": [2, ["x91", "x78", "x4"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x94", "_"],
+      "operation": "addcarryx",
+      "arguments": ["x93", "x80", "0x0"],
+      "decisions": {
+        "di_choose_arg": [2, ["x93", "x80", "0x0"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x96", "x97"],
+      "operation": "mulx",
+      "arguments": ["arg3[3]", "arg4[3]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[3]", "arg4[3]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x98", "x99"],
+      "operation": "mulx",
+      "arguments": ["arg3[3]", "arg4[2]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg3[3]", "arg4[2]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x100", "x101"],
+      "operation": "mulx",
+      "arguments": ["arg3[3]", "arg4[1]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg3[3]", "arg4[1]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x102", "x103"],
+      "operation": "mulx",
+      "arguments": ["arg3[3]", "arg4[0]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg3[3]", "arg4[0]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x104", "x105"],
+      "operation": "mulx",
+      "arguments": ["arg3[2]", "arg4[3]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg3[2]", "arg4[3]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x106", "x107"],
+      "operation": "mulx",
+      "arguments": ["arg3[2]", "arg4[2]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[2]", "arg4[2]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x108", "x109"],
+      "operation": "mulx",
+      "arguments": ["arg3[2]", "arg4[1]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[2]", "arg4[1]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x110", "x111"],
+      "operation": "mulx",
+      "arguments": ["arg3[2]", "arg4[0]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[2]", "arg4[0]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x112", "x113"],
+      "operation": "mulx",
+      "arguments": ["arg3[1]", "arg4[3]"],
+      "decisions": {
+        "di_choose_arg": [1, ["arg3[1]", "arg4[3]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x114", "x115"],
+      "operation": "mulx",
+      "arguments": ["arg3[1]", "arg4[2]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[1]", "arg4[2]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x116", "x117"],
+      "operation": "mulx",
+      "arguments": ["arg3[1]", "arg4[1]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[1]", "arg4[1]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x118", "x119"],
+      "operation": "mulx",
+      "arguments": ["arg3[1]", "arg4[0]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[1]", "arg4[0]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x120", "x121"],
+      "operation": "mulx",
+      "arguments": ["arg3[0]", "arg4[3]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[0]", "arg4[3]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x122", "x123"],
+      "operation": "mulx",
+      "arguments": ["arg3[0]", "arg4[2]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[0]", "arg4[2]"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x124", "x125"],
+      "operation": "mulx",
+      "arguments": ["arg3[0]", "arg4[1]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[0]", "arg4[1]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x126", "x127"],
+      "operation": "mulx",
+      "arguments": ["arg3[0]", "arg4[0]"],
+      "decisions": {
+        "di_choose_arg": [0, ["arg3[0]", "arg4[0]"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x128", "x129"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x123", "x102"],
+      "decisions": {
+        "di_choose_arg": [2, ["0x0", "x123", "x102"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x130", "x131"],
+      "operation": "addcarryx",
+      "arguments": ["x129", "x121", "x100"],
+      "decisions": {
+        "di_choose_arg": [2, ["x129", "x121", "x100"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg", "di_flag", "di_choose_imm"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x132"],
+      "operation": "+",
+      "arguments": ["x131", "x113"],
+      "decisions": {
+        "di_choose_arg": [1, ["x131", "x113"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x133", "x134"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x128", "x108"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x0", "x128", "x108"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x135", "x136"],
+      "operation": "addcarryx",
+      "arguments": ["x134", "x130", "x103"],
+      "decisions": {
+        "di_choose_arg": [1, ["x134", "x130", "x103"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x137", "x138"],
+      "operation": "addcarryx",
+      "arguments": ["x136", "x132", "0x0"],
+      "decisions": {
+        "di_choose_arg": [0, ["x136", "x132", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x139"],
+      "operation": "+",
+      "arguments": ["x138", "x105"],
+      "decisions": {
+        "di_choose_arg": [1, ["x138", "x105"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x140", "x141"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x125", "x110"],
+      "decisions": {
+        "di_choose_arg": [2, ["0x0", "x125", "x110"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x142", "x143"],
+      "operation": "addcarryx",
+      "arguments": ["x141", "x133", "x111"],
+      "decisions": {
+        "di_choose_arg": [1, ["x141", "x133", "x111"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag", "di_choose_imm"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x144", "x145"],
+      "operation": "addcarryx",
+      "arguments": ["x143", "x135", "x106"],
+      "decisions": {
+        "di_choose_arg": [2, ["x143", "x135", "x106"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x146", "x147"],
+      "operation": "addcarryx",
+      "arguments": ["x145", "x137", "x98"],
+      "decisions": {
+        "di_choose_arg": [0, ["x145", "x137", "x98"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x148", "x149"],
+      "operation": "addcarryx",
+      "arguments": ["x147", "x139", "0x0"],
+      "decisions": {
+        "di_choose_arg": [2, ["x147", "x139", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x150"],
+      "operation": "+",
+      "arguments": ["x149", "x97"],
+      "decisions": {
+        "di_choose_arg": [1, ["x149", "x97"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x151", "x152"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x140", "x116"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x0", "x140", "x116"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x153", "x154"],
+      "operation": "addcarryx",
+      "arguments": ["x152", "x142", "x114"],
+      "decisions": {
+        "di_choose_arg": [2, ["x152", "x142", "x114"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg", "di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x155", "x156"],
+      "operation": "addcarryx",
+      "arguments": ["x154", "x144", "x109"],
+      "decisions": {
+        "di_choose_arg": [0, ["x154", "x144", "x109"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x157", "x158"],
+      "operation": "addcarryx",
+      "arguments": ["x156", "x146", "x101"],
+      "decisions": {
+        "di_choose_arg": [1, ["x156", "x146", "x101"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x159", "x160"],
+      "operation": "addcarryx",
+      "arguments": ["x158", "x148", "0x0"],
+      "decisions": {
+        "di_choose_arg": [1, ["x158", "x148", "0x0"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x161", "_"],
+      "operation": "addcarryx",
+      "arguments": ["x160", "x150", "0x0"],
+      "decisions": {
+        "di_choose_arg": [0, ["x160", "x150", "0x0"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x163", "x164"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x127", "x118"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x0", "x127", "x118"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x165", "x166"],
+      "operation": "addcarryx",
+      "arguments": ["x164", "x151", "x119"],
+      "decisions": {
+        "di_choose_arg": [0, ["x164", "x151", "x119"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x167", "x168"],
+      "operation": "addcarryx",
+      "arguments": ["x166", "x153", "x117"],
+      "decisions": {
+        "di_choose_arg": [0, ["x166", "x153", "x117"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x169", "x170"],
+      "operation": "addcarryx",
+      "arguments": ["x168", "x155", "x112"],
+      "decisions": {
+        "di_choose_arg": [0, ["x168", "x155", "x112"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x171", "x172"],
+      "operation": "addcarryx",
+      "arguments": ["x170", "x157", "x104"],
+      "decisions": {
+        "di_choose_arg": [2, ["x170", "x157", "x104"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x173", "x174"],
+      "operation": "addcarryx",
+      "arguments": ["x172", "x159", "x96"],
+      "decisions": {
+        "di_choose_arg": [0, ["x172", "x159", "x96"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag", "di_choose_imm"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x175", "_"],
+      "operation": "addcarryx",
+      "arguments": ["x174", "x161", "0x0"],
+      "decisions": {
+        "di_choose_arg": [0, ["x174", "x161", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x177", "x178"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x163", "x124"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x0", "x163", "x124"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x179", "x180"],
+      "operation": "addcarryx",
+      "arguments": ["x178", "x165", "x122"],
+      "decisions": {
+        "di_choose_arg": [1, ["x178", "x165", "x122"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg", "di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x181", "x182"],
+      "operation": "addcarryx",
+      "arguments": ["x180", "x167", "x120"],
+      "decisions": {
+        "di_choose_arg": [2, ["x180", "x167", "x120"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x183", "x184"],
+      "operation": "addcarryx",
+      "arguments": ["x182", "x169", "x115"],
+      "decisions": {
+        "di_choose_arg": [1, ["x182", "x169", "x115"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x185", "x186"],
+      "operation": "addcarryx",
+      "arguments": ["x184", "x171", "x107"],
+      "decisions": {
+        "di_choose_arg": [0, ["x184", "x171", "x107"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x187", "x188"],
+      "operation": "addcarryx",
+      "arguments": ["x186", "x173", "x99"],
+      "decisions": {
+        "di_choose_arg": [1, ["x186", "x173", "x99"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x189", "_"],
+      "operation": "addcarryx",
+      "arguments": ["x188", "x175", "0x0"],
+      "decisions": {
+        "di_choose_arg": [1, ["x188", "x175", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x191", "x192"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x92"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x26", "x92"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x193", "x194"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x90"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x26", "x90"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x195", "x196"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x88"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x26", "x88"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x197", "x198"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x82", "x193"],
+      "decisions": {
+        "di_choose_arg": [2, ["0x0", "x82", "x193"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x199", "x200"],
+      "operation": "addcarryx",
+      "arguments": ["x198", "x84", "x191"],
+      "decisions": {
+        "di_choose_arg": [1, ["x198", "x84", "x191"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x201", "_"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x94"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x26", "x94"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x203", "x204"],
+      "operation": "addcarryx",
+      "arguments": ["x200", "x86", "x201"],
+      "decisions": {
+        "di_choose_arg": [0, ["x200", "x86", "x201"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["_", "x206"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x94"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x26", "x94"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x207"],
+      "operation": "+",
+      "arguments": ["x204", "x206"],
+      "decisions": {
+        "di_choose_arg": [1, ["x204", "x206"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x208", "x209"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x31", "x195"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x0", "x31", "x195"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x210", "x211"],
+      "operation": "addcarryx",
+      "arguments": ["x209", "x197", "x196"],
+      "decisions": {
+        "di_choose_arg": [0, ["x209", "x197", "x196"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x212", "x213"],
+      "operation": "addcarryx",
+      "arguments": ["x211", "x199", "x194"],
+      "decisions": {
+        "di_choose_arg": [0, ["x211", "x199", "x194"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x214", "x215"],
+      "operation": "addcarryx",
+      "arguments": ["x213", "x203", "x192"],
+      "decisions": {
+        "di_choose_arg": [0, ["x213", "x203", "x192"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x216"],
+      "operation": "+",
+      "arguments": ["x215", "x207"],
+      "decisions": {
+        "di_choose_arg": [0, ["x215", "x207"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x217", "_"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x216"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x26", "x216"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x219", "x220"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x208", "x217"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x0", "x208", "x217"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x221", "x222"],
+      "operation": "addcarryx",
+      "arguments": ["x220", "x210", "0x0"],
+      "decisions": {
+        "di_choose_arg": [0, ["x220", "x210", "0x0"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x223", "x224"],
+      "operation": "addcarryx",
+      "arguments": ["x222", "x212", "0x0"],
+      "decisions": {
+        "di_choose_arg": [2, ["x222", "x212", "0x0"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x225", "x226"],
+      "operation": "addcarryx",
+      "arguments": ["x224", "x214", "0x0"],
+      "decisions": {
+        "di_choose_arg": [2, ["x224", "x214", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x227"],
+      "operation": "cmovznz",
+      "arguments": ["x226", "0x0", "0x26"],
+      "decisions": {
+        "di_choose_arg": [0, ["x226", "0x0", "0x26"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x228", "_"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x227", "x219"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x0", "x227", "x219"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x230", "x231"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x189"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x26", "x189"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x232", "x233"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x187"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x26", "x187"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x234", "x235"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x185"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x26", "x185"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x236", "x237"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x183"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x26", "x183"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x238", "x239"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x177", "x234"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x0", "x177", "x234"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x240", "x241"],
+      "operation": "addcarryx",
+      "arguments": ["x239", "x179", "x232"],
+      "decisions": {
+        "di_choose_arg": [1, ["x239", "x179", "x232"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x242", "x243"],
+      "operation": "addcarryx",
+      "arguments": ["x241", "x181", "x230"],
+      "decisions": {
+        "di_choose_arg": [2, ["x241", "x181", "x230"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_imm"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x244"],
+      "operation": "+",
+      "arguments": ["x243", "x231"],
+      "decisions": {
+        "di_choose_arg": [1, ["x243", "x231"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x245", "x246"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x126", "x236"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x0", "x126", "x236"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_choose_arg", "di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x247", "x248"],
+      "operation": "addcarryx",
+      "arguments": ["x246", "x238", "x237"],
+      "decisions": {
+        "di_choose_arg": [1, ["x246", "x238", "x237"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x249", "x250"],
+      "operation": "addcarryx",
+      "arguments": ["x248", "x240", "x235"],
+      "decisions": {
+        "di_choose_arg": [2, ["x248", "x240", "x235"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x251", "x252"],
+      "operation": "addcarryx",
+      "arguments": ["x250", "x242", "x233"],
+      "decisions": {
+        "di_choose_arg": [0, ["x250", "x242", "x233"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x253"],
+      "operation": "+",
+      "arguments": ["x252", "x244"],
+      "decisions": {
+        "di_choose_arg": [1, ["x252", "x244"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x254", "_"],
+      "operation": "mulx",
+      "arguments": ["0x26", "x253"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x26", "x253"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": ["di_choose_arg"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["x256", "x257"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x245", "x254"],
+      "decisions": {
+        "di_choose_arg": [0, ["0x0", "x245", "x254"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [0, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x258", "x259"],
+      "operation": "addcarryx",
+      "arguments": ["x257", "x247", "0x0"],
+      "decisions": {
+        "di_choose_arg": [1, ["x257", "x247", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [1, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x260", "x261"],
+      "operation": "addcarryx",
+      "arguments": ["x259", "x249", "0x0"],
+      "decisions": {
+        "di_choose_arg": [0, ["x259", "x249", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [0, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x262", "x263"],
+      "operation": "addcarryx",
+      "arguments": ["x261", "x251", "0x0"],
+      "decisions": {
+        "di_choose_arg": [0, ["x261", "x251", "0x0"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [1, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x264"],
+      "operation": "cmovznz",
+      "arguments": ["x263", "0x0", "0x26"],
+      "decisions": {
+        "di_choose_arg": [1, ["x263", "0x0", "0x26"]],
+        "di_spill_location": [1, ["c_mem", "c_xmm_reg"]]
+      },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["x265", "_"],
+      "operation": "addcarryx",
+      "arguments": ["0x0", "x264", "x256"],
+      "decisions": {
+        "di_choose_arg": [1, ["0x0", "x264", "x256"]],
+        "di_spill_location": [0, ["c_mem", "c_xmm_reg"]],
+        "di_flag": [0, ["CF", "OF"]],
+        "di_handle_flags_kk": [2, ["c_add", "c_xor_adx", "c_test_adx"]],
+        "di_choose_imm": [1, ["0x0", "-0x1"]]
+      },
+      "decisionsHot": ["di_flag"]
+    },
+    {
+      "datatype": "u64",
+      "name": ["out1[0]"],
+      "operation": "=",
+      "arguments": ["x228"],
+      "decisions": { "di_choose_arg": [0, ["x228"]], "di_spill_location": [1, ["c_mem", "c_xmm_reg"]] },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["out1[1]"],
+      "operation": "=",
+      "arguments": ["x221"],
+      "decisions": { "di_choose_arg": [0, ["x221"]], "di_spill_location": [0, ["c_mem", "c_xmm_reg"]] },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["out1[2]"],
+      "operation": "=",
+      "arguments": ["x223"],
+      "decisions": { "di_choose_arg": [0, ["x223"]], "di_spill_location": [1, ["c_mem", "c_xmm_reg"]] },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["out1[3]"],
+      "operation": "=",
+      "arguments": ["x225"],
+      "decisions": { "di_choose_arg": [0, ["x225"]], "di_spill_location": [0, ["c_mem", "c_xmm_reg"]] },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["out2[0]"],
+      "operation": "=",
+      "arguments": ["x265"],
+      "decisions": { "di_choose_arg": [0, ["x265"]], "di_spill_location": [1, ["c_mem", "c_xmm_reg"]] },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["out2[1]"],
+      "operation": "=",
+      "arguments": ["x258"],
+      "decisions": { "di_choose_arg": [0, ["x258"]], "di_spill_location": [1, ["c_mem", "c_xmm_reg"]] },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["out2[2]"],
+      "operation": "=",
+      "arguments": ["x260"],
+      "decisions": { "di_choose_arg": [0, ["x260"]], "di_spill_location": [1, ["c_mem", "c_xmm_reg"]] },
+      "decisionsHot": []
+    },
+    {
+      "datatype": "u64",
+      "name": ["out2[3]"],
+      "operation": "=",
+      "arguments": ["x262"],
+      "decisions": { "di_choose_arg": [0, ["x262"]], "di_spill_location": [0, ["c_mem", "c_xmm_reg"]] },
+      "decisionsHot": []
+    }
+  ],
+  "ratio": null,
+  "convergence": [
+    "1.4837",
+    "1.5478",
+    "1.5657",
+    "1.6015",
+    "1.6283",
+    "1.5980",
+    "1.6261",
+    "1.6328",
+    "1.6259",
+    "1.6452",
+    "1.6360"
+  ],
+  "seed": 3837329857916135,
+  "time": { "validate": 0, "generateFiat": 0, "generateCryptopt": 0 },
+  "parsedArgs": {
+    "_": [],
+    "bridge": "fiat",
+    "curve": "curve25519_solinas",
+    "c": "curve25519_solinas",
+    "method": "mul2",
+    "m": "mul2",
+    "evals": 100,
+    "e": 100,
+    "single": true,
+    "verbose": false,
+    "v": false,
+    "seed": 688561254,
+    "s": 688561254,
+    "readState": "./seed0000000688561254.json",
+    "read-state": "./seed0000000688561254.json",
+    "jsonFile": "",
+    "j": "",
+    "json-file": "",
+    "cFile": "",
+    "f": "",
+    "c-file": "",
+    "bets": 10,
+    "b": 10,
+    "betRatio": 0.2,
+    "r": 0.2,
+    "bet-ratio": 0.2,
+    "resultDir": "../results",
+    "result-dir": "",
+    "proof": true,
+    "xmm": false,
+    "x": false,
+    "logComment": "",
+    "log-comment": "",
+    "cyclegoal": 10000,
+    "$0": "./CryptOpt",
+    "symbolname": "fiat_curve25519_solinas_mul2"
+  }
+}

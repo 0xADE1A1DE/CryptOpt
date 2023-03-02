@@ -18,6 +18,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { dirname } from "path";
 
 import { ByteRegister, Flags, FUNCTIONS, Register, XmmRegister } from "@/enums";
+import Logger from "@/helper/Logger.class";
 import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation } from "@/types";
 
 import {
@@ -33,7 +34,6 @@ import {
   XD_REGEX,
 } from "./constants";
 import { getQwRegFromByteReg } from "./reg-conversion";
-
 //Lamdas means here just helper functions, which dont need any imports.
 // so don't specify any imports there. Put those into ./helpers.ts
 // this is done to remove circular dependencies while ensuring low amount of code duplication
@@ -53,7 +53,12 @@ export function toImm(val: string | number): imm {
 }
 // gets the memorylocation for a given offset
 export function toMem(offset: number | string, base: Register = Register.rsp): mem {
-  return `[ ${base} + 0x${(Number(offset) * 8).toString(16)} ]`;
+  offset = Number(offset) * 8;
+  if (offset < 0) {
+    return `[ ${base} - 0x${(-offset).toString(16)} ]`;
+  } else {
+    return `[ ${base} + 0x${offset.toString(16)} ]`;
+  }
 }
 
 export function matchXD(variable: string | null | undefined): RegExpMatchArray | null {
@@ -234,7 +239,7 @@ export function setToString(s: Set<string>, max = Infinity): string {
 }
 
 export function writeString(filename: string, asmString: string): void {
-  console.log(`writing ${asmString.length} chars of asm to '${filename}'`);
+  Logger.log(`writing ${asmString.length} chars of asm to '${filename}'`);
   mkdirSync(dirname(filename), { recursive: true });
   writeFileSync(filename, asmString);
 }

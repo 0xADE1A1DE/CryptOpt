@@ -17,6 +17,7 @@
 import { existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
+import Logger from "@/helper/Logger.class";
 import type { OptimizerArgs } from "@/types";
 
 import { padSeed } from "./lamdas";
@@ -38,13 +39,12 @@ export function generateResultFilename(
       : resolve(`${process.cwd()}/results`, bridge, symbolname);
 
   if (!existsSync(path)) {
-    console.log(`${path} does not exist. Trying to create it.`);
+    Logger.log(`${path} does not exist. Trying to create it.`);
     try {
       mkdirSync(path, { recursive: true });
     } catch (e) {
-      console.error(
-        `${path} does not exist. And could not be created due to Error:${e}. Create that folder manually and re-run. Exiting.`,
-      );
+      const msg = `${path} does not exist. And could not be created due to Error:${e}. Create that folder manually and re-run. Exiting.`;
+      console.error(msg);
       process.exit(2);
     }
   }

@@ -67,7 +67,7 @@ export const parsedArgs = y
     boolean: true,
     alias: "v",
     default: false,
-    describe: "print debug info.",
+    describe: "Print debug info. (Compile with `DEBUG=1 make`)",
   })
   .option("seed", {
     number: true,

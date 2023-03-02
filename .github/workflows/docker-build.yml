@@ -1,0 +1,21 @@
+name: Docker build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    name: Build and test inside of the Docker image
+    runs-on: ubuntu-22.04
+
+    steps:
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v4
+      with:
+        push: false
+

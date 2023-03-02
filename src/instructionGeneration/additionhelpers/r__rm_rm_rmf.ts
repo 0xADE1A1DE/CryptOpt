@@ -101,7 +101,7 @@ export function r__r_r_r(
 // TODO: this could be handled better, iff r1 is u1, we could add
 // cin and r1 first ()
 function r__r_rm_rm__noFlagsAlive(
-  out: string,
+  _out: string,
   r0store: Register,
   r1: RegisterAllocation | MemoryAllocation,
   cin: U1RegisterAllocation | U1MemoryAllocation,
