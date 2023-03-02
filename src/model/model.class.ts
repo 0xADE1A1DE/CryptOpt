@@ -235,10 +235,9 @@ export class Model {
     m.backupbody();
 
     // console.log(`mutatePermutation; candidateIndexes: ${candidates.join(",")}`);
-    //
 
     const chosen = Paul.chooseBetween(Model._order.length);
-    // const index = Paul.pick(candidates);
+
     // mutate
     const candidateIDX = Model._order[chosen];
     if (isNaN(candidateIDX)) {
@@ -345,17 +344,7 @@ export class Model {
       ? keys[0]
       : keys[Paul.chooseBetween(keys.length)]) as unknown as DECISION_IDENTIFIER;
 
-    const a = {
-      [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: "AR",
-      [DECISION_IDENTIFIER.DI_HANDLE_FLAGS_KK]: "KK",
-      [DECISION_IDENTIFIER.DI_FLAG]: "FL",
-      [DECISION_IDENTIFIER.DI_INSTRUCTION_AND]: "B&",
-      [DECISION_IDENTIFIER.DI_CHOOSE_IMM]: "IM",
-      [DECISION_IDENTIFIER.DI_MULTIPLICATION_IMM]: "MU",
-      [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: "SL",
-    } as { [c in DECISION_IDENTIFIER]: string };
-
-    Model.decisionStats = `D[${a[key]}/${candidateIdx.toString().padStart(3)}/${cands}/${from}]`;
+    Model.decisionStats = `D[${DI_ABBRV[key]}/${candidateIdx.toString().padStart(3)}/${cands}/${from}]`;
 
     const dec = candidate.decisions[key];
     if (!dec) {

@@ -16,9 +16,9 @@
 
 import { cpus } from "os";
 
-import globals from "@/helper/globals";
 import { CHOICE } from "@/enums";
 import { bl, cy, env, gn, pu, rd, re, SI, yl } from "@/helper";
+import globals from "@/helper/globals";
 import { Model } from "@/model";
 import type { AnalyseResult } from "@/types";
 
