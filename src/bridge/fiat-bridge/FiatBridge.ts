@@ -17,7 +17,7 @@
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
-import { datadir, env, preprocessFunction } from "@/helper";
+import { datadir, env, preprocessFunction, STACK_OFFSET_IN_ELEMENTS } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { sha256Hash } from "@/paul";
 import type { CryptOpt, Fiat } from "@/types";
@@ -203,17 +203,22 @@ export class FiatBridge implements Bridge {
       "--output-asm /dev/null",
     ].join(" ");
 
-    const stacksize = Math.max(
-      ...readFileSync(hintsFilename)
-        .toString()
-        .split("\n")
-        .map((line) => /mov .*, \[ rsp \+ ([0-9x]+) \].*/.exec(line)?.[1])
-        .filter((match) => typeof match !== undefined)
-        .map(Number),
-    );
+    const stackoffsets = readFileSync(hintsFilename)
+      .toString()
+      .split("\n")
+      .map((line) => /mov .*, \[ rsp \+ ([0-9x]+) \].*/.exec(line)?.[1])
+      .filter((match) => typeof match !== undefined)
+      .map(Number)
+      .filter((nu) => !isNaN(nu));
 
+    // those are the 'rsp - ...' and mov [rsp], rbx
+    let stacksize = (STACK_OFFSET_IN_ELEMENTS + 1) * 8;
+    if (stackoffsets.length > 0) {
+      stacksize += Math.max(...stackoffsets);
+    }
+
+    const stack = `--asm-stack-size ${stacksize ?? 0}`;
     const hint = `--hints-file ${hintsFilename}`;
-    const stack = `--asm-stack-size ${stacksize}`;
 
     switch (binary) {
       case BINS.dettman:
