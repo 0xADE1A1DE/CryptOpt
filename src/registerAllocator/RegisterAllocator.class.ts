@@ -24,7 +24,7 @@ import {
   Flags,
   FlagState,
   Register,
-  XmmRegister
+  XmmRegister,
 } from "@/enums";
 import {
   ALL_XMM_REGISTERS,
@@ -35,7 +35,7 @@ import {
   LSB_MAPPING,
   SETX,
   STACK_OFFSET_IN_ELEMENTS,
-  TEMP_VARNAME
+  TEMP_VARNAME,
 } from "@/helper/constants";
 import {
   delimbify,
@@ -58,7 +58,7 @@ import {
   setToString,
   toImm,
   toMem,
-  zx
+  zx,
 } from "@/helper/lamdas";
 import Logger from "@/helper/Logger.class";
 import { getByteRegFromQwReg, getQwRegFromByteReg } from "@/helper/reg-conversion";
@@ -77,7 +77,7 @@ import type {
   PointerAllocation,
   RegisterAllocation,
   U1FlagAllocation,
-  ValueAllocation
+  ValueAllocation,
 } from "@/types";
 
 import { populateClobbers } from "./RegisterAllocator.helper";
@@ -102,9 +102,9 @@ export class RegisterAllocator {
   private _flagState: {
     [f in Flags]: FlagState;
   } = {
-      [Flags.CF]: FlagState.KILLED,
-      [Flags.OF]: FlagState.KILLED,
-    };
+    [Flags.CF]: FlagState.KILLED,
+    [Flags.OF]: FlagState.KILLED,
+  };
 
   public static getInstance(): RegisterAllocator {
     if (RegisterAllocator._instance) {
@@ -362,14 +362,14 @@ export class RegisterAllocator {
 
       const choice =
         this.canXmm &&
-          // second we need a free xmm
-          freeXmm &&
-          // then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
-          matchXD(spareVariableName)
+        // second we need a free xmm
+        freeXmm &&
+        // then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
+        matchXD(spareVariableName)
           ? // then we may ask Paul.
-          Paul.chooseSpillLocation(Model.operationByName(spareVariableName))
+            Paul.chooseSpillLocation(Model.operationByName(spareVariableName))
           : // fallback to
-          C_DI_SPILL_LOCATION.C_DI_MEM;
+            C_DI_SPILL_LOCATION.C_DI_MEM;
 
       if (choice == C_DI_SPILL_LOCATION.C_DI_MEM) {
         // if its worth to save, save it to mem.
@@ -846,7 +846,8 @@ export class RegisterAllocator {
 
     this.addToPreInstructions(
       Logger.log(
-        `; to calculate ${outVarname}, ill backup ${inVarname} from (${allocation.store
+        `; to calculate ${outVarname}, ill backup ${inVarname} from (${
+          allocation.store
         }) if it has deps. has it: ${hasDeps}: ${setToString(deps)}`,
       ) ?? "",
     );
@@ -868,8 +869,9 @@ export class RegisterAllocator {
         )}, current hard deps: ${setToString(Model.hardDependencies, 4)}`,
       );
       this._preInstructions.push(
-        `${inst} ${backupReg}, ${isByte && isMem(allocation.store) ? "byte " : ""}${allocation.store
-        };${comment ?? ""}`,
+        `${inst} ${backupReg}, ${isByte && isMem(allocation.store) ? "byte " : ""}${allocation.store};${
+          comment ?? ""
+        }`,
       );
       return backupReg;
     } else {
@@ -957,7 +959,8 @@ export class RegisterAllocator {
     }
     if (findings.length !== 0 || throwIfNotFound) {
       throw new Error(
-        `Tried to find the name of data being stored at ${storeNeedle}, but found ${findings.length
+        `Tried to find the name of data being stored at ${storeNeedle}, but found ${
+          findings.length
         }: ${JSON.stringify(findings)} instead of ONE in the current Allocations. TSNH. Abort.`,
       );
     } else {
@@ -1145,7 +1148,8 @@ export class RegisterAllocator {
       };
     }
     this._preInstructions.push(
-      `inc ${store}; OF<-0x0, preserve CF (debug 7; load -3, increase it, ${save ? "save it as -2" : "discard the information #workaround"
+      `inc ${store}; OF<-0x0, preserve CF (debug 7; load -3, increase it, ${
+        save ? "save it as -2" : "discard the information #workaround"
       }). #last resort`,
     );
 
@@ -1423,11 +1427,15 @@ export class RegisterAllocator {
     const post = ["ret"] as asm[];
     if (stacklength > 0) {
       // CALLER SAVE REGS must be placed at the end.
-      const stacksizeInBytes = stacklength * 8;
 
-      pre.push(`sub rsp, ${stacksizeInBytes}`);
+      // basically if we have any mov [ rsp + ...] (rather than [rsp - ...])
+      if (stacklength > STACK_OFFSET_IN_ELEMENTS) {
+        const stacksizeInBytes = stacklength * 8;
 
-      post.unshift(`add rsp, ${stacksizeInBytes}`);
+        pre.push(`sub rsp, ${stacksizeInBytes}`);
+
+        post.unshift(`add rsp, ${stacksizeInBytes}`);
+      }
       post.unshift(
         ...this.entriesAllocations
           .filter(([name]) => isCallerSave(name))
@@ -1435,7 +1443,11 @@ export class RegisterAllocator {
             const dest = name.split(CALLER_SAVE_PREFIX)[1]; // like rbp
             const src = allo.store; // like xmm0 or [rsp + 0x08]
             const instr = isXmmRegister(src) ? "movq" : "mov";
-            return `${instr} ${dest}, ${src}; pop`;
+            if (dest !== src) {
+              return `${instr} ${dest}, ${src}; pop`;
+            } else {
+              return `; ${src} is untouched.`;
+            }
           }),
       );
     }

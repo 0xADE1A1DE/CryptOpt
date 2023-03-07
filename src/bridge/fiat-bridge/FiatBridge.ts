@@ -203,18 +203,28 @@ export class FiatBridge implements Bridge {
       "--output-asm /dev/null",
     ].join(" ");
 
-    const hintstring = `--hints-file ${hintsFilename}`;
+    const stacksize = Math.max(
+      ...readFileSync(hintsFilename)
+        .toString()
+        .split("\n")
+        .map((line) => /mov .*, \[ rsp \+ ([0-9x]+) \].*/.exec(line)?.[1])
+        .filter((match) => typeof match !== undefined)
+        .map(Number),
+    );
+
+    const hint = `--hints-file ${hintsFilename}`;
+    const stack = `--asm-stack-size ${stacksize}`;
 
     switch (binary) {
       case BINS.dettman:
         CODE_PROOF_ARGS += ` --extra-rewrite-rule or-to-add`;
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function} ${hintstring}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function} ${hint} ${stack}`;
       case BINS.unsaturated:
         CODE_PROOF_ARGS += ` --tight-bounds-mul-by 1.000001`;
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${prime}' ${required_function} ${hintstring}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}'                '${prime}'              ${required_function} ${hint} ${stack}`;
       case BINS.wbw_montgomery:
       case BINS.solinas:
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'               '${prime}' ${required_function} ${hintstring}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'                              '${prime}'              ${required_function} ${hint} ${stack}`;
     }
   }
 
