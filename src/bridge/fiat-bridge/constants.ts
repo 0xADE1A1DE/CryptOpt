@@ -81,7 +81,7 @@ export const METHOD_DETAILS: {
       [BINS.unsaturated]: "carry_square",
       [BINS.wbw_montgomery]: "square",
       [BINS.solinas]: "square",
-      [BINS.dettman]: "square",
+      [BINS.dettman]: "", // not supported yet
     },
   },
 };

@@ -34,6 +34,7 @@ import {
   SHA256SUMS,
 } from "./constants";
 import { BINS } from "./enums";
+import { errorOut, ERRORS } from "@/errors";
 
 const cwd = resolve(datadir, "fiat-bridge");
 
@@ -167,6 +168,10 @@ export class FiatBridge implements Bridge {
     let cmd = "";
     switch (binary) {
       case BINS.dettman:
+        if (!required_function && method == "square") {
+          console.error("Currently, only 'mul' is supported when using the dettman implementation strategy");
+          errorOut(ERRORS.unsupportedParameterCombination);
+        }
         cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function}`;
         break;
       case BINS.unsaturated:

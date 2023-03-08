@@ -36,6 +36,10 @@ export const ERRORS: { [k: string]: Err } = {
     exitCode: 24,
     msg: "measuresuite.measure did yield data points, but could not be analyzed.",
   },
+  unsupportedParameterCombination: {
+    exitCode: 30,
+    msg: "the given combination of generating code with Fiat Cryptography is currently unsupported.",
+  },
   proofUnsuccessful: {
     exitCode: 50,
     msg: `Could not prove correct. Aborting mission. I repeat: Abort mission now.`,
