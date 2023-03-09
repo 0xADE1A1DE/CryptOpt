@@ -43,27 +43,30 @@ export const getInstruction = (o: CryptOpt.StringOperation): asm[] => {
     case "+":
     case "addcarryx": {
       RegisterAllocator.getInstance().initNewInstruction(o);
-      let comment =
-        Logger.log([
+      let comment = Logger.log(
+        [
           `\n`,
           `; add:`,
           `; ${RegisterAllocator.getInstance().flagStateString()}`,
           `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-add(${o.arguments.join(",")})`,
-        ].join("\n"));
-      comment ??= ""
+        ].join("\n"),
+      );
+      comment ??= "";
       const instructions = add(o);
 
       return [comment, ...RegisterAllocator.getInstance().pres, ...instructions];
     }
     case "subborrowx": {
       RegisterAllocator.getInstance().initNewInstruction(o);
-      let comment = Logger.log([
-        `\n`,
-        `; sub:`,
-        `; ${RegisterAllocator.getInstance().flagStateString()}`,
-        `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-sub(${o.arguments.join(",")})`,].join("\n")
+      let comment = Logger.log(
+        [
+          `\n`,
+          `; sub:`,
+          `; ${RegisterAllocator.getInstance().flagStateString()}`,
+          `; r:${o.name[0]},f:${o.name[1] ?? "_"}<-sub(${o.arguments.join(",")})`,
+        ].join("\n"),
       );
-      comment ??= ""
+      comment ??= "";
 
       const instructions = sub(o);
       return [comment, ...RegisterAllocator.getInstance().pres, ...instructions];

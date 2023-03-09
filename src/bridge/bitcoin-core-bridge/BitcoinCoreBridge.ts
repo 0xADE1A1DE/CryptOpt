@@ -48,8 +48,7 @@ export class BitcoinCoreBridge implements Bridge {
       .reduce(
         (acc, f) => {
           if (!existsSync(f)) {
-            console.error(ERRORS.bcbFail.msg);
-            process.exit(ERRORS.bcbFail.exitCode);
+            errorOut(ERRORS.bcbFail);
           }
           // read+Parse
           const parsed = JSON.parse(readFileSync(f).toString()) as Array<raw_T | structDef_T>;

@@ -29,7 +29,7 @@ import {
   rd,
   re,
   SI,
-  writeString
+  writeString,
 } from "@/helper";
 import { registerExitHooks } from "@/helper/process";
 import { Model } from "@/model";
@@ -58,13 +58,12 @@ if (!verbose) {
     // intentionally empty
   };
 }
-// Idea is: if you want debug messages, you want to compile with DEBUG and run with --verbose, 
+// Idea is: if you want debug messages, you want to compile with DEBUG and run with --verbose,
 // compile with DEBUG | run with --verbose | outcome
 //         0          |          0         |      no debug msg while running, and not in asm
 //         0          |          1         |      no debug msg while running, and not in asm
 //         1          |          0         |      no debug msg while running, but additional info in asm
 //         1          |          1         | many(!) debug msg while running, and not in asm
-
 
 // to get the symbol name, we create new anonymous optimizer.
 const symbolname = new Optimizer(parsedArgs).getSymbolname(true);

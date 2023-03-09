@@ -36,14 +36,6 @@ export const ERRORS: { [k: string]: Err } = {
     exitCode: 24,
     msg: "measuresuite.measure did yield data points, but could not be analyzed.",
   },
-  unsupportedParameterCombination: {
-    exitCode: 30,
-    msg: "the given combination of generating code with Fiat Cryptography is currently unsupported.",
-  },
-  proofUnsuccessful: {
-    exitCode: 50,
-    msg: `Could not prove correct. Aborting mission. I repeat: Abort mission now.`,
-  },
   bcbMakeFail: {
     exitCode: 30,
     msg: "While Executing `make` in bitcoin-core-bridge, there was an error.",
@@ -54,7 +46,15 @@ export const ERRORS: { [k: string]: Err } = {
   },
   parameterParseFail: {
     exitCode: 41,
-    msg: "A paramter from the command line could not be parsed.",
+    msg: "A parameter from the command line could not be parsed.",
+  },
+  proofUnsuccessful: {
+    exitCode: 50,
+    msg: `Could not prove correct. Aborting mission. I repeat: Abort mission now.`,
+  },
+  unsupportedParameterCombination: {
+    exitCode: 60,
+    msg: "the given combination of generating code with Fiat Cryptography is currently unsupported.",
   },
 };
 

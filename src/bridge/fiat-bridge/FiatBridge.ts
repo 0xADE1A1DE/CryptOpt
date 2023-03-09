@@ -17,6 +17,7 @@
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
+import { errorOut, ERRORS } from "@/errors";
 import { datadir, env, preprocessFunction, STACK_OFFSET_IN_ELEMENTS } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { sha256Hash } from "@/paul";
@@ -34,7 +35,6 @@ import {
   SHA256SUMS,
 } from "./constants";
 import { BINS } from "./enums";
-import { errorOut, ERRORS } from "@/errors";
 
 const cwd = resolve(datadir, "fiat-bridge");
 
