@@ -222,7 +222,6 @@ export class FiatBridge implements Bridge {
 
     switch (binary) {
       case BINS.dettman:
-        CODE_PROOF_ARGS += ` --extra-rewrite-rule or-to-add`;
         return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${prime}' ${required_function} ${hint} ${stack}`;
       case BINS.unsaturated:
         CODE_PROOF_ARGS += ` --tight-bounds-mul-by 1.000001`;
