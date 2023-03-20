@@ -34,7 +34,7 @@ export const AVAILABLE_CURVES = [
   "secp256k1_montgomery",
   "secp256k1_dettman",
 ];
-export const AVAILABLE_METHODS = ["square", "mul" /* currently unsupported "mul2" */, , "add", "sub"];
+export const AVAILABLE_METHODS = ["square", "mul" /* currently unsupported "mul2", */, "add", "sub"];
 
 export const METHOD_DETAILS: {
   [f in METHOD_T]: {
