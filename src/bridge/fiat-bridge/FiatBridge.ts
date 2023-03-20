@@ -17,7 +17,6 @@
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
-import { errorOut, ERRORS } from "@/errors";
 import { datadir, env, preprocessFunction, STACK_OFFSET_IN_ELEMENTS } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { sha256Hash } from "@/paul";
@@ -67,7 +66,7 @@ export class FiatBridge implements Bridge {
   }
 
   /**
-   * calls ./unsaturated_solinas or ./word_by_word_montgomery,
+   * calls ./unsaturated_solinas or ./word_by_word_montgomery, ...
    * obtains the JSON code and returns the parsed string of the specified @param method on @param curve
    */
   public getCryptOptFunction(method: METHOD_T, curve: CURVE_T): CryptOpt.Function {
@@ -145,7 +144,7 @@ export class FiatBridge implements Bridge {
     method: METHOD_T,
     lang: "C" | "JSON",
   ): { cmd: string; methodname: string; hash: string } {
-    const { limbwidth, magnitude, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
 
     const binWithPath = resolve(cwd, binary);
     FiatBridge.check(curve, method, binWithPath, lang);
@@ -168,18 +167,14 @@ export class FiatBridge implements Bridge {
     let cmd = "";
     switch (binary) {
       case BINS.dettman:
-        if (!required_function && method == "square") {
-          console.error("Currently, only 'mul' is supported when using the dettman implementation strategy");
-          errorOut(ERRORS.unsupportedParameterCombination);
-        }
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${prime}'  ${required_function}`;
         break;
       case BINS.unsaturated:
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}'                '${prime}'              ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}'                     '${prime}'  ${required_function}`;
         break;
       case BINS.wbw_montgomery:
       case BINS.solinas:
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'                              '${prime}'              ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'                                   '${prime}'  ${required_function}`;
         break;
     }
 
@@ -193,7 +188,7 @@ export class FiatBridge implements Bridge {
    */
 
   public static buildProofCommand(curve: CURVE_T, method: METHOD_T, hintsFilename: string): string {
-    const { limbwidth, magnitude, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
     const binWithPath = resolve(cwd, binary);
 
     FiatBridge.check(curve, method, binWithPath);
@@ -228,13 +223,13 @@ export class FiatBridge implements Bridge {
     switch (binary) {
       case BINS.dettman:
         CODE_PROOF_ARGS += ` --extra-rewrite-rule or-to-add`;
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${limbwidth}' '${prime}' ${magnitude} ${required_function} ${hint} ${stack}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${prime}' ${required_function} ${hint} ${stack}`;
       case BINS.unsaturated:
         CODE_PROOF_ARGS += ` --tight-bounds-mul-by 1.000001`;
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}'                '${prime}'              ${required_function} ${hint} ${stack}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}'                     '${prime}' ${required_function} ${hint} ${stack}`;
       case BINS.wbw_montgomery:
       case BINS.solinas:
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'                              '${prime}'              ${required_function} ${hint} ${stack}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'                                   '${prime}' ${required_function} ${hint} ${stack}`;
     }
   }
 

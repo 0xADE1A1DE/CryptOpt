@@ -52,10 +52,6 @@ export const ERRORS: { [k: string]: Err } = {
     exitCode: 50,
     msg: `Could not prove correct. Aborting mission. I repeat: Abort mission now.`,
   },
-  unsupportedParameterCombination: {
-    exitCode: 60,
-    msg: "the given combination of generating code with Fiat Cryptography is currently unsupported.",
-  },
 };
 
 export function errorOut(e: Err): never {

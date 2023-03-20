@@ -36,8 +36,8 @@ RUN curl -L https://github.com/0xADE1A1DE/AssemblyLine/releases/download/v${asml
 # get and install fiat-crypto
 RUN git clone --jobs 3 --recurse-submodules --single-branch https://github.com/mit-plv/fiat-crypto /root/fiat-crypto
 RUN cd /root/fiat-crypto && \
-        git checkout --recurse-submodules popl-2023-cryptopt-initial-submission && \
-        make -j2 -C /root/fiat-crypto standalone-ocaml
+        git checkout --recurse-submodules f9f0ed5bb6b440e646c5849362c67f7731be6186 && \
+        make -j -C /root/fiat-crypto standalone-ocaml
 
 # get and install CryptOpt
 RUN git clone --jobs 3 --recurse-submodules  https://github.com/0xADE1A1DE/CryptOpt /root/CryptOpt
@@ -49,8 +49,12 @@ WORKDIR /root/CryptOpt
 
 # get latest version of Fiat-Binaries
 RUN cd /root/CryptOpt/src/bridge/fiat-bridge/data && \
-        cp /root/fiat-crypto/src/ExtractionOCaml/unsaturated_solinas /root/fiat-crypto/src/ExtractionOCaml/word_by_word_montgomery . && \
-        sha256sum word_by_word_montgomery unsaturated_solinas > ./sha256sums
+        cp /root/fiat-crypto/src/ExtractionOCaml/unsaturated_solinas \
+        /root/fiat-crypto/src/ExtractionOCaml/word_by_word_montgomery \ 
+        /root/fiat-crypto/src/ExtractionOCaml/dettman_multiplication \ 
+        /root/fiat-crypto/src/ExtractionOCaml/solinas_reduction \ 
+        . && \ 
+        sha256sum word_by_word_montgomery unsaturated_solinas solinas_reduction dettman_multiplication > ./sha256sums
 
 # run the CryptOpt tests
 RUN make check -C /root/CryptOpt

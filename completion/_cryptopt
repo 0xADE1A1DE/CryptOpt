@@ -59,7 +59,7 @@ case "$state" in
   			'p448_solinas[p=2^448 - 2^224 - 1;                Unsaturated Solinas]' \
   			'p521[p=2^521 - 1;                        Unsaturated Solinas]' \
   			'poly1305[p=2^130 - 5;                        Unsaturated Solinas]' \
-  			'secp256k1[p=2^256 - 2^32 - 977;               Wbw Montgomery]' \
+  			'secp256k1_montgomery[p=2^256 - 2^32 - 977;               Wbw Montgomery]' \
   			'secp256k1_dettman[p=2^256 - 4294968273;               Unsaturated Dettman]' \
 		;;
 esac

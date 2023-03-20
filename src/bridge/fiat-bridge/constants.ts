@@ -31,7 +31,7 @@ export const AVAILABLE_CURVES = [
   "p448_solinas",
   "p521",
   "poly1305",
-  "secp256k1",
+  "secp256k1_montgomery",
   "secp256k1_dettman",
 ];
 export const AVAILABLE_METHODS = ["square", "mul", "mul2", "add", "sub"];
@@ -81,7 +81,7 @@ export const METHOD_DETAILS: {
       [BINS.unsaturated]: "carry_square",
       [BINS.wbw_montgomery]: "square",
       [BINS.solinas]: "square",
-      [BINS.dettman]: "", // not supported yet
+      [BINS.dettman]: "square",
     },
   },
 };
@@ -93,8 +93,7 @@ export const CURVE_DETAILS: {
     prime: string;
     binary: BINS;
     bounds: string[];
-    magnitude?: number; // only used in dettman
-    limbwidth?: number; // only used in dettman
+    last_limbwidth?: number; // only used in dettman
   };
 } = {
   curve25519: {
@@ -200,7 +199,7 @@ export const CURVE_DETAILS: {
     binary: BINS.unsaturated,
     bounds: ["0x300000000000", "0x180000000000", "0x180000000000"],
   },
-  secp256k1: {
+  secp256k1_montgomery: {
     argwidth: 4,
     bitwidth: 64,
     prime: "2^256 - 2^32 - 977",
@@ -212,8 +211,7 @@ export const CURVE_DETAILS: {
   secp256k1_dettman: {
     argwidth: 5,
     bitwidth: 64,
-    magnitude: 1,
-    limbwidth: 52,
+    last_limbwidth: 48,
     prime: "2^256 - 4294968273",
     binary: BINS.dettman,
     bounds: [
