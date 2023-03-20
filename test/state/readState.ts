@@ -31,7 +31,11 @@ vi.useFakeTimers();
 it("optimise", () => {
   return new Promise((resolve, reject) => {
     const dir = dirname(fileURLToPath(import.meta.url));
-    const statefile = pathResolve(dir, "./seed0000000688561254.json");
+
+    // Commented out, because currently mul2 not supported
+    // const statefile = pathResolve(dir, "./seed0000000688561254.json");
+
+    const statefile = pathResolve(dir, "./seed4435557851432120.json");
     const args = JSON.parse(readFileSync(statefile).toString()).parsedArgs;
     args.resultDir = getTestResultsPath();
     args.readState = statefile;
