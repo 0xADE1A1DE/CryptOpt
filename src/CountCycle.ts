@@ -70,7 +70,7 @@ function main() {
   let asmString: string | null = null;
   let symbol: string | undefined;
   if (fs.existsSync(param_one)) {
-    seed = Number(basename(param_one).match(/seed(?<seed>[0-9]+)_ratio(?<radio>[0-9])+\.asm/)?.groups?.seed);
+    seed = Number(basename(param_one).match(/seed(?<seed>[0-9]+)_ratio(?<ratio>[0-9])+\.asm/)?.groups?.seed);
 
     if (isNaN(seed)) {
       console.error("The filename is not in the right format. Must match /seed[0-9]+_ratio[0-9]+.asm/ .");
