@@ -34,7 +34,7 @@ export const parsedArgs = y
     string: true,
     alias: "c",
     default: "curve25519",
-    describe: `Curve to optimise a method on. Must be secp256k1, if @param bridge is 'bitcoin-core'.`,
+    describe: `Curve to optimise a method on. No applicable, if manual/bitcoin-core bridges are used.`,
     choices: FIAT_CURVES,
   })
   .option("method", {
@@ -171,9 +171,6 @@ export const parsedArgs = y
       }
     }
     if (bridge == "bitcoin-core") {
-      if (curve !== "secp256k1") {
-        throw new Error(`Bridge is bitcoin-core. The specified curve '${curve}' not 'secp256k1'.`);
-      }
       if (!BITCOIN_CORE_METHODS.includes(method)) {
         throw new Error(`Bridge is bitcoin-core. The specified method '${method}' not available.`);
       }
