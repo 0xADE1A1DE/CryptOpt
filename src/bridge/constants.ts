@@ -40,9 +40,10 @@ export const KNOWN_SYMBOLS: {
   fiat_p521_carry_square: { bridge: "fiat", method: "square", curve: "p521" },
   fiat_poly1305_carry_mul: { bridge: "fiat", method: "mul", curve: "poly1305" },
   fiat_poly1305_carry_square: { bridge: "fiat", method: "square", curve: "poly1305" },
-  fiat_secp256k1_mul: { bridge: "fiat", method: "mul", curve: "secp256k1" },
+  fiat_secp256k1_montgomery_mul: { bridge: "fiat", method: "mul", curve: "secp256k1" },
+  fiat_secp256k1_montgomery_square: { bridge: "fiat", method: "square", curve: "secp256k1" },
   fiat_secp256k1_dettman_mul: { bridge: "fiat", method: "mul", curve: "secp256k1_dettman" },
-  fiat_secp256k1_square: { bridge: "fiat", method: "square", curve: "secp256k1" },
+  fiat_secp256k1_dettman_square: { bridge: "fiat", method: "square", curve: "secp256k1_dettman" },
 
   // bitcoin curve
   secp256k1_fe_mul_inner: { bridge: "bitcoin-core", method: "mul", curve: "secp256k1" },
