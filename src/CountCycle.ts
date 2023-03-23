@@ -168,7 +168,7 @@ function createMS(
 
   if ([jsonFilename, cFilename].some((f) => !(f && fs.existsSync(f)))) {
     console.error(
-      "json and or c file names are invalid. Make sure that the first three parameters point to asm-file, c-file and json-file resp.",
+      `${symbol} is not known. Relying on json and C files. But: json and or c file names do not exist as file. Make sure that the first three parameters point to asm-file, c-file and json-file resp.`,
     );
     process.exit(-1);
   }

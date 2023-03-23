@@ -24,7 +24,9 @@ export const KNOWN_SYMBOLS: {
   fiat_curve25519_carry_mul: { bridge: "fiat", method: "mul", curve: "curve25519" },
   fiat_curve25519_carry_square: { bridge: "fiat", method: "square", curve: "curve25519" },
   fiat_curve25519_solinas_mul: { bridge: "fiat", method: "mul", curve: "curve25519_solinas" },
-  fiat_curve25519_solinas_mul2: { bridge: "fiat", method: "mul2", curve: "curve25519_solinas" },
+  /* currently not supported
+   * fiat_curve25519_solinas_mul2: { bridge: "fiat", method: "mul2", curve: "curve25519_solinas" },
+   */
   fiat_curve25519_solinas_square: { bridge: "fiat", method: "square", curve: "curve25519_solinas" },
   fiat_p224_mul: { bridge: "fiat", method: "mul", curve: "p224" },
   fiat_p224_square: { bridge: "fiat", method: "square", curve: "p224" },
@@ -40,8 +42,8 @@ export const KNOWN_SYMBOLS: {
   fiat_p521_carry_square: { bridge: "fiat", method: "square", curve: "p521" },
   fiat_poly1305_carry_mul: { bridge: "fiat", method: "mul", curve: "poly1305" },
   fiat_poly1305_carry_square: { bridge: "fiat", method: "square", curve: "poly1305" },
-  fiat_secp256k1_montgomery_mul: { bridge: "fiat", method: "mul", curve: "secp256k1" },
-  fiat_secp256k1_montgomery_square: { bridge: "fiat", method: "square", curve: "secp256k1" },
+  fiat_secp256k1_montgomery_mul: { bridge: "fiat", method: "mul", curve: "secp256k1_montgomery" },
+  fiat_secp256k1_montgomery_square: { bridge: "fiat", method: "square", curve: "secp256k1_montgomery" },
   fiat_secp256k1_dettman_mul: { bridge: "fiat", method: "mul", curve: "secp256k1_dettman" },
   fiat_secp256k1_dettman_square: { bridge: "fiat", method: "square", curve: "secp256k1_dettman" },
 
