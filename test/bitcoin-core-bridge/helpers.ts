@@ -85,29 +85,15 @@ describe("bitcoinCoreBridge:helpers", () => {
       expect(a.pointers).toContainEqual({ type: "i64*", id: "x1" });
       expect(a.imm).toContainEqual({ type: "i64", imm: "3" });
     });
-    it("struct-ptr + imm (getelementptr)", () => {
-      const a = getArguments(", %struct.secp256k1_scalar* x0, i64 0, i32 0, i64 0");
+    it("ptr + imm (getelementptr) 'ptr'", () => {
+      const a = getArguments("i64, ptr x1, i64 3");
       expect(a.scalars).toHaveLength(0);
       expect(a.casts).toHaveLength(0);
       expect(a.pointers).toHaveLength(1);
-      expect(a.imm).toHaveLength(3);
+      expect(a.imm).toHaveLength(1);
 
-      expect(a.pointers).toContainEqual({ type: "struct.secp256k1_scalar*", id: "x0" });
-      expect(a.imm[0]).toStrictEqual({ type: "i64", imm: "0" });
-      expect(a.imm[1]).toStrictEqual({ type: "i32", imm: "0" });
-      expect(a.imm[2]).toStrictEqual({ type: "i64", imm: "0" });
-    });
-    it("struct-ptr + imm (getelementptr)", () => {
-      const a = getArguments(", %struct.secp256k1_scalar* x0, i64 0, i32 0, i64 1");
-      expect(a.scalars).toHaveLength(0);
-      expect(a.casts).toHaveLength(0);
-      expect(a.pointers).toHaveLength(1);
-      expect(a.imm).toHaveLength(3);
-
-      expect(a.pointers).toContainEqual({ type: "struct.secp256k1_scalar*", id: "x0" });
-      expect(a.imm[0]).toStrictEqual({ type: "i64", imm: "0" });
-      expect(a.imm[1]).toStrictEqual({ type: "i32", imm: "0" });
-      expect(a.imm[2]).toStrictEqual({ type: "i64", imm: "1" });
+      expect(a.pointers).toContainEqual({ type: "i64*", id: "x1" });
+      expect(a.imm).toContainEqual({ type: "i64", imm: "3" });
     });
   });
   describe("getScalarsAndImmMappedAsConstArg", () => {

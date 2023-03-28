@@ -41,9 +41,16 @@ export function getArguments(s: string): argMatch {
         Object.entries(regexMap).forEach(([key, regex]) => {
           const g = regex.exec(s)?.groups;
           if (g) {
-            if (key == "pointers" && g?.type.startsWith("%struct")) {
-              g.type = g.type.replaceAll("%struct", "struct");
+            if (key == "pointers") {
+              if (g?.type.startsWith("%struct")) {
+                g.type = g.type.replaceAll("%struct", "struct");
+              }
+              if (g?.type == "ptr") {
+                // lets do this for consistency for now.
+                g.type = "i64*";
+              }
             }
+
             /* eslint-disable @typescript-eslint/no-explicit-any */
             acc[key as keyof argMatch].push(Object.assign({}, g as any)); // skip type checking here.
           }
