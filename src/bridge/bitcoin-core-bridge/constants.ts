@@ -16,7 +16,7 @@
 
 export type METHOD_T = (typeof AVAILABLE_METHODS)[number];
 
-export const AVAILABLE_METHODS = ["square", "mul", /* "reduce",*/ "scmul"];
+export const AVAILABLE_METHODS = ["square", "mul"];
 
 export const METHOD_DETAILS: {
   [f in METHOD_T]: {
@@ -29,13 +29,5 @@ export const METHOD_DETAILS: {
   },
   square: {
     name: "secp256k1_fe_sqr_inner",
-  },
-  /*
-  reduce: {
-    name: "secp256k1_scalar_reduce_512",
-  },
-  */
-  scmul: {
-    name: "secp256k1_scalar_mul_512",
   },
 };

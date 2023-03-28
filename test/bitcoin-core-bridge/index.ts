@@ -21,7 +21,12 @@ import { BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
 describe("bridge", () => {
   describe("bridge:getCryptOptFunction", () => {
     it("should only have every node once", () => {
-      const b = new BitcoinCoreBridge().getCryptOptFunction("scmul").body;
+      const b = new BitcoinCoreBridge().getCryptOptFunction("mul").body;
+      const set = new Set(b.map((n) => n.name[0]));
+      expect(b).toHaveLength(set.size);
+    });
+    it("should only have every node once", () => {
+      const b = new BitcoinCoreBridge().getCryptOptFunction("square").body;
       const set = new Set(b.map((n) => n.name[0]));
       expect(b).toHaveLength(set.size);
     });
