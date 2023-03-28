@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 import { execSync } from "child_process";
-import { existsSync, readFileSync } from "fs";
-import { groupBy } from "lodash-es";
+import { readFileSync } from "fs";
 import { resolve } from "path";
 
 import { errorOut, ERRORS } from "@/errors";
