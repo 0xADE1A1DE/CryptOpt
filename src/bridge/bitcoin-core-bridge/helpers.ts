@@ -16,7 +16,7 @@
 
 import type { CryptOpt } from "@/types";
 
-import type { PT, StructName } from "./raw.type";
+import type { PT } from "./raw.type";
 
 export type argMatch = {
   casts: Array<{ type: `i${number}` }>;
@@ -24,7 +24,7 @@ export type argMatch = {
   scalars: Array<{ type?: `i${number}`; id: `x${number}` }>;
   imm: Array<{ type: `i${number}`; imm: string }>;
 };
-export const pointerRegEx = /(?<type>((i\d+)|(%struct\.\w+))\*)\s+(?<id>x\d+)/;
+export const pointerRegEx = /(?<type>((i\d+)\*)|(ptr))\s+(?<id>x\d+)/;
 export function getArguments(s: string): argMatch {
   const regexMap = {
     casts: /to\s(?<type>i\d+)/,
@@ -67,8 +67,4 @@ export function getScalarsAndImmMappedAsConstArg(s: string): CryptOpt.ConstArgum
     return `${isNeg ? "-" : ""}0x${(isNeg ? bi * -1n : bi).toString(16)}` as CryptOpt.ConstArgument;
   });
   return scalarsAsConstArg.concat(immsAsConstArg);
-}
-
-export function isStructPointer(a: PT): a is `${StructName}*` {
-  return a.startsWith("struct.") && a.endsWith("*");
 }

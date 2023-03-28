@@ -49,8 +49,3 @@ export type raw_T = {
   returns: [{ datatype: PT; name: varName_T }];
   body: SSA[];
 };
-
-export type structDef_T = {
-  name: StructName;
-  definition: string;
-};

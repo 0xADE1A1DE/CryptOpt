@@ -17,11 +17,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it } from "vitest";
 
-import {
-  getArguments,
-  getScalarsAndImmMappedAsConstArg,
-  isStructPointer,
-} from "@/bridge/bitcoin-core-bridge/helpers";
+import { getArguments, getScalarsAndImmMappedAsConstArg } from "@/bridge/bitcoin-core-bridge/helpers";
 
 describe("bitcoinCoreBridge:helpers", () => {
   describe("getArguments", () => {
@@ -139,11 +135,5 @@ describe("bitcoinCoreBridge:helpers", () => {
       expect(r[0]).toBe("x243");
       expect(r[1]).toBe("-0x4551231950b75fc5");
     });
-  });
-  it("isStructPointer", () => {
-    expect(isStructPointer("struct.abc*")).toBe(true);
-    expect(isStructPointer("i64*")).toBe(false);
-    expect(isStructPointer("%struct.abc*" as any)).toBe(false);
-    expect(isStructPointer("i534.abc*" as any)).toBe(false);
   });
 });

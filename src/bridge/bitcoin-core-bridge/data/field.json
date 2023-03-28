@@ -2,7 +2,7 @@
   {
     "operation": "secp256k1_fe_mul_inner",
     "arguments": [
-      ", i64* nocapture readonly x1, i64* noalias nocapture readonly x2"
+      ", ptr nocapture noundef readonly x1, ptr noalias nocapture noundef readonly x2"
     ],
     "returns": [
       {
@@ -18,7 +18,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, align 8, !tbaa !5"
+        "arguments": "i64, ptr x1, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -27,7 +27,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, i64 1"
+        "arguments": "i64, ptr x1, i64 1"
       },
       {
         "name": [
@@ -36,7 +36,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x5, align 8, !tbaa !5"
+        "arguments": "i64, ptr x5, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -45,7 +45,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, i64 2"
+        "arguments": "i64, ptr x1, i64 2"
       },
       {
         "name": [
@@ -54,7 +54,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x7, align 8, !tbaa !5"
+        "arguments": "i64, ptr x7, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -63,7 +63,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, i64 3"
+        "arguments": "i64, ptr x1, i64 3"
       },
       {
         "name": [
@@ -72,7 +72,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x9, align 8, !tbaa !5"
+        "arguments": "i64, ptr x9, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -81,7 +81,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, i64 4"
+        "arguments": "i64, ptr x1, i64 4"
       },
       {
         "name": [
@@ -90,7 +90,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x11, align 8, !tbaa !5"
+        "arguments": "i64, ptr x11, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -108,7 +108,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x2, i64 3"
+        "arguments": "i64, ptr x2, i64 3"
       },
       {
         "name": [
@@ -117,7 +117,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x14, align 8, !tbaa !5"
+        "arguments": "i64, ptr x14, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -153,7 +153,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x2, i64 2"
+        "arguments": "i64, ptr x2, i64 2"
       },
       {
         "name": [
@@ -162,7 +162,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x19, align 8, !tbaa !5"
+        "arguments": "i64, ptr x19, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -207,7 +207,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x2, i64 1"
+        "arguments": "i64, ptr x2, i64 1"
       },
       {
         "name": [
@@ -216,7 +216,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x25, align 8, !tbaa !5"
+        "arguments": "i64, ptr x25, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -261,7 +261,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x2, align 8, !tbaa !5"
+        "arguments": "i64, ptr x2, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -306,7 +306,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x2, i64 4"
+        "arguments": "i64, ptr x2, i64 4"
       },
       {
         "name": [
@@ -315,7 +315,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x36, align 8, !tbaa !5"
+        "arguments": "i64, ptr x36, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -864,7 +864,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x0, i64 1"
+        "arguments": "i64, ptr x0, i64 1"
       },
       {
         "name": [
@@ -1035,7 +1035,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x0, i64 2"
+        "arguments": "i64, ptr x0, i64 2"
       },
       {
         "name": [
@@ -1116,7 +1116,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x0, i64 3"
+        "arguments": "i64, ptr x0, i64 3"
       },
       {
         "name": [
@@ -1170,7 +1170,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x0, i64 4"
+        "arguments": "i64, ptr x0, i64 4"
       },
       {
         "name": [
@@ -1186,7 +1186,7 @@
   {
     "operation": "secp256k1_fe_sqr_inner",
     "arguments": [
-      ", i64* nocapture readonly x1"
+      ", ptr nocapture noundef readonly x1"
     ],
     "returns": [
       {
@@ -1202,7 +1202,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, align 8, !tbaa !5"
+        "arguments": "i64, ptr x1, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -1211,7 +1211,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, i64 1"
+        "arguments": "i64, ptr x1, i64 1"
       },
       {
         "name": [
@@ -1220,7 +1220,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x4, align 8, !tbaa !5"
+        "arguments": "i64, ptr x4, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -1229,7 +1229,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, i64 2"
+        "arguments": "i64, ptr x1, i64 2"
       },
       {
         "name": [
@@ -1238,7 +1238,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x6, align 8, !tbaa !5"
+        "arguments": "i64, ptr x6, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -1247,7 +1247,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, i64 3"
+        "arguments": "i64, ptr x1, i64 3"
       },
       {
         "name": [
@@ -1256,7 +1256,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x8, align 8, !tbaa !5"
+        "arguments": "i64, ptr x8, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -1265,7 +1265,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x1, i64 4"
+        "arguments": "i64, ptr x1, i64 4"
       },
       {
         "name": [
@@ -1274,7 +1274,7 @@
         "operation": "load",
         "modifiers": "",
         "datatype": "i64",
-        "arguments": "i64, i64* x10, align 8, !tbaa !5"
+        "arguments": "i64, ptr x10, align 8, !tbaa !5"
       },
       {
         "name": [
@@ -1850,7 +1850,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x0, i64 1"
+        "arguments": "i64, ptr x0, i64 1"
       },
       {
         "name": [
@@ -1985,7 +1985,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x0, i64 2"
+        "arguments": "i64, ptr x0, i64 2"
       },
       {
         "name": [
@@ -2066,7 +2066,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x0, i64 3"
+        "arguments": "i64, ptr x0, i64 3"
       },
       {
         "name": [
@@ -2120,7 +2120,7 @@
         "operation": "getelementptr",
         "modifiers": "inbounds ",
         "datatype": "i64",
-        "arguments": "i64, i64* x0, i64 4"
+        "arguments": "i64, ptr x0, i64 4"
       },
       {
         "name": [

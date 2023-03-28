@@ -20,8 +20,8 @@ import { matchArgPrefix } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import type { Fiat } from "@/types";
 
-import { getArguments, isStructPointer } from "./helpers";
-import type { raw_T, SSA, structDef_T, StructName } from "./raw.type";
+import { getArguments } from "./helpers";
+import type { raw_T, SSA, StructName } from "./raw.type";
 import {
   transformAdd,
   transformAnd,
@@ -43,7 +43,7 @@ type A = Fiat.FiatFunction["arguments"][number];
 type R = Fiat.FiatFunction["returns"][number];
 type B = Fiat.FiatFunction["body"];
 export class BCBPreprocessor {
-  public constructor(private structDef: structDef_T[]) {}
+  public constructor() {}
 
   public preprocessRaw(raw: Readonly<raw_T>): Fiat.FiatFunction {
     Logger.log(`BCB: preprocessRaw'ing ${raw.operation}`);
@@ -163,14 +163,6 @@ export class BCBPreprocessor {
         // check if the name is part of the known structs.
 
         const p = pointers[0];
-
-        if (
-          isStructPointer(p.type) &&
-          !this.structDef.map(({ name }) => name).includes(p.type.split("*")[0] as StructName)
-        ) {
-          throw new Error("unknown struct pointer");
-        }
-
         needle = p.id; // x0
       }
       // because I know, currently all getelementptr s are from input, I don't bother checking recursively
@@ -250,7 +242,7 @@ export class BCBPreprocessor {
     returns: R[];
     body: B;
   } {
-    const UNUSED_MODIFIERS = ["nocapture", "noalias", "readonly"];
+    const UNUSED_MODIFIERS = ["nocapture", "noundef", "writeonly", "ptr", "noalias", "readonly"];
     // transform the arguments
     const args_ND = raw.arguments[0]
       .split(",")

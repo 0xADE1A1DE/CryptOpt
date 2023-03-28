@@ -27,7 +27,7 @@ import { lockAndRunOrReturn } from "../bridge.helper";
 import { Bridge } from "../bridge.interface";
 import { AVAILABLE_METHODS, METHOD_DETAILS, METHOD_T } from "./constants";
 import { BCBPreprocessor } from "./preprocess";
-import type { raw_T, structDef_T } from "./raw.type";
+import type { raw_T } from "./raw.type";
 
 const cwd = resolve(datadir, "bitcoin-core-bridge");
 
@@ -43,31 +43,7 @@ export class BitcoinCoreBridge implements Bridge {
       throw new Error(`unsupported method '${method}'. Choose from ${AVAILABLE_METHODS.join(", ")}.`);
     }
 
-    const [raw, structs] = ["field.json", "scalar.json"]
-      .map((f) => resolve(cwd, f))
-      .reduce(
-        (acc, f) => {
-          if (!existsSync(f)) {
-            errorOut(ERRORS.bcbFail);
-          }
-          // read+Parse
-          const parsed = JSON.parse(readFileSync(f).toString()) as Array<raw_T | structDef_T>;
-
-          // group to funcs and struct defs
-          const { structDef, func } = groupBy(parsed, (funcOrStructDef) =>
-            "definition" in funcOrStructDef ? "structDef" : "func",
-          );
-          if (func) {
-            acc[0].push(...(func as raw_T[]));
-          }
-          if (structDef) {
-            acc[1].push(...(structDef as structDef_T[]));
-          }
-
-          return acc;
-        },
-        [[], []] as [raw_T[], structDef_T[]],
-      );
+    const raw = JSON.parse(readFileSync(resolve(cwd, "field.json")).toString()) as Array<raw_T>;
 
     const found = raw.find(({ operation }) => operation == METHOD_DETAILS[method].name);
 
@@ -80,7 +56,7 @@ export class BitcoinCoreBridge implements Bridge {
     }
 
     // raw preprocessing (i.e. llvm->fiat)
-    const fiat = new BCBPreprocessor(structs).preprocessRaw(found);
+    const fiat = new BCBPreprocessor().preprocessRaw(found);
 
     // 'normal' preprocessing (fiat-> cryptopt)
     const cryptOpt = preprocessFunction(fiat);
