@@ -15,15 +15,15 @@ export enum CONF_IDX {
 
 export const ttable: [
   //                   alpha - confidence level
-  CONF_IDX.conf_09, // 0.9   - 10%
-  CONF_IDX.conf_05, // 0.5   - 50%
-  CONF_IDX.conf_03, // 0.3   - 70%
-  CONF_IDX.conf_02, // 0.2   - 80%
-  CONF_IDX.conf_01, // 0.1   - 90%
-  CONF_IDX.conf_005, //0.05  - 95%
-  CONF_IDX.conf_002, //0.02  - 98%
-  CONF_IDX.conf_001, //0.01  - 99%
-  CONF_IDX.conf_0001, //0.001- 99.9%
+  number, // CONF_IDX.conf_09,   0.9   - 10%
+  number, // CONF_IDX.conf_05,   0.5   - 50%
+  number, // CONF_IDX.conf_03,   0.3   - 70%
+  number, // CONF_IDX.conf_02,   0.2   - 80%
+  number, // CONF_IDX.conf_01,   0.1   - 90%
+  number, // CONF_IDX.conf_005,  0.05  - 95%
+  number, // CONF_IDX.conf_002,  0.02  - 98%
+  number, // CONF_IDX.conf_001,  0.01  - 99%
+  number, // CONF_IDX.conf_0001, 0.001 - 99.9%
 ][] = [
   [-1, -1, -1, -1, -1, -1, -1, -1, -1], // to align the others to the deg_freedom
   // confidence level
