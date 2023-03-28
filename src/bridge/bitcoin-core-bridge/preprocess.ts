@@ -43,8 +43,6 @@ type A = Fiat.FiatFunction["arguments"][number];
 type R = Fiat.FiatFunction["returns"][number];
 type B = Fiat.FiatFunction["body"];
 export class BCBPreprocessor {
-  public constructor() {}
-
   public preprocessRaw(raw: Readonly<raw_T>): Fiat.FiatFunction {
     Logger.log(`BCB: preprocessRaw'ing ${raw.operation}`);
     const fixed = this.fixArguments(raw);
