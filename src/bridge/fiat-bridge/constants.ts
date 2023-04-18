@@ -22,6 +22,8 @@ export type METHOD_T = (typeof AVAILABLE_METHODS)[number];
 export const SHA256SUMS = "sha256sums"; // the one created in the Makefile
 
 export const AVAILABLE_CURVES = [
+  "bls12_381_p",
+  "bls12_381_q",
   "curve25519",
   "curve25519_solinas",
   "p224",
@@ -97,6 +99,33 @@ export const CURVE_DETAILS: {
     last_limbwidth?: number; // only used in dettman
   };
 } = {
+  // https://github.com/zkcrypto/bls12_381#curve-description
+  bls12_381_p: {
+    argwidth: 6,
+    bitwidth: 64,
+    prime:
+      // z = -0xd201000000010000
+      // p = (z - 1)^2 (z^4 - z^2 + 1) / 3 + z
+      "(-0xd201000000010000 -1)^2 * ((-0xd201000000010000)^4 - (-0xd201000000010000)^2 + 1)/3 + (-0xd201000000010000)",
+    binary: BINS.wbw_montgomery,
+    bounds: [
+      "0xffffffffffffffff",
+      "0xffffffffffffffff",
+      "0xffffffffffffffff",
+      "0xffffffffffffffff",
+      "0xffffffffffffffff",
+      "0xffffffffffffffff",
+    ],
+  },
+  bls12_381_q: {
+    argwidth: 4,
+    bitwidth: 64,
+    // z = -0xd201000000010000
+    // q = z^4 - z^2 + 1
+    prime: "(-0xd201000000010000)^4 -(-0xd201000000010000)^2 + 1",
+    binary: BINS.wbw_montgomery,
+    bounds: ["0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff", "0xffffffffffffffff"],
+  },
   curve25519: {
     argwidth: 5,
     bitwidth: 64,
