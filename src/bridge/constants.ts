@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export const BRIDGES = ["fiat", "bitcoin-core", "manual"];
+export const BRIDGES = ["fiat", "jasmin", "bitcoin-core", "manual"];
 
 // currently used only in src/CountCycle
 export const KNOWN_SYMBOLS: {
