@@ -36,7 +36,7 @@ RUN curl -L https://github.com/0xADE1A1DE/AssemblyLine/releases/download/v${asml
 # get and install fiat-crypto
 RUN git clone --jobs 3 --recurse-submodules --single-branch https://github.com/mit-plv/fiat-crypto /root/fiat-crypto
 RUN cd /root/fiat-crypto && \
-        git checkout --recurse-submodules f9f0ed5bb6b440e646c5849362c67f7731be6186 && \
+        git checkout --recurse-submodules 3ee27a22d9a1858b44c6fdf1df0531291680e964 && \
         make -j -C /root/fiat-crypto standalone-ocaml
 
 # get and install CryptOpt
