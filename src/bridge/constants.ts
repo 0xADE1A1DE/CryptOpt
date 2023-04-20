@@ -20,7 +20,13 @@ export const BRIDGES = ["fiat", "jasmin", "bitcoin-core", "manual"];
 export const KNOWN_SYMBOLS: {
   [symbol: string]: { bridge: "fiat" | "bitcoin-core"; method: string; curve: string };
 } = {
-  // fiat curves
+  // fiat generated bls curves
+  fiat_bls12_381_p_mul: { bridge: "fiat", method: "mul", curve: "bls12_381_p" },
+  fiat_bls12_381_p_square: { bridge: "fiat", method: "square", curve: "bls12_381_p" },
+  fiat_bls12_381_q_mul: { bridge: "fiat", method: "mul", curve: "bls12_381_q" },
+  fiat_bls12_381_q_square: { bridge: "fiat", method: "square", curve: "bls12_381_q" },
+
+  // fiat default curves
   fiat_curve25519_carry_mul: { bridge: "fiat", method: "mul", curve: "curve25519" },
   fiat_curve25519_carry_square: { bridge: "fiat", method: "square", curve: "curve25519" },
   fiat_curve25519_solinas_mul: { bridge: "fiat", method: "mul", curve: "curve25519_solinas" },

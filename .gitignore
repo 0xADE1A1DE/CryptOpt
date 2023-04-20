@@ -9,3 +9,4 @@ coverage
 bundle.zip
 bundle.tar.gz
 demo
+src/bridge/fiat-bridge/data/sha256sums
