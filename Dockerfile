@@ -47,14 +47,6 @@ RUN cd /root/CryptOpt && \
 
 WORKDIR /root/CryptOpt
 
-# get latest version of Fiat-Binaries
-# RUN cd /root/CryptOpt/src/bridge/fiat-bridge/data && \
-#         cp /root/fiat-crypto/src/ExtractionOCaml/unsaturated_solinas \
-#         /root/fiat-crypto/src/ExtractionOCaml/word_by_word_montgomery \
-#         /root/fiat-crypto/src/ExtractionOCaml/dettman_multiplication \
-#         /root/fiat-crypto/src/ExtractionOCaml/solinas_reduction \
-#         . && \
-#         sha256sum word_by_word_montgomery unsaturated_solinas solinas_reduction dettman_multiplication > ./sha256sums
 
 # run the CryptOpt tests
 RUN make check -C /root/CryptOpt
