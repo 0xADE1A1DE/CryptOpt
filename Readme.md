@@ -1,92 +1,46 @@
-# CryptOpt
+![Unit Tests](https://github.com/0xADE1A1DE/CryptOpt/actions/workflows/check.yml/badge.svg) ![Code Style](https://github.com/0xADE1A1DE/CryptOpt/actions/workflows/ts-formatting.yml/badge.svg)
 
-![Unit Tests](https://github.com/0xADE1A1DE/CryptOpt/actions/workflows/check.yml/badge.svg)
-![Code Style](https://github.com/0xADE1A1DE/CryptOpt/actions/workflows/ts-formatting.yml/badge.svg)
+# CryptOpt: Verified Compilation with Random Program Search for Cryptographic Primitives
 
+CryptOpt is the result of a research project aiming to enhance the state-of-the-art of how we generate fast code for cryptographic primitives. 
+CryptOpt is an optimizer which feeds itself from [Fiat Cryptography](https://github.com/mit-plv/fiat-crypto), generates and optimized x86-64 Assembly for field arithmetic feeds that assembly back into Fiat Cryptography for end-to-end formal verification.
+With doing that, CryptOpt achieves much higher performance than GCC and Clang on many different micro-architectures, and in some cases even surpassing the performance hand-optimized assembly.
+
+The generated fast and verified assembly files are in the `fiat-amd64`-directory in the Fiat project, here the table from the research paper showcasing average speedups against GCC 12 / Clang 15 with respective highest optimization settings.
+
+### Geometric means of Speedup CryptOpt vs. off- the-shelf compilers.
+| Primitive   | Mul (Clang) | Mul (GCC)  | Square (Clang) | Square (GCC) |
+| Curve25519  | 1.25        | 1.16       | 1.18           | 1.17         |
+| P-224       | 1.54        | 2.52       | 1.40           | 2.56         |
+| P-256       | 1.70        | 2.61       | 1.63           | 2.59         |
+| P-384       | 1.45        | 2.49       | 1.37           | 2.51         |
+| SIKEp434    | 1.70        | 2.43       | 1.73           | 2.39         |
+| Curve448    | 1.19        | 0.98       | 1.07           | 1.05         |
+| P-521       | 1.30        | 0.97       | 1.35           | 1.03         |
+| Poly1305    | 1.12        | 1.22       | 1.11           | 1.26         |
+| secp256k1   | 1.80        | 2.62       | 1.71           | 2.54         |
+
+## Use CryptOpt
+
+If you want to optimize on your own machine, or a different primitive you can
 1. Follow the instructions [in the INSTALL document](./INSTALL.md).
 1. Run `./CryptOpt --help` to check if the installation worked.
 1. Run `./CryptOpt` to see an optimization in action.
+1. Follow the instructions [in the Frist Steps document](./First_Steps.md) to get a feeling of what is going on.
+
+The CryptOpt optimizer can also be used with non-Fiat Cryptography input. For more information see the `./test/manual-bridge/`
 
 ## Research Paper
 
-A preprint of the CryptOpt paper titled *CryptOpt: Compiling Cryptographic Primitives with High Performance and Formal Assurance* [is available here](./papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./papers/CryptOpt-preprint.bib).
-
-## Understand Output
-
-While optimizing, CryptOpt will output the current status of the optimization.
-Each line has this format:
-```
-fiat_curve25519_carry_square|1/10| 14|bs  181|#inst: 140|cyclΔ     70|G  58 cycl σ  0|B  59 cycl σ  0|L  55|l/g 0.9519| P|P[ -14/   0/  14/ -11]|D[MU/  1/ 31/ 59]| 90.0( 1%)  60/s
-```
-Lets break this down:
-
-Field                 |Example    | Comment
---|--|--
-Symbol                | `fiat_curve25519_carry_square`	| The symbol being optimized.
-Comment               | 1/10                            | Arbitrary comment. Usually used in Bet-n-run mode. Then, it means bet `1` from `10`, after that it'll say `run`.
-Stack size            | 14	                 	        | How many spills to memory there are. E.g. `6` for all spills of the six callee-saved registers
-Batch Size            | bs  181		                    | `BS` in the paper, How big is the batch. i.e. how many iterations of *Symbol* are counted
-Instr. Count          | #inst: 140		                | How many instructions are used to implement the *Symbol*
-Raw Cycle Delta       | cyclΔ     70		            | Measure both batches `nob=31` times, take difference of medians. (This is that delta). Based on this a mutation is kept or not.
-Cycles +stddev (good) | G  58 cycl σ  0		            | Number of cycles for the `good` candidate, scaled by `bs` i.e. per on *one* iteration. Also states the stdDev of the `nob` measurements
-Cycles +stddev (bad)  | B  59 cycl σ  0		            | Same, but for the `bad` candidate
-Cycles Library        | L  55		                    | Cycles that the CC-Compiled version takes
-Ratio                 | l/g 0.9519                      | Ratio of cycles lib / cycles good. i.e. 55 / 58 -> 0.9519 (uses the non-scaled counts) This is green if the ratio is `>1` which means that CryptOpt Code is faster than CC's.
-Mutation              |  P		                        | Which mutation has been applied. **P**ermuation or **D**ecision. (Permutation means mutation in operation order; Decision means which template to use, or how to load operands.)
-P-Mutation-Detail     | P[ -14/   0/  14/ -11]          | Details on last P-Mutation. [steps to go back / steps to go forward / absolute index of operation to move / applied relative movement ]
-D-Mutation-Detail     | D[MU/  1/ 31/ 59]		        | Details on last D-Mutation. [new chosen template / absolute index of operation to change decision / number of operations with changeable decisions / number of operations with decisions]
-Progress, speed       |  90.0( 1%)  60/s                | Number of the current Mutation, then in Percent, then how many mutations per second can be evaluated. This is green if the mutation is kept.
-
-More on the *D-Mutation*-Details:
-
-Template Short | Description
---|--
-AR | A different argument is loaded from memory
-KK | The flags `CF`/ `OF` flags are cleared differently
-FL | A different flag `CF`/ `OF` is used as an accumulator
-B& | For a binary-and a different instruction-template is used
-MU | For a multiplication-with-immediate a different instruction-template is used
-IM | A different immediate value is loaded
-SL | Spill location changed spill-to-memory <-> spill-to-xmm
+A preprint of the CryptOpt paper titled *CryptOpt: Verified Compilation with Random Program Search for Cryptographic Primitives* [is available here](./papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./papers/CryptOpt-preprint.bib).
 
 
-## Understand Output Files
+## Tracking usage of CryptOpt
 
-While Optimizing, CryptOpt will generate files in the `./results/<BRIDGE>/<SYMBOL>` folder (adjustable with `--resultDir` parameter to `./CryptOpt`).
+We have used CryptOpt to generate code for:
 
-CryptOpt writes out intermediate ASM-files whenever *it finishes a bet* and an additional file when finished the *run*.
-CryptOpt also generates the internal state (in `*.json` files) of the optimization for each *bet*-outcome.
-The directory also contains a `*.dat` (space separated) file with rows for every bet/run containing the `l/g` value every time it is printed to the terminal.
-From that `*.dat` file, the generated `*.gp` file will generate the `*.pdf` file, which shows the optimization in progress.
-Additionally, (currently WIP) there is a `*.csv` file logging all the mutations and which ones were kept.
-
-## Play around w/ Fiat
-
-We can give CryptOpt a wide range of parameters:
-
-Parameter    | default     | possible / typical values | description
--------------|-------------|---------------------------|----------
---bridge     | fiat        | fiat, bitcoin-core, manual| which *connection* i.e. input should be used.
---evals      | 10000       | 100, 1k, 100k, 1M         | `t`; How many mutations to evaluate
---curve      | curve25519  | curve25519, p224, p256, p384, p434, p448\_solinas, p521, poly1305, secp256k1 | which field - this determines the prime, the implementation strategy and number of limbs
---method     | square      | mul, square               | Method (i.e. function) to optimize. Multiply or Square
---cyclegoal  | 10000       | 1, 100, 100000            | How many cycles to measure, and adjust batch size `bs` accordingly
---bets       | 10          | 10, 30, 100               | How many 'bets' for the bet-and-run heuristic
---betRatio   | 0.2         | 0.1, 0.3                  | The share from parameter `--evals`, which are spent for all bets, in per cent (i.e. 0.2 means 20% of --evals will be used for the bet part, and 80% for the final run-part)
---resultDir  | ./results   | /tmp/myresults            | The directory under which `<BRIDGE>/<SYMBOL>` will be created and the result files will be stored
---no-proof   |             | --no-proof, --proof       | [dis\|en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
-
-For more information check `./CryptOpt --help`
-
-As next example, use `CC=clang ./CryptOpt --curve p256 --method mul --evals 10k` to generate an optimized version for NIST P-256 multiply and compare the function with `clang`-compiled version of the C-equivalent.
-
-## Play around w/ Bitcoin
-
-1. Run `./CryptOpt --bridge bitcoin-core --curve secp256k1 --method mul --bets 5`  
-This will try 5 different *bets* for the primitive *mul* of *libsecp256k1*.
-
-1. Find the result files (`*.asm`,`*.pdf`) for this run in `./results/bitcoin-core/secp256k1_fe_mul_inner/`
-
+1. `libsecp256k1`-compatible code (`./CryptOpt --curve secp256k1_dettman`)
+1. BLS12-381 Curves (`./CryptOpt --curve bls12_381_p`, `./CryptOpt --curve bls12_381_q`)
 
 ## Acknowledgements
 #### This project was supported by:  

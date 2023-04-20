@@ -36,7 +36,13 @@ node_modules:
 	@echo "Installing dependencies"
 	@CFLAGS="-I$(NODE_DIR)/include" PATH=$(PATH) npm $$(test -e ./package-lock.json && echo 'clean-install' || echo "install")
 
-$(BUILT_CRYPTOPT): $(NODE) node_modules $(shell find ./src -type f -name '*ts')
+FIAT_DATA_DIR=src/bridge/fiat-bridge/data
+FIAT_CHECKSUMS=$(FIAT_DATA_DIR)/sha256sums
+FIAT_BINARIES=unsaturated_solinas word_by_word_montgomery dettman_multiplication solinas_reduction
+$(FIAT_CHECKSUMS): $(addprefix $(FIAT_DATA_DIR)/, $(FIAT_BINARIES))
+	cd $(FIAT_DATA_DIR) && sha256sum $(FIAT_BINARIES) > $(notdir $(FIAT_CHECKSUMS))
+
+$(BUILT_CRYPTOPT): $(NODE) node_modules $(shell find ./src -type f -name '*ts') $(FIAT_CHECKSUMS)
 	@echo "Building CryptOpt"
 	@PATH=$(PATH) npm run bundle
 	@test -e "$(@)" && touch $(@) && echo "Successfully built CryptOpt. :)"
