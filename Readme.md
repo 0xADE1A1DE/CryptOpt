@@ -10,6 +10,7 @@ The generated fast and verified assembly files are in the `fiat-amd64`-directory
 
 ### Geometric means of Speedup CryptOpt vs. off- the-shelf compilers.
 | Primitive   | Mul (Clang) | Mul (GCC)  | Square (Clang) | Square (GCC) |
+|-------------|-------------|------------|----------------|--------------|
 | Curve25519  | 1.25        | 1.16       | 1.18           | 1.17         |
 | P-224       | 1.54        | 2.52       | 1.40           | 2.56         |
 | P-256       | 1.70        | 2.61       | 1.63           | 2.59         |
