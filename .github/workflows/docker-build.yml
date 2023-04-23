@@ -14,6 +14,11 @@ jobs:
 
     steps:
 
+    - name: env
+      run: 'echo ${ALLOW_DIFF}'
+      env: 
+        ALLOW_DIFF: 1
+
     - name: Build and push Docker images
       uses: docker/build-push-action@v4
       with:
