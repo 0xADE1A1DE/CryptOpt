@@ -68,7 +68,7 @@
     "rollup-plugin-shell": "^1.0.9",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
-    "vite": "^4.2.2",
+    "vite": "^4.3.1",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.30.1"
   },
