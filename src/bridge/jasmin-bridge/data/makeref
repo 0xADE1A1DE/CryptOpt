@@ -1,0 +1,2625 @@
+/* -------------------------------------------------------------------- */
+/* After add assignments before and after call to ensure that arguments and results are ref ptr */
+
+
+export
+fn add_doubl4 (reg u64 pr.856, reg u64 pinit.857, reg u64 px2.858,
+              reg u64 pz2.859, reg u64 px3.860, reg u64 pz3.861) -> () {
+  stack u64 pr_s.4978;
+  stack u64[4] i_z3.4979;
+  stack u64[4] i_x3.4980;
+  stack u64[4] i_x2.4981;
+  stack u64[4] i_init.4982;
+  reg u64 f#0.4983;
+  reg u64 f#1.4984;
+  reg u64 f#2.4985;
+  reg u64 f#3.4986;
+  stack u64[4] init.4987;
+  stack u64[4] x2.4988;
+  stack u64[4] x3.4989;
+  stack u64[4] z3.4990;
+  stack u64[4] fs.4991;
+  stack u64[4] fs.4992;
+  reg bool _of_.4993;
+  reg bool _cf_.4994;
+  reg bool _sf_.4995;
+  reg bool _zf_.4996;
+  reg u64 z.4997;
+  reg u64 h#0.4998;
+  reg u64 h#1.4999;
+  reg u64 h#2.5000;
+  reg u64 h#3.5001;
+  reg bool cf.5002;
+  reg u64 h#0.5003;
+  reg bool cf.5004;
+  reg u64 h#1.5005;
+  reg bool cf.5006;
+  reg u64 h#2.5007;
+  reg bool cf.5008;
+  reg u64 h#3.5009;
+  reg u64 z.5010;
+  reg u64 z.5011;
+  reg bool cf.5012;
+  reg u64 h#0.5013;
+  reg bool cf.5014;
+  reg u64 h#1.5015;
+  reg bool cf.5016;
+  reg u64 h#2.5017;
+  reg bool cf.5018;
+  reg u64 h#3.5019;
+  reg u64 z.5020;
+  reg u64 z.5021;
+  reg u64 h#0.5022;
+  stack u64[4] hs.5023;
+  stack u64[4] t0.5024;
+  stack u64[4] fs.5025;
+  stack u64[4] g.5026;
+  reg bool _of_.5027;
+  reg bool _cf_.5028;
+  reg bool _sf_.5029;
+  reg bool _zf_.5030;
+  reg u64 z.5031;
+  reg u64 h#0.5032;
+  reg u64 h#1.5033;
+  reg u64 h#2.5034;
+  reg u64 h#3.5035;
+  reg bool cf.5036;
+  reg u64 h#0.5037;
+  reg bool cf.5038;
+  reg u64 h#1.5039;
+  reg bool cf.5040;
+  reg u64 h#2.5041;
+  reg bool cf.5042;
+  reg u64 h#3.5043;
+  reg u64 z.5044;
+  reg u64 z.5045;
+  reg bool cf.5046;
+  reg u64 h#0.5047;
+  reg bool cf.5048;
+  reg u64 h#1.5049;
+  reg bool cf.5050;
+  reg u64 h#2.5051;
+  reg bool cf.5052;
+  reg u64 h#3.5053;
+  reg u64 z.5054;
+  reg u64 z.5055;
+  reg u64 h#0.5056;
+  stack u64[4] hs.5057;
+  stack u64[4] x2.5058;
+  stack u64[4] fs.5059;
+  stack u64[4] gs.5060;
+  reg u64 f#0.5061;
+  reg u64 f#1.5062;
+  reg u64 f#2.5063;
+  reg u64 f#3.5064;
+  stack u64[4] gs.5065;
+  reg bool _of_.5066;
+  reg bool _cf_.5067;
+  reg bool _sf_.5068;
+  reg bool _zf_.5069;
+  reg u64 z.5070;
+  reg u64 h#0.5071;
+  reg u64 h#1.5072;
+  reg u64 h#2.5073;
+  reg u64 h#3.5074;
+  reg bool cf.5075;
+  reg u64 h#0.5076;
+  reg bool cf.5077;
+  reg u64 h#1.5078;
+  reg bool cf.5079;
+  reg u64 h#2.5080;
+  reg bool cf.5081;
+  reg u64 h#3.5082;
+  reg u64 z.5083;
+  reg u64 z.5084;
+  reg bool cf.5085;
+  reg u64 h#0.5086;
+  reg bool cf.5087;
+  reg u64 h#1.5088;
+  reg bool cf.5089;
+  reg u64 h#2.5090;
+  reg bool cf.5091;
+  reg u64 h#3.5092;
+  reg u64 z.5093;
+  reg u64 z.5094;
+  reg u64 h#0.5095;
+  stack u64[4] hs.5096;
+  stack u64[4] t1.5097;
+  stack u64[4] fs.5098;
+  stack u64[4] gs.5099;
+  reg u64 f#0.5100;
+  reg u64 f#1.5101;
+  reg u64 f#2.5102;
+  reg u64 f#3.5103;
+  stack u64[4] g.5104;
+  reg bool _of_.5105;
+  reg bool _cf_.5106;
+  reg bool _sf_.5107;
+  reg bool _zf_.5108;
+  reg u64 z.5109;
+  reg u64 h#0.5110;
+  reg u64 h#1.5111;
+  reg u64 h#2.5112;
+  reg u64 h#3.5113;
+  reg bool cf.5114;
+  reg u64 h#0.5115;
+  reg bool cf.5116;
+  reg u64 h#1.5117;
+  reg bool cf.5118;
+  reg u64 h#2.5119;
+  reg bool cf.5120;
+  reg u64 h#3.5121;
+  reg u64 z.5122;
+  reg u64 z.5123;
+  reg bool cf.5124;
+  reg u64 h#0.5125;
+  reg bool cf.5126;
+  reg u64 h#1.5127;
+  reg bool cf.5128;
+  reg u64 h#2.5129;
+  reg bool cf.5130;
+  reg u64 h#3.5131;
+  reg u64 z.5132;
+  reg u64 z.5133;
+  reg u64 h#0.5134;
+  stack u64[4] hs.5135;
+  stack u64[4] z2.5136;
+  stack u64[4] fs.5137;
+  stack u64[4] gs.5138;
+  reg u64 g#0.5139;
+  reg u64 g#1.5140;
+  reg u64 g#2.5141;
+  reg u64 g#3.5142;
+  stack u64[4] fs.5143;
+  reg bool of.5144;
+  reg bool cf.5145;
+  reg u64 z.5146;
+  reg u64 f0.5147;
+  reg u64 h#1.5148;
+  reg u64 h#0.5149;
+  reg u64 h#2.5150;
+  reg u64 lo.5151;
+  reg bool cf.5152;
+  reg u64 h#1.5153;
+  reg u64 h#3.5154;
+  reg u64 lo.5155;
+  reg bool cf.5156;
+  reg u64 h#2.5157;
+  reg u64 r#0.5158;
+  reg u64 lo.5159;
+  reg bool cf.5160;
+  reg u64 h#3.5161;
+  reg bool cf.5162;
+  reg u64 r#0.5163;
+  reg u64 f.5164;
+  reg u64 hi.5165;
+  reg u64 lo.5166;
+  reg bool of.5167;
+  reg u64 h#1.5168;
+  reg bool cf.5169;
+  reg u64 h#2.5170;
+  reg u64 hi.5171;
+  reg u64 lo.5172;
+  reg bool of.5173;
+  reg u64 h#2.5174;
+  reg bool cf.5175;
+  reg u64 h#3.5176;
+  reg u64 hi.5177;
+  reg u64 lo.5178;
+  reg bool of.5179;
+  reg u64 h#3.5180;
+  reg bool cf.5181;
+  reg u64 r#0.5182;
+  reg u64 r#1.5183;
+  reg u64 lo.5184;
+  reg bool of.5185;
+  reg u64 r#0.5186;
+  reg bool cf.5187;
+  reg u64 r#1.5188;
+  reg bool of.5189;
+  reg u64 r#1.5190;
+  reg u64 f.5191;
+  reg u64 hi.5192;
+  reg u64 lo.5193;
+  reg bool of.5194;
+  reg u64 h#2.5195;
+  reg bool cf.5196;
+  reg u64 h#3.5197;
+  reg u64 hi.5198;
+  reg u64 lo.5199;
+  reg bool of.5200;
+  reg u64 h#3.5201;
+  reg bool cf.5202;
+  reg u64 r#0.5203;
+  reg u64 hi.5204;
+  reg u64 lo.5205;
+  reg bool of.5206;
+  reg u64 r#0.5207;
+  reg bool cf.5208;
+  reg u64 r#1.5209;
+  reg u64 r#2.5210;
+  reg u64 lo.5211;
+  reg bool of.5212;
+  reg u64 r#1.5213;
+  reg bool cf.5214;
+  reg u64 r#2.5215;
+  reg bool of.5216;
+  reg u64 r#2.5217;
+  reg u64 f.5218;
+  reg u64 hi.5219;
+  reg u64 lo.5220;
+  reg bool of.5221;
+  reg u64 h#3.5222;
+  reg bool cf.5223;
+  reg u64 r#0.5224;
+  reg u64 hi.5225;
+  reg u64 lo.5226;
+  reg bool of.5227;
+  reg u64 r#0.5228;
+  reg bool cf.5229;
+  reg u64 r#1.5230;
+  reg u64 hi.5231;
+  reg u64 lo.5232;
+  reg bool of.5233;
+  reg u64 r#1.5234;
+  reg bool cf.5235;
+  reg u64 r#2.5236;
+  reg u64 r#3.5237;
+  reg u64 lo.5238;
+  reg bool of.5239;
+  reg u64 r#2.5240;
+  reg bool cf.5241;
+  reg u64 r#3.5242;
+  reg bool of.5243;
+  reg u64 r#3.5244;
+  reg u64 _38.5245;
+  reg u64 hi.5246;
+  reg u64 lo.5247;
+  reg bool of.5248;
+  reg u64 h#0.5249;
+  reg bool cf.5250;
+  reg u64 h#1.5251;
+  reg u64 hi.5252;
+  reg u64 lo.5253;
+  reg bool of.5254;
+  reg u64 h#1.5255;
+  reg bool cf.5256;
+  reg u64 h#2.5257;
+  reg u64 hi.5258;
+  reg u64 lo.5259;
+  reg bool of.5260;
+  reg u64 h#2.5261;
+  reg bool cf.5262;
+  reg u64 h#3.5263;
+  reg u64 r#0.5264;
+  reg u64 lo.5265;
+  reg bool of.5266;
+  reg u64 h#3.5267;
+  reg bool cf.5268;
+  reg u64 r#0.5269;
+  reg bool of.5270;
+  reg u64 r#0.5271;
+  reg u64 lo.5272;
+  reg bool cf.5273;
+  reg u64 h#0.5274;
+  reg bool cf.5275;
+  reg u64 h#1.5276;
+  reg bool cf.5277;
+  reg u64 h#2.5278;
+  reg bool cf.5279;
+  reg u64 h#3.5280;
+  reg u64 z.5281;
+  reg u64 z.5282;
+  reg u64 h#0.5283;
+  stack u64[4] hs.5284;
+  stack u64[4] z3.5285;
+  stack u64[4] fs.5286;
+  stack u64[4] gs.5287;
+  reg u64 g#0.5288;
+  reg u64 g#1.5289;
+  reg u64 g#2.5290;
+  reg u64 g#3.5291;
+  stack u64[4] fs.5292;
+  reg bool of.5293;
+  reg bool cf.5294;
+  reg u64 z.5295;
+  reg u64 f0.5296;
+  reg u64 h#1.5297;
+  reg u64 h#0.5298;
+  reg u64 h#2.5299;
+  reg u64 lo.5300;
+  reg bool cf.5301;
+  reg u64 h#1.5302;
+  reg u64 h#3.5303;
+  reg u64 lo.5304;
+  reg bool cf.5305;
+  reg u64 h#2.5306;
+  reg u64 r#0.5307;
+  reg u64 lo.5308;
+  reg bool cf.5309;
+  reg u64 h#3.5310;
+  reg bool cf.5311;
+  reg u64 r#0.5312;
+  reg u64 f.5313;
+  reg u64 hi.5314;
+  reg u64 lo.5315;
+  reg bool of.5316;
+  reg u64 h#1.5317;
+  reg bool cf.5318;
+  reg u64 h#2.5319;
+  reg u64 hi.5320;
+  reg u64 lo.5321;
+  reg bool of.5322;
+  reg u64 h#2.5323;
+  reg bool cf.5324;
+  reg u64 h#3.5325;
+  reg u64 hi.5326;
+  reg u64 lo.5327;
+  reg bool of.5328;
+  reg u64 h#3.5329;
+  reg bool cf.5330;
+  reg u64 r#0.5331;
+  reg u64 r#1.5332;
+  reg u64 lo.5333;
+  reg bool of.5334;
+  reg u64 r#0.5335;
+  reg bool cf.5336;
+  reg u64 r#1.5337;
+  reg bool of.5338;
+  reg u64 r#1.5339;
+  reg u64 f.5340;
+  reg u64 hi.5341;
+  reg u64 lo.5342;
+  reg bool of.5343;
+  reg u64 h#2.5344;
+  reg bool cf.5345;
+  reg u64 h#3.5346;
+  reg u64 hi.5347;
+  reg u64 lo.5348;
+  reg bool of.5349;
+  reg u64 h#3.5350;
+  reg bool cf.5351;
+  reg u64 r#0.5352;
+  reg u64 hi.5353;
+  reg u64 lo.5354;
+  reg bool of.5355;
+  reg u64 r#0.5356;
+  reg bool cf.5357;
+  reg u64 r#1.5358;
+  reg u64 r#2.5359;
+  reg u64 lo.5360;
+  reg bool of.5361;
+  reg u64 r#1.5362;
+  reg bool cf.5363;
+  reg u64 r#2.5364;
+  reg bool of.5365;
+  reg u64 r#2.5366;
+  reg u64 f.5367;
+  reg u64 hi.5368;
+  reg u64 lo.5369;
+  reg bool of.5370;
+  reg u64 h#3.5371;
+  reg bool cf.5372;
+  reg u64 r#0.5373;
+  reg u64 hi.5374;
+  reg u64 lo.5375;
+  reg bool of.5376;
+  reg u64 r#0.5377;
+  reg bool cf.5378;
+  reg u64 r#1.5379;
+  reg u64 hi.5380;
+  reg u64 lo.5381;
+  reg bool of.5382;
+  reg u64 r#1.5383;
+  reg bool cf.5384;
+  reg u64 r#2.5385;
+  reg u64 r#3.5386;
+  reg u64 lo.5387;
+  reg bool of.5388;
+  reg u64 r#2.5389;
+  reg bool cf.5390;
+  reg u64 r#3.5391;
+  reg bool of.5392;
+  reg u64 r#3.5393;
+  reg u64 _38.5394;
+  reg u64 hi.5395;
+  reg u64 lo.5396;
+  reg bool of.5397;
+  reg u64 h#0.5398;
+  reg bool cf.5399;
+  reg u64 h#1.5400;
+  reg u64 hi.5401;
+  reg u64 lo.5402;
+  reg bool of.5403;
+  reg u64 h#1.5404;
+  reg bool cf.5405;
+  reg u64 h#2.5406;
+  reg u64 hi.5407;
+  reg u64 lo.5408;
+  reg bool of.5409;
+  reg u64 h#2.5410;
+  reg bool cf.5411;
+  reg u64 h#3.5412;
+  reg u64 r#0.5413;
+  reg u64 lo.5414;
+  reg bool of.5415;
+  reg u64 h#3.5416;
+  reg bool cf.5417;
+  reg u64 r#0.5418;
+  reg bool of.5419;
+  reg u64 r#0.5420;
+  reg u64 lo.5421;
+  reg bool cf.5422;
+  reg u64 h#0.5423;
+  reg bool cf.5424;
+  reg u64 h#1.5425;
+  reg bool cf.5426;
+  reg u64 h#2.5427;
+  reg bool cf.5428;
+  reg u64 h#3.5429;
+  reg u64 z.5430;
+  reg u64 z.5431;
+  reg u64 h#0.5432;
+  stack u64[4] hs.5433;
+  stack u64[4] z2.5434;
+  stack u64[4] fs.5435;
+  reg u64 f#0.5436;
+  reg u64 f#1.5437;
+  reg u64 f#2.5438;
+  reg u64 f#3.5439;
+  reg bool of.5440;
+  reg bool cf.5441;
+  reg u64 z.5442;
+  reg u64 fx.5443;
+  reg u64 t#1.5444;
+  reg u64 h#0.5445;
+  reg u64 h#2.5446;
+  reg u64 h#1.5447;
+  reg u64 h#3.5448;
+  reg u64 t#2.5449;
+  reg bool cf.5450;
+  reg u64 h#2.5451;
+  reg u64 r#0.5452;
+  reg u64 t#3.5453;
+  reg bool cf.5454;
+  reg u64 h#3.5455;
+  reg u64 fx.5456;
+  reg u64 t#4.5457;
+  reg u64 t#3.5458;
+  reg bool of.5459;
+  reg u64 h#3.5460;
+  reg bool cf.5461;
+  reg u64 r#0.5462;
+  reg u64 r#1.5463;
+  reg u64 t#4.5464;
+  reg bool of.5465;
+  reg u64 r#0.5466;
+  reg u64 t#3.5467;
+  reg u64 t#2.5468;
+  reg u64 fx.5469;
+  reg u64 r#2.5470;
+  reg u64 t#5.5471;
+  reg bool cf.5472;
+  reg u64 r#1.5473;
+  reg bool of.5474;
+  reg u64 r#1.5475;
+  reg bool cf.5476;
+  reg u64 r#2.5477;
+  reg bool of.5478;
+  reg u64 r#2.5479;
+  reg u64 t#5.5480;
+  reg u64 t#4.5481;
+  reg u64 fx.5482;
+  reg u64 r#3.5483;
+  reg u64 t#6.5484;
+  reg bool cf.5485;
+  reg u64 h#1.5486;
+  reg bool of.5487;
+  reg u64 h#1.5488;
+  reg bool cf.5489;
+  reg u64 h#2.5490;
+  reg bool of.5491;
+  reg u64 h#2.5492;
+  reg bool cf.5493;
+  reg u64 h#3.5494;
+  reg bool of.5495;
+  reg u64 h#3.5496;
+  reg bool cf.5497;
+  reg u64 r#0.5498;
+  reg bool of.5499;
+  reg u64 r#0.5500;
+  reg bool cf.5501;
+  reg u64 r#1.5502;
+  reg bool of.5503;
+  reg u64 r#1.5504;
+  reg bool cf.5505;
+  reg u64 r#2.5506;
+  reg bool of.5507;
+  reg u64 r#2.5508;
+  reg bool cf.5509;
+  reg u64 r#3.5510;
+  reg bool of.5511;
+  reg u64 r#3.5512;
+  reg u64 _38.5513;
+  reg u64 hi.5514;
+  reg u64 lo.5515;
+  reg bool of.5516;
+  reg u64 h#0.5517;
+  reg bool cf.5518;
+  reg u64 h#1.5519;
+  reg u64 hi.5520;
+  reg u64 lo.5521;
+  reg bool of.5522;
+  reg u64 h#1.5523;
+  reg bool cf.5524;
+  reg u64 h#2.5525;
+  reg u64 hi.5526;
+  reg u64 lo.5527;
+  reg bool of.5528;
+  reg u64 h#2.5529;
+  reg bool cf.5530;
+  reg u64 h#3.5531;
+  reg u64 r#0.5532;
+  reg u64 lo.5533;
+  reg bool of.5534;
+  reg u64 h#3.5535;
+  reg bool cf.5536;
+  reg u64 r#0.5537;
+  reg bool of.5538;
+  reg u64 r#0.5539;
+  reg u64 lo.5540;
+  reg bool cf.5541;
+  reg u64 h#0.5542;
+  reg bool cf.5543;
+  reg u64 h#1.5544;
+  reg bool cf.5545;
+  reg u64 h#2.5546;
+  reg bool cf.5547;
+  reg u64 h#3.5548;
+  reg u64 z.5549;
+  reg u64 z.5550;
+  reg u64 h#0.5551;
+  stack u64[4] hs.5552;
+  stack u64[4] t2.5553;
+  stack u64[4] fs.5554;
+  reg u64 f#0.5555;
+  reg u64 f#1.5556;
+  reg u64 f#2.5557;
+  reg u64 f#3.5558;
+  reg bool of.5559;
+  reg bool cf.5560;
+  reg u64 z.5561;
+  reg u64 fx.5562;
+  reg u64 t#1.5563;
+  reg u64 t1r#0.5564;
+  reg u64 t1r#2.5565;
+  reg u64 t1r#1.5566;
+  reg u64 t1r#3.5567;
+  reg u64 t#2.5568;
+  reg bool cf.5569;
+  reg u64 t1r#2.5570;
+  reg u64 r#0.5571;
+  reg u64 t#3.5572;
+  reg bool cf.5573;
+  reg u64 t1r#3.5574;
+  reg u64 fx.5575;
+  reg u64 t#4.5576;
+  reg u64 t#3.5577;
+  reg bool of.5578;
+  reg u64 t1r#3.5579;
+  reg bool cf.5580;
+  reg u64 r#0.5581;
+  reg u64 r#1.5582;
+  reg u64 t#4.5583;
+  reg bool of.5584;
+  reg u64 r#0.5585;
+  reg u64 t#3.5586;
+  reg u64 t#2.5587;
+  reg u64 fx.5588;
+  reg u64 r#2.5589;
+  reg u64 t#5.5590;
+  reg bool cf.5591;
+  reg u64 r#1.5592;
+  reg bool of.5593;
+  reg u64 r#1.5594;
+  reg bool cf.5595;
+  reg u64 r#2.5596;
+  reg bool of.5597;
+  reg u64 r#2.5598;
+  reg u64 t#5.5599;
+  reg u64 t#4.5600;
+  reg u64 fx.5601;
+  reg u64 r#3.5602;
+  reg u64 t#6.5603;
+  reg bool cf.5604;
+  reg u64 t1r#1.5605;
+  reg bool of.5606;
+  reg u64 t1r#1.5607;
+  reg bool cf.5608;
+  reg u64 t1r#2.5609;
+  reg bool of.5610;
+  reg u64 t1r#2.5611;
+  reg bool cf.5612;
+  reg u64 t1r#3.5613;
+  reg bool of.5614;
+  reg u64 t1r#3.5615;
+  reg bool cf.5616;
+  reg u64 r#0.5617;
+  reg bool of.5618;
+  reg u64 r#0.5619;
+  reg bool cf.5620;
+  reg u64 r#1.5621;
+  reg bool of.5622;
+  reg u64 r#1.5623;
+  reg bool cf.5624;
+  reg u64 r#2.5625;
+  reg bool of.5626;
+  reg u64 r#2.5627;
+  reg bool cf.5628;
+  reg u64 r#3.5629;
+  reg bool of.5630;
+  reg u64 r#3.5631;
+  reg u64 _38.5632;
+  reg u64 hi.5633;
+  reg u64 lo.5634;
+  reg bool of.5635;
+  reg u64 t1r#0.5636;
+  reg bool cf.5637;
+  reg u64 t1r#1.5638;
+  reg u64 hi.5639;
+  reg u64 lo.5640;
+  reg bool of.5641;
+  reg u64 t1r#1.5642;
+  reg bool cf.5643;
+  reg u64 t1r#2.5644;
+  reg u64 hi.5645;
+  reg u64 lo.5646;
+  reg bool of.5647;
+  reg u64 t1r#2.5648;
+  reg bool cf.5649;
+  reg u64 t1r#3.5650;
+  reg u64 r#0.5651;
+  reg u64 lo.5652;
+  reg bool of.5653;
+  reg u64 t1r#3.5654;
+  reg bool cf.5655;
+  reg u64 r#0.5656;
+  reg bool of.5657;
+  reg u64 r#0.5658;
+  reg u64 lo.5659;
+  reg bool cf.5660;
+  reg u64 t1r#0.5661;
+  reg bool cf.5662;
+  reg u64 t1r#1.5663;
+  reg bool cf.5664;
+  reg u64 t1r#2.5665;
+  reg bool cf.5666;
+  reg u64 t1r#3.5667;
+  reg u64 z.5668;
+  reg u64 z.5669;
+  reg u64 t1r#0.5670;
+  stack u64[4] fs.5671;
+  stack u64[4] gs.5672;
+  reg u64 f#0.5673;
+  reg u64 f#1.5674;
+  reg u64 f#2.5675;
+  reg u64 f#3.5676;
+  stack u64[4] g.5677;
+  reg bool _of_.5678;
+  reg bool _cf_.5679;
+  reg bool _sf_.5680;
+  reg bool _zf_.5681;
+  reg u64 z.5682;
+  reg u64 h#0.5683;
+  reg u64 h#1.5684;
+  reg u64 h#2.5685;
+  reg u64 h#3.5686;
+  reg bool cf.5687;
+  reg u64 h#0.5688;
+  reg bool cf.5689;
+  reg u64 h#1.5690;
+  reg bool cf.5691;
+  reg u64 h#2.5692;
+  reg bool cf.5693;
+  reg u64 h#3.5694;
+  reg u64 z.5695;
+  reg u64 z.5696;
+  reg bool cf.5697;
+  reg u64 h#0.5698;
+  reg bool cf.5699;
+  reg u64 h#1.5700;
+  reg bool cf.5701;
+  reg u64 h#2.5702;
+  reg bool cf.5703;
+  reg u64 h#3.5704;
+  reg u64 z.5705;
+  reg u64 z.5706;
+  reg u64 h#0.5707;
+  stack u64[4] hs.5708;
+  stack u64[4] x3.5709;
+  stack u64[4] fs.5710;
+  stack u64[4] gs.5711;
+  reg u64 f#0.5712;
+  reg u64 f#1.5713;
+  reg u64 f#2.5714;
+  reg u64 f#3.5715;
+  stack u64[4] gs.5716;
+  reg bool _of_.5717;
+  reg bool _cf_.5718;
+  reg bool _sf_.5719;
+  reg bool _zf_.5720;
+  reg u64 z.5721;
+  reg u64 h#0.5722;
+  reg u64 h#1.5723;
+  reg u64 h#2.5724;
+  reg u64 h#3.5725;
+  reg bool cf.5726;
+  reg u64 h#0.5727;
+  reg bool cf.5728;
+  reg u64 h#1.5729;
+  reg bool cf.5730;
+  reg u64 h#2.5731;
+  reg bool cf.5732;
+  reg u64 h#3.5733;
+  reg u64 z.5734;
+  reg u64 z.5735;
+  reg bool cf.5736;
+  reg u64 h#0.5737;
+  reg bool cf.5738;
+  reg u64 h#1.5739;
+  reg bool cf.5740;
+  reg u64 h#2.5741;
+  reg bool cf.5742;
+  reg u64 h#3.5743;
+  reg u64 z.5744;
+  reg u64 z.5745;
+  reg u64 h#0.5746;
+  stack u64[4] hs.5747;
+  stack u64[4] z2.5748;
+  stack u64[4] fs.5749;
+  stack u64[4] fs.5750;
+  reg bool _of_.5751;
+  reg bool _cf_.5752;
+  reg bool _sf_.5753;
+  reg bool _zf_.5754;
+  reg u64 z.5755;
+  reg u64 h#0.5756;
+  reg u64 h#1.5757;
+  reg u64 h#2.5758;
+  reg u64 h#3.5759;
+  reg bool cf.5760;
+  reg u64 h#0.5761;
+  reg bool cf.5762;
+  reg u64 h#1.5763;
+  reg bool cf.5764;
+  reg u64 h#2.5765;
+  reg bool cf.5766;
+  reg u64 h#3.5767;
+  reg u64 z.5768;
+  reg u64 z.5769;
+  reg bool cf.5770;
+  reg u64 h#0.5771;
+  reg bool cf.5772;
+  reg u64 h#1.5773;
+  reg bool cf.5774;
+  reg u64 h#2.5775;
+  reg bool cf.5776;
+  reg u64 h#3.5777;
+  reg u64 z.5778;
+  reg u64 z.5779;
+  reg u64 h#0.5780;
+  stack u64[4] hs.5781;
+  stack u64[4] t0.5782;
+  stack u64[4] fs.5783;
+  stack u64[4] fs.5784;
+  reg bool of.5785;
+  reg bool cf.5786;
+  reg u64 z.5787;
+  reg u64 f0.5788;
+  reg u64 h#1.5789;
+  reg u64 h#0.5790;
+  reg u64 h#2.5791;
+  reg u64 lo.5792;
+  reg bool cf.5793;
+  reg u64 h#1.5794;
+  reg u64 h#3.5795;
+  reg u64 lo.5796;
+  reg bool cf.5797;
+  reg u64 h#2.5798;
+  reg u64 r#0.5799;
+  reg u64 lo.5800;
+  reg bool cf.5801;
+  reg u64 h#3.5802;
+  reg bool cf.5803;
+  reg u64 r#0.5804;
+  reg u64 f.5805;
+  reg u64 hi.5806;
+  reg u64 lo.5807;
+  reg bool of.5808;
+  reg u64 h#1.5809;
+  reg bool cf.5810;
+  reg u64 h#2.5811;
+  reg u64 hi.5812;
+  reg u64 lo.5813;
+  reg bool of.5814;
+  reg u64 h#2.5815;
+  reg bool cf.5816;
+  reg u64 h#3.5817;
+  reg u64 hi.5818;
+  reg u64 lo.5819;
+  reg bool of.5820;
+  reg u64 h#3.5821;
+  reg bool cf.5822;
+  reg u64 r#0.5823;
+  reg u64 r#1.5824;
+  reg u64 lo.5825;
+  reg bool of.5826;
+  reg u64 r#0.5827;
+  reg bool cf.5828;
+  reg u64 r#1.5829;
+  reg bool of.5830;
+  reg u64 r#1.5831;
+  reg u64 f.5832;
+  reg u64 hi.5833;
+  reg u64 lo.5834;
+  reg bool of.5835;
+  reg u64 h#2.5836;
+  reg bool cf.5837;
+  reg u64 h#3.5838;
+  reg u64 hi.5839;
+  reg u64 lo.5840;
+  reg bool of.5841;
+  reg u64 h#3.5842;
+  reg bool cf.5843;
+  reg u64 r#0.5844;
+  reg u64 hi.5845;
+  reg u64 lo.5846;
+  reg bool of.5847;
+  reg u64 r#0.5848;
+  reg bool cf.5849;
+  reg u64 r#1.5850;
+  reg u64 r#2.5851;
+  reg u64 lo.5852;
+  reg bool of.5853;
+  reg u64 r#1.5854;
+  reg bool cf.5855;
+  reg u64 r#2.5856;
+  reg bool of.5857;
+  reg u64 r#2.5858;
+  reg u64 f.5859;
+  reg u64 hi.5860;
+  reg u64 lo.5861;
+  reg bool of.5862;
+  reg u64 h#3.5863;
+  reg bool cf.5864;
+  reg u64 r#0.5865;
+  reg u64 hi.5866;
+  reg u64 lo.5867;
+  reg bool of.5868;
+  reg u64 r#0.5869;
+  reg bool cf.5870;
+  reg u64 r#1.5871;
+  reg u64 hi.5872;
+  reg u64 lo.5873;
+  reg bool of.5874;
+  reg u64 r#1.5875;
+  reg bool cf.5876;
+  reg u64 r#2.5877;
+  reg u64 r#3.5878;
+  reg u64 lo.5879;
+  reg bool of.5880;
+  reg u64 r#2.5881;
+  reg bool cf.5882;
+  reg u64 r#3.5883;
+  reg bool of.5884;
+  reg u64 r#3.5885;
+  reg u64 _38.5886;
+  reg u64 hi.5887;
+  reg u64 lo.5888;
+  reg bool of.5889;
+  reg u64 h#0.5890;
+  reg bool cf.5891;
+  reg u64 h#1.5892;
+  reg u64 hi.5893;
+  reg u64 lo.5894;
+  reg bool of.5895;
+  reg u64 h#1.5896;
+  reg bool cf.5897;
+  reg u64 h#2.5898;
+  reg u64 hi.5899;
+  reg u64 lo.5900;
+  reg bool of.5901;
+  reg u64 h#2.5902;
+  reg bool cf.5903;
+  reg u64 h#3.5904;
+  reg u64 r#0.5905;
+  reg u64 lo.5906;
+  reg bool of.5907;
+  reg u64 h#3.5908;
+  reg bool cf.5909;
+  reg u64 r#0.5910;
+  reg bool of.5911;
+  reg u64 r#0.5912;
+  reg u64 lo.5913;
+  reg bool cf.5914;
+  reg u64 h#0.5915;
+  reg bool cf.5916;
+  reg u64 h#1.5917;
+  reg bool cf.5918;
+  reg u64 h#2.5919;
+  reg bool cf.5920;
+  reg u64 h#3.5921;
+  reg u64 z.5922;
+  reg u64 z.5923;
+  reg u64 h#0.5924;
+  stack u64[4] hs.5925;
+  stack u64[4] x2.5926;
+  stack u64[4] fs.5927;
+  reg u64 f#0.5928;
+  reg u64 f#1.5929;
+  reg u64 f#2.5930;
+  reg u64 f#3.5931;
+  reg bool of.5932;
+  reg bool cf.5933;
+  reg u64 z.5934;
+  reg u64 fx.5935;
+  reg u64 t#1.5936;
+  reg u64 h#0.5937;
+  reg u64 h#2.5938;
+  reg u64 h#1.5939;
+  reg u64 h#3.5940;
+  reg u64 t#2.5941;
+  reg bool cf.5942;
+  reg u64 h#2.5943;
+  reg u64 r#0.5944;
+  reg u64 t#3.5945;
+  reg bool cf.5946;
+  reg u64 h#3.5947;
+  reg u64 fx.5948;
+  reg u64 t#4.5949;
+  reg u64 t#3.5950;
+  reg bool of.5951;
+  reg u64 h#3.5952;
+  reg bool cf.5953;
+  reg u64 r#0.5954;
+  reg u64 r#1.5955;
+  reg u64 t#4.5956;
+  reg bool of.5957;
+  reg u64 r#0.5958;
+  reg u64 t#3.5959;
+  reg u64 t#2.5960;
+  reg u64 fx.5961;
+  reg u64 r#2.5962;
+  reg u64 t#5.5963;
+  reg bool cf.5964;
+  reg u64 r#1.5965;
+  reg bool of.5966;
+  reg u64 r#1.5967;
+  reg bool cf.5968;
+  reg u64 r#2.5969;
+  reg bool of.5970;
+  reg u64 r#2.5971;
+  reg u64 t#5.5972;
+  reg u64 t#4.5973;
+  reg u64 fx.5974;
+  reg u64 r#3.5975;
+  reg u64 t#6.5976;
+  reg bool cf.5977;
+  reg u64 h#1.5978;
+  reg bool of.5979;
+  reg u64 h#1.5980;
+  reg bool cf.5981;
+  reg u64 h#2.5982;
+  reg bool of.5983;
+  reg u64 h#2.5984;
+  reg bool cf.5985;
+  reg u64 h#3.5986;
+  reg bool of.5987;
+  reg u64 h#3.5988;
+  reg bool cf.5989;
+  reg u64 r#0.5990;
+  reg bool of.5991;
+  reg u64 r#0.5992;
+  reg bool cf.5993;
+  reg u64 r#1.5994;
+  reg bool of.5995;
+  reg u64 r#1.5996;
+  reg bool cf.5997;
+  reg u64 r#2.5998;
+  reg bool of.5999;
+  reg u64 r#2.6000;
+  reg bool cf.6001;
+  reg u64 r#3.6002;
+  reg bool of.6003;
+  reg u64 r#3.6004;
+  reg u64 _38.6005;
+  reg u64 hi.6006;
+  reg u64 lo.6007;
+  reg bool of.6008;
+  reg u64 h#0.6009;
+  reg bool cf.6010;
+  reg u64 h#1.6011;
+  reg u64 hi.6012;
+  reg u64 lo.6013;
+  reg bool of.6014;
+  reg u64 h#1.6015;
+  reg bool cf.6016;
+  reg u64 h#2.6017;
+  reg u64 hi.6018;
+  reg u64 lo.6019;
+  reg bool of.6020;
+  reg u64 h#2.6021;
+  reg bool cf.6022;
+  reg u64 h#3.6023;
+  reg u64 r#0.6024;
+  reg u64 lo.6025;
+  reg bool of.6026;
+  reg u64 h#3.6027;
+  reg bool cf.6028;
+  reg u64 r#0.6029;
+  reg bool of.6030;
+  reg u64 r#0.6031;
+  reg u64 lo.6032;
+  reg bool cf.6033;
+  reg u64 h#0.6034;
+  reg bool cf.6035;
+  reg u64 h#1.6036;
+  reg bool cf.6037;
+  reg u64 h#2.6038;
+  reg bool cf.6039;
+  reg u64 h#3.6040;
+  reg u64 z.6041;
+  reg u64 z.6042;
+  reg u64 h#0.6043;
+  stack u64[4] hs.6044;
+  stack u64[4] z2.6045;
+  stack u64[4] fs.6046;
+  stack u64[4] fs.6047;
+  reg u64 c.6048;
+  reg u64 h#1.6049;
+  reg u64 h#0.6050;
+  reg u64 h#2.6051;
+  reg u64 lo.6052;
+  reg bool cf.6053;
+  reg u64 h#1.6054;
+  reg u64 h#3.6055;
+  reg u64 lo.6056;
+  reg bool cf.6057;
+  reg u64 h#2.6058;
+  reg u64 r0.6059;
+  reg u64 lo.6060;
+  reg bool cf.6061;
+  reg u64 h#3.6062;
+  reg u64 r0.6063;
+  reg u64 r0.6064;
+  reg bool cf.6065;
+  reg u64 h#0.6066;
+  reg bool cf.6067;
+  reg u64 h#1.6068;
+  reg bool cf.6069;
+  reg u64 h#2.6070;
+  reg bool cf.6071;
+  reg u64 h#3.6072;
+  reg u64 c.6073;
+  reg u64 c.6074;
+  reg u64 h#0.6075;
+  stack u64[4] hs.6076;
+  stack u64[4] z3.6077;
+  stack u64[4] fs.6078;
+  reg u64 f#0.6079;
+  reg u64 f#1.6080;
+  reg u64 f#2.6081;
+  reg u64 f#3.6082;
+  reg bool of.6083;
+  reg bool cf.6084;
+  reg u64 z.6085;
+  reg u64 fx.6086;
+  reg u64 t#1.6087;
+  reg u64 h#0.6088;
+  reg u64 h#2.6089;
+  reg u64 h#1.6090;
+  reg u64 h#3.6091;
+  reg u64 t#2.6092;
+  reg bool cf.6093;
+  reg u64 h#2.6094;
+  reg u64 r#0.6095;
+  reg u64 t#3.6096;
+  reg bool cf.6097;
+  reg u64 h#3.6098;
+  reg u64 fx.6099;
+  reg u64 t#4.6100;
+  reg u64 t#3.6101;
+  reg bool of.6102;
+  reg u64 h#3.6103;
+  reg bool cf.6104;
+  reg u64 r#0.6105;
+  reg u64 r#1.6106;
+  reg u64 t#4.6107;
+  reg bool of.6108;
+  reg u64 r#0.6109;
+  reg u64 t#3.6110;
+  reg u64 t#2.6111;
+  reg u64 fx.6112;
+  reg u64 r#2.6113;
+  reg u64 t#5.6114;
+  reg bool cf.6115;
+  reg u64 r#1.6116;
+  reg bool of.6117;
+  reg u64 r#1.6118;
+  reg bool cf.6119;
+  reg u64 r#2.6120;
+  reg bool of.6121;
+  reg u64 r#2.6122;
+  reg u64 t#5.6123;
+  reg u64 t#4.6124;
+  reg u64 fx.6125;
+  reg u64 r#3.6126;
+  reg u64 t#6.6127;
+  reg bool cf.6128;
+  reg u64 h#1.6129;
+  reg bool of.6130;
+  reg u64 h#1.6131;
+  reg bool cf.6132;
+  reg u64 h#2.6133;
+  reg bool of.6134;
+  reg u64 h#2.6135;
+  reg bool cf.6136;
+  reg u64 h#3.6137;
+  reg bool of.6138;
+  reg u64 h#3.6139;
+  reg bool cf.6140;
+  reg u64 r#0.6141;
+  reg bool of.6142;
+  reg u64 r#0.6143;
+  reg bool cf.6144;
+  reg u64 r#1.6145;
+  reg bool of.6146;
+  reg u64 r#1.6147;
+  reg bool cf.6148;
+  reg u64 r#2.6149;
+  reg bool of.6150;
+  reg u64 r#2.6151;
+  reg bool cf.6152;
+  reg u64 r#3.6153;
+  reg bool of.6154;
+  reg u64 r#3.6155;
+  reg u64 _38.6156;
+  reg u64 hi.6157;
+  reg u64 lo.6158;
+  reg bool of.6159;
+  reg u64 h#0.6160;
+  reg bool cf.6161;
+  reg u64 h#1.6162;
+  reg u64 hi.6163;
+  reg u64 lo.6164;
+  reg bool of.6165;
+  reg u64 h#1.6166;
+  reg bool cf.6167;
+  reg u64 h#2.6168;
+  reg u64 hi.6169;
+  reg u64 lo.6170;
+  reg bool of.6171;
+  reg u64 h#2.6172;
+  reg bool cf.6173;
+  reg u64 h#3.6174;
+  reg u64 r#0.6175;
+  reg u64 lo.6176;
+  reg bool of.6177;
+  reg u64 h#3.6178;
+  reg bool cf.6179;
+  reg u64 r#0.6180;
+  reg bool of.6181;
+  reg u64 r#0.6182;
+  reg u64 lo.6183;
+  reg bool cf.6184;
+  reg u64 h#0.6185;
+  reg bool cf.6186;
+  reg u64 h#1.6187;
+  reg bool cf.6188;
+  reg u64 h#2.6189;
+  reg bool cf.6190;
+  reg u64 h#3.6191;
+  reg u64 z.6192;
+  reg u64 z.6193;
+  reg u64 h#0.6194;
+  stack u64[4] hs.6195;
+  stack u64[4] x3.6196;
+  stack u64[4] fs.6197;
+  stack u64[4] gs.6198;
+  reg u64 f#0.6199;
+  reg u64 f#1.6200;
+  reg u64 f#2.6201;
+  reg u64 f#3.6202;
+  stack u64[4] g.6203;
+  reg bool _of_.6204;
+  reg bool _cf_.6205;
+  reg bool _sf_.6206;
+  reg bool _zf_.6207;
+  reg u64 z.6208;
+  reg u64 h#0.6209;
+  reg u64 h#1.6210;
+  reg u64 h#2.6211;
+  reg u64 h#3.6212;
+  reg bool cf.6213;
+  reg u64 h#0.6214;
+  reg bool cf.6215;
+  reg u64 h#1.6216;
+  reg bool cf.6217;
+  reg u64 h#2.6218;
+  reg bool cf.6219;
+  reg u64 h#3.6220;
+  reg u64 z.6221;
+  reg u64 z.6222;
+  reg bool cf.6223;
+  reg u64 h#0.6224;
+  reg bool cf.6225;
+  reg u64 h#1.6226;
+  reg bool cf.6227;
+  reg u64 h#2.6228;
+  reg bool cf.6229;
+  reg u64 h#3.6230;
+  reg u64 z.6231;
+  reg u64 z.6232;
+  reg u64 h#0.6233;
+  stack u64[4] hs.6234;
+  stack u64[4] t2.6235;
+  stack u64[4] fs.6236;
+  stack u64[4] gs.6237;
+  reg u64 g#0.6238;
+  reg u64 g#1.6239;
+  reg u64 g#2.6240;
+  reg u64 g#3.6241;
+  stack u64[4] fs.6242;
+  reg bool of.6243;
+  reg bool cf.6244;
+  reg u64 z.6245;
+  reg u64 f0.6246;
+  reg u64 h#1.6247;
+  reg u64 h#0.6248;
+  reg u64 h#2.6249;
+  reg u64 lo.6250;
+  reg bool cf.6251;
+  reg u64 h#1.6252;
+  reg u64 h#3.6253;
+  reg u64 lo.6254;
+  reg bool cf.6255;
+  reg u64 h#2.6256;
+  reg u64 r#0.6257;
+  reg u64 lo.6258;
+  reg bool cf.6259;
+  reg u64 h#3.6260;
+  reg bool cf.6261;
+  reg u64 r#0.6262;
+  reg u64 f.6263;
+  reg u64 hi.6264;
+  reg u64 lo.6265;
+  reg bool of.6266;
+  reg u64 h#1.6267;
+  reg bool cf.6268;
+  reg u64 h#2.6269;
+  reg u64 hi.6270;
+  reg u64 lo.6271;
+  reg bool of.6272;
+  reg u64 h#2.6273;
+  reg bool cf.6274;
+  reg u64 h#3.6275;
+  reg u64 hi.6276;
+  reg u64 lo.6277;
+  reg bool of.6278;
+  reg u64 h#3.6279;
+  reg bool cf.6280;
+  reg u64 r#0.6281;
+  reg u64 r#1.6282;
+  reg u64 lo.6283;
+  reg bool of.6284;
+  reg u64 r#0.6285;
+  reg bool cf.6286;
+  reg u64 r#1.6287;
+  reg bool of.6288;
+  reg u64 r#1.6289;
+  reg u64 f.6290;
+  reg u64 hi.6291;
+  reg u64 lo.6292;
+  reg bool of.6293;
+  reg u64 h#2.6294;
+  reg bool cf.6295;
+  reg u64 h#3.6296;
+  reg u64 hi.6297;
+  reg u64 lo.6298;
+  reg bool of.6299;
+  reg u64 h#3.6300;
+  reg bool cf.6301;
+  reg u64 r#0.6302;
+  reg u64 hi.6303;
+  reg u64 lo.6304;
+  reg bool of.6305;
+  reg u64 r#0.6306;
+  reg bool cf.6307;
+  reg u64 r#1.6308;
+  reg u64 r#2.6309;
+  reg u64 lo.6310;
+  reg bool of.6311;
+  reg u64 r#1.6312;
+  reg bool cf.6313;
+  reg u64 r#2.6314;
+  reg bool of.6315;
+  reg u64 r#2.6316;
+  reg u64 f.6317;
+  reg u64 hi.6318;
+  reg u64 lo.6319;
+  reg bool of.6320;
+  reg u64 h#3.6321;
+  reg bool cf.6322;
+  reg u64 r#0.6323;
+  reg u64 hi.6324;
+  reg u64 lo.6325;
+  reg bool of.6326;
+  reg u64 r#0.6327;
+  reg bool cf.6328;
+  reg u64 r#1.6329;
+  reg u64 hi.6330;
+  reg u64 lo.6331;
+  reg bool of.6332;
+  reg u64 r#1.6333;
+  reg bool cf.6334;
+  reg u64 r#2.6335;
+  reg u64 r#3.6336;
+  reg u64 lo.6337;
+  reg bool of.6338;
+  reg u64 r#2.6339;
+  reg bool cf.6340;
+  reg u64 r#3.6341;
+  reg bool of.6342;
+  reg u64 r#3.6343;
+  reg u64 _38.6344;
+  reg u64 hi.6345;
+  reg u64 lo.6346;
+  reg bool of.6347;
+  reg u64 h#0.6348;
+  reg bool cf.6349;
+  reg u64 h#1.6350;
+  reg u64 hi.6351;
+  reg u64 lo.6352;
+  reg bool of.6353;
+  reg u64 h#1.6354;
+  reg bool cf.6355;
+  reg u64 h#2.6356;
+  reg u64 hi.6357;
+  reg u64 lo.6358;
+  reg bool of.6359;
+  reg u64 h#2.6360;
+  reg bool cf.6361;
+  reg u64 h#3.6362;
+  reg u64 r#0.6363;
+  reg u64 lo.6364;
+  reg bool of.6365;
+  reg u64 h#3.6366;
+  reg bool cf.6367;
+  reg u64 r#0.6368;
+  reg bool of.6369;
+  reg u64 r#0.6370;
+  reg u64 lo.6371;
+  reg bool cf.6372;
+  reg u64 h#0.6373;
+  reg bool cf.6374;
+  reg u64 h#1.6375;
+  reg bool cf.6376;
+  reg u64 h#2.6377;
+  reg bool cf.6378;
+  reg u64 h#3.6379;
+  reg u64 z.6380;
+  reg u64 z.6381;
+  reg u64 h#0.6382;
+  stack u64[4] hs.6383;
+  stack u64[4] z3.6384;
+  stack u64[4] fs.6385;
+  stack u64[4] gs.6386;
+  reg u64 g#0.6387;
+  reg u64 g#1.6388;
+  reg u64 g#2.6389;
+  reg u64 g#3.6390;
+  stack u64[4] fs.6391;
+  reg bool of.6392;
+  reg bool cf.6393;
+  reg u64 z.6394;
+  reg u64 f0.6395;
+  reg u64 o_z2r#1.6396;
+  reg u64 o_z2r#0.6397;
+  reg u64 o_z2r#2.6398;
+  reg u64 lo.6399;
+  reg bool cf.6400;
+  reg u64 o_z2r#1.6401;
+  reg u64 o_z2r#3.6402;
+  reg u64 lo.6403;
+  reg bool cf.6404;
+  reg u64 o_z2r#2.6405;
+  reg u64 r#0.6406;
+  reg u64 lo.6407;
+  reg bool cf.6408;
+  reg u64 o_z2r#3.6409;
+  reg bool cf.6410;
+  reg u64 r#0.6411;
+  reg u64 f.6412;
+  reg u64 hi.6413;
+  reg u64 lo.6414;
+  reg bool of.6415;
+  reg u64 o_z2r#1.6416;
+  reg bool cf.6417;
+  reg u64 o_z2r#2.6418;
+  reg u64 hi.6419;
+  reg u64 lo.6420;
+  reg bool of.6421;
+  reg u64 o_z2r#2.6422;
+  reg bool cf.6423;
+  reg u64 o_z2r#3.6424;
+  reg u64 hi.6425;
+  reg u64 lo.6426;
+  reg bool of.6427;
+  reg u64 o_z2r#3.6428;
+  reg bool cf.6429;
+  reg u64 r#0.6430;
+  reg u64 r#1.6431;
+  reg u64 lo.6432;
+  reg bool of.6433;
+  reg u64 r#0.6434;
+  reg bool cf.6435;
+  reg u64 r#1.6436;
+  reg bool of.6437;
+  reg u64 r#1.6438;
+  reg u64 f.6439;
+  reg u64 hi.6440;
+  reg u64 lo.6441;
+  reg bool of.6442;
+  reg u64 o_z2r#2.6443;
+  reg bool cf.6444;
+  reg u64 o_z2r#3.6445;
+  reg u64 hi.6446;
+  reg u64 lo.6447;
+  reg bool of.6448;
+  reg u64 o_z2r#3.6449;
+  reg bool cf.6450;
+  reg u64 r#0.6451;
+  reg u64 hi.6452;
+  reg u64 lo.6453;
+  reg bool of.6454;
+  reg u64 r#0.6455;
+  reg bool cf.6456;
+  reg u64 r#1.6457;
+  reg u64 r#2.6458;
+  reg u64 lo.6459;
+  reg bool of.6460;
+  reg u64 r#1.6461;
+  reg bool cf.6462;
+  reg u64 r#2.6463;
+  reg bool of.6464;
+  reg u64 r#2.6465;
+  reg u64 f.6466;
+  reg u64 hi.6467;
+  reg u64 lo.6468;
+  reg bool of.6469;
+  reg u64 o_z2r#3.6470;
+  reg bool cf.6471;
+  reg u64 r#0.6472;
+  reg u64 hi.6473;
+  reg u64 lo.6474;
+  reg bool of.6475;
+  reg u64 r#0.6476;
+  reg bool cf.6477;
+  reg u64 r#1.6478;
+  reg u64 hi.6479;
+  reg u64 lo.6480;
+  reg bool of.6481;
+  reg u64 r#1.6482;
+  reg bool cf.6483;
+  reg u64 r#2.6484;
+  reg u64 r#3.6485;
+  reg u64 lo.6486;
+  reg bool of.6487;
+  reg u64 r#2.6488;
+  reg bool cf.6489;
+  reg u64 r#3.6490;
+  reg bool of.6491;
+  reg u64 r#3.6492;
+  reg u64 _38.6493;
+  reg u64 hi.6494;
+  reg u64 lo.6495;
+  reg bool of.6496;
+  reg u64 o_z2r#0.6497;
+  reg bool cf.6498;
+  reg u64 o_z2r#1.6499;
+  reg u64 hi.6500;
+  reg u64 lo.6501;
+  reg bool of.6502;
+  reg u64 o_z2r#1.6503;
+  reg bool cf.6504;
+  reg u64 o_z2r#2.6505;
+  reg u64 hi.6506;
+  reg u64 lo.6507;
+  reg bool of.6508;
+  reg u64 o_z2r#2.6509;
+  reg bool cf.6510;
+  reg u64 o_z2r#3.6511;
+  reg u64 r#0.6512;
+  reg u64 lo.6513;
+  reg bool of.6514;
+  reg u64 o_z2r#3.6515;
+  reg bool cf.6516;
+  reg u64 r#0.6517;
+  reg bool of.6518;
+  reg u64 r#0.6519;
+  reg u64 lo.6520;
+  reg bool cf.6521;
+  reg u64 o_z2r#0.6522;
+  reg bool cf.6523;
+  reg u64 o_z2r#1.6524;
+  reg bool cf.6525;
+  reg u64 o_z2r#2.6526;
+  reg bool cf.6527;
+  reg u64 o_z2r#3.6528;
+  reg u64 z.6529;
+  reg u64 z.6530;
+  reg u64 o_z2r#0.6531;
+  stack u64[4] o_x2.6532;
+  stack u64[4] o_x3.6533;
+  stack u64[4] o_z3.6534;
+  reg u64 pr.6535;
+  
+  pr_s.4978 = pr.856; /* u64 */
+  ArrayInit(i_z3.4979); /* length=32 u8[32] */
+  ArrayInit(i_x3.4980); /* length=32 u8[32] */
+  ArrayInit(i_x2.4981); /* length=32 u8[32] */
+  ArrayInit(i_init.4982); /* length=32 u8[32] */
+  i_init.4982[u64 0 ] = (u64)[pinit.857 + ((64u) 0)]; /* u64 */
+  i_x2.4981[u64 0 ] = (u64)[px2.858 + ((64u) 0)]; /* u64 */
+  f#0.4983 = (u64)[pz2.859 + ((64u) 0)]; /* u64 */
+  i_x3.4980[u64 0 ] = (u64)[px3.860 + ((64u) 0)]; /* u64 */
+  i_z3.4979[u64 0 ] = (u64)[pz3.861 + ((64u) 0)]; /* u64 */
+  i_init.4982[u64 1 ] = (u64)[pinit.857 + ((64u) 8)]; /* u64 */
+  i_x2.4981[u64 1 ] = (u64)[px2.858 + ((64u) 8)]; /* u64 */
+  f#1.4984 = (u64)[pz2.859 + ((64u) 8)]; /* u64 */
+  i_x3.4980[u64 1 ] = (u64)[px3.860 + ((64u) 8)]; /* u64 */
+  i_z3.4979[u64 1 ] = (u64)[pz3.861 + ((64u) 8)]; /* u64 */
+  i_init.4982[u64 2 ] = (u64)[pinit.857 + ((64u) 16)]; /* u64 */
+  i_x2.4981[u64 2 ] = (u64)[px2.858 + ((64u) 16)]; /* u64 */
+  f#2.4985 = (u64)[pz2.859 + ((64u) 16)]; /* u64 */
+  i_x3.4980[u64 2 ] = (u64)[px3.860 + ((64u) 16)]; /* u64 */
+  i_z3.4979[u64 2 ] = (u64)[pz3.861 + ((64u) 16)]; /* u64 */
+  i_init.4982[u64 3 ] = (u64)[pinit.857 + ((64u) 24)]; /* u64 */
+  i_x2.4981[u64 3 ] = (u64)[px2.858 + ((64u) 24)]; /* u64 */
+  f#3.4986 = (u64)[pz2.859 + ((64u) 24)]; /* u64 */
+  i_x3.4980[u64 3 ] = (u64)[px3.860 + ((64u) 24)]; /* u64 */
+  i_z3.4979[u64 3 ] = (u64)[pz3.861 + ((64u) 24)]; /* u64 */
+  init.4987 = i_init.4982; /* u8[32]:r */
+  x2.4988 = i_x2.4981; /* u8[32]:r */
+  x3.4989 = i_x3.4980; /* u8[32]:r */
+  z3.4990 = i_z3.4979; /* u8[32]:r */
+  fs.4991 = x2.4988; /* u8[32]:r */
+  fs.4992 = fs.4991; /* u8[32]:r */
+  (_of_.4993, _cf_.4994, _sf_.4995, _ /* bool */, _zf_.4996, z.4997) =
+    #set0_64(); /* :k */
+  h#0.4998 = fs.4992[u64 0 ]; /* u64 */
+  h#1.4999 = fs.4992[u64 1 ]; /* u64 */
+  h#2.5000 = fs.4992[u64 2 ]; /* u64 */
+  h#3.5001 = fs.4992[u64 3 ]; /* u64 */
+  (cf.5002, h#0.5003) = #sbb_64(h#0.4998, f#0.4983, false); /* :k */
+  (cf.5004, h#1.5005) = #sbb_64(h#1.4999, f#1.4984, cf.5002); /* :k */
+  (cf.5006, h#2.5007) = #sbb_64(h#2.5000, f#2.4985, cf.5004); /* :k */
+  (cf.5008, h#3.5009) = #sbb_64(h#3.5001, f#3.4986, cf.5006); /* :k */
+  (_ /* bool */, z.5010) = #sbb_64(z.4997, z.4997, cf.5008); /* :k */
+  z.5011 = (z.5010 & ((64u) 38)); /* u64 */
+  (cf.5012, h#0.5013) = #sbb_64(h#0.5003, z.5011, false); /* :k */
+  (cf.5014, h#1.5015) = #sbb_64(h#1.5005, ((64u) 0), cf.5012); /* :k */
+  (cf.5016, h#2.5017) = #sbb_64(h#2.5007, ((64u) 0), cf.5014); /* :k */
+  (cf.5018, h#3.5019) = #sbb_64(h#3.5009, ((64u) 0), cf.5016); /* :k */
+  (_ /* bool */, z.5020) = #sbb_64(z.5011, z.5011, cf.5018); /* :k */
+  z.5021 = (z.5020 & ((64u) 38)); /* u64 */
+  h#0.5022 = (h#0.5013 - z.5021); /* u64 */
+  ArrayInit(hs.5023); /* length=32 u8[32] */
+  hs.5023[u64 0 ] = h#0.5022; /* u64 */
+  hs.5023[u64 1 ] = h#1.5015; /* u64 */
+  hs.5023[u64 2 ] = h#2.5017; /* u64 */
+  hs.5023[u64 3 ] = h#3.5019; /* u64 */
+  t0.5024 = hs.5023; /* u8[32]:r */
+  fs.5025 = x2.4988; /* u8[32]:r */
+  g.5026 = fs.5025; /* u8[32]:r */
+  (_of_.5027, _cf_.5028, _sf_.5029, _ /* bool */, _zf_.5030, z.5031) =
+    #set0_64(); /* :k */
+  h#0.5032 = f#0.4983; /* u64 */
+  h#1.5033 = f#1.4984; /* u64 */
+  h#2.5034 = f#2.4985; /* u64 */
+  h#3.5035 = f#3.4986; /* u64 */
+  (cf.5036, h#0.5037) = #adc_64(h#0.5032, g.5026[u64 0 ], false); /* :k */
+  (cf.5038, h#1.5039) = #adc_64(h#1.5033, g.5026[u64 1 ], cf.5036); /* :k */
+  (cf.5040, h#2.5041) = #adc_64(h#2.5034, g.5026[u64 2 ], cf.5038); /* :k */
+  (cf.5042, h#3.5043) = #adc_64(h#3.5035, g.5026[u64 3 ], cf.5040); /* :k */
+  (_ /* bool */, z.5044) = #sbb_64(z.5031, z.5031, cf.5042); /* :k */
+  z.5045 = (z.5044 & ((64u) 38)); /* u64 */
+  (cf.5046, h#0.5047) = #adc_64(h#0.5037, z.5045, false); /* :k */
+  (cf.5048, h#1.5049) = #adc_64(h#1.5039, ((64u) 0), cf.5046); /* :k */
+  (cf.5050, h#2.5051) = #adc_64(h#2.5041, ((64u) 0), cf.5048); /* :k */
+  (cf.5052, h#3.5053) = #adc_64(h#3.5043, ((64u) 0), cf.5050); /* :k */
+  (_ /* bool */, z.5054) = #sbb_64(z.5045, z.5045, cf.5052); /* :k */
+  z.5055 = (z.5054 & ((64u) 38)); /* u64 */
+  h#0.5056 = (h#0.5047 + z.5055); /* u64 */
+  ArrayInit(hs.5057); /* length=32 u8[32] */
+  hs.5057[u64 0 ] = h#0.5056; /* u64 */
+  hs.5057[u64 1 ] = h#1.5049; /* u64 */
+  hs.5057[u64 2 ] = h#2.5051; /* u64 */
+  hs.5057[u64 3 ] = h#3.5053; /* u64 */
+  x2.5058 = hs.5057; /* u8[32]:r */
+  fs.5059 = x3.4989; /* u8[32]:r */
+  gs.5060 = z3.4990; /* u8[32]:r */
+  f#0.5061 = fs.5059[u64 0 ]; /* u64 */
+  f#1.5062 = fs.5059[u64 1 ]; /* u64 */
+  f#2.5063 = fs.5059[u64 2 ]; /* u64 */
+  f#3.5064 = fs.5059[u64 3 ]; /* u64 */
+  gs.5065 = gs.5060; /* u8[32]:r */
+  (_of_.5066, _cf_.5067, _sf_.5068, _ /* bool */, _zf_.5069, z.5070) =
+    #set0_64(); /* :k */
+  h#0.5071 = f#0.5061; /* u64 */
+  h#1.5072 = f#1.5062; /* u64 */
+  h#2.5073 = f#2.5063; /* u64 */
+  h#3.5074 = f#3.5064; /* u64 */
+  (cf.5075, h#0.5076) = #sbb_64(h#0.5071, gs.5065[u64 0 ], false); /* :k */
+  (cf.5077, h#1.5078) = #sbb_64(h#1.5072, gs.5065[u64 1 ], cf.5075); /* :k */
+  (cf.5079, h#2.5080) = #sbb_64(h#2.5073, gs.5065[u64 2 ], cf.5077); /* :k */
+  (cf.5081, h#3.5082) = #sbb_64(h#3.5074, gs.5065[u64 3 ], cf.5079); /* :k */
+  (_ /* bool */, z.5083) = #sbb_64(z.5070, z.5070, cf.5081); /* :k */
+  z.5084 = (z.5083 & ((64u) 38)); /* u64 */
+  (cf.5085, h#0.5086) = #sbb_64(h#0.5076, z.5084, false); /* :k */
+  (cf.5087, h#1.5088) = #sbb_64(h#1.5078, ((64u) 0), cf.5085); /* :k */
+  (cf.5089, h#2.5090) = #sbb_64(h#2.5080, ((64u) 0), cf.5087); /* :k */
+  (cf.5091, h#3.5092) = #sbb_64(h#3.5082, ((64u) 0), cf.5089); /* :k */
+  (_ /* bool */, z.5093) = #sbb_64(z.5084, z.5084, cf.5091); /* :k */
+  z.5094 = (z.5093 & ((64u) 38)); /* u64 */
+  h#0.5095 = (h#0.5086 - z.5094); /* u64 */
+  ArrayInit(hs.5096); /* length=32 u8[32] */
+  hs.5096[u64 0 ] = h#0.5095; /* u64 */
+  hs.5096[u64 1 ] = h#1.5088; /* u64 */
+  hs.5096[u64 2 ] = h#2.5090; /* u64 */
+  hs.5096[u64 3 ] = h#3.5092; /* u64 */
+  t1.5097 = hs.5096; /* u8[32]:r */
+  fs.5098 = x3.4989; /* u8[32]:r */
+  gs.5099 = z3.4990; /* u8[32]:r */
+  f#0.5100 = fs.5098[u64 0 ]; /* u64 */
+  f#1.5101 = fs.5098[u64 1 ]; /* u64 */
+  f#2.5102 = fs.5098[u64 2 ]; /* u64 */
+  f#3.5103 = fs.5098[u64 3 ]; /* u64 */
+  g.5104 = gs.5099; /* u8[32]:r */
+  (_of_.5105, _cf_.5106, _sf_.5107, _ /* bool */, _zf_.5108, z.5109) =
+    #set0_64(); /* :k */
+  h#0.5110 = f#0.5100; /* u64 */
+  h#1.5111 = f#1.5101; /* u64 */
+  h#2.5112 = f#2.5102; /* u64 */
+  h#3.5113 = f#3.5103; /* u64 */
+  (cf.5114, h#0.5115) = #adc_64(h#0.5110, g.5104[u64 0 ], false); /* :k */
+  (cf.5116, h#1.5117) = #adc_64(h#1.5111, g.5104[u64 1 ], cf.5114); /* :k */
+  (cf.5118, h#2.5119) = #adc_64(h#2.5112, g.5104[u64 2 ], cf.5116); /* :k */
+  (cf.5120, h#3.5121) = #adc_64(h#3.5113, g.5104[u64 3 ], cf.5118); /* :k */
+  (_ /* bool */, z.5122) = #sbb_64(z.5109, z.5109, cf.5120); /* :k */
+  z.5123 = (z.5122 & ((64u) 38)); /* u64 */
+  (cf.5124, h#0.5125) = #adc_64(h#0.5115, z.5123, false); /* :k */
+  (cf.5126, h#1.5127) = #adc_64(h#1.5117, ((64u) 0), cf.5124); /* :k */
+  (cf.5128, h#2.5129) = #adc_64(h#2.5119, ((64u) 0), cf.5126); /* :k */
+  (cf.5130, h#3.5131) = #adc_64(h#3.5121, ((64u) 0), cf.5128); /* :k */
+  (_ /* bool */, z.5132) = #sbb_64(z.5123, z.5123, cf.5130); /* :k */
+  z.5133 = (z.5132 & ((64u) 38)); /* u64 */
+  h#0.5134 = (h#0.5125 + z.5133); /* u64 */
+  ArrayInit(hs.5135); /* length=32 u8[32] */
+  hs.5135[u64 0 ] = h#0.5134; /* u64 */
+  hs.5135[u64 1 ] = h#1.5127; /* u64 */
+  hs.5135[u64 2 ] = h#2.5129; /* u64 */
+  hs.5135[u64 3 ] = h#3.5131; /* u64 */
+  z2.5136 = hs.5135; /* u8[32]:r */
+  fs.5137 = x2.5058; /* u8[32]:r */
+  gs.5138 = t1.5097; /* u8[32]:r */
+  g#0.5139 = gs.5138[u64 0 ]; /* u64 */
+  g#1.5140 = gs.5138[u64 1 ]; /* u64 */
+  g#2.5141 = gs.5138[u64 2 ]; /* u64 */
+  g#3.5142 = gs.5138[u64 3 ]; /* u64 */
+  fs.5143 = fs.5137; /* u8[32]:r */
+  (of.5144, cf.5145, _ /* bool */, _ /* bool */, _ /* bool */, z.5146) =
+    #set0_64(); /* :k */
+  f0.5147 = fs.5143[u64 0 ]; /* u64 */
+  (h#1.5148, h#0.5149) = #MULX_64(f0.5147, g#0.5139); /* :k */
+  (h#2.5150, lo.5151) = #MULX_64(f0.5147, g#1.5140); /* :k */
+  (cf.5152, h#1.5153) = #ADCX_64(h#1.5148, lo.5151, cf.5145); /* :k */
+  (h#3.5154, lo.5155) = #MULX_64(f0.5147, g#2.5141); /* :k */
+  (cf.5156, h#2.5157) = #ADCX_64(h#2.5150, lo.5155, cf.5152); /* :k */
+  (r#0.5158, lo.5159) = #MULX_64(f0.5147, g#3.5142); /* :k */
+  (cf.5160, h#3.5161) = #ADCX_64(h#3.5154, lo.5159, cf.5156); /* :k */
+  (cf.5162, r#0.5163) = #ADCX_64(r#0.5158, z.5146, cf.5160); /* :k */
+  f.5164 = fs.5143[u64 1 ]; /* u64 */
+  (hi.5165, lo.5166) = #MULX_64(f.5164, g#0.5139); /* :k */
+  (of.5167, h#1.5168) = #ADOX_64(h#1.5153, lo.5166, of.5144); /* :k */
+  (cf.5169, h#2.5170) = #ADCX_64(h#2.5157, hi.5165, cf.5162); /* :k */
+  (hi.5171, lo.5172) = #MULX_64(f.5164, g#1.5140); /* :k */
+  (of.5173, h#2.5174) = #ADOX_64(h#2.5170, lo.5172, of.5167); /* :k */
+  (cf.5175, h#3.5176) = #ADCX_64(h#3.5161, hi.5171, cf.5169); /* :k */
+  (hi.5177, lo.5178) = #MULX_64(f.5164, g#2.5141); /* :k */
+  (of.5179, h#3.5180) = #ADOX_64(h#3.5176, lo.5178, of.5173); /* :k */
+  (cf.5181, r#0.5182) = #ADCX_64(r#0.5163, hi.5177, cf.5175); /* :k */
+  (r#1.5183, lo.5184) = #MULX_64(f.5164, g#3.5142); /* :k */
+  (of.5185, r#0.5186) = #ADOX_64(r#0.5182, lo.5184, of.5179); /* :k */
+  (cf.5187, r#1.5188) = #ADCX_64(r#1.5183, z.5146, cf.5181); /* :k */
+  (of.5189, r#1.5190) = #ADOX_64(r#1.5188, z.5146, of.5185); /* :k */
+  f.5191 = fs.5143[u64 2 ]; /* u64 */
+  (hi.5192, lo.5193) = #MULX_64(f.5191, g#0.5139); /* :k */
+  (of.5194, h#2.5195) = #ADOX_64(h#2.5174, lo.5193, of.5189); /* :k */
+  (cf.5196, h#3.5197) = #ADCX_64(h#3.5180, hi.5192, cf.5187); /* :k */
+  (hi.5198, lo.5199) = #MULX_64(f.5191, g#1.5140); /* :k */
+  (of.5200, h#3.5201) = #ADOX_64(h#3.5197, lo.5199, of.5194); /* :k */
+  (cf.5202, r#0.5203) = #ADCX_64(r#0.5186, hi.5198, cf.5196); /* :k */
+  (hi.5204, lo.5205) = #MULX_64(f.5191, g#2.5141); /* :k */
+  (of.5206, r#0.5207) = #ADOX_64(r#0.5203, lo.5205, of.5200); /* :k */
+  (cf.5208, r#1.5209) = #ADCX_64(r#1.5190, hi.5204, cf.5202); /* :k */
+  (r#2.5210, lo.5211) = #MULX_64(f.5191, g#3.5142); /* :k */
+  (of.5212, r#1.5213) = #ADOX_64(r#1.5209, lo.5211, of.5206); /* :k */
+  (cf.5214, r#2.5215) = #ADCX_64(r#2.5210, z.5146, cf.5208); /* :k */
+  (of.5216, r#2.5217) = #ADOX_64(r#2.5215, z.5146, of.5212); /* :k */
+  f.5218 = fs.5143[u64 3 ]; /* u64 */
+  (hi.5219, lo.5220) = #MULX_64(f.5218, g#0.5139); /* :k */
+  (of.5221, h#3.5222) = #ADOX_64(h#3.5201, lo.5220, of.5216); /* :k */
+  (cf.5223, r#0.5224) = #ADCX_64(r#0.5207, hi.5219, cf.5214); /* :k */
+  (hi.5225, lo.5226) = #MULX_64(f.5218, g#1.5140); /* :k */
+  (of.5227, r#0.5228) = #ADOX_64(r#0.5224, lo.5226, of.5221); /* :k */
+  (cf.5229, r#1.5230) = #ADCX_64(r#1.5213, hi.5225, cf.5223); /* :k */
+  (hi.5231, lo.5232) = #MULX_64(f.5218, g#2.5141); /* :k */
+  (of.5233, r#1.5234) = #ADOX_64(r#1.5230, lo.5232, of.5227); /* :k */
+  (cf.5235, r#2.5236) = #ADCX_64(r#2.5217, hi.5231, cf.5229); /* :k */
+  (r#3.5237, lo.5238) = #MULX_64(f.5218, g#3.5142); /* :k */
+  (of.5239, r#2.5240) = #ADOX_64(r#2.5236, lo.5238, of.5233); /* :k */
+  (cf.5241, r#3.5242) = #ADCX_64(r#3.5237, z.5146, cf.5235); /* :k */
+  (of.5243, r#3.5244) = #ADOX_64(r#3.5242, z.5146, of.5239); /* :k */
+  _38.5245 = ((64u) 38); /* u64 */
+  (hi.5246, lo.5247) = #MULX_64(_38.5245, r#0.5228); /* :k */
+  (of.5248, h#0.5249) = #ADOX_64(h#0.5149, lo.5247, of.5243); /* :k */
+  (cf.5250, h#1.5251) = #ADCX_64(h#1.5168, hi.5246, cf.5241); /* :k */
+  (hi.5252, lo.5253) = #MULX_64(_38.5245, r#1.5234); /* :k */
+  (of.5254, h#1.5255) = #ADOX_64(h#1.5251, lo.5253, of.5248); /* :k */
+  (cf.5256, h#2.5257) = #ADCX_64(h#2.5195, hi.5252, cf.5250); /* :k */
+  (hi.5258, lo.5259) = #MULX_64(_38.5245, r#2.5240); /* :k */
+  (of.5260, h#2.5261) = #ADOX_64(h#2.5257, lo.5259, of.5254); /* :k */
+  (cf.5262, h#3.5263) = #ADCX_64(h#3.5222, hi.5258, cf.5256); /* :k */
+  (r#0.5264, lo.5265) = #MULX_64(_38.5245, r#3.5244); /* :k */
+  (of.5266, h#3.5267) = #ADOX_64(h#3.5263, lo.5265, of.5260); /* :k */
+  (cf.5268, r#0.5269) = #ADCX_64(r#0.5264, z.5146, cf.5262); /* :k */
+  (of.5270, r#0.5271) = #ADOX_64(r#0.5269, z.5146, of.5266); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.5272) = #IMULri_64(r#0.5271, ((64u) 38)); /* :k */
+  (cf.5273, h#0.5274) = #adc_64(h#0.5249, lo.5272, false); /* :k */
+  (cf.5275, h#1.5276) = #adc_64(h#1.5255, z.5146, cf.5273); /* :k */
+  (cf.5277, h#2.5278) = #adc_64(h#2.5261, z.5146, cf.5275); /* :k */
+  (cf.5279, h#3.5280) = #adc_64(h#3.5267, z.5146, cf.5277); /* :k */
+  (_ /* bool */, z.5281) = #sbb_64(z.5146, z.5146, cf.5279); /* :k */
+  z.5282 = (z.5281 & ((64u) 38)); /* u64 */
+  h#0.5283 = (h#0.5274 + z.5282); /* u64 */
+  ArrayInit(hs.5284); /* length=32 u8[32] */
+  hs.5284[u64 0 ] = h#0.5283; /* u64 */
+  hs.5284[u64 1 ] = h#1.5276; /* u64 */
+  hs.5284[u64 2 ] = h#2.5278; /* u64 */
+  hs.5284[u64 3 ] = h#3.5280; /* u64 */
+  z3.5285 = hs.5284; /* u8[32]:r */
+  fs.5286 = z2.5136; /* u8[32]:r */
+  gs.5287 = t0.5024; /* u8[32]:r */
+  g#0.5288 = gs.5287[u64 0 ]; /* u64 */
+  g#1.5289 = gs.5287[u64 1 ]; /* u64 */
+  g#2.5290 = gs.5287[u64 2 ]; /* u64 */
+  g#3.5291 = gs.5287[u64 3 ]; /* u64 */
+  fs.5292 = fs.5286; /* u8[32]:r */
+  (of.5293, cf.5294, _ /* bool */, _ /* bool */, _ /* bool */, z.5295) =
+    #set0_64(); /* :k */
+  f0.5296 = fs.5292[u64 0 ]; /* u64 */
+  (h#1.5297, h#0.5298) = #MULX_64(f0.5296, g#0.5288); /* :k */
+  (h#2.5299, lo.5300) = #MULX_64(f0.5296, g#1.5289); /* :k */
+  (cf.5301, h#1.5302) = #ADCX_64(h#1.5297, lo.5300, cf.5294); /* :k */
+  (h#3.5303, lo.5304) = #MULX_64(f0.5296, g#2.5290); /* :k */
+  (cf.5305, h#2.5306) = #ADCX_64(h#2.5299, lo.5304, cf.5301); /* :k */
+  (r#0.5307, lo.5308) = #MULX_64(f0.5296, g#3.5291); /* :k */
+  (cf.5309, h#3.5310) = #ADCX_64(h#3.5303, lo.5308, cf.5305); /* :k */
+  (cf.5311, r#0.5312) = #ADCX_64(r#0.5307, z.5295, cf.5309); /* :k */
+  f.5313 = fs.5292[u64 1 ]; /* u64 */
+  (hi.5314, lo.5315) = #MULX_64(f.5313, g#0.5288); /* :k */
+  (of.5316, h#1.5317) = #ADOX_64(h#1.5302, lo.5315, of.5293); /* :k */
+  (cf.5318, h#2.5319) = #ADCX_64(h#2.5306, hi.5314, cf.5311); /* :k */
+  (hi.5320, lo.5321) = #MULX_64(f.5313, g#1.5289); /* :k */
+  (of.5322, h#2.5323) = #ADOX_64(h#2.5319, lo.5321, of.5316); /* :k */
+  (cf.5324, h#3.5325) = #ADCX_64(h#3.5310, hi.5320, cf.5318); /* :k */
+  (hi.5326, lo.5327) = #MULX_64(f.5313, g#2.5290); /* :k */
+  (of.5328, h#3.5329) = #ADOX_64(h#3.5325, lo.5327, of.5322); /* :k */
+  (cf.5330, r#0.5331) = #ADCX_64(r#0.5312, hi.5326, cf.5324); /* :k */
+  (r#1.5332, lo.5333) = #MULX_64(f.5313, g#3.5291); /* :k */
+  (of.5334, r#0.5335) = #ADOX_64(r#0.5331, lo.5333, of.5328); /* :k */
+  (cf.5336, r#1.5337) = #ADCX_64(r#1.5332, z.5295, cf.5330); /* :k */
+  (of.5338, r#1.5339) = #ADOX_64(r#1.5337, z.5295, of.5334); /* :k */
+  f.5340 = fs.5292[u64 2 ]; /* u64 */
+  (hi.5341, lo.5342) = #MULX_64(f.5340, g#0.5288); /* :k */
+  (of.5343, h#2.5344) = #ADOX_64(h#2.5323, lo.5342, of.5338); /* :k */
+  (cf.5345, h#3.5346) = #ADCX_64(h#3.5329, hi.5341, cf.5336); /* :k */
+  (hi.5347, lo.5348) = #MULX_64(f.5340, g#1.5289); /* :k */
+  (of.5349, h#3.5350) = #ADOX_64(h#3.5346, lo.5348, of.5343); /* :k */
+  (cf.5351, r#0.5352) = #ADCX_64(r#0.5335, hi.5347, cf.5345); /* :k */
+  (hi.5353, lo.5354) = #MULX_64(f.5340, g#2.5290); /* :k */
+  (of.5355, r#0.5356) = #ADOX_64(r#0.5352, lo.5354, of.5349); /* :k */
+  (cf.5357, r#1.5358) = #ADCX_64(r#1.5339, hi.5353, cf.5351); /* :k */
+  (r#2.5359, lo.5360) = #MULX_64(f.5340, g#3.5291); /* :k */
+  (of.5361, r#1.5362) = #ADOX_64(r#1.5358, lo.5360, of.5355); /* :k */
+  (cf.5363, r#2.5364) = #ADCX_64(r#2.5359, z.5295, cf.5357); /* :k */
+  (of.5365, r#2.5366) = #ADOX_64(r#2.5364, z.5295, of.5361); /* :k */
+  f.5367 = fs.5292[u64 3 ]; /* u64 */
+  (hi.5368, lo.5369) = #MULX_64(f.5367, g#0.5288); /* :k */
+  (of.5370, h#3.5371) = #ADOX_64(h#3.5350, lo.5369, of.5365); /* :k */
+  (cf.5372, r#0.5373) = #ADCX_64(r#0.5356, hi.5368, cf.5363); /* :k */
+  (hi.5374, lo.5375) = #MULX_64(f.5367, g#1.5289); /* :k */
+  (of.5376, r#0.5377) = #ADOX_64(r#0.5373, lo.5375, of.5370); /* :k */
+  (cf.5378, r#1.5379) = #ADCX_64(r#1.5362, hi.5374, cf.5372); /* :k */
+  (hi.5380, lo.5381) = #MULX_64(f.5367, g#2.5290); /* :k */
+  (of.5382, r#1.5383) = #ADOX_64(r#1.5379, lo.5381, of.5376); /* :k */
+  (cf.5384, r#2.5385) = #ADCX_64(r#2.5366, hi.5380, cf.5378); /* :k */
+  (r#3.5386, lo.5387) = #MULX_64(f.5367, g#3.5291); /* :k */
+  (of.5388, r#2.5389) = #ADOX_64(r#2.5385, lo.5387, of.5382); /* :k */
+  (cf.5390, r#3.5391) = #ADCX_64(r#3.5386, z.5295, cf.5384); /* :k */
+  (of.5392, r#3.5393) = #ADOX_64(r#3.5391, z.5295, of.5388); /* :k */
+  _38.5394 = ((64u) 38); /* u64 */
+  (hi.5395, lo.5396) = #MULX_64(_38.5394, r#0.5377); /* :k */
+  (of.5397, h#0.5398) = #ADOX_64(h#0.5298, lo.5396, of.5392); /* :k */
+  (cf.5399, h#1.5400) = #ADCX_64(h#1.5317, hi.5395, cf.5390); /* :k */
+  (hi.5401, lo.5402) = #MULX_64(_38.5394, r#1.5383); /* :k */
+  (of.5403, h#1.5404) = #ADOX_64(h#1.5400, lo.5402, of.5397); /* :k */
+  (cf.5405, h#2.5406) = #ADCX_64(h#2.5344, hi.5401, cf.5399); /* :k */
+  (hi.5407, lo.5408) = #MULX_64(_38.5394, r#2.5389); /* :k */
+  (of.5409, h#2.5410) = #ADOX_64(h#2.5406, lo.5408, of.5403); /* :k */
+  (cf.5411, h#3.5412) = #ADCX_64(h#3.5371, hi.5407, cf.5405); /* :k */
+  (r#0.5413, lo.5414) = #MULX_64(_38.5394, r#3.5393); /* :k */
+  (of.5415, h#3.5416) = #ADOX_64(h#3.5412, lo.5414, of.5409); /* :k */
+  (cf.5417, r#0.5418) = #ADCX_64(r#0.5413, z.5295, cf.5411); /* :k */
+  (of.5419, r#0.5420) = #ADOX_64(r#0.5418, z.5295, of.5415); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.5421) = #IMULri_64(r#0.5420, ((64u) 38)); /* :k */
+  (cf.5422, h#0.5423) = #adc_64(h#0.5398, lo.5421, false); /* :k */
+  (cf.5424, h#1.5425) = #adc_64(h#1.5404, z.5295, cf.5422); /* :k */
+  (cf.5426, h#2.5427) = #adc_64(h#2.5410, z.5295, cf.5424); /* :k */
+  (cf.5428, h#3.5429) = #adc_64(h#3.5416, z.5295, cf.5426); /* :k */
+  (_ /* bool */, z.5430) = #sbb_64(z.5295, z.5295, cf.5428); /* :k */
+  z.5431 = (z.5430 & ((64u) 38)); /* u64 */
+  h#0.5432 = (h#0.5423 + z.5431); /* u64 */
+  ArrayInit(hs.5433); /* length=32 u8[32] */
+  hs.5433[u64 0 ] = h#0.5432; /* u64 */
+  hs.5433[u64 1 ] = h#1.5425; /* u64 */
+  hs.5433[u64 2 ] = h#2.5427; /* u64 */
+  hs.5433[u64 3 ] = h#3.5429; /* u64 */
+  z2.5434 = hs.5433; /* u8[32]:r */
+  fs.5435 = x2.5058; /* u8[32]:r */
+  f#0.5436 = fs.5435[u64 0 ]; /* u64 */
+  f#1.5437 = fs.5435[u64 1 ]; /* u64 */
+  f#2.5438 = fs.5435[u64 2 ]; /* u64 */
+  f#3.5439 = fs.5435[u64 3 ]; /* u64 */
+  (of.5440, cf.5441, _ /* bool */, _ /* bool */, _ /* bool */, z.5442) =
+    #set0_64(); /* :k */
+  fx.5443 = f#0.5436; /* u64 */
+  (t#1.5444, h#0.5445) = #MULX_64(fx.5443, fx.5443); /* :k */
+  (h#2.5446, h#1.5447) = #MULX_64(fx.5443, f#1.5437); /* :k */
+  (h#3.5448, t#2.5449) = #MULX_64(fx.5443, f#2.5438); /* :k */
+  (cf.5450, h#2.5451) = #ADCX_64(h#2.5446, t#2.5449, cf.5441); /* :k */
+  (r#0.5452, t#3.5453) = #MULX_64(fx.5443, f#3.5439); /* :k */
+  (cf.5454, h#3.5455) = #ADCX_64(h#3.5448, t#3.5453, cf.5450); /* :k */
+  fx.5456 = f#1.5437; /* u64 */
+  (t#4.5457, t#3.5458) = #MULX_64(fx.5456, f#2.5438); /* :k */
+  (of.5459, h#3.5460) = #ADOX_64(h#3.5455, t#3.5458, of.5440); /* :k */
+  (cf.5461, r#0.5462) = #ADCX_64(r#0.5452, t#4.5457, cf.5454); /* :k */
+  (r#1.5463, t#4.5464) = #MULX_64(fx.5456, f#3.5439); /* :k */
+  (of.5465, r#0.5466) = #ADOX_64(r#0.5462, t#4.5464, of.5459); /* :k */
+  (t#3.5467, t#2.5468) = #MULX_64(fx.5456, fx.5456); /* :k */
+  fx.5469 = f#2.5438; /* u64 */
+  (r#2.5470, t#5.5471) = #MULX_64(fx.5469, f#3.5439); /* :k */
+  (cf.5472, r#1.5473) = #ADCX_64(r#1.5463, t#5.5471, cf.5461); /* :k */
+  (of.5474, r#1.5475) = #ADOX_64(r#1.5473, z.5442, of.5465); /* :k */
+  (cf.5476, r#2.5477) = #ADCX_64(r#2.5470, z.5442, cf.5472); /* :k */
+  (of.5478, r#2.5479) = #ADOX_64(r#2.5477, z.5442, of.5474); /* :k */
+  (t#5.5480, t#4.5481) = #MULX_64(fx.5469, fx.5469); /* :k */
+  fx.5482 = f#3.5439; /* u64 */
+  (r#3.5483, t#6.5484) = #MULX_64(fx.5482, fx.5482); /* :k */
+  (cf.5485, h#1.5486) = #ADCX_64(h#1.5447, h#1.5447, cf.5476); /* :k */
+  (of.5487, h#1.5488) = #ADOX_64(h#1.5486, t#1.5444, of.5478); /* :k */
+  (cf.5489, h#2.5490) = #ADCX_64(h#2.5451, h#2.5451, cf.5485); /* :k */
+  (of.5491, h#2.5492) = #ADOX_64(h#2.5490, t#2.5468, of.5487); /* :k */
+  (cf.5493, h#3.5494) = #ADCX_64(h#3.5460, h#3.5460, cf.5489); /* :k */
+  (of.5495, h#3.5496) = #ADOX_64(h#3.5494, t#3.5467, of.5491); /* :k */
+  (cf.5497, r#0.5498) = #ADCX_64(r#0.5466, r#0.5466, cf.5493); /* :k */
+  (of.5499, r#0.5500) = #ADOX_64(r#0.5498, t#4.5481, of.5495); /* :k */
+  (cf.5501, r#1.5502) = #ADCX_64(r#1.5475, r#1.5475, cf.5497); /* :k */
+  (of.5503, r#1.5504) = #ADOX_64(r#1.5502, t#5.5480, of.5499); /* :k */
+  (cf.5505, r#2.5506) = #ADCX_64(r#2.5479, r#2.5479, cf.5501); /* :k */
+  (of.5507, r#2.5508) = #ADOX_64(r#2.5506, t#6.5484, of.5503); /* :k */
+  (cf.5509, r#3.5510) = #ADCX_64(r#3.5483, z.5442, cf.5505); /* :k */
+  (of.5511, r#3.5512) = #ADOX_64(r#3.5510, z.5442, of.5507); /* :k */
+  _38.5513 = ((64u) 38); /* u64 */
+  (hi.5514, lo.5515) = #MULX_64(_38.5513, r#0.5500); /* :k */
+  (of.5516, h#0.5517) = #ADOX_64(h#0.5445, lo.5515, of.5511); /* :k */
+  (cf.5518, h#1.5519) = #ADCX_64(h#1.5488, hi.5514, cf.5509); /* :k */
+  (hi.5520, lo.5521) = #MULX_64(_38.5513, r#1.5504); /* :k */
+  (of.5522, h#1.5523) = #ADOX_64(h#1.5519, lo.5521, of.5516); /* :k */
+  (cf.5524, h#2.5525) = #ADCX_64(h#2.5492, hi.5520, cf.5518); /* :k */
+  (hi.5526, lo.5527) = #MULX_64(_38.5513, r#2.5508); /* :k */
+  (of.5528, h#2.5529) = #ADOX_64(h#2.5525, lo.5527, of.5522); /* :k */
+  (cf.5530, h#3.5531) = #ADCX_64(h#3.5496, hi.5526, cf.5524); /* :k */
+  (r#0.5532, lo.5533) = #MULX_64(_38.5513, r#3.5512); /* :k */
+  (of.5534, h#3.5535) = #ADOX_64(h#3.5531, lo.5533, of.5528); /* :k */
+  (cf.5536, r#0.5537) = #ADCX_64(r#0.5532, z.5442, cf.5530); /* :k */
+  (of.5538, r#0.5539) = #ADOX_64(r#0.5537, z.5442, of.5534); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.5540) = #IMULri_64(r#0.5539, ((64u) 38)); /* :k */
+  (cf.5541, h#0.5542) = #adc_64(h#0.5517, lo.5540, false); /* :k */
+  (cf.5543, h#1.5544) = #adc_64(h#1.5523, z.5442, cf.5541); /* :k */
+  (cf.5545, h#2.5546) = #adc_64(h#2.5529, z.5442, cf.5543); /* :k */
+  (cf.5547, h#3.5548) = #adc_64(h#3.5535, z.5442, cf.5545); /* :k */
+  (_ /* bool */, z.5549) = #sbb_64(z.5442, z.5442, cf.5547); /* :k */
+  z.5550 = (z.5549 & ((64u) 38)); /* u64 */
+  h#0.5551 = (h#0.5542 + z.5550); /* u64 */
+  ArrayInit(hs.5552); /* length=32 u8[32] */
+  hs.5552[u64 0 ] = h#0.5551; /* u64 */
+  hs.5552[u64 1 ] = h#1.5544; /* u64 */
+  hs.5552[u64 2 ] = h#2.5546; /* u64 */
+  hs.5552[u64 3 ] = h#3.5548; /* u64 */
+  t2.5553 = hs.5552; /* u8[32]:r */
+  fs.5554 = t0.5024; /* u8[32]:r */
+  f#0.5555 = fs.5554[u64 0 ]; /* u64 */
+  f#1.5556 = fs.5554[u64 1 ]; /* u64 */
+  f#2.5557 = fs.5554[u64 2 ]; /* u64 */
+  f#3.5558 = fs.5554[u64 3 ]; /* u64 */
+  (of.5559, cf.5560, _ /* bool */, _ /* bool */, _ /* bool */, z.5561) =
+    #set0_64(); /* :k */
+  fx.5562 = f#0.5555; /* u64 */
+  (t#1.5563, t1r#0.5564) = #MULX_64(fx.5562, fx.5562); /* :k */
+  (t1r#2.5565, t1r#1.5566) = #MULX_64(fx.5562, f#1.5556); /* :k */
+  (t1r#3.5567, t#2.5568) = #MULX_64(fx.5562, f#2.5557); /* :k */
+  (cf.5569, t1r#2.5570) = #ADCX_64(t1r#2.5565, t#2.5568, cf.5560); /* :k */
+  (r#0.5571, t#3.5572) = #MULX_64(fx.5562, f#3.5558); /* :k */
+  (cf.5573, t1r#3.5574) = #ADCX_64(t1r#3.5567, t#3.5572, cf.5569); /* :k */
+  fx.5575 = f#1.5556; /* u64 */
+  (t#4.5576, t#3.5577) = #MULX_64(fx.5575, f#2.5557); /* :k */
+  (of.5578, t1r#3.5579) = #ADOX_64(t1r#3.5574, t#3.5577, of.5559); /* :k */
+  (cf.5580, r#0.5581) = #ADCX_64(r#0.5571, t#4.5576, cf.5573); /* :k */
+  (r#1.5582, t#4.5583) = #MULX_64(fx.5575, f#3.5558); /* :k */
+  (of.5584, r#0.5585) = #ADOX_64(r#0.5581, t#4.5583, of.5578); /* :k */
+  (t#3.5586, t#2.5587) = #MULX_64(fx.5575, fx.5575); /* :k */
+  fx.5588 = f#2.5557; /* u64 */
+  (r#2.5589, t#5.5590) = #MULX_64(fx.5588, f#3.5558); /* :k */
+  (cf.5591, r#1.5592) = #ADCX_64(r#1.5582, t#5.5590, cf.5580); /* :k */
+  (of.5593, r#1.5594) = #ADOX_64(r#1.5592, z.5561, of.5584); /* :k */
+  (cf.5595, r#2.5596) = #ADCX_64(r#2.5589, z.5561, cf.5591); /* :k */
+  (of.5597, r#2.5598) = #ADOX_64(r#2.5596, z.5561, of.5593); /* :k */
+  (t#5.5599, t#4.5600) = #MULX_64(fx.5588, fx.5588); /* :k */
+  fx.5601 = f#3.5558; /* u64 */
+  (r#3.5602, t#6.5603) = #MULX_64(fx.5601, fx.5601); /* :k */
+  (cf.5604, t1r#1.5605) = #ADCX_64(t1r#1.5566, t1r#1.5566, cf.5595); /* :k */
+  (of.5606, t1r#1.5607) = #ADOX_64(t1r#1.5605, t#1.5563, of.5597); /* :k */
+  (cf.5608, t1r#2.5609) = #ADCX_64(t1r#2.5570, t1r#2.5570, cf.5604); /* :k */
+  (of.5610, t1r#2.5611) = #ADOX_64(t1r#2.5609, t#2.5587, of.5606); /* :k */
+  (cf.5612, t1r#3.5613) = #ADCX_64(t1r#3.5579, t1r#3.5579, cf.5608); /* :k */
+  (of.5614, t1r#3.5615) = #ADOX_64(t1r#3.5613, t#3.5586, of.5610); /* :k */
+  (cf.5616, r#0.5617) = #ADCX_64(r#0.5585, r#0.5585, cf.5612); /* :k */
+  (of.5618, r#0.5619) = #ADOX_64(r#0.5617, t#4.5600, of.5614); /* :k */
+  (cf.5620, r#1.5621) = #ADCX_64(r#1.5594, r#1.5594, cf.5616); /* :k */
+  (of.5622, r#1.5623) = #ADOX_64(r#1.5621, t#5.5599, of.5618); /* :k */
+  (cf.5624, r#2.5625) = #ADCX_64(r#2.5598, r#2.5598, cf.5620); /* :k */
+  (of.5626, r#2.5627) = #ADOX_64(r#2.5625, t#6.5603, of.5622); /* :k */
+  (cf.5628, r#3.5629) = #ADCX_64(r#3.5602, z.5561, cf.5624); /* :k */
+  (of.5630, r#3.5631) = #ADOX_64(r#3.5629, z.5561, of.5626); /* :k */
+  _38.5632 = ((64u) 38); /* u64 */
+  (hi.5633, lo.5634) = #MULX_64(_38.5632, r#0.5619); /* :k */
+  (of.5635, t1r#0.5636) = #ADOX_64(t1r#0.5564, lo.5634, of.5630); /* :k */
+  (cf.5637, t1r#1.5638) = #ADCX_64(t1r#1.5607, hi.5633, cf.5628); /* :k */
+  (hi.5639, lo.5640) = #MULX_64(_38.5632, r#1.5623); /* :k */
+  (of.5641, t1r#1.5642) = #ADOX_64(t1r#1.5638, lo.5640, of.5635); /* :k */
+  (cf.5643, t1r#2.5644) = #ADCX_64(t1r#2.5611, hi.5639, cf.5637); /* :k */
+  (hi.5645, lo.5646) = #MULX_64(_38.5632, r#2.5627); /* :k */
+  (of.5647, t1r#2.5648) = #ADOX_64(t1r#2.5644, lo.5646, of.5641); /* :k */
+  (cf.5649, t1r#3.5650) = #ADCX_64(t1r#3.5615, hi.5645, cf.5643); /* :k */
+  (r#0.5651, lo.5652) = #MULX_64(_38.5632, r#3.5631); /* :k */
+  (of.5653, t1r#3.5654) = #ADOX_64(t1r#3.5650, lo.5652, of.5647); /* :k */
+  (cf.5655, r#0.5656) = #ADCX_64(r#0.5651, z.5561, cf.5649); /* :k */
+  (of.5657, r#0.5658) = #ADOX_64(r#0.5656, z.5561, of.5653); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.5659) = #IMULri_64(r#0.5658, ((64u) 38)); /* :k */
+  (cf.5660, t1r#0.5661) = #adc_64(t1r#0.5636, lo.5659, false); /* :k */
+  (cf.5662, t1r#1.5663) = #adc_64(t1r#1.5642, z.5561, cf.5660); /* :k */
+  (cf.5664, t1r#2.5665) = #adc_64(t1r#2.5648, z.5561, cf.5662); /* :k */
+  (cf.5666, t1r#3.5667) = #adc_64(t1r#3.5654, z.5561, cf.5664); /* :k */
+  (_ /* bool */, z.5668) = #sbb_64(z.5561, z.5561, cf.5666); /* :k */
+  z.5669 = (z.5668 & ((64u) 38)); /* u64 */
+  t1r#0.5670 = (t1r#0.5661 + z.5669); /* u64 */
+  fs.5671 = z3.5285; /* u8[32]:r */
+  gs.5672 = z2.5434; /* u8[32]:r */
+  f#0.5673 = fs.5671[u64 0 ]; /* u64 */
+  f#1.5674 = fs.5671[u64 1 ]; /* u64 */
+  f#2.5675 = fs.5671[u64 2 ]; /* u64 */
+  f#3.5676 = fs.5671[u64 3 ]; /* u64 */
+  g.5677 = gs.5672; /* u8[32]:r */
+  (_of_.5678, _cf_.5679, _sf_.5680, _ /* bool */, _zf_.5681, z.5682) =
+    #set0_64(); /* :k */
+  h#0.5683 = f#0.5673; /* u64 */
+  h#1.5684 = f#1.5674; /* u64 */
+  h#2.5685 = f#2.5675; /* u64 */
+  h#3.5686 = f#3.5676; /* u64 */
+  (cf.5687, h#0.5688) = #adc_64(h#0.5683, g.5677[u64 0 ], false); /* :k */
+  (cf.5689, h#1.5690) = #adc_64(h#1.5684, g.5677[u64 1 ], cf.5687); /* :k */
+  (cf.5691, h#2.5692) = #adc_64(h#2.5685, g.5677[u64 2 ], cf.5689); /* :k */
+  (cf.5693, h#3.5694) = #adc_64(h#3.5686, g.5677[u64 3 ], cf.5691); /* :k */
+  (_ /* bool */, z.5695) = #sbb_64(z.5682, z.5682, cf.5693); /* :k */
+  z.5696 = (z.5695 & ((64u) 38)); /* u64 */
+  (cf.5697, h#0.5698) = #adc_64(h#0.5688, z.5696, false); /* :k */
+  (cf.5699, h#1.5700) = #adc_64(h#1.5690, ((64u) 0), cf.5697); /* :k */
+  (cf.5701, h#2.5702) = #adc_64(h#2.5692, ((64u) 0), cf.5699); /* :k */
+  (cf.5703, h#3.5704) = #adc_64(h#3.5694, ((64u) 0), cf.5701); /* :k */
+  (_ /* bool */, z.5705) = #sbb_64(z.5696, z.5696, cf.5703); /* :k */
+  z.5706 = (z.5705 & ((64u) 38)); /* u64 */
+  h#0.5707 = (h#0.5698 + z.5706); /* u64 */
+  ArrayInit(hs.5708); /* length=32 u8[32] */
+  hs.5708[u64 0 ] = h#0.5707; /* u64 */
+  hs.5708[u64 1 ] = h#1.5700; /* u64 */
+  hs.5708[u64 2 ] = h#2.5702; /* u64 */
+  hs.5708[u64 3 ] = h#3.5704; /* u64 */
+  x3.5709 = hs.5708; /* u8[32]:r */
+  fs.5710 = z3.5285; /* u8[32]:r */
+  gs.5711 = z2.5434; /* u8[32]:r */
+  f#0.5712 = fs.5710[u64 0 ]; /* u64 */
+  f#1.5713 = fs.5710[u64 1 ]; /* u64 */
+  f#2.5714 = fs.5710[u64 2 ]; /* u64 */
+  f#3.5715 = fs.5710[u64 3 ]; /* u64 */
+  gs.5716 = gs.5711; /* u8[32]:r */
+  (_of_.5717, _cf_.5718, _sf_.5719, _ /* bool */, _zf_.5720, z.5721) =
+    #set0_64(); /* :k */
+  h#0.5722 = f#0.5712; /* u64 */
+  h#1.5723 = f#1.5713; /* u64 */
+  h#2.5724 = f#2.5714; /* u64 */
+  h#3.5725 = f#3.5715; /* u64 */
+  (cf.5726, h#0.5727) = #sbb_64(h#0.5722, gs.5716[u64 0 ], false); /* :k */
+  (cf.5728, h#1.5729) = #sbb_64(h#1.5723, gs.5716[u64 1 ], cf.5726); /* :k */
+  (cf.5730, h#2.5731) = #sbb_64(h#2.5724, gs.5716[u64 2 ], cf.5728); /* :k */
+  (cf.5732, h#3.5733) = #sbb_64(h#3.5725, gs.5716[u64 3 ], cf.5730); /* :k */
+  (_ /* bool */, z.5734) = #sbb_64(z.5721, z.5721, cf.5732); /* :k */
+  z.5735 = (z.5734 & ((64u) 38)); /* u64 */
+  (cf.5736, h#0.5737) = #sbb_64(h#0.5727, z.5735, false); /* :k */
+  (cf.5738, h#1.5739) = #sbb_64(h#1.5729, ((64u) 0), cf.5736); /* :k */
+  (cf.5740, h#2.5741) = #sbb_64(h#2.5731, ((64u) 0), cf.5738); /* :k */
+  (cf.5742, h#3.5743) = #sbb_64(h#3.5733, ((64u) 0), cf.5740); /* :k */
+  (_ /* bool */, z.5744) = #sbb_64(z.5735, z.5735, cf.5742); /* :k */
+  z.5745 = (z.5744 & ((64u) 38)); /* u64 */
+  h#0.5746 = (h#0.5737 - z.5745); /* u64 */
+  ArrayInit(hs.5747); /* length=32 u8[32] */
+  hs.5747[u64 0 ] = h#0.5746; /* u64 */
+  hs.5747[u64 1 ] = h#1.5739; /* u64 */
+  hs.5747[u64 2 ] = h#2.5741; /* u64 */
+  hs.5747[u64 3 ] = h#3.5743; /* u64 */
+  z2.5748 = hs.5747; /* u8[32]:r */
+  fs.5749 = t2.5553; /* u8[32]:r */
+  fs.5750 = fs.5749; /* u8[32]:r */
+  (_of_.5751, _cf_.5752, _sf_.5753, _ /* bool */, _zf_.5754, z.5755) =
+    #set0_64(); /* :k */
+  h#0.5756 = fs.5750[u64 0 ]; /* u64 */
+  h#1.5757 = fs.5750[u64 1 ]; /* u64 */
+  h#2.5758 = fs.5750[u64 2 ]; /* u64 */
+  h#3.5759 = fs.5750[u64 3 ]; /* u64 */
+  (cf.5760, h#0.5761) = #sbb_64(h#0.5756, t1r#0.5670, false); /* :k */
+  (cf.5762, h#1.5763) = #sbb_64(h#1.5757, t1r#1.5663, cf.5760); /* :k */
+  (cf.5764, h#2.5765) = #sbb_64(h#2.5758, t1r#2.5665, cf.5762); /* :k */
+  (cf.5766, h#3.5767) = #sbb_64(h#3.5759, t1r#3.5667, cf.5764); /* :k */
+  (_ /* bool */, z.5768) = #sbb_64(z.5755, z.5755, cf.5766); /* :k */
+  z.5769 = (z.5768 & ((64u) 38)); /* u64 */
+  (cf.5770, h#0.5771) = #sbb_64(h#0.5761, z.5769, false); /* :k */
+  (cf.5772, h#1.5773) = #sbb_64(h#1.5763, ((64u) 0), cf.5770); /* :k */
+  (cf.5774, h#2.5775) = #sbb_64(h#2.5765, ((64u) 0), cf.5772); /* :k */
+  (cf.5776, h#3.5777) = #sbb_64(h#3.5767, ((64u) 0), cf.5774); /* :k */
+  (_ /* bool */, z.5778) = #sbb_64(z.5769, z.5769, cf.5776); /* :k */
+  z.5779 = (z.5778 & ((64u) 38)); /* u64 */
+  h#0.5780 = (h#0.5771 - z.5779); /* u64 */
+  ArrayInit(hs.5781); /* length=32 u8[32] */
+  hs.5781[u64 0 ] = h#0.5780; /* u64 */
+  hs.5781[u64 1 ] = h#1.5773; /* u64 */
+  hs.5781[u64 2 ] = h#2.5775; /* u64 */
+  hs.5781[u64 3 ] = h#3.5777; /* u64 */
+  t0.5782 = hs.5781; /* u8[32]:r */
+  fs.5783 = t2.5553; /* u8[32]:r */
+  fs.5784 = fs.5783; /* u8[32]:r */
+  (of.5785, cf.5786, _ /* bool */, _ /* bool */, _ /* bool */, z.5787) =
+    #set0_64(); /* :k */
+  f0.5788 = fs.5784[u64 0 ]; /* u64 */
+  (h#1.5789, h#0.5790) = #MULX_64(f0.5788, t1r#0.5670); /* :k */
+  (h#2.5791, lo.5792) = #MULX_64(f0.5788, t1r#1.5663); /* :k */
+  (cf.5793, h#1.5794) = #ADCX_64(h#1.5789, lo.5792, cf.5786); /* :k */
+  (h#3.5795, lo.5796) = #MULX_64(f0.5788, t1r#2.5665); /* :k */
+  (cf.5797, h#2.5798) = #ADCX_64(h#2.5791, lo.5796, cf.5793); /* :k */
+  (r#0.5799, lo.5800) = #MULX_64(f0.5788, t1r#3.5667); /* :k */
+  (cf.5801, h#3.5802) = #ADCX_64(h#3.5795, lo.5800, cf.5797); /* :k */
+  (cf.5803, r#0.5804) = #ADCX_64(r#0.5799, z.5787, cf.5801); /* :k */
+  f.5805 = fs.5784[u64 1 ]; /* u64 */
+  (hi.5806, lo.5807) = #MULX_64(f.5805, t1r#0.5670); /* :k */
+  (of.5808, h#1.5809) = #ADOX_64(h#1.5794, lo.5807, of.5785); /* :k */
+  (cf.5810, h#2.5811) = #ADCX_64(h#2.5798, hi.5806, cf.5803); /* :k */
+  (hi.5812, lo.5813) = #MULX_64(f.5805, t1r#1.5663); /* :k */
+  (of.5814, h#2.5815) = #ADOX_64(h#2.5811, lo.5813, of.5808); /* :k */
+  (cf.5816, h#3.5817) = #ADCX_64(h#3.5802, hi.5812, cf.5810); /* :k */
+  (hi.5818, lo.5819) = #MULX_64(f.5805, t1r#2.5665); /* :k */
+  (of.5820, h#3.5821) = #ADOX_64(h#3.5817, lo.5819, of.5814); /* :k */
+  (cf.5822, r#0.5823) = #ADCX_64(r#0.5804, hi.5818, cf.5816); /* :k */
+  (r#1.5824, lo.5825) = #MULX_64(f.5805, t1r#3.5667); /* :k */
+  (of.5826, r#0.5827) = #ADOX_64(r#0.5823, lo.5825, of.5820); /* :k */
+  (cf.5828, r#1.5829) = #ADCX_64(r#1.5824, z.5787, cf.5822); /* :k */
+  (of.5830, r#1.5831) = #ADOX_64(r#1.5829, z.5787, of.5826); /* :k */
+  f.5832 = fs.5784[u64 2 ]; /* u64 */
+  (hi.5833, lo.5834) = #MULX_64(f.5832, t1r#0.5670); /* :k */
+  (of.5835, h#2.5836) = #ADOX_64(h#2.5815, lo.5834, of.5830); /* :k */
+  (cf.5837, h#3.5838) = #ADCX_64(h#3.5821, hi.5833, cf.5828); /* :k */
+  (hi.5839, lo.5840) = #MULX_64(f.5832, t1r#1.5663); /* :k */
+  (of.5841, h#3.5842) = #ADOX_64(h#3.5838, lo.5840, of.5835); /* :k */
+  (cf.5843, r#0.5844) = #ADCX_64(r#0.5827, hi.5839, cf.5837); /* :k */
+  (hi.5845, lo.5846) = #MULX_64(f.5832, t1r#2.5665); /* :k */
+  (of.5847, r#0.5848) = #ADOX_64(r#0.5844, lo.5846, of.5841); /* :k */
+  (cf.5849, r#1.5850) = #ADCX_64(r#1.5831, hi.5845, cf.5843); /* :k */
+  (r#2.5851, lo.5852) = #MULX_64(f.5832, t1r#3.5667); /* :k */
+  (of.5853, r#1.5854) = #ADOX_64(r#1.5850, lo.5852, of.5847); /* :k */
+  (cf.5855, r#2.5856) = #ADCX_64(r#2.5851, z.5787, cf.5849); /* :k */
+  (of.5857, r#2.5858) = #ADOX_64(r#2.5856, z.5787, of.5853); /* :k */
+  f.5859 = fs.5784[u64 3 ]; /* u64 */
+  (hi.5860, lo.5861) = #MULX_64(f.5859, t1r#0.5670); /* :k */
+  (of.5862, h#3.5863) = #ADOX_64(h#3.5842, lo.5861, of.5857); /* :k */
+  (cf.5864, r#0.5865) = #ADCX_64(r#0.5848, hi.5860, cf.5855); /* :k */
+  (hi.5866, lo.5867) = #MULX_64(f.5859, t1r#1.5663); /* :k */
+  (of.5868, r#0.5869) = #ADOX_64(r#0.5865, lo.5867, of.5862); /* :k */
+  (cf.5870, r#1.5871) = #ADCX_64(r#1.5854, hi.5866, cf.5864); /* :k */
+  (hi.5872, lo.5873) = #MULX_64(f.5859, t1r#2.5665); /* :k */
+  (of.5874, r#1.5875) = #ADOX_64(r#1.5871, lo.5873, of.5868); /* :k */
+  (cf.5876, r#2.5877) = #ADCX_64(r#2.5858, hi.5872, cf.5870); /* :k */
+  (r#3.5878, lo.5879) = #MULX_64(f.5859, t1r#3.5667); /* :k */
+  (of.5880, r#2.5881) = #ADOX_64(r#2.5877, lo.5879, of.5874); /* :k */
+  (cf.5882, r#3.5883) = #ADCX_64(r#3.5878, z.5787, cf.5876); /* :k */
+  (of.5884, r#3.5885) = #ADOX_64(r#3.5883, z.5787, of.5880); /* :k */
+  _38.5886 = ((64u) 38); /* u64 */
+  (hi.5887, lo.5888) = #MULX_64(_38.5886, r#0.5869); /* :k */
+  (of.5889, h#0.5890) = #ADOX_64(h#0.5790, lo.5888, of.5884); /* :k */
+  (cf.5891, h#1.5892) = #ADCX_64(h#1.5809, hi.5887, cf.5882); /* :k */
+  (hi.5893, lo.5894) = #MULX_64(_38.5886, r#1.5875); /* :k */
+  (of.5895, h#1.5896) = #ADOX_64(h#1.5892, lo.5894, of.5889); /* :k */
+  (cf.5897, h#2.5898) = #ADCX_64(h#2.5836, hi.5893, cf.5891); /* :k */
+  (hi.5899, lo.5900) = #MULX_64(_38.5886, r#2.5881); /* :k */
+  (of.5901, h#2.5902) = #ADOX_64(h#2.5898, lo.5900, of.5895); /* :k */
+  (cf.5903, h#3.5904) = #ADCX_64(h#3.5863, hi.5899, cf.5897); /* :k */
+  (r#0.5905, lo.5906) = #MULX_64(_38.5886, r#3.5885); /* :k */
+  (of.5907, h#3.5908) = #ADOX_64(h#3.5904, lo.5906, of.5901); /* :k */
+  (cf.5909, r#0.5910) = #ADCX_64(r#0.5905, z.5787, cf.5903); /* :k */
+  (of.5911, r#0.5912) = #ADOX_64(r#0.5910, z.5787, of.5907); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.5913) = #IMULri_64(r#0.5912, ((64u) 38)); /* :k */
+  (cf.5914, h#0.5915) = #adc_64(h#0.5890, lo.5913, false); /* :k */
+  (cf.5916, h#1.5917) = #adc_64(h#1.5896, z.5787, cf.5914); /* :k */
+  (cf.5918, h#2.5919) = #adc_64(h#2.5902, z.5787, cf.5916); /* :k */
+  (cf.5920, h#3.5921) = #adc_64(h#3.5908, z.5787, cf.5918); /* :k */
+  (_ /* bool */, z.5922) = #sbb_64(z.5787, z.5787, cf.5920); /* :k */
+  z.5923 = (z.5922 & ((64u) 38)); /* u64 */
+  h#0.5924 = (h#0.5915 + z.5923); /* u64 */
+  ArrayInit(hs.5925); /* length=32 u8[32] */
+  hs.5925[u64 0 ] = h#0.5924; /* u64 */
+  hs.5925[u64 1 ] = h#1.5917; /* u64 */
+  hs.5925[u64 2 ] = h#2.5919; /* u64 */
+  hs.5925[u64 3 ] = h#3.5921; /* u64 */
+  x2.5926 = hs.5925; /* u8[32]:r */
+  fs.5927 = z2.5748; /* u8[32]:r */
+  f#0.5928 = fs.5927[u64 0 ]; /* u64 */
+  f#1.5929 = fs.5927[u64 1 ]; /* u64 */
+  f#2.5930 = fs.5927[u64 2 ]; /* u64 */
+  f#3.5931 = fs.5927[u64 3 ]; /* u64 */
+  (of.5932, cf.5933, _ /* bool */, _ /* bool */, _ /* bool */, z.5934) =
+    #set0_64(); /* :k */
+  fx.5935 = f#0.5928; /* u64 */
+  (t#1.5936, h#0.5937) = #MULX_64(fx.5935, fx.5935); /* :k */
+  (h#2.5938, h#1.5939) = #MULX_64(fx.5935, f#1.5929); /* :k */
+  (h#3.5940, t#2.5941) = #MULX_64(fx.5935, f#2.5930); /* :k */
+  (cf.5942, h#2.5943) = #ADCX_64(h#2.5938, t#2.5941, cf.5933); /* :k */
+  (r#0.5944, t#3.5945) = #MULX_64(fx.5935, f#3.5931); /* :k */
+  (cf.5946, h#3.5947) = #ADCX_64(h#3.5940, t#3.5945, cf.5942); /* :k */
+  fx.5948 = f#1.5929; /* u64 */
+  (t#4.5949, t#3.5950) = #MULX_64(fx.5948, f#2.5930); /* :k */
+  (of.5951, h#3.5952) = #ADOX_64(h#3.5947, t#3.5950, of.5932); /* :k */
+  (cf.5953, r#0.5954) = #ADCX_64(r#0.5944, t#4.5949, cf.5946); /* :k */
+  (r#1.5955, t#4.5956) = #MULX_64(fx.5948, f#3.5931); /* :k */
+  (of.5957, r#0.5958) = #ADOX_64(r#0.5954, t#4.5956, of.5951); /* :k */
+  (t#3.5959, t#2.5960) = #MULX_64(fx.5948, fx.5948); /* :k */
+  fx.5961 = f#2.5930; /* u64 */
+  (r#2.5962, t#5.5963) = #MULX_64(fx.5961, f#3.5931); /* :k */
+  (cf.5964, r#1.5965) = #ADCX_64(r#1.5955, t#5.5963, cf.5953); /* :k */
+  (of.5966, r#1.5967) = #ADOX_64(r#1.5965, z.5934, of.5957); /* :k */
+  (cf.5968, r#2.5969) = #ADCX_64(r#2.5962, z.5934, cf.5964); /* :k */
+  (of.5970, r#2.5971) = #ADOX_64(r#2.5969, z.5934, of.5966); /* :k */
+  (t#5.5972, t#4.5973) = #MULX_64(fx.5961, fx.5961); /* :k */
+  fx.5974 = f#3.5931; /* u64 */
+  (r#3.5975, t#6.5976) = #MULX_64(fx.5974, fx.5974); /* :k */
+  (cf.5977, h#1.5978) = #ADCX_64(h#1.5939, h#1.5939, cf.5968); /* :k */
+  (of.5979, h#1.5980) = #ADOX_64(h#1.5978, t#1.5936, of.5970); /* :k */
+  (cf.5981, h#2.5982) = #ADCX_64(h#2.5943, h#2.5943, cf.5977); /* :k */
+  (of.5983, h#2.5984) = #ADOX_64(h#2.5982, t#2.5960, of.5979); /* :k */
+  (cf.5985, h#3.5986) = #ADCX_64(h#3.5952, h#3.5952, cf.5981); /* :k */
+  (of.5987, h#3.5988) = #ADOX_64(h#3.5986, t#3.5959, of.5983); /* :k */
+  (cf.5989, r#0.5990) = #ADCX_64(r#0.5958, r#0.5958, cf.5985); /* :k */
+  (of.5991, r#0.5992) = #ADOX_64(r#0.5990, t#4.5973, of.5987); /* :k */
+  (cf.5993, r#1.5994) = #ADCX_64(r#1.5967, r#1.5967, cf.5989); /* :k */
+  (of.5995, r#1.5996) = #ADOX_64(r#1.5994, t#5.5972, of.5991); /* :k */
+  (cf.5997, r#2.5998) = #ADCX_64(r#2.5971, r#2.5971, cf.5993); /* :k */
+  (of.5999, r#2.6000) = #ADOX_64(r#2.5998, t#6.5976, of.5995); /* :k */
+  (cf.6001, r#3.6002) = #ADCX_64(r#3.5975, z.5934, cf.5997); /* :k */
+  (of.6003, r#3.6004) = #ADOX_64(r#3.6002, z.5934, of.5999); /* :k */
+  _38.6005 = ((64u) 38); /* u64 */
+  (hi.6006, lo.6007) = #MULX_64(_38.6005, r#0.5992); /* :k */
+  (of.6008, h#0.6009) = #ADOX_64(h#0.5937, lo.6007, of.6003); /* :k */
+  (cf.6010, h#1.6011) = #ADCX_64(h#1.5980, hi.6006, cf.6001); /* :k */
+  (hi.6012, lo.6013) = #MULX_64(_38.6005, r#1.5996); /* :k */
+  (of.6014, h#1.6015) = #ADOX_64(h#1.6011, lo.6013, of.6008); /* :k */
+  (cf.6016, h#2.6017) = #ADCX_64(h#2.5984, hi.6012, cf.6010); /* :k */
+  (hi.6018, lo.6019) = #MULX_64(_38.6005, r#2.6000); /* :k */
+  (of.6020, h#2.6021) = #ADOX_64(h#2.6017, lo.6019, of.6014); /* :k */
+  (cf.6022, h#3.6023) = #ADCX_64(h#3.5988, hi.6018, cf.6016); /* :k */
+  (r#0.6024, lo.6025) = #MULX_64(_38.6005, r#3.6004); /* :k */
+  (of.6026, h#3.6027) = #ADOX_64(h#3.6023, lo.6025, of.6020); /* :k */
+  (cf.6028, r#0.6029) = #ADCX_64(r#0.6024, z.5934, cf.6022); /* :k */
+  (of.6030, r#0.6031) = #ADOX_64(r#0.6029, z.5934, of.6026); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.6032) = #IMULri_64(r#0.6031, ((64u) 38)); /* :k */
+  (cf.6033, h#0.6034) = #adc_64(h#0.6009, lo.6032, false); /* :k */
+  (cf.6035, h#1.6036) = #adc_64(h#1.6015, z.5934, cf.6033); /* :k */
+  (cf.6037, h#2.6038) = #adc_64(h#2.6021, z.5934, cf.6035); /* :k */
+  (cf.6039, h#3.6040) = #adc_64(h#3.6027, z.5934, cf.6037); /* :k */
+  (_ /* bool */, z.6041) = #sbb_64(z.5934, z.5934, cf.6039); /* :k */
+  z.6042 = (z.6041 & ((64u) 38)); /* u64 */
+  h#0.6043 = (h#0.6034 + z.6042); /* u64 */
+  ArrayInit(hs.6044); /* length=32 u8[32] */
+  hs.6044[u64 0 ] = h#0.6043; /* u64 */
+  hs.6044[u64 1 ] = h#1.6036; /* u64 */
+  hs.6044[u64 2 ] = h#2.6038; /* u64 */
+  hs.6044[u64 3 ] = h#3.6040; /* u64 */
+  z2.6045 = hs.6044; /* u8[32]:r */
+  fs.6046 = t0.5782; /* u8[32]:r */
+  fs.6047 = fs.6046; /* u8[32]:r */
+  c.6048 = ((64u) 121665); /* u64 */
+  (h#1.6049, h#0.6050) = #MULX_64(c.6048, fs.6047[u64 0 ]); /* :k */
+  (h#2.6051, lo.6052) = #MULX_64(c.6048, fs.6047[u64 1 ]); /* :k */
+  (cf.6053, h#1.6054) = #adc_64(h#1.6049, lo.6052, false); /* :k */
+  (h#3.6055, lo.6056) = #MULX_64(c.6048, fs.6047[u64 2 ]); /* :k */
+  (cf.6057, h#2.6058) = #adc_64(h#2.6051, lo.6056, cf.6053); /* :k */
+  (r0.6059, lo.6060) = #MULX_64(c.6048, fs.6047[u64 3 ]); /* :k */
+  (cf.6061, h#3.6062) = #adc_64(h#3.6055, lo.6060, cf.6057); /* :k */
+  (_ /* bool */, r0.6063) = #adc_64(r0.6059, ((64u) 0), cf.6061); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   r0.6064) = #IMULri_64(r0.6063, ((64u) 38)); /* :k */
+  (cf.6065, h#0.6066) = #adc_64(h#0.6050, r0.6064, false); /* :k */
+  (cf.6067, h#1.6068) = #adc_64(h#1.6054, ((64u) 0), cf.6065); /* :k */
+  (cf.6069, h#2.6070) = #adc_64(h#2.6058, ((64u) 0), cf.6067); /* :k */
+  (cf.6071, h#3.6072) = #adc_64(h#3.6062, ((64u) 0), cf.6069); /* :k */
+  (_ /* bool */, c.6073) = #sbb_64(c.6048, c.6048, cf.6071); /* :k */
+  c.6074 = (c.6073 & ((64u) 38)); /* u64 */
+  h#0.6075 = (h#0.6066 + c.6074); /* u64 */
+  ArrayInit(hs.6076); /* length=32 u8[32] */
+  hs.6076[u64 0 ] = h#0.6075; /* u64 */
+  hs.6076[u64 1 ] = h#1.6068; /* u64 */
+  hs.6076[u64 2 ] = h#2.6070; /* u64 */
+  hs.6076[u64 3 ] = h#3.6072; /* u64 */
+  z3.6077 = hs.6076; /* u8[32]:r */
+  fs.6078 = x3.5709; /* u8[32]:r */
+  f#0.6079 = fs.6078[u64 0 ]; /* u64 */
+  f#1.6080 = fs.6078[u64 1 ]; /* u64 */
+  f#2.6081 = fs.6078[u64 2 ]; /* u64 */
+  f#3.6082 = fs.6078[u64 3 ]; /* u64 */
+  (of.6083, cf.6084, _ /* bool */, _ /* bool */, _ /* bool */, z.6085) =
+    #set0_64(); /* :k */
+  fx.6086 = f#0.6079; /* u64 */
+  (t#1.6087, h#0.6088) = #MULX_64(fx.6086, fx.6086); /* :k */
+  (h#2.6089, h#1.6090) = #MULX_64(fx.6086, f#1.6080); /* :k */
+  (h#3.6091, t#2.6092) = #MULX_64(fx.6086, f#2.6081); /* :k */
+  (cf.6093, h#2.6094) = #ADCX_64(h#2.6089, t#2.6092, cf.6084); /* :k */
+  (r#0.6095, t#3.6096) = #MULX_64(fx.6086, f#3.6082); /* :k */
+  (cf.6097, h#3.6098) = #ADCX_64(h#3.6091, t#3.6096, cf.6093); /* :k */
+  fx.6099 = f#1.6080; /* u64 */
+  (t#4.6100, t#3.6101) = #MULX_64(fx.6099, f#2.6081); /* :k */
+  (of.6102, h#3.6103) = #ADOX_64(h#3.6098, t#3.6101, of.6083); /* :k */
+  (cf.6104, r#0.6105) = #ADCX_64(r#0.6095, t#4.6100, cf.6097); /* :k */
+  (r#1.6106, t#4.6107) = #MULX_64(fx.6099, f#3.6082); /* :k */
+  (of.6108, r#0.6109) = #ADOX_64(r#0.6105, t#4.6107, of.6102); /* :k */
+  (t#3.6110, t#2.6111) = #MULX_64(fx.6099, fx.6099); /* :k */
+  fx.6112 = f#2.6081; /* u64 */
+  (r#2.6113, t#5.6114) = #MULX_64(fx.6112, f#3.6082); /* :k */
+  (cf.6115, r#1.6116) = #ADCX_64(r#1.6106, t#5.6114, cf.6104); /* :k */
+  (of.6117, r#1.6118) = #ADOX_64(r#1.6116, z.6085, of.6108); /* :k */
+  (cf.6119, r#2.6120) = #ADCX_64(r#2.6113, z.6085, cf.6115); /* :k */
+  (of.6121, r#2.6122) = #ADOX_64(r#2.6120, z.6085, of.6117); /* :k */
+  (t#5.6123, t#4.6124) = #MULX_64(fx.6112, fx.6112); /* :k */
+  fx.6125 = f#3.6082; /* u64 */
+  (r#3.6126, t#6.6127) = #MULX_64(fx.6125, fx.6125); /* :k */
+  (cf.6128, h#1.6129) = #ADCX_64(h#1.6090, h#1.6090, cf.6119); /* :k */
+  (of.6130, h#1.6131) = #ADOX_64(h#1.6129, t#1.6087, of.6121); /* :k */
+  (cf.6132, h#2.6133) = #ADCX_64(h#2.6094, h#2.6094, cf.6128); /* :k */
+  (of.6134, h#2.6135) = #ADOX_64(h#2.6133, t#2.6111, of.6130); /* :k */
+  (cf.6136, h#3.6137) = #ADCX_64(h#3.6103, h#3.6103, cf.6132); /* :k */
+  (of.6138, h#3.6139) = #ADOX_64(h#3.6137, t#3.6110, of.6134); /* :k */
+  (cf.6140, r#0.6141) = #ADCX_64(r#0.6109, r#0.6109, cf.6136); /* :k */
+  (of.6142, r#0.6143) = #ADOX_64(r#0.6141, t#4.6124, of.6138); /* :k */
+  (cf.6144, r#1.6145) = #ADCX_64(r#1.6118, r#1.6118, cf.6140); /* :k */
+  (of.6146, r#1.6147) = #ADOX_64(r#1.6145, t#5.6123, of.6142); /* :k */
+  (cf.6148, r#2.6149) = #ADCX_64(r#2.6122, r#2.6122, cf.6144); /* :k */
+  (of.6150, r#2.6151) = #ADOX_64(r#2.6149, t#6.6127, of.6146); /* :k */
+  (cf.6152, r#3.6153) = #ADCX_64(r#3.6126, z.6085, cf.6148); /* :k */
+  (of.6154, r#3.6155) = #ADOX_64(r#3.6153, z.6085, of.6150); /* :k */
+  _38.6156 = ((64u) 38); /* u64 */
+  (hi.6157, lo.6158) = #MULX_64(_38.6156, r#0.6143); /* :k */
+  (of.6159, h#0.6160) = #ADOX_64(h#0.6088, lo.6158, of.6154); /* :k */
+  (cf.6161, h#1.6162) = #ADCX_64(h#1.6131, hi.6157, cf.6152); /* :k */
+  (hi.6163, lo.6164) = #MULX_64(_38.6156, r#1.6147); /* :k */
+  (of.6165, h#1.6166) = #ADOX_64(h#1.6162, lo.6164, of.6159); /* :k */
+  (cf.6167, h#2.6168) = #ADCX_64(h#2.6135, hi.6163, cf.6161); /* :k */
+  (hi.6169, lo.6170) = #MULX_64(_38.6156, r#2.6151); /* :k */
+  (of.6171, h#2.6172) = #ADOX_64(h#2.6168, lo.6170, of.6165); /* :k */
+  (cf.6173, h#3.6174) = #ADCX_64(h#3.6139, hi.6169, cf.6167); /* :k */
+  (r#0.6175, lo.6176) = #MULX_64(_38.6156, r#3.6155); /* :k */
+  (of.6177, h#3.6178) = #ADOX_64(h#3.6174, lo.6176, of.6171); /* :k */
+  (cf.6179, r#0.6180) = #ADCX_64(r#0.6175, z.6085, cf.6173); /* :k */
+  (of.6181, r#0.6182) = #ADOX_64(r#0.6180, z.6085, of.6177); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.6183) = #IMULri_64(r#0.6182, ((64u) 38)); /* :k */
+  (cf.6184, h#0.6185) = #adc_64(h#0.6160, lo.6183, false); /* :k */
+  (cf.6186, h#1.6187) = #adc_64(h#1.6166, z.6085, cf.6184); /* :k */
+  (cf.6188, h#2.6189) = #adc_64(h#2.6172, z.6085, cf.6186); /* :k */
+  (cf.6190, h#3.6191) = #adc_64(h#3.6178, z.6085, cf.6188); /* :k */
+  (_ /* bool */, z.6192) = #sbb_64(z.6085, z.6085, cf.6190); /* :k */
+  z.6193 = (z.6192 & ((64u) 38)); /* u64 */
+  h#0.6194 = (h#0.6185 + z.6193); /* u64 */
+  ArrayInit(hs.6195); /* length=32 u8[32] */
+  hs.6195[u64 0 ] = h#0.6194; /* u64 */
+  hs.6195[u64 1 ] = h#1.6187; /* u64 */
+  hs.6195[u64 2 ] = h#2.6189; /* u64 */
+  hs.6195[u64 3 ] = h#3.6191; /* u64 */
+  x3.6196 = hs.6195; /* u8[32]:r */
+  fs.6197 = t2.5553; /* u8[32]:r */
+  gs.6198 = z3.6077; /* u8[32]:r */
+  f#0.6199 = fs.6197[u64 0 ]; /* u64 */
+  f#1.6200 = fs.6197[u64 1 ]; /* u64 */
+  f#2.6201 = fs.6197[u64 2 ]; /* u64 */
+  f#3.6202 = fs.6197[u64 3 ]; /* u64 */
+  g.6203 = gs.6198; /* u8[32]:r */
+  (_of_.6204, _cf_.6205, _sf_.6206, _ /* bool */, _zf_.6207, z.6208) =
+    #set0_64(); /* :k */
+  h#0.6209 = f#0.6199; /* u64 */
+  h#1.6210 = f#1.6200; /* u64 */
+  h#2.6211 = f#2.6201; /* u64 */
+  h#3.6212 = f#3.6202; /* u64 */
+  (cf.6213, h#0.6214) = #adc_64(h#0.6209, g.6203[u64 0 ], false); /* :k */
+  (cf.6215, h#1.6216) = #adc_64(h#1.6210, g.6203[u64 1 ], cf.6213); /* :k */
+  (cf.6217, h#2.6218) = #adc_64(h#2.6211, g.6203[u64 2 ], cf.6215); /* :k */
+  (cf.6219, h#3.6220) = #adc_64(h#3.6212, g.6203[u64 3 ], cf.6217); /* :k */
+  (_ /* bool */, z.6221) = #sbb_64(z.6208, z.6208, cf.6219); /* :k */
+  z.6222 = (z.6221 & ((64u) 38)); /* u64 */
+  (cf.6223, h#0.6224) = #adc_64(h#0.6214, z.6222, false); /* :k */
+  (cf.6225, h#1.6226) = #adc_64(h#1.6216, ((64u) 0), cf.6223); /* :k */
+  (cf.6227, h#2.6228) = #adc_64(h#2.6218, ((64u) 0), cf.6225); /* :k */
+  (cf.6229, h#3.6230) = #adc_64(h#3.6220, ((64u) 0), cf.6227); /* :k */
+  (_ /* bool */, z.6231) = #sbb_64(z.6222, z.6222, cf.6229); /* :k */
+  z.6232 = (z.6231 & ((64u) 38)); /* u64 */
+  h#0.6233 = (h#0.6224 + z.6232); /* u64 */
+  ArrayInit(hs.6234); /* length=32 u8[32] */
+  hs.6234[u64 0 ] = h#0.6233; /* u64 */
+  hs.6234[u64 1 ] = h#1.6226; /* u64 */
+  hs.6234[u64 2 ] = h#2.6228; /* u64 */
+  hs.6234[u64 3 ] = h#3.6230; /* u64 */
+  t2.6235 = hs.6234; /* u8[32]:r */
+  fs.6236 = init.4987; /* u8[32]:r */
+  gs.6237 = z2.6045; /* u8[32]:r */
+  g#0.6238 = gs.6237[u64 0 ]; /* u64 */
+  g#1.6239 = gs.6237[u64 1 ]; /* u64 */
+  g#2.6240 = gs.6237[u64 2 ]; /* u64 */
+  g#3.6241 = gs.6237[u64 3 ]; /* u64 */
+  fs.6242 = fs.6236; /* u8[32]:r */
+  (of.6243, cf.6244, _ /* bool */, _ /* bool */, _ /* bool */, z.6245) =
+    #set0_64(); /* :k */
+  f0.6246 = fs.6242[u64 0 ]; /* u64 */
+  (h#1.6247, h#0.6248) = #MULX_64(f0.6246, g#0.6238); /* :k */
+  (h#2.6249, lo.6250) = #MULX_64(f0.6246, g#1.6239); /* :k */
+  (cf.6251, h#1.6252) = #ADCX_64(h#1.6247, lo.6250, cf.6244); /* :k */
+  (h#3.6253, lo.6254) = #MULX_64(f0.6246, g#2.6240); /* :k */
+  (cf.6255, h#2.6256) = #ADCX_64(h#2.6249, lo.6254, cf.6251); /* :k */
+  (r#0.6257, lo.6258) = #MULX_64(f0.6246, g#3.6241); /* :k */
+  (cf.6259, h#3.6260) = #ADCX_64(h#3.6253, lo.6258, cf.6255); /* :k */
+  (cf.6261, r#0.6262) = #ADCX_64(r#0.6257, z.6245, cf.6259); /* :k */
+  f.6263 = fs.6242[u64 1 ]; /* u64 */
+  (hi.6264, lo.6265) = #MULX_64(f.6263, g#0.6238); /* :k */
+  (of.6266, h#1.6267) = #ADOX_64(h#1.6252, lo.6265, of.6243); /* :k */
+  (cf.6268, h#2.6269) = #ADCX_64(h#2.6256, hi.6264, cf.6261); /* :k */
+  (hi.6270, lo.6271) = #MULX_64(f.6263, g#1.6239); /* :k */
+  (of.6272, h#2.6273) = #ADOX_64(h#2.6269, lo.6271, of.6266); /* :k */
+  (cf.6274, h#3.6275) = #ADCX_64(h#3.6260, hi.6270, cf.6268); /* :k */
+  (hi.6276, lo.6277) = #MULX_64(f.6263, g#2.6240); /* :k */
+  (of.6278, h#3.6279) = #ADOX_64(h#3.6275, lo.6277, of.6272); /* :k */
+  (cf.6280, r#0.6281) = #ADCX_64(r#0.6262, hi.6276, cf.6274); /* :k */
+  (r#1.6282, lo.6283) = #MULX_64(f.6263, g#3.6241); /* :k */
+  (of.6284, r#0.6285) = #ADOX_64(r#0.6281, lo.6283, of.6278); /* :k */
+  (cf.6286, r#1.6287) = #ADCX_64(r#1.6282, z.6245, cf.6280); /* :k */
+  (of.6288, r#1.6289) = #ADOX_64(r#1.6287, z.6245, of.6284); /* :k */
+  f.6290 = fs.6242[u64 2 ]; /* u64 */
+  (hi.6291, lo.6292) = #MULX_64(f.6290, g#0.6238); /* :k */
+  (of.6293, h#2.6294) = #ADOX_64(h#2.6273, lo.6292, of.6288); /* :k */
+  (cf.6295, h#3.6296) = #ADCX_64(h#3.6279, hi.6291, cf.6286); /* :k */
+  (hi.6297, lo.6298) = #MULX_64(f.6290, g#1.6239); /* :k */
+  (of.6299, h#3.6300) = #ADOX_64(h#3.6296, lo.6298, of.6293); /* :k */
+  (cf.6301, r#0.6302) = #ADCX_64(r#0.6285, hi.6297, cf.6295); /* :k */
+  (hi.6303, lo.6304) = #MULX_64(f.6290, g#2.6240); /* :k */
+  (of.6305, r#0.6306) = #ADOX_64(r#0.6302, lo.6304, of.6299); /* :k */
+  (cf.6307, r#1.6308) = #ADCX_64(r#1.6289, hi.6303, cf.6301); /* :k */
+  (r#2.6309, lo.6310) = #MULX_64(f.6290, g#3.6241); /* :k */
+  (of.6311, r#1.6312) = #ADOX_64(r#1.6308, lo.6310, of.6305); /* :k */
+  (cf.6313, r#2.6314) = #ADCX_64(r#2.6309, z.6245, cf.6307); /* :k */
+  (of.6315, r#2.6316) = #ADOX_64(r#2.6314, z.6245, of.6311); /* :k */
+  f.6317 = fs.6242[u64 3 ]; /* u64 */
+  (hi.6318, lo.6319) = #MULX_64(f.6317, g#0.6238); /* :k */
+  (of.6320, h#3.6321) = #ADOX_64(h#3.6300, lo.6319, of.6315); /* :k */
+  (cf.6322, r#0.6323) = #ADCX_64(r#0.6306, hi.6318, cf.6313); /* :k */
+  (hi.6324, lo.6325) = #MULX_64(f.6317, g#1.6239); /* :k */
+  (of.6326, r#0.6327) = #ADOX_64(r#0.6323, lo.6325, of.6320); /* :k */
+  (cf.6328, r#1.6329) = #ADCX_64(r#1.6312, hi.6324, cf.6322); /* :k */
+  (hi.6330, lo.6331) = #MULX_64(f.6317, g#2.6240); /* :k */
+  (of.6332, r#1.6333) = #ADOX_64(r#1.6329, lo.6331, of.6326); /* :k */
+  (cf.6334, r#2.6335) = #ADCX_64(r#2.6316, hi.6330, cf.6328); /* :k */
+  (r#3.6336, lo.6337) = #MULX_64(f.6317, g#3.6241); /* :k */
+  (of.6338, r#2.6339) = #ADOX_64(r#2.6335, lo.6337, of.6332); /* :k */
+  (cf.6340, r#3.6341) = #ADCX_64(r#3.6336, z.6245, cf.6334); /* :k */
+  (of.6342, r#3.6343) = #ADOX_64(r#3.6341, z.6245, of.6338); /* :k */
+  _38.6344 = ((64u) 38); /* u64 */
+  (hi.6345, lo.6346) = #MULX_64(_38.6344, r#0.6327); /* :k */
+  (of.6347, h#0.6348) = #ADOX_64(h#0.6248, lo.6346, of.6342); /* :k */
+  (cf.6349, h#1.6350) = #ADCX_64(h#1.6267, hi.6345, cf.6340); /* :k */
+  (hi.6351, lo.6352) = #MULX_64(_38.6344, r#1.6333); /* :k */
+  (of.6353, h#1.6354) = #ADOX_64(h#1.6350, lo.6352, of.6347); /* :k */
+  (cf.6355, h#2.6356) = #ADCX_64(h#2.6294, hi.6351, cf.6349); /* :k */
+  (hi.6357, lo.6358) = #MULX_64(_38.6344, r#2.6339); /* :k */
+  (of.6359, h#2.6360) = #ADOX_64(h#2.6356, lo.6358, of.6353); /* :k */
+  (cf.6361, h#3.6362) = #ADCX_64(h#3.6321, hi.6357, cf.6355); /* :k */
+  (r#0.6363, lo.6364) = #MULX_64(_38.6344, r#3.6343); /* :k */
+  (of.6365, h#3.6366) = #ADOX_64(h#3.6362, lo.6364, of.6359); /* :k */
+  (cf.6367, r#0.6368) = #ADCX_64(r#0.6363, z.6245, cf.6361); /* :k */
+  (of.6369, r#0.6370) = #ADOX_64(r#0.6368, z.6245, of.6365); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.6371) = #IMULri_64(r#0.6370, ((64u) 38)); /* :k */
+  (cf.6372, h#0.6373) = #adc_64(h#0.6348, lo.6371, false); /* :k */
+  (cf.6374, h#1.6375) = #adc_64(h#1.6354, z.6245, cf.6372); /* :k */
+  (cf.6376, h#2.6377) = #adc_64(h#2.6360, z.6245, cf.6374); /* :k */
+  (cf.6378, h#3.6379) = #adc_64(h#3.6366, z.6245, cf.6376); /* :k */
+  (_ /* bool */, z.6380) = #sbb_64(z.6245, z.6245, cf.6378); /* :k */
+  z.6381 = (z.6380 & ((64u) 38)); /* u64 */
+  h#0.6382 = (h#0.6373 + z.6381); /* u64 */
+  ArrayInit(hs.6383); /* length=32 u8[32] */
+  hs.6383[u64 0 ] = h#0.6382; /* u64 */
+  hs.6383[u64 1 ] = h#1.6375; /* u64 */
+  hs.6383[u64 2 ] = h#2.6377; /* u64 */
+  hs.6383[u64 3 ] = h#3.6379; /* u64 */
+  z3.6384 = hs.6383; /* u8[32]:r */
+  fs.6385 = t0.5782; /* u8[32]:r */
+  gs.6386 = t2.6235; /* u8[32]:r */
+  g#0.6387 = gs.6386[u64 0 ]; /* u64 */
+  g#1.6388 = gs.6386[u64 1 ]; /* u64 */
+  g#2.6389 = gs.6386[u64 2 ]; /* u64 */
+  g#3.6390 = gs.6386[u64 3 ]; /* u64 */
+  fs.6391 = fs.6385; /* u8[32]:r */
+  (of.6392, cf.6393, _ /* bool */, _ /* bool */, _ /* bool */, z.6394) =
+    #set0_64(); /* :k */
+  f0.6395 = fs.6391[u64 0 ]; /* u64 */
+  (o_z2r#1.6396, o_z2r#0.6397) = #MULX_64(f0.6395, g#0.6387); /* :k */
+  (o_z2r#2.6398, lo.6399) = #MULX_64(f0.6395, g#1.6388); /* :k */
+  (cf.6400, o_z2r#1.6401) =
+    #ADCX_64(o_z2r#1.6396, lo.6399, cf.6393); /* :k */
+  (o_z2r#3.6402, lo.6403) = #MULX_64(f0.6395, g#2.6389); /* :k */
+  (cf.6404, o_z2r#2.6405) =
+    #ADCX_64(o_z2r#2.6398, lo.6403, cf.6400); /* :k */
+  (r#0.6406, lo.6407) = #MULX_64(f0.6395, g#3.6390); /* :k */
+  (cf.6408, o_z2r#3.6409) =
+    #ADCX_64(o_z2r#3.6402, lo.6407, cf.6404); /* :k */
+  (cf.6410, r#0.6411) = #ADCX_64(r#0.6406, z.6394, cf.6408); /* :k */
+  f.6412 = fs.6391[u64 1 ]; /* u64 */
+  (hi.6413, lo.6414) = #MULX_64(f.6412, g#0.6387); /* :k */
+  (of.6415, o_z2r#1.6416) =
+    #ADOX_64(o_z2r#1.6401, lo.6414, of.6392); /* :k */
+  (cf.6417, o_z2r#2.6418) =
+    #ADCX_64(o_z2r#2.6405, hi.6413, cf.6410); /* :k */
+  (hi.6419, lo.6420) = #MULX_64(f.6412, g#1.6388); /* :k */
+  (of.6421, o_z2r#2.6422) =
+    #ADOX_64(o_z2r#2.6418, lo.6420, of.6415); /* :k */
+  (cf.6423, o_z2r#3.6424) =
+    #ADCX_64(o_z2r#3.6409, hi.6419, cf.6417); /* :k */
+  (hi.6425, lo.6426) = #MULX_64(f.6412, g#2.6389); /* :k */
+  (of.6427, o_z2r#3.6428) =
+    #ADOX_64(o_z2r#3.6424, lo.6426, of.6421); /* :k */
+  (cf.6429, r#0.6430) = #ADCX_64(r#0.6411, hi.6425, cf.6423); /* :k */
+  (r#1.6431, lo.6432) = #MULX_64(f.6412, g#3.6390); /* :k */
+  (of.6433, r#0.6434) = #ADOX_64(r#0.6430, lo.6432, of.6427); /* :k */
+  (cf.6435, r#1.6436) = #ADCX_64(r#1.6431, z.6394, cf.6429); /* :k */
+  (of.6437, r#1.6438) = #ADOX_64(r#1.6436, z.6394, of.6433); /* :k */
+  f.6439 = fs.6391[u64 2 ]; /* u64 */
+  (hi.6440, lo.6441) = #MULX_64(f.6439, g#0.6387); /* :k */
+  (of.6442, o_z2r#2.6443) =
+    #ADOX_64(o_z2r#2.6422, lo.6441, of.6437); /* :k */
+  (cf.6444, o_z2r#3.6445) =
+    #ADCX_64(o_z2r#3.6428, hi.6440, cf.6435); /* :k */
+  (hi.6446, lo.6447) = #MULX_64(f.6439, g#1.6388); /* :k */
+  (of.6448, o_z2r#3.6449) =
+    #ADOX_64(o_z2r#3.6445, lo.6447, of.6442); /* :k */
+  (cf.6450, r#0.6451) = #ADCX_64(r#0.6434, hi.6446, cf.6444); /* :k */
+  (hi.6452, lo.6453) = #MULX_64(f.6439, g#2.6389); /* :k */
+  (of.6454, r#0.6455) = #ADOX_64(r#0.6451, lo.6453, of.6448); /* :k */
+  (cf.6456, r#1.6457) = #ADCX_64(r#1.6438, hi.6452, cf.6450); /* :k */
+  (r#2.6458, lo.6459) = #MULX_64(f.6439, g#3.6390); /* :k */
+  (of.6460, r#1.6461) = #ADOX_64(r#1.6457, lo.6459, of.6454); /* :k */
+  (cf.6462, r#2.6463) = #ADCX_64(r#2.6458, z.6394, cf.6456); /* :k */
+  (of.6464, r#2.6465) = #ADOX_64(r#2.6463, z.6394, of.6460); /* :k */
+  f.6466 = fs.6391[u64 3 ]; /* u64 */
+  (hi.6467, lo.6468) = #MULX_64(f.6466, g#0.6387); /* :k */
+  (of.6469, o_z2r#3.6470) =
+    #ADOX_64(o_z2r#3.6449, lo.6468, of.6464); /* :k */
+  (cf.6471, r#0.6472) = #ADCX_64(r#0.6455, hi.6467, cf.6462); /* :k */
+  (hi.6473, lo.6474) = #MULX_64(f.6466, g#1.6388); /* :k */
+  (of.6475, r#0.6476) = #ADOX_64(r#0.6472, lo.6474, of.6469); /* :k */
+  (cf.6477, r#1.6478) = #ADCX_64(r#1.6461, hi.6473, cf.6471); /* :k */
+  (hi.6479, lo.6480) = #MULX_64(f.6466, g#2.6389); /* :k */
+  (of.6481, r#1.6482) = #ADOX_64(r#1.6478, lo.6480, of.6475); /* :k */
+  (cf.6483, r#2.6484) = #ADCX_64(r#2.6465, hi.6479, cf.6477); /* :k */
+  (r#3.6485, lo.6486) = #MULX_64(f.6466, g#3.6390); /* :k */
+  (of.6487, r#2.6488) = #ADOX_64(r#2.6484, lo.6486, of.6481); /* :k */
+  (cf.6489, r#3.6490) = #ADCX_64(r#3.6485, z.6394, cf.6483); /* :k */
+  (of.6491, r#3.6492) = #ADOX_64(r#3.6490, z.6394, of.6487); /* :k */
+  _38.6493 = ((64u) 38); /* u64 */
+  (hi.6494, lo.6495) = #MULX_64(_38.6493, r#0.6476); /* :k */
+  (of.6496, o_z2r#0.6497) =
+    #ADOX_64(o_z2r#0.6397, lo.6495, of.6491); /* :k */
+  (cf.6498, o_z2r#1.6499) =
+    #ADCX_64(o_z2r#1.6416, hi.6494, cf.6489); /* :k */
+  (hi.6500, lo.6501) = #MULX_64(_38.6493, r#1.6482); /* :k */
+  (of.6502, o_z2r#1.6503) =
+    #ADOX_64(o_z2r#1.6499, lo.6501, of.6496); /* :k */
+  (cf.6504, o_z2r#2.6505) =
+    #ADCX_64(o_z2r#2.6443, hi.6500, cf.6498); /* :k */
+  (hi.6506, lo.6507) = #MULX_64(_38.6493, r#2.6488); /* :k */
+  (of.6508, o_z2r#2.6509) =
+    #ADOX_64(o_z2r#2.6505, lo.6507, of.6502); /* :k */
+  (cf.6510, o_z2r#3.6511) =
+    #ADCX_64(o_z2r#3.6470, hi.6506, cf.6504); /* :k */
+  (r#0.6512, lo.6513) = #MULX_64(_38.6493, r#3.6492); /* :k */
+  (of.6514, o_z2r#3.6515) =
+    #ADOX_64(o_z2r#3.6511, lo.6513, of.6508); /* :k */
+  (cf.6516, r#0.6517) = #ADCX_64(r#0.6512, z.6394, cf.6510); /* :k */
+  (of.6518, r#0.6519) = #ADOX_64(r#0.6517, z.6394, of.6514); /* :k */
+  (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */,
+   lo.6520) = #IMULri_64(r#0.6519, ((64u) 38)); /* :k */
+  (cf.6521, o_z2r#0.6522) = #adc_64(o_z2r#0.6497, lo.6520, false); /* :k */
+  (cf.6523, o_z2r#1.6524) = #adc_64(o_z2r#1.6503, z.6394, cf.6521); /* :k */
+  (cf.6525, o_z2r#2.6526) = #adc_64(o_z2r#2.6509, z.6394, cf.6523); /* :k */
+  (cf.6527, o_z2r#3.6528) = #adc_64(o_z2r#3.6515, z.6394, cf.6525); /* :k */
+  (_ /* bool */, z.6529) = #sbb_64(z.6394, z.6394, cf.6527); /* :k */
+  z.6530 = (z.6529 & ((64u) 38)); /* u64 */
+  o_z2r#0.6531 = (o_z2r#0.6522 + z.6530); /* u64 */
+  o_x2.6532 = x2.5926; /* u8[32]:r */
+  o_x3.6533 = x3.6196; /* u8[32]:r */
+  o_z3.6534 = z3.6384; /* u8[32]:r */
+  pr.6535 = pr_s.4978; /* u64 */
+  (u64)[pr.6535 + ((64u) 0)] = o_x2.6532[u64 0 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 32)] = o_z2r#0.6531; /* u64 */
+  (u64)[pr.6535 + ((64u) 64)] = o_x3.6533[u64 0 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 96)] = o_z3.6534[u64 0 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 8)] = o_x2.6532[u64 1 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 40)] = o_z2r#1.6524; /* u64 */
+  (u64)[pr.6535 + ((64u) 72)] = o_x3.6533[u64 1 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 104)] = o_z3.6534[u64 1 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 16)] = o_x2.6532[u64 2 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 48)] = o_z2r#2.6526; /* u64 */
+  (u64)[pr.6535 + ((64u) 80)] = o_x3.6533[u64 2 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 112)] = o_z3.6534[u64 2 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 24)] = o_x2.6532[u64 3 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 56)] = o_z2r#3.6528; /* u64 */
+  (u64)[pr.6535 + ((64u) 88)] = o_x3.6533[u64 3 ]; /* u64 */
+  (u64)[pr.6535 + ((64u) 120)] = o_z3.6534[u64 3 ]; /* u64 */
+  return ();
+}
+
+
