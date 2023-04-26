@@ -1,10 +1,4 @@
-/* -------------------------------------------------------------------- */
-/* After add assignments before and after call to ensure that arguments and results are ref ptr */
-
-
-export
 fn add_doubl4 (reg u64 pr.856, reg u64 pinit.857, reg u64 px2.858, reg u64 pz2.859, reg u64 px3.860, reg u64 pz3.861) -> () {
-  
   pr_s.4978 = pr.856; /* u64 */
   ArrayInit(i_z3.4979); /* length=32 u8[32] */
   ArrayInit(i_x3.4980); /* length=32 u8[32] */
@@ -1014,7 +1008,3 @@ fn add_doubl4 (reg u64 pr.856, reg u64 pinit.857, reg u64 px2.858, reg u64 pz2.8
   (u64)[pr.6535 + ((64u) 56)] = o_z2r#3.6528; /* u64 */
   (u64)[pr.6535 + ((64u) 88)] = o_x3.6533[u64 3 ]; /* u64 */
   (u64)[pr.6535 + ((64u) 120)] = o_z3.6534[u64 3 ]; /* u64 */
-  return ();
-}
-
-
