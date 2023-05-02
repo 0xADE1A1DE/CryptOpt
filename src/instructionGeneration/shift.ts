@@ -45,6 +45,10 @@ export function shiftLeft(c: CryptOpt.StringOperation): asm[] {
       AllocationFlags.IN_0_AS_OUT_REGISTER,
   });
 
+  if (Number(shiftWidth) >= 64) {
+    throw new Error("Warning. Check if shifts >=64 are not causing undefined behaviour.");
+  }
+
   ra.declareFlagState(Flags.CF, FlagState.KILLED);
   ra.declareFlagState(Flags.OF, FlagState.KILLED);
   // TODO: Consider using shlx, no need to save Flags, dest must be a reg, but can be different to src,
@@ -130,8 +134,12 @@ export function shiftRight(c: CryptOpt.StringOperation): asm[] {
     const [inVarname, shiftWidth] = c.arguments as string[];
     const allocs = ra.getCurrentAllocations();
     if (allocs[inVarname].datatype === "u128") {
+      if (Number(shiftWidth) >= 64) {
+        throw new Error("Warning. Check if shifts >=64 are not causing undefined behaviour.");
+      }
+
       // now we are a shld
-      const newOp = defaults({ arguments: [...limbify(c.arguments[0]), c.arguments[1]] }, c);
+      const newOp = defaults({ arguments: [...limbify(c.arguments[0]), shiftWidth] }, c);
       return shiftRightDouble(newOp);
     }
 
