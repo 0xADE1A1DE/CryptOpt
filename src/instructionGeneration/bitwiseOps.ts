@@ -34,7 +34,7 @@ export function bitwiseOp(c: CryptOpt.StringOperation): asm[] {
   switch (c.operation) {
     case "&": {
       const ra = RegisterAllocator.getInstance();
-      // saneity check
+      // sanity check
       if (c.arguments[1] == "0xffffffffffffffff" && c.datatype == "u64") {
         //  maybe we should rewrite this operation as a limb[0] in the preprocessing
         let src = c.arguments[0];
