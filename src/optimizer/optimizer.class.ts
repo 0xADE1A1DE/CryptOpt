@@ -177,7 +177,10 @@ export class Optimizer {
         if (numEvals == 0) {
           // then point to fB and continue, write first
           if (this.asmStrings[FUNCTIONS.F_A].includes("undefined")) {
-            const e = "\n\n\nNah... we dont want undefined \n\n\n";
+            const p = pathResolve(this.libcheckfunctionDirectory, "with_undefined.asm");
+            writeString(p, this.asmStrings[FUNCTIONS.F_A]);
+
+            const e = `\n\n\nNah... we dont want undefined; wrote ${p}, plx fix. \n\n\n`;
             console.error(e);
             throw new Error(e);
           }

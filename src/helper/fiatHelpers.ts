@@ -47,6 +47,9 @@ function isDynArgument(ins: Fiat.Argument): ins is Fiat.DynArgument {
   return typeof ins !== "string";
 }
 
+function isDynCoArgument(ins: CryptOpt.Argument): ins is CryptOpt.DynArgument {
+  return typeof ins !== "string";
+}
 export function preprocessFunction(func: Fiat.FiatFunction): CryptOpt.Function {
   // to init a new cache everytime
   delete flattenHierarchicals.prototype.cacheCalc;
@@ -74,7 +77,8 @@ export function preprocessFunction(func: Fiat.FiatFunction): CryptOpt.Function {
   const sixSeventhProcessed = filterDeadOps(fiveSixthProcessed);
 
   // and add decisionsproperties where necessary
-  const body = sixSeventhProcessed.map(addDecisionProperty) as CryptOpt.StringOperation[]; // decisionsproperty should be added last.
+
+  const body = sixSeventhProcessed.map(addDecisionProperty).map(freeLimb) as CryptOpt.StringOperation[]; // decisionsproperty should be added last.
 
   // types
   body.forEach(assertStringArguments);
@@ -237,6 +241,36 @@ function reduce128bitShiftCombination(arg: Fiat.Argument): Fiat.Argument {
       }
     }
   }
+  return arg;
+}
+/* u128 & 0xffffffffffffffff and u128 >> 64 become limb[0] / limb[1]*/
+function freeLimb(arg: CryptOpt.Argument, _index: number, array: CryptOpt.Argument[]): CryptOpt.Argument {
+  if (typeof arg === "string") {
+    return arg;
+  }
+
+  const a0 = arg.arguments[0];
+  const parentIsU128 = () =>
+    array.filter(isDynCoArgument).find(({ name, datatype }) => name[0] == a0 && datatype == "u128");
+  if (
+    arg.operation === "&" &&
+    arg.arguments[1] == "0xffffffffffffffff" &&
+    arg.datatype == "u64" &&
+    parentIsU128()
+  ) {
+    return {
+      ...arg,
+      operation: "limb",
+      arguments: [a0, "0"],
+    };
+  } else if (arg.operation === ">>" && arg.arguments[1] == "64" && arg.datatype == "u64" && parentIsU128()) {
+    return {
+      ...arg,
+      operation: "limb",
+      arguments: [a0, "1"],
+    };
+  }
+
   return arg;
 }
 
