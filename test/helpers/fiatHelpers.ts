@@ -448,4 +448,55 @@ describe("preprocessFunction", () => {
     expect(plus).toBeTruthy();
     expect(plus?.arguments[0]).toEqual(plus?.arguments[1]);
   });
+  it("should find limb[0]'s ", () => {
+    const input = Object.assign({}, Object.assign({}, boilerplate), {
+      body: [
+        {
+          // keep this to make sure that they dont end up missing
+          name: ["x1"],
+          arguments: ["arg1[7]", "arg2[7]"],
+          operation: "*",
+          datatype: "u128",
+        },
+        {
+          name: ["x3"],
+          arguments: ["x13", "x1"],
+          operation: "+",
+          datatype: "u128",
+        },
+        {
+          name: ["x4"],
+          arguments: ["x3", "0xffffffffffffffff"],
+          operation: "&",
+          datatype: "u64",
+        },
+        {
+          name: ["x5"],
+          arguments: ["x3", "64"],
+          operation: ">>",
+          datatype: "u64",
+        },
+        createOut("x4"),
+        createOut("x5"),
+      ],
+    });
+
+    // input has 6 ops
+    expect(input.body).toHaveLength(6);
+    const result = preprocessFunction(input).body;
+    // after processing, we should no longer have &'s or '>>64'
+
+    const and_shifts = result.find((o) => ["&", ">>"].includes(o.operation));
+    expect(and_shifts).toBeFalsy();
+
+    const limbs = result.filter((o) => "limb" == o.operation);
+    expect(limbs).toBeTruthy();
+    expect(limbs).toHaveLength(2);
+    const [l0a0, l0a1] = limbs[0].arguments;
+    const [l1a0, l1a1] = limbs[1].arguments;
+    expect(l0a0).toBe("x3");
+    expect(l1a0).toBe("x3");
+    expect(l0a1).toBe("0");
+    expect(l1a1).toBe("1");
+  });
 });
