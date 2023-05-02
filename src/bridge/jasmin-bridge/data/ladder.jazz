@@ -89,6 +89,7 @@ export fn add_doubl4(reg u64 pr pinit px2 pz2 px3 pz3)
   pr = pr_s;
   for i=0 to 4
   {
+          // byte indexing here
 	  [pr + 0 * 32 + 8 * i] =  o_x2[i];
 	  [pr + 1 * 32 + 8 * i] = o_z2r[i];
 	  [pr + 2 * 32 + 8 * i] =  o_x3[i];

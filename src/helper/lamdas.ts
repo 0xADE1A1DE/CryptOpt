@@ -19,7 +19,7 @@ import { dirname } from "path";
 
 import { ByteRegister, Flags, FUNCTIONS, Register, XmmRegister } from "@/enums";
 import Logger from "@/helper/Logger.class";
-import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation } from "@/types";
+import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation, Fiat } from "@/types";
 
 import {
   ARG_PREFIX,

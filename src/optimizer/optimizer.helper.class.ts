@@ -22,11 +22,15 @@ import { BRIDGES } from "@/bridge";
 import { AVAILABLE_METHODS, BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
 import { CURVE_DETAILS, CURVE_T, FiatBridge, METHOD_T } from "@/bridge/fiat-bridge";
 import { ManualBridge } from "@/bridge/manual-bridge";
+import { JasminBridge } from "@/bridge/jasmin-bridge";
 import { Model } from "@/model";
 
 interface needComms {
   bridge: (typeof BRIDGES)[number];
   seed: number;
+}
+interface needJasmin extends needComms {
+  bridge: "jasmin";
 }
 interface needFiat extends needComms {
   curve: CURVE_T;
@@ -43,7 +47,7 @@ interface needBitcoinCore extends needComms {
   method: (typeof AVAILABLE_METHODS)[number];
 }
 
-type neededArgs = needFiat | needManual | needBitcoinCore;
+type neededArgs = needJasmin | needFiat | needManual | needBitcoinCore;
 
 type ret = {
   argwidth: number;
@@ -85,6 +89,24 @@ function initBitcoinCore(sharedObjectFilename: string, args: needBitcoinCore): r
   const argnumout = bridge.argnumout(args.method);
 
   const bounds = bridge.bounds("", args.method);
+  return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
+}
+
+function initJasmin(sharedObjectFilename: string, args: needJasmin): ret {
+  const bridge = new JasminBridge();
+  bridge;
+  Model.init({
+    curve: bridge.curve, //
+    json: bridge.getCryptOptFunction(),
+  });
+
+  const symbolname = bridge.machinecode(sharedObjectFilename);
+  const chunksize = 16; // only for reading the chunk breaks atm. see MS code
+  const argwidth = bridge.argwidth;
+  const argnumin = bridge.argnumin;
+  const argnumout = bridge.argnumout;
+
+  const bounds = bridge.bounds;
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
@@ -150,6 +172,9 @@ export function init(tmpDir: string, args: neededArgs): { symbolname: string; me
 
   let r: ret;
   switch (args.bridge) {
+    case "jasmin":
+      r = initJasmin(sharedObjectFilename, args);
+      break;
     case "manual":
       r = initManual(sharedObjectFilename, args);
       break;

@@ -37,8 +37,19 @@ export function fr__f_rm_rmi(
   arg1: imm | RegisterAllocation | MemoryAllocation,
 ): asm[] {
   if (cin.store !== Flags.CF) {
-    // could be done with seto then f__r_r_i though
-    throw new Error("unsupported to do OF in substraction.");
+    // seto then f__r_r_i though
+    const ra = RegisterAllocator.getInstance();
+    const cinName = ra.getVarnameFromStore(cin);
+    const byteReg = ra.setCC(Flags.OF, cinName);
+    if (!byteReg) {
+      throw new Error("unsupported to do OF in substraction.");
+    }
+    const newCinAlloc = {
+      ...cin,
+      store: byteReg,
+    };
+
+    return fr__rm_rm_rmi(cout, cout, newCinAlloc, arg0, arg1);
   }
   return fr__CF_rm_rmi(cout, out, arg0, arg1);
 }

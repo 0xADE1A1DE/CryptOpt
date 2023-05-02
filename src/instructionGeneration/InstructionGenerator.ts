@@ -56,6 +56,7 @@ export const getInstruction = (o: CryptOpt.StringOperation): asm[] => {
 
       return [comment, ...RegisterAllocator.getInstance().pres, ...instructions];
     }
+    case "-":
     case "subborrowx": {
       RegisterAllocator.getInstance().initNewInstruction(o);
       let comment = Logger.log(

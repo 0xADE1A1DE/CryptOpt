@@ -60,7 +60,8 @@ export namespace Fiat {
   }
 
   export interface Parameters {
-    size: number;
+    size?: number;
+    comment?: string;
   }
 
   // as in: computed

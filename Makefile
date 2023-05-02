@@ -22,9 +22,10 @@ PATH           := $(NODE_DIR)/bin:$(PATH)
 
 BUILT_CRYPTOPT := $(ROOT)/dist/CryptOpt.js
 
-.PHONY: all build check clean deepclean
+.PHONY: all build check clean deepclean jasmin
 
-all: clean $(BUILT_CRYPTOPT)
+all: jasmin
+# all: clean $(BUILT_CRYPTOPT) jasmin
 build: $(BUILT_CRYPTOPT)
 
 $(NODE):
@@ -68,3 +69,10 @@ bundle.tar.gz: $(BUNDLE_FILES)
 
 bundle.zip: $(BUNDLE_FILES)
 	zip ${@} $(^)
+
+jasmin: $(BUILT_CRYPTOPT)
+	clear
+	./CryptOpt --bridge jasmin --verbose  --seed 123456
+
+watch: $(NODE) node_modules
+	@PATH=$(PATH) DEBUG=1 npm run bundle-w

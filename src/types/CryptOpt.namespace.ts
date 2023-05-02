@@ -63,7 +63,8 @@ export namespace CryptOpt {
   export type ConstArgument =
     | Exclude<Fiat.ConstArgument, Fiat.HexConstant | Fiat.VarName>
     | HexConstant //-0xabc, 0xabe
-    | Varname; // extends Fiat Types to x1_1
+    | Varname // extends Fiat Types to x1_1
+    | Fiat.OutName;
   export type Argument = ConstArgument | DynArgument;
 
   /**
