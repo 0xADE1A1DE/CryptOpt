@@ -13,7 +13,7 @@ You can `sudo make install-zsh`, if you want to get `zsh` completion.
 curl -L https://raw.githubusercontent.com/0xADE1A1DE/CryptOpt/main/Dockerfile > Dockerfile
 docker build . -t cryptopt 
 docker run --name CryptOpt -ti cryptopt zsh
-# shell changes to root@123456:~/CryptOpt
+# shell changes to 123456# 
 ./CryptOpt --help
 ```
 
@@ -27,7 +27,7 @@ This can take a while. (Maybe around 20 minutes, depending on Internet bandwidth
 The build was successful if it ends `naming to docker.io/library/cryptopt` (or `Sucessfully tagged cryptopt:latest`)
 The build command will create a container image tagged `cryptopt`, where all the dependencies are installed and the projects are built, ready to go.
 
-1. Run the container image with `docker run --name CryptOpt -ti cryptopt zsh` -> you are now in the built project, your terminal should change to something like `root@abcdef1234:~/CryptOpt#`
+1. Run the container image with `docker run --name CryptOpt -ti cryptopt zsh` -> you are now in the built project, your terminal should change to something like `abcdef1234#`
 
 
 ## Bare Metal
