@@ -7,18 +7,27 @@ See below install instructions.
 The main entry point is the `./CryptOpt` script, the `--help` option gives options.
 You can `sudo make install-zsh`, if you want to get `zsh` completion.
 
+## Docker Super Jump Start
 
-## With Docker
+```
+curl -L https://raw.githubusercontent.com/0xADE1A1DE/CryptOpt/main/Dockerfile > Dockerfile
+docker build . -t cryptopt 
+docker run --name CryptOpt -ti cryptopt zsh
+# shell changes to root@123456:~/CryptOpt
+./CryptOpt --help
+```
 
-1. [Install Docker](https://docs.docker.com/get-docker).
-1. Download and extract the tarball or clone this repository recursively, then change into the directory containing the `Dockerfile`
+## With Docker (A Bit More Detailed)
+
+1. [Install Docker](https://docs.docker.com/get-docker) or in the [Install Docker.md](./INSTALL_docker.md).
+1. Clone this repository, then change into the directory containing the `Dockerfile`.
 1. Build Container  
 Build the container with `docker build . -t cryptopt`. (`.` is the *build context*. It's the path containing the `Dockerfile`)
-This will take a while. (Maybe around 1-2 hours, depending on Internet bandwidth and machine) (Note: It is expected that the some output is red. This is warnings of the build process piped to stderr).
-The build was successful if it ends with `Sucessfully tagged cryptopt:latest`
+This can take a while. (Maybe around 20 minutes, depending on Internet bandwidth and machine) (Note: Depending on your Docker version, it is expected that the some output is red. This is warnings of the build process piped to stderr).
+The build was successful if it ends `naming to docker.io/library/cryptopt` (or `Sucessfully tagged cryptopt:latest`)
 The build command will create a container image tagged `cryptopt`, where all the dependencies are installed and the projects are built, ready to go.
 
-1. Run the container image with `docker run --name CryptOpt -ti cryptopt bash` -> you are now in the built project, your terminal should change to something like `root@abcdef1234:~/CryptOpt#`
+1. Run the container image with `docker run --name CryptOpt -ti cryptopt zsh` -> you are now in the built project, your terminal should change to something like `root@abcdef1234:~/CryptOpt#`
 
 
 ## Bare Metal
