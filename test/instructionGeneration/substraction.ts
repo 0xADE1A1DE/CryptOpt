@@ -25,28 +25,14 @@ const allocs = {
   "0x0": { datatype: "u64", store: "r12" },
   "-0x1": { datatype: "u64", store: "rsi" },
   "0x1db41": { datatype: "u64", store: "r9" },
-  "arg4[2]": { datatype: "u64", store: "[ r8 + 0x10 ]" },
   "arg4[3]": { datatype: "u64", store: "[ r8 + 0x18 ]" },
-  "arg5[2]": { datatype: "u64", store: "[ r9 + 0x10 ]" },
   "arg5[3]": { datatype: "u64", store: "[ r9 + 0x18 ]" },
 
   x910: { datatype: "u1", store: "OF" },
   x1000: { datatype: "u1", store: "CF" },
   x48: { datatype: "u1", store: "r12b" },
   x12: { datatype: "u1", store: "[ rsp + 0x0 ]" },
-
-  x11: { datatype: "u64", store: "r14" },
-  x219: { datatype: "u64", store: "r12" },
-  x221: { datatype: "u64", store: "r15" },
-  x463: { datatype: "u64", store: "r11" },
-  x465: { datatype: "u64", store: "r14" },
-  x468: { datatype: "u64", store: "rbx" },
-  x10071: { datatype: "u64", store: "rax" },
-  x631: { datatype: "u64", store: "r13" },
-  x10073: { datatype: "u64", store: "rcx" },
-  x619: { datatype: "u64", store: "rdx" },
-  x10076: { datatype: "u64", store: "rdx" },
-  x100: { datatype: "u64", store: "[ rsp ]" },
+  x13: { datatype: "u64", store: "rdx" },
 } as Allocations;
 
 const allocate = vi.fn();
@@ -282,6 +268,40 @@ describe("instructionGeneration:sub", () => {
 
     // to load OF
     expect(addToPreInstructions).toHaveBeenCalledWith("add sil, byte [ rsp + 0x0 ]; load to CF<-x12"); // becuase '-0x1' is in rsi, x12 is in [ rsp + 0 ]
+
+    expect(declareHavoc).toHaveBeenCalledWith(Register.rsi);
+    expect(code[0]).toBe("sbb rax, [ r9 + 0x18 ]");
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+  it("carry-in in r/64", () => {
+    getCurrentAllocations.mockClear();
+    backupIfVarHasDependencies.mockClear().mockImplementation(() => Register.rax);
+    declareHavoc.mockClear();
+    addToPreInstructions.mockClear();
+
+    spillFlag.mockClear();
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x1003", "x1002"],
+      arguments: ["x13", "arg4[3]", "arg5[3]"],
+      decisions: {
+        di_choose_arg: [0, ["x13", "arg4[3]", "arg5[3]"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+    expect(code).toHaveLength(1);
+    expect(backupIfVarHasDependencies).toBeCalledWith("arg4[3]", "x1003");
+
+    // to load OF
+    expect(addToPreInstructions).toHaveBeenCalledWith("add rsi, rdx; load to CF<-x13"); // becuase '-0x1' is in rsi, x13 is in rdx
 
     expect(declareHavoc).toHaveBeenCalledWith(Register.rsi);
     expect(code[0]).toBe("sbb rax, [ r9 + 0x18 ]");

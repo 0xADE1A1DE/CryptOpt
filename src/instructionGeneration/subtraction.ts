@@ -90,9 +90,8 @@ export function sub(c: CryptOpt.StringOperation): asm[] {
         ra.addToPreInstructions(`add ${getByteRegFromQwReg(r)}, byte ${cin}; load to CF<-${carryinVarname}`);
       } else if (isByteRegister(cin)) {
         ra.addToPreInstructions(`add ${getByteRegFromQwReg(r)}, ${cin}; load to CF<-${carryinVarname}`);
-
-        // this should not be possible, u1 in m64
-        // } else { ra.addToPreInstructions(`add ${r}, ${cin}; load to CF<-${carryinVarname}`);
+      } else {
+        ra.addToPreInstructions(`add ${r}, ${cin}; load to CF<-${carryinVarname}`);
       }
       ra.declareHavoc(r);
     }
