@@ -15,19 +15,8 @@
  */
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  ByteRegister,
-  C_DI_HANDLE_FLAGS_KK,
-  C_DI_SPILL_LOCATION,
-  DECISION_IDENTIFIER,
-  Flags,
-  FlagState,
-  Register,
-} from "@/enums";
-import { TEMP_VARNAME } from "@/helper";
+import { ByteRegister, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Flags, Register } from "@/enums";
 import { sub } from "@/instructionGeneration/subtraction";
-import { Model } from "@/model";
-import { Paul } from "@/paul";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
 
 // this not consistent in within itself (multiple vars in one single reg).
