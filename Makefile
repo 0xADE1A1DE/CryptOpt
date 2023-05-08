@@ -24,8 +24,7 @@ BUILT_CRYPTOPT := $(ROOT)/dist/CryptOpt.js
 
 .PHONY: all build check clean deepclean jasmin
 
-all: jasmin
-# all: clean $(BUILT_CRYPTOPT) jasmin
+all: clean $(BUILT_CRYPTOPT)
 build: $(BUILT_CRYPTOPT)
 
 $(NODE):
