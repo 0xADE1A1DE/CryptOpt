@@ -26,7 +26,7 @@
     "test-no-watch": "vitest --watch false",
     "test-cov": " vitest --coverage",
     "lint-check": "eslint .",
-    "lint-fix": "eslint . --fix",
+    "lint-fix": "eslint --fix .",
     "format-check": "npx prettier --check \"./**/*.ts\" \"!./dist\"",
     "format-fix": "npx prettier -w \"./**/*.ts\" \"!./dist\"",
     "bundle-debug": "DEBUG=1 rollup --config rollup.config.js",
