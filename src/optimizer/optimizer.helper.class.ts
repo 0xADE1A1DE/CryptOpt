@@ -21,8 +21,8 @@ import { resolve } from "path";
 import { BRIDGES } from "@/bridge";
 import { AVAILABLE_METHODS, BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
 import { CURVE_DETAILS, CURVE_T, FiatBridge, METHOD_T } from "@/bridge/fiat-bridge";
-import { ManualBridge } from "@/bridge/manual-bridge";
 import { JasminBridge } from "@/bridge/jasmin-bridge";
+import { ManualBridge } from "@/bridge/manual-bridge";
 import { Model } from "@/model";
 
 interface needComms {
@@ -92,7 +92,7 @@ function initBitcoinCore(sharedObjectFilename: string, args: needBitcoinCore): r
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
-function initJasmin(sharedObjectFilename: string, args: needJasmin): ret {
+function initJasmin(sharedObjectFilename: string, _args: needJasmin): ret {
   const bridge = new JasminBridge();
   bridge;
   Model.init({

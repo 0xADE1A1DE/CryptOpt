@@ -14,40 +14,58 @@
  * limitations under the License.
  */
 
-import { isFlag, TEMP_VARNAME } from "@/helper";
-import type {
-  asm,
-  imm,
-  U1Allocation,
-  U1FlagAllocation,
-  U1MemoryAllocation,
-  U1RegisterAllocation,
-  U64Allocation,
-} from "@/types";
-
-import { fr__f_rm_rmi, fr__rm_rm_rmi } from "./fr__rfm_rm_rmi";
-
-export { fr__frm_rmi } from "./fr__frm_rmi";
-
-export function fr__rfm_rm_rmi(
-  cout: string,
-  out: string,
-  cin: U1Allocation,
-  arg0: U64Allocation | U1Allocation,
-  arg1: imm | U64Allocation | U1Allocation,
-): asm[] {
-  if (isFlag(cin.store)) {
-    return fr__f_rm_rmi(cout, out, cin as U1FlagAllocation, arg0, arg1);
-  } else {
-    return fr__rm_rm_rmi(cout, out, cin as U1RegisterAllocation | U1MemoryAllocation, arg0, arg1);
-  }
-}
-
-export function f__rfm_rm_rmi(
-  cout: string,
-  cin: U1Allocation,
-  arg0: U64Allocation | U1Allocation,
-  arg1: imm | U64Allocation | U1Allocation,
-): asm[] {
-  return fr__rfm_rm_rmi(cout, TEMP_VARNAME, cin, arg0, arg1);
-}
+// import { isFlag, TEMP_VARNAME } from "@/helper";
+// import { RegisterAllocator } from "@/registerAllocator";
+// import type {
+//   asm,
+//   imm,
+//   U1Allocation,
+//   U1FlagAllocation,
+//   U1MemoryAllocation,
+//   U1RegisterAllocation,
+//   U64Allocation,
+// } from "@/types";
+//
+// import { fr__f_rm_rmi, fr__rm_rm_rmi } from "./fr__rfm_rm_rmi";
+//
+// export { fr__frm_rmi } from "./fr__frm_rmi";
+// export { r__frmi_frmi } from "./r__frm_rmi";
+//
+// export function fr__rfm_rm_rmi(
+//   cout: string,
+//   out: string,
+//   cin: U1Allocation,
+//   arg0: U64Allocation | U1Allocation,
+//   arg1: imm | U64Allocation | U1Allocation,
+// ): asm[] {
+//   if (isFlag(cin.store)) {
+//     return fr__f_rm_rmi(cout, out, cin as U1FlagAllocation, arg0, arg1);
+//   } else {
+//     return fr__rm_rm_rmi(cout, out, cin as U1RegisterAllocation | U1MemoryAllocation, arg0, arg1);
+//   }
+// }
+//
+// export function CR__C_M_S(cout: string, out: string, cin: string, min: string, sub: string): asm[] {
+//   const ra = RegisterAllocator.getInstance();
+//   const allocations = ra.getCurrentAllocations();
+//   return fr__rfm_rm_rmi(cout, out, a_minuend, a_subtrahend);
+//   return [];
+// }
+//
+// export function xR__C_M_S(out: string, cin: string, min: string, sub: string): asm[] {
+//   return [];
+// }
+//
+// export function CR__x_M_S(
+//   cout: string,
+//   out: string,
+//
+//   min: string,
+//   sub: string,
+// ): asm[] {
+//   return [];
+// }
+//
+// export function xR__x_M_S(out: string, cin: string, min: string, sub: string): asm[] {
+//   return [];
+// }

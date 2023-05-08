@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Fiat, CryptOpt } from "@/types";
-import Logger from "@/helper/Logger.class";
 import { isXD } from "@/helper";
+import Logger from "@/helper/Logger.class";
+import { CryptOpt, Fiat } from "@/types";
 
 const ARRAY_REG = /(?<base>[\w.]+)\[u64 (?<off>\d+) \]/;
 type CryptOptNoLimb = Exclude<CryptOpt.Varname, CryptOpt.VarnameL>;
@@ -47,26 +47,28 @@ export class Renamer {
 
   public static rename(original: string): CryptOptNoLimb {
     const m = Renamer.instance.mapping;
-    if (m.has(original)) {
+    let newVar = m.get(original);
+    if (newVar) {
       Logger.log(`   \x1b[33mlook-up\x1b[0m  ${original} -> ${m.get(original)}`);
-    } else {
-      const arrGroups = original.match(ARRAY_REG)?.groups;
-      if (arrGroups) {
-        const origArrayName = Renamer.instance.arrayAliases.get(arrGroups.base);
-        if (origArrayName) {
-          return Renamer.rename(`${origArrayName}[u64 ${Number(arrGroups.off)} ]`);
-        }
-
-        throw new Error(
-          `Illegal State, ${original} seems to be an array, but its not in arrayAliases or in mapping.`,
-        );
-      }
-      const newVar = Renamer.instance.bump;
-
-      m.set(original, newVar);
-      Logger.log(`   \x1b[33mrenamed\x1b[0m  ${original} -> ${newVar}`);
+      return newVar;
     }
-    return m.get(original)!;
+    const arrGroups = original.match(ARRAY_REG)?.groups;
+    if (arrGroups) {
+      const origArrayName = Renamer.instance.arrayAliases.get(arrGroups.base);
+      if (origArrayName) {
+        return Renamer.rename(`${origArrayName}[u64 ${Number(arrGroups.off)} ]`);
+      }
+
+      throw new Error(
+        `Illegal State, ${original} seems to be an array, but its not in arrayAliases or in mapping.`,
+      );
+    }
+    newVar = Renamer.instance.bump;
+
+    m.set(original, newVar);
+    Logger.log(`   \x1b[33mrenamed\x1b[0m  ${original} -> ${newVar}`);
+
+    return newVar;
   }
 
   public static renameTo<T extends Fiat.ArgName | Fiat.OutName>(original: string, nameOverwrite: T): T {

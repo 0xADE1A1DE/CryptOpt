@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { CryptOpt, Fiat } from "@/types";
+import { Fiat } from "@/types";
+
 import { Renamer } from "./renamer.class";
 
 const misc = new Map<RegExp, (a: NonNullable<RegExpMatchArray["groups"]>) => Fiat.DynArgument[]>();
@@ -46,6 +47,10 @@ misc.set(/\s+(?<dest>[()\w.,/* ]+) = #set0_64\(\);.*/, (g) => {
     parameters: { comment: `${d}<-0, formerly ${g.dest}<- #set0_64` },
   }));
 });
+
+//*************
+//  return();
+//*************
 // yeah. must have groups...
 misc.set(/\s+(?<ret>return)\s*\(\);}.*/, (_g) => {
   return [];

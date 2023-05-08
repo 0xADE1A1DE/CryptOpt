@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { omit } from "lodash-es";
+
 import { delimbify, isFlag, isImm, isU1, isXmmRegister, limbify, TEMP_VARNAME } from "@/helper";
 import { Model } from "@/model";
 import { Paul } from "@/paul";
@@ -28,7 +30,6 @@ import type {
   U64Allocation,
   ValueAllocation,
 } from "@/types";
-import { omit } from "lodash-es";
 
 import { fr__rm_rm, fr__rm_rm_rmf, fr_rm_f_f, r__rm_f_f, r__rm_rm_rmf, r__rmf_rmf } from "./additionhelpers";
 

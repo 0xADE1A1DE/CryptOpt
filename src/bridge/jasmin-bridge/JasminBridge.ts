@@ -14,28 +14,20 @@
  * limitations under the License.
  */
 
-import { CryptOpt } from "@/types";
-import { Renamer } from "./renamer.class";
-import {
-  accessSync,
-  chmodSync,
-  writeFileSync,
-  constants as FS_CONSTANTS,
-  existsSync,
-  mkdirSync,
-  readFileSync,
-} from "fs";
+import { execSync } from "child_process";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-import { datadir, env, preprocessFunction, STACK_OFFSET_IN_ELEMENTS } from "@/helper";
+import { datadir, env, preprocessFunction } from "@/helper";
 import Logger from "@/helper/Logger.class";
+import { CryptOpt } from "@/types";
+
 import { Converter } from "./converter";
-import { json } from "stream/consumers";
-import { execSync } from "child_process";
+import { Renamer } from "./renamer.class";
+
 const cwd = resolve(datadir, "jasmin-bridge");
 
 const { CC, CFLAGS } = env;
-const cacheDir = resolve(cwd, ".cache");
 
 // Proior knowledge:
 const CURVE_NAME = "curve25519";
@@ -68,13 +60,16 @@ export class JasminBridge {
     const matchGroups = rawLines[0].match(
       /fn (?<name>\w+) \((?<params>(reg u64 [\w.]+,? ?)+)\) -> \(\) {/,
     )?.groups;
-    const args = matchGroups?.["params"]
+    if (!matchGroups) {
+      throw new Error("unsupported function signature");
+    }
+    const args = matchGroups.params
       ?.split(",")
       .map((p) => p.trim().match(/reg u64 (?<name>[\w.]+)/)?.groups?.["name"])
       .filter((name) => name)
-      .map((name) => name!)
+      .map((name) => name as string)
       .reduce(
-        (acc, name, i) => {
+        (acc, name: string, i) => {
           const width = OUT_WIDTHS.concat(IN_WIDTHS)[i];
           if (i < OUT_WIDTHS.length) {
             // still an out-argument
@@ -123,7 +118,7 @@ export class JasminBridge {
 
     writeFileSync(resolve(cwd, "jasmin_pre.json"), JSON.stringify(body, undefined, 2));
     this.add_dbl = preprocessFunction({
-      operation: matchGroups?.["name"]!,
+      operation: matchGroups.name,
       ...args,
       body,
     });

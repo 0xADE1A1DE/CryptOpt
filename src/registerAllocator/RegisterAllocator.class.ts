@@ -357,7 +357,7 @@ export class RegisterAllocator {
       checkToSpill &&
       (matchXD(spareVariableName) || isCallerSave(spareVariableName) || matchArgPrefix(spareVariableName))
     ) {
-      const freeXmm = this.getFreeXmmRegister();
+      const freeXmm = RegisterAllocator._options?.xmm && this.getFreeXmmRegister();
       // we cant always spill to xmms
 
       const choice =
@@ -846,9 +846,9 @@ export class RegisterAllocator {
 
     this.addToPreInstructions(
       Logger.log(
-        `; to calculate ${outVarname}, ill backup ${inVarname} from (${
+        `; to calculate ${outVarname}, i'll backup ${inVarname} from (${
           allocation.store
-        }) if it has deps. has it: ${hasDeps}: ${setToString(deps)}`,
+        }) if it has deps. has it: ${hasDeps}: ${setToString(deps, 10)}`,
       ) ?? "",
     );
     if (
@@ -1206,6 +1206,11 @@ export class RegisterAllocator {
     );
   }
 
+  public declareHavoc(r: ByteRegister | Register): void {
+    const vname = this.getVarnameFromStore({ store: r });
+    delete this._allocations[vname];
+  }
+
   /**
    * if @param moveInstruction is "movzx", its guaranteed that it returns a reg64
    * if nothing or /mov/ is passed, the same size as mem is passed back:
@@ -1416,6 +1421,14 @@ export class RegisterAllocator {
         delete this._allocations[varname];
       }
     });
+
+    this.addToPreInstructions(
+      Logger.log(
+        `\n; Operation: ${ni.name.join("--")}<-${ni.operation}(${ni.arguments.join(", ")}), ${
+          ni.parameters?.comment ?? ""
+        }`,
+      ) ?? "",
+    );
   }
   // if the allocation-phase is done, call this method.
   // It returns an object with instructions, which should be put before and after the assembly instructions.

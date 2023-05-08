@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { CryptOpt, Fiat } from "@/types";
-import { Renamer } from "./renamer.class";
 import Logger from "@/helper/Logger.class";
+import { Fiat } from "@/types";
+
+import { Renamer } from "./renamer.class";
 
 const muls = new Map<RegExp, (a: NonNullable<RegExpMatchArray["groups"]>) => Fiat.DynArgument[]>();
 
@@ -25,7 +26,7 @@ const muls = new Map<RegExp, (a: NonNullable<RegExpMatchArray["groups"]>) => Fia
 //  (h#1.5148, h#0.5149) = #MULX_64(f0.5147, g#0.5139); /* :k */
 //*************
 
-muls.set(/\s+\((?<hi>[^,]+), (?<lo>[^\)]+)\) = #MULX_64\((?<arg0>[^,]+), (?<arg1>[^\)]+)\);.*/, (g) => {
+muls.set(/\s+\((?<hi>[^,]+), (?<lo>[^)]+)\) = #MULX_64\((?<arg0>[^,]+), (?<arg1>[^)]+)\);.*/, (g) => {
   Logger.log("trying to mulx");
 
   const [arg0, arg1] = [g.arg0, g.arg1].map(Renamer.rename);
@@ -35,7 +36,7 @@ muls.set(/\s+\((?<hi>[^,]+), (?<lo>[^\)]+)\) = #MULX_64\((?<arg0>[^,]+), (?<arg1
     {
       operation: "mulx",
       datatype: "u64",
-      name: [hi, lo],
+      name: [lo, hi],
       arguments: [arg0, arg1],
       parameters: {
         comment: `${hi},${lo}<-${arg0}x${arg1}, formerly ${g.hi},${g.lo}=#MULX_64(${g.arg0},${g.arg1})`,
@@ -48,7 +49,7 @@ muls.set(/\s+\((?<hi>[^,]+), (?<lo>[^\)]+)\) = #MULX_64\((?<arg0>[^,]+), (?<arg1
 //   (_ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, _ /* bool */, lo.6032) = #IMULri_64(r#0.6031, ((64u) 38)); /* :k */
 //*************
 
-muls.set(/\s+\((_ \/\* bool \*\/, )+(?<lo>[^\)]+)\) = #IMULri_64(?<src>[^;]+);.*/, (g) => {
+muls.set(/\s+\((_ \/\* bool \*\/, )+(?<lo>[^)]+)\) = #IMULri_64(?<src>[^;]+);.*/, (g) => {
   Logger.log("trying to mul");
 
   const [arg0, arg1] = g.src
@@ -73,7 +74,7 @@ muls.set(/\s+\((_ \/\* bool \*\/, )+(?<lo>[^\)]+)\) = #IMULri_64(?<src>[^;]+);.*
       name: [lo],
       arguments: [arg0, arg1],
       parameters: {
-        comment: `${lo}<-${arg0}x${arg1}, formerly ${g.hi},${g.lo}=#IMULri_64(${g.arg0},${g.arg1}`,
+        comment: `${lo}<-${arg0}x${arg1}, formerly ${g.lo}=#IMULri_64(${g.src})`,
       },
     },
   ];

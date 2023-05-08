@@ -19,7 +19,7 @@ import { dirname } from "path";
 
 import { ByteRegister, Flags, FUNCTIONS, Register, XmmRegister } from "@/enums";
 import Logger from "@/helper/Logger.class";
-import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation, Fiat } from "@/types";
+import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation } from "@/types";
 
 import {
   ARG_PREFIX,
@@ -151,8 +151,8 @@ export function isFlag(test?: string): test is Flags {
   return [Flags.CF, Flags.OF].includes(test as Flags);
 }
 
-export function isImm(test: string): test is imm {
-  return IMM_REGEX.test(test);
+export function isImm(test: string | object): test is imm {
+  return typeof test === "string" && IMM_REGEX.test(test);
 }
 
 export function isMem(test?: string): test is mem {
@@ -231,9 +231,11 @@ export function setToString(s: Set<string>, max = Infinity): string {
   let depstring = '"';
   let i = 0;
   for (const v of s.values()) {
-    if (i == 0) depstring += v;
-    else depstring += `, ${v}`;
-    if (i++ == max) break;
+    depstring += i == 0 ? v : `, ${v}`;
+
+    if (i++ == max) {
+      return `${depstring} [10 ... rest trunctated]"`;
+    }
   }
   return depstring + '"';
 }
@@ -285,7 +287,7 @@ export function delimbify(
  * as in: safe unsigned.
  * as in: must be smaller than
  */
-export function isSafeImm32(a: CryptOpt.HexConstant) {
+export function isSafeImm32(a: string) {
   if (a.startsWith("-")) {
     throw new Error("unimplemented");
   }

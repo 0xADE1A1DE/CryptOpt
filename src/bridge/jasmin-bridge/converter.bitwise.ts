@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { CryptOpt, Fiat } from "@/types";
+import { Fiat } from "@/types";
+
 import { Renamer } from "./renamer.class";
-import Logger from "@/helper/Logger.class";
-import { C } from "vitest/dist/types-e3c9754d";
 
 const and = new Map<RegExp, (a: NonNullable<RegExpMatchArray["groups"]>) => Fiat.DynArgument[]>();
 

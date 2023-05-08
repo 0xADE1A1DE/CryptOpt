@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { CryptOpt, Fiat } from "@/types";
-import { Renamer } from "./renamer.class";
-import Logger from "@/helper/Logger.class";
+import { Fiat } from "@/types";
+
 import { resolvePointerRead, resolvePointerWrite } from "./converter.helper";
+import { Renamer } from "./renamer.class";
 
 const movs = new Map<RegExp, (a: NonNullable<RegExpMatchArray["groups"]>) => Fiat.DynArgument[]>();
 
@@ -69,7 +69,7 @@ movs.set(/\s+(?<dest>[\w.#]+) = \(\(64u\) (?<const>\d+)\);.*/, (g) => {
       datatype: "u64",
       name: [d],
       arguments: [s],
-      parameters: { comment: `${d}<-${s}, formerly ${g.dest}<-${g.src}` },
+      parameters: { comment: `${d}<-${s}, formerly ${g.dest}<-${g.const}` },
     },
   ];
 });
@@ -100,7 +100,7 @@ movs.set(/\s+\(u64\)\[(?<base>[\w.]+) \+ \(\(64u\) (?<off>\d+)\)\] = (?<src>[^;]
       datatype: "u64",
       name: [d],
       arguments: [s],
-      parameters: { comment: `${d}<-${s}, formerly ${g.dest}<-${g.src}` },
+      parameters: { comment: `${d}<-${s}, formerly [${g.base} + (64u) ${g.off}]<-${g.src}` },
     },
   ];
 });

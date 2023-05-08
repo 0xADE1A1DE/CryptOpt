@@ -1,0 +1,1117 @@
+/**
+ * Copyright 2022 University of Adelaide
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import { describe, expect, it, vi } from "vitest";
+
+import {
+  ByteRegister,
+  C_DI_HANDLE_FLAGS_KK,
+  C_DI_SPILL_LOCATION,
+  DECISION_IDENTIFIER,
+  Flags,
+  FlagState,
+  Register,
+} from "@/enums";
+import { TEMP_VARNAME } from "@/helper";
+import { sub } from "@/instructionGeneration/subtraction";
+import { Model } from "@/model";
+import { Paul } from "@/paul";
+import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
+
+// this not consistent in within itself (multiple vars in one single reg).
+// but certain vars are only used in certain tests
+const allocs = {
+  "0x0": { datatype: "u64", store: "r12" },
+  "-0x1": { datatype: "u64", store: "rsi" },
+  "0x1db41": { datatype: "u64", store: "r9" },
+  "arg4[2]": { datatype: "u64", store: "[ r8 + 0x10 ]" },
+  "arg4[3]": { datatype: "u64", store: "[ r8 + 0x18 ]" },
+  "arg5[2]": { datatype: "u64", store: "[ r9 + 0x10 ]" },
+  "arg5[3]": { datatype: "u64", store: "[ r9 + 0x18 ]" },
+
+  x910: { datatype: "u1", store: "OF" },
+  x1000: { datatype: "u1", store: "CF" },
+  x48: { datatype: "u1", store: "r12b" },
+  x12: { datatype: "u1", store: "[ rsp + 0x0 ]" },
+
+  x11: { datatype: "u64", store: "r14" },
+  x219: { datatype: "u64", store: "r12" },
+  x221: { datatype: "u64", store: "r15" },
+  x463: { datatype: "u64", store: "r11" },
+  x465: { datatype: "u64", store: "r14" },
+  x468: { datatype: "u64", store: "rbx" },
+  x10071: { datatype: "u64", store: "rax" },
+  x631: { datatype: "u64", store: "r13" },
+  x10073: { datatype: "u64", store: "rcx" },
+  x619: { datatype: "u64", store: "rdx" },
+  x10076: { datatype: "u64", store: "rdx" },
+  x100: { datatype: "u64", store: "[ rsp ]" },
+} as Allocations;
+
+type MOCK_MODEL = any;
+const allocate = vi.fn();
+const getCurrentAllocations = vi.fn().mockImplementation(() => allocs);
+const flagState = vi.fn();
+const spillFlag = vi.fn();
+const addToClobbers = vi.fn();
+const addToPreInstructions = vi.fn();
+const declareVarForFlag = vi.fn();
+const getW = vi.fn();
+const setCC = vi.fn();
+
+const backupIfStoreHasDependencies = vi.fn();
+const xmm2reg_return_store_constant = Register.rbx;
+vi.mock("@/registerAllocator/RegisterAllocator.class.ts", () => {
+  return {
+    RegisterAllocator: {
+      xmm2reg: vi.fn().mockImplementation((_a: ValueAllocation) => ({
+        store: xmm2reg_return_store_constant,
+        datatype: "u64",
+      })),
+      getInstance: () => {
+        return {
+          addToClobbers,
+          addToPreInstructions,
+          allocate,
+          backupIfStoreHasDependencies,
+          backupIfVarHasDependencies: vi.fn().mockImplementation((v, _out) => allocs[v].store),
+          declareFlagState: () => {
+            /**intentionally empty */
+          },
+          declareVarForFlag,
+          flagState,
+          flagStateString: () => `flagstatestring`,
+          getCurrentAllocations,
+          initNewInstruction: () => {
+            /**intentionally empty */
+          },
+          getW,
+          loadVarToReg: vi.fn(),
+          setCC,
+          loadImmToReg64: vi.fn().mockImplementation((name: string) => {
+            if (name in allocs) return allocs[name].store;
+            else throw new Error(JSON.stringify({ name, allocs }, undefined, 2));
+          }),
+          pres: [],
+          spillFlag,
+          getVarnameFromStore: vi.fn().mockImplementation((needle: { store: string }) => {
+            return Object.entries(allocs).find(([_varname, sto]) => sto.store == needle.store)?.[0];
+          }),
+        };
+      },
+    },
+  };
+});
+// this will only mock the 'hasDependants' function
+// see https://vitest.dev/guide/mocking.html: "Mock part of a Module"
+vi.mock("@/model/model.class.ts", async () => {
+  const actual = await vi.importActual<typeof import("@/model/model.class")>("@/model/model.class.ts");
+  return {
+    Model: {
+      ...actual.Model,
+      hasDependants: vi.fn().mockImplementation((_depVarname: string) => false),
+    },
+  };
+});
+
+describe("instructionGeneration:sub", () => {
+  // just assume it does not have deps
+  backupIfStoreHasDependencies.mockImplementation(
+    (varname: MemoryAllocation | RegisterAllocation, _out: string): string => {
+      return varname.store;
+    },
+  );
+
+  it.only("R-Rsubborrowx@@u64-REG@u64-MEM@u64-MEM", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x99", "x610"],
+      arguments: ["0x0", "x100", "arg4[2]"],
+      parameters: {
+        comment:
+          "l  504: x100,x610<-subborrowx(0x0,x100,arg4[2]), formerly cf-cf.5736,r-h#0.5737=sbb(h#0.5727, z.5735, false)",
+      },
+      decisions: {
+        di_choose_arg: [2, ["0x0", "x100", "arg4[2]"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-Rsubborrowx@@u1-FLG@u64-MEM@u64-MEM", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x1003", "x1002"],
+      arguments: ["x1000", "arg4[3]", "arg5[3]"],
+      parameters: {
+        comment:
+          "l   98: x1003,x1002<-subborrowx(x1000,arg4[3],arg5[3]), formerly cf-cf.5081,r-h#3.5082=sbb(h#3.5074, gs.5065[u64 3 ], cf.5079)",
+      },
+      decisions: {
+        di_choose_arg: [0, ["x1000", "arg4[3]", "arg5[3]"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-_subborrowx@@u1-FLG@u64-REG@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x1178", "_"],
+      arguments: ["910", "0x0", "0x0"],
+      parameters: {
+        comment:
+          "l  901: x1178,_<-subborrowx(910,x1047,x1047), formerly cf-_ /* bool */,r-z.6380=sbb(z.6245, z.6245, cf.6378)",
+      },
+      decisions: {
+        di_choose_arg: [2, ["910", "0x0", "0x0"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-Rsubborrowx@@u64-REG@u64-REG@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x100", "x622"],
+      arguments: ["0x0", "x468", "x10076"],
+      parameters: {
+        comment:
+          "l  524: x100,x622<-subborrowx(0x0,x468,x10076), formerly cf-cf.5760,r-h#0.5761=sbb(h#0.5756, t1r#0.5670, false)",
+      },
+      decisions: {
+        di_choose_arg: [2, ["0x0", "x468", "x10076"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-Rsubborrowx@@u1-REG@u64-MEM@u64-MEM", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x1001", "x1000"],
+      arguments: ["x48", "arg4[2]", "arg5[2]"],
+      parameters: {
+        comment:
+          "l   97: x1001,x1000<-subborrowx(x48,arg4[2],arg5[2]), formerly cf-cf.5079,r-h#2.5080=sbb(h#2.5073, gs.5065[u64 2 ], cf.5077)",
+      },
+      decisions: {
+        di_choose_arg: [0, ["x48", "arg4[2]", "arg5[2]"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-_subborrowx@@u1-REG@u64-REG@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x884", "_"],
+      arguments: ["x48", "0x0", "0x0"],
+      parameters: {
+        comment:
+          "l  687: x884,_<-subborrowx(x48,x781,x781), formerly cf-_ /* bool */,r-z.6041=sbb(z.5934, z.5934, cf.6039)",
+      },
+      decisions: {
+        di_choose_arg: [2, ["x48", "0x0", "0x0"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-Rsubborrowx@@u1-REG@u64-REG@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x627", "x1000"],
+      arguments: ["x48", "x463", "x10071"],
+      parameters: {
+        comment:
+          "l  526: x627,x1000<-subborrowx(x48,x463,x10071), formerly cf-cf.5764,r-h#2.5765=sbb(h#2.5758, t1r#2.5665, cf.5762)",
+      },
+      decisions: {
+        di_choose_arg: [1, ["x48", "x463", "x10071"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-Rsubborrowx@@u1-FLG@u64-REG@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x100", "x628"],
+      arguments: ["x1000", "x465", "x10073"],
+      parameters: {
+        comment:
+          "l  527: x100,x628<-subborrowx(x1000,x465,x10073), formerly cf-cf.5766,r-h#3.5767=sbb(h#3.5759, t1r#3.5667, cf.5764)",
+      },
+      decisions: {
+        di_choose_arg: [0, ["x1000", "x465", "x10073"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-Rsubborrowx@@u1-REG@u64-MEM@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x639", "x638"],
+      arguments: ["x48", "x100", "0x0"],
+      parameters: {
+        comment:
+          "l  533: x639,x638<-subborrowx(x48,x100,0x0), formerly cf-cf.5776,r-h#3.5777=sbb(h#3.5767, ((64u) 0), cf.5774)",
+      },
+      decisions: {
+        di_choose_arg: [0, ["x48", "x100", "0x0"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-Rsubborrowx@@u1-MEM@u64-MEM@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x15", "x14"],
+      arguments: ["x12", "x100", "0x0"],
+      parameters: {
+        comment:
+          "l   45: x15,x14<-subborrowx(x12,x100,0x0), formerly cf-cf.5014,r-h#1.5015=sbb(h#1.5005, ((64u) 0), cf.5012)",
+      },
+      decisions: {
+        di_choose_arg: [1, ["x12", "x100", "0x0"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(flagState).toBeCalled();
+  });
+
+  it.skip("R-@@u64-MEM@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    spillFlag.mockClear();
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "-",
+      datatype: "u64",
+      name: ["x620"],
+      arguments: ["x100", "x619"],
+      parameters: { comment: "l  510: x620<-x100 - x619, formerly h#0.5746=h#0.5737-z.5745" },
+      decisions: {
+        di_choose_arg: [0, ["x100", "x619"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(2);
+    // no clear OF, because that would be in ra.pres
+    expect(code[0]).toBe("adox rbx, r14");
+    expect(code[1]).toBe("adox r13, rdx");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+
+  it.only("R-_subborrowx@@u1-MEM@u64-REG@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    spillFlag.mockClear();
+    backupIfStoreHasDependencies.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      if (name == TEMP_VARNAME) {
+        // cin
+        expect(datatype).toBe("u1");
+        expect(store).toBe("[ rsp + 0x0 ]"); // where x12
+        return ByteRegister.r12b;
+      }
+      if (name == "x20") {
+        expect(datatype).toBe("u64");
+        expect(store).toBe(Register.r14); // where x11
+        return Register.rcx;
+      }
+      console.error({ datatype, store, name });
+      throw new Error("unexpected");
+    });
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x20", "_"],
+      arguments: ["x12", "x11", "x11"],
+      parameters: {
+        comment:
+          "l   48: x20,_<-subborrowx(x12,x11,x11), formerly cf-_ /* bool */,r-z.5020=sbb(z.5011, z.5011, cf.5018)",
+      },
+      decisions: {
+        di_choose_arg: [2, ["x12", "x11", "x11"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+
+    expect(code[0]).toBe("sbb rcx, r14"); // read from r14, which is where x11 still is
+    expect(getCurrentAllocations).toBeCalled();
+    expect(backupIfStoreHasDependencies).toBeCalledWith("x11", "x20");
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+
+  it("R-Rsubborrowx@@IMM@u64-MEM@u64-REG", () => {
+    getCurrentAllocations.mockClear();
+    backupIfStoreHasDependencies.mockClear();
+    spillFlag.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      if (name == "x101") {
+        expect(datatype).toBe("u64");
+        expect(store).toBe("[ rsp ]"); // where x100
+        return Register.rbx;
+      }
+      throw new Error("unexpected");
+    });
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x101", "x632"],
+      arguments: ["0x0", "x100", "x631"],
+      parameters: {
+        comment:
+          "l  530: x100,x632<-subborrowx(0x0,x100,x631), formerly cf-cf.5770,r-h#0.5771=sbb(h#0.5761, z.5769, false)",
+      },
+      decisions: {
+        di_choose_arg: [1, ["0x0", "x100", "x631"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+    expect(code[0]).toBe("sub rbx, r13");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(1);
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+
+  it("R-Rsubborrowx@@0@u64-REG@u64-MEM", () => {
+    getCurrentAllocations.mockClear();
+    backupIfStoreHasDependencies.mockClear();
+    spillFlag.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      if (name == "x101") {
+        expect(datatype).toBe("u64");
+        expect(store).toBe(Register.r12); // where x219
+        return Register.rbx;
+      }
+      throw new Error("unexpected");
+    });
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x101", "x607"],
+      arguments: ["0x0", "x219", "x100"],
+      parameters: {
+        comment:
+          "l  498: x101,x607<-subborrowx(0x0,x219,x100), formerly cf-cf.5726,r-h#0.5727=sbb(h#0.5722, gs.5716[u64 0 ], false)",
+      },
+      decisions: {
+        di_choose_arg: [0, ["0x0", "x219", "x100"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+    expect(code[0]).toBe("sub rbx, [ rsp ]");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(1);
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+
+  it("R-Rsubborrowx@@u1-REG@u64-REG@u64-MEM", () => {
+    getCurrentAllocations.mockClear();
+    backupIfStoreHasDependencies.mockClear();
+    spillFlag.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      if (name == "x606") {
+        // cin
+        expect(datatype).toBe("u1");
+        expect(store).toBe(ByteRegister.r12b); // where x48
+        return ByteRegister.r12b;
+      }
+      if (name == "x101") {
+        expect(datatype).toBe("u64");
+        expect(store).toBe(Register.r15); // where x221
+        return Register.r15;
+      }
+      console.error({ datatype, store, name });
+      throw new Error("unexpected");
+    });
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x101", "x606"],
+      arguments: ["x48", "x221", "x100"],
+      parameters: {
+        comment:
+          "l  501: x100,x606<-subborrowx(x48,x221,x100), formerly cf-cf.5732,r-h#3.5733=sbb(h#3.5725, gs.5716[u64 3 ], cf.5730)",
+      },
+      decisions: {
+        di_choose_arg: [0, ["x48", "x221", "x100"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+    expect(code[0]).toBe("sbb r15, [ rsp ]"); // x100
+
+    expect(getCurrentAllocations).toBeCalled();
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(2);
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+
+  it("R-Rsubborrowx@@u1-FLG@u64-REG@u64-MEM", () => {
+    getCurrentAllocations.mockClear();
+    spillFlag.mockClear();
+    backupIfStoreHasDependencies.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      expect(name).toBe("x605");
+      expect(datatype).toBe("u64");
+      expect(store).toBe(Register.r12); // where x219 is
+      // will mov rax, [ rsp ]
+      return Register.r12;
+    });
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.ALIVE,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x605", "x50"],
+      arguments: ["x1000", "x219", "x100"],
+      parameters: {
+        comment:
+          "l  500: x605,x48<-subborrowx(x1000,x219,x100), formerly cf-cf.5730,r-h#2.5731=sbb(h#2.5724, gs.5716[u64 2 ], cf.5728)",
+      },
+      decisions: {
+        di_choose_arg: [1, ["x1000", "x219", "x100"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    // x50, x605 = x219 - x100 - 1000
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+
+    expect(code[0]).toBe("sbb r12, [ rsp ]");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(1);
+  });
+
+  it("R-@@u64-MEM@u64-MEM", () => {
+    getCurrentAllocations.mockClear();
+    spillFlag.mockClear();
+    backupIfStoreHasDependencies.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      expect(name).toBe("x642");
+      expect(datatype).toBe("u64");
+      expect(store).toBe("[ rsp ]"); // where x100 is
+      // will mov rax, [ rsp ]
+      return Register.rax;
+    });
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "-",
+      datatype: "u64",
+      name: ["x642"],
+      arguments: ["x100", "arg4[2]"],
+      parameters: { comment: "l  536: x642<-x100 - arg4[2], formerly h#0.5780=h#0.5771-z.5779" },
+      decisions: {
+        di_choose_arg: [1, ["x100", "arg4[2]"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+
+    expect(code[0]).toMatch(/sub rax, \[ r8 \+ 0x10 \].*/);
+    expect(getCurrentAllocations).toBeCalled();
+    expect(spillFlag).toHaveBeenNthCalledWith(1, Flags.CF); // in case it would have deps
+    expect(spillFlag).toHaveBeenNthCalledWith(2, Flags.OF); // in case it would have deps
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(1);
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+
+  it("R-Rsubborrowx@@u1-FLG@u64-MEM@u8-IMM", () => {
+    getCurrentAllocations.mockClear();
+    backupIfStoreHasDependencies.mockClear();
+    spillFlag.mockClear();
+
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      expect(name).toBe("x617");
+      expect(datatype).toBe("u64");
+      expect(store).toBe("[ rsp ]"); // where x100 is
+      // will mov rax, [ rsp ]
+      return Register.rax;
+    });
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.ALIVE,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x617", "x50"],
+      arguments: ["x1000", "x100", "0x0"],
+      parameters: {
+        comment:
+          "l  507: x617,x48<-subborrowx(x1000,x100,0x0), formerly cf-cf.5742,r-h#3.5743=sbb(h#3.5733, ((64u) 0), cf.5740)",
+      },
+      decisions: {
+        di_choose_arg: [1, ["x1000", "x100", "0x0"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    // cf x50, r x617 =  x100 - 0x0 - x1000 (cin, CF)
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+    expect(code[0]).toBe("sbb rax, 0x00000000");
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(1);
+    expect(getCurrentAllocations).toBeCalled();
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+
+  it("R-_subborrowx@@u1-REG@u64-MEM@u64-MEM", () => {
+    getCurrentAllocations.mockClear();
+    addToPreInstructions.mockClear();
+    spillFlag.mockClear();
+    backupIfStoreHasDependencies.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      if (name == TEMP_VARNAME) {
+        expect(store).toBe("[ rsp ]"); // where x100 is
+        // will mov rax, [ rsp ]
+        return Register.rax;
+      }
+      expect(name).toBe("x618");
+      expect(datatype).toBe("u1");
+      expect(store).toBe(ByteRegister.r12b);
+      return ByteRegister.bl;
+    });
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.KILLED,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x618", "_"],
+      arguments: ["x48", "x100", "arg4[2]"],
+      parameters: {
+        comment:
+          "l  508: x618,_<-subborrowx(x48,x100,arg4[2]), formerly cf-_ /* bool */,r-z.5744=sbb(z.5735, z.5735, cf.5742)",
+      },
+      decisions: {
+        di_choose_arg: [1, ["x48", "x100", "arg4[2]"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(2);
+
+    expect(code).toHaveLength(1);
+
+    expect(code[0]).toBe("sbb rax, [ r8 + 0x10 ]");
+    expect(getCurrentAllocations).toBeCalled();
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+  });
+
+  it("R-_subborrowx@@u1-FLG@IMM@IMM", () => {
+    getCurrentAllocations.mockClear();
+    spillFlag.mockClear();
+
+    setCC.mockClear();
+    setCC.mockImplementation((f: Flags, name) => {
+      expect(f).toBe(Flags.OF);
+      expect(name).toBe("x910"); // spill this
+      return ByteRegister.r13b;
+    });
+
+    backupIfStoreHasDependencies.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      console.error({ datatype, store, name });
+      if (name == TEMP_VARNAME) {
+        // cin
+        // expect(datatype).toBe("u1"); // because has been spilled
+        expect(store).toBe(ByteRegister.r13b); // where x910 has been spilled to
+        return ByteRegister.r13b;
+      }
+      if (name == "x912") {
+        expect(datatype).toBe("u64");
+        expect(store).toBe("IMM"); // where x11
+        return Register.rcx;
+      }
+      console.error({ datatype, store, name });
+      throw new Error("unexpected");
+    });
+    addToPreInstructions.mockClear();
+
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.ALIVE,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x912", "_"],
+      arguments: ["x910", "0x1db41", "0x1db41"],
+      parameters: {
+        comment:
+          "l  712: x912,_<-subborrowx(x910,x887,x887), formerly cf-_ /* bool */,r-c.6073=sbb(c.6048, c.6048, cf.6071)",
+      },
+      decisions: {
+        di_choose_arg: [2, ["x910", "0x1db41", "0x1db41"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+
+    expect(setCC).toBeCalledTimes(1); // because x910 is in OF, will result in OF being spilled to r13b
+
+    expect(addToPreInstructions).toBeCalledWith("add r13b, -0x1; CF<-undefined"); // load to CF
+    expect(code[0]).toBe("sbb rax, 0x0001db41");
+
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+    expect(getCurrentAllocations).toBeCalled();
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(2);
+  });
+
+  it("R-_subborrowx@@u1-FLG@IMM@IMM", () => {
+    getCurrentAllocations.mockClear();
+    spillFlag.mockClear();
+
+    setCC.mockClear();
+    setCC.mockImplementation((f: Flags, name) => {
+      expect(f).toBe(Flags.OF);
+      expect(name).toBe("x910"); // spill this
+      return ByteRegister.r13b;
+    });
+
+    backupIfStoreHasDependencies.mockClear();
+    backupIfStoreHasDependencies.mockImplementation(({ datatype, store }, name: string) => {
+      console.error({ datatype, store, name });
+      if (name == TEMP_VARNAME) {
+        // cin
+        // expect(datatype).toBe("u1"); // because has been spilled
+        expect(store).toBe(ByteRegister.r13b); // where x910 has been spilled to
+        return ByteRegister.r13b;
+      }
+      if (name == "x912") {
+        expect(datatype).toBe("u64");
+        expect(store).toBe("IMM"); // where x11
+        return Register.rcx;
+      }
+      console.error({ datatype, store, name });
+      throw new Error("unexpected");
+    });
+    addToPreInstructions.mockClear();
+
+    flagState.mockImplementation(
+      () =>
+        ({
+          [Flags.CF]: FlagState.KILLED,
+          [Flags.OF]: FlagState.ALIVE,
+        } as { [f in Flags]: FlagState }),
+    );
+
+    const c: CryptOpt.StringOperation = {
+      operation: "subborrowx",
+      datatype: "u64",
+      name: ["x912", "_"],
+      arguments: ["x910", "0x1db41", "0x1db41"],
+      parameters: {
+        comment:
+          "l  712: x912,_<-subborrowx(x910,x887,x887), formerly cf-_ /* bool */,r-c.6073=sbb(c.6048, c.6048, cf.6071)",
+      },
+      decisions: {
+        di_choose_arg: [2, ["x910", "0x1db41", "0x1db41"]],
+        [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
+          0,
+          [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
+        ],
+      },
+      decisionsHot: [],
+    };
+
+    const code = sub(c).filter((a) => !a.startsWith(";"));
+
+    expect(code).toHaveLength(1);
+
+    expect(setCC).toBeCalledTimes(1); // because x910 is in OF, will result in OF being spilled to r13b
+
+    expect(addToPreInstructions).toBeCalledWith("add r13b, -0x1; CF<-undefined"); // load to CF
+    expect(code[0]).toBe("sbb rax, 0x0001db41");
+
+    expect(spillFlag).toBeCalledWith(Flags.CF);
+    expect(spillFlag).toBeCalledWith(Flags.OF);
+    expect(getCurrentAllocations).toBeCalled();
+    expect(backupIfStoreHasDependencies).toBeCalledTimes(2);
+  });
+});

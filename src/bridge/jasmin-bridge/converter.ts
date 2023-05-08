@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-import { CryptOpt, Fiat } from "@/types";
-import { Renamer } from "./renamer.class";
-import Logger from "@/helper/Logger.class";
+import { Fiat } from "@/types";
 
-import { misc } from "./converter.misc";
-import { movs } from "./converter.mov";
 import { addsub } from "./converter.add.sub";
 import { and } from "./converter.bitwise";
+import { misc } from "./converter.misc";
+import { movs } from "./converter.mov";
 import { muls } from "./converter.mul";
 
 const converters = new Map([...movs, ...misc, ...addsub, ...and, ...muls]);
@@ -29,7 +27,7 @@ export { converters };
 
 export class Converter {
   public static convert(line: string): Fiat.DynArgument[] {
-    for (let [regex, callback] of converters.entries()) {
+    for (const [regex, callback] of converters.entries()) {
       const g = line.match(regex)?.groups;
       if (g) {
         return callback(g);

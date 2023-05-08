@@ -1,5 +1,7 @@
+import { Fiat } from "@/types";
+
 import { Renamer } from "./renamer.class";
-import { CryptOpt, Fiat } from "@/types";
+
 export const resolvePointerRead = (src: string, si: string): Fiat.ArgVarName => {
   const s = Renamer.rename(src) as `arg${number}`;
   if (!s.startsWith("arg")) {
