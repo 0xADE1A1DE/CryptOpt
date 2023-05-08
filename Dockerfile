@@ -36,7 +36,8 @@ RUN curl -L https://github.com/0xADE1A1DE/AssemblyLine/releases/download/v${asml
 RUN git clone --jobs 3 --recurse-submodules  https://github.com/0xADE1A1DE/CryptOpt /root/CryptOpt
 RUN cd /root/CryptOpt && \
         git checkout --recurse-submodules main && \
-        make
+        make && \
+        make install-zsh
 
 WORKDIR /root/CryptOpt
 
