@@ -42,6 +42,7 @@ case "$state" in
 		_values  'bridge' \
 			'fiat[Fiat Bridge]' \
 			'bitcoin-core[Bitcoin Core Bridge (must specify -c secp256k1)]' \
+			'jasmin[Jasmin Bridge, experimental and currenly only supports the curve25519-add_double4 method]' \
 			'manual[Manual Bridge (must specify -j and -f)]' \
 		;;
 	methods)
