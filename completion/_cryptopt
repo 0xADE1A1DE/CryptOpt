@@ -22,6 +22,7 @@ _arguments -S -s \
     '(-j --jsonFile -c --curve -m --method)'{-j,--jsonFile=}'[JSON-CODE, must --bridge manual]:json:_files -g \*.json' \
     '(-f --cFile -c --curve -m --method)'{-f,--cFile=}'[C-CODE must --bridge manual]:cfile:_files -g \*.c' \
     '--readState=[Continue from this State file]:statejson:_files -g \*.json' \
+    '--startFromBestJson=[Scan for the best of all current state files and continue for from the best one.' \
     '--resultDir=[Where to safe the result-files (assembly, pdfs, ...)]:directory:_path_files -/' \
     '(-e --evals)'{-e=,--evals=}'[Budget, in # of mutations to evaluate]:evals:' \
     '(-b --bets -r --betRatio)--single[no bets. Short for --bets=1 --betRatio=1]:single:' \

@@ -122,6 +122,11 @@ export const parsedArgs = y
     describe: "this must be a filename to a JSON, which has a state (to, body).",
     demandOption: false,
   })
+  .option("startFromBestJson", {
+    boolean: true,
+    default: false,
+    describe: "Will check the given/current resultDir for the best JSON-file and continues from there.",
+  })
   .option("logComment", {
     string: true,
     default: "",
