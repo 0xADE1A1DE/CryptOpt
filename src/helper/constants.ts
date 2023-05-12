@@ -39,7 +39,7 @@ export const TEMP_VARNAME = "x0";
 export const CALLER_SAVE_PREFIX = "calSv-";
 
 // let op be \in CHAINABLE_OPS, then A op (B op (C op D)) will be squashed to A op B op C op D
-export const CHAINABLE_OPS: CryptOpt.Operation_T[] = ["-", "&", "|"];
+export const CHAINABLE_OPS: CryptOpt.Operation_T[] = ["&", "|"];
 // pretty much the last key in LSB_MAPPING. used to check if string-imm-vals are >64bit i.e. 2 limbs
 export const IMM_64_BIT_IMM = `0x${Array(8 * 2)
   .fill("f")
