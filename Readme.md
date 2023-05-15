@@ -34,6 +34,7 @@ The CryptOpt optimizer can also be used with non-Fiat Cryptography input. For mo
 ## Research Paper
 
 A preprint of the CryptOpt paper titled *CryptOpt: Verified Compilation with Random Program Search for Cryptographic Primitives* [is available here](./papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./papers/CryptOpt-preprint.bib).
+The ICSE'23 DEMO paper titled *CryptOpt: Automatic Optimization of Straightline Code* [is available here](./papers/KuepperEWGCSTCCGWY23-ICSE23-demo.pdf), which epxlains the technical engineeding effort in more detail.
 
 
 ## Tracking usage of CryptOpt
