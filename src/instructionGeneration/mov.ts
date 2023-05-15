@@ -51,9 +51,10 @@ export function mov(c: CryptOpt.StringOperation): asm[] {
     } else {
       // cause mov cannot take m64, m64, we may need to use a tmp register.
 
+      const instr = isXmmRegister(allocation.in[0]) ? "movq" : "mov";
       return [
         ...ra.pres,
-        `mov ${memOut}, ${allocation.in[0]}; ${outMemAddr} = ${read}`, // and then this will put the data to the destination memory
+        `${instr} ${memOut}, ${allocation.in[0]}; ${outMemAddr} = ${read}`, // and then this will put the data to the destination memory
       ];
     }
   } else {
