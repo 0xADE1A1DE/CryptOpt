@@ -114,7 +114,14 @@ export const parsedArgs = y
     alias: "x",
     default: false,
     describe:
-      "If this is set, CryptOpt will optimize with spilling into vector registers rather than spilling solely into memory.",
+      "If this is set, CryptOpt will optimize considering to spill into vector registers rather than spilling solely into memory.",
+    boolean: true,
+  })
+  .option("preferXmm", {
+    alias: "X",
+    default: false,
+    describe:
+      "If this is set, CryptOpt will prefer spilling into vector registers as long as they are available, then start spilling into memory. Must specify --xmm switch, too. It will not try to optimize on it. (i.e. The first 16 values to be spilled will be spilled into XMMs, the rest into memory.)",
     boolean: true,
   })
   .option("readState", {

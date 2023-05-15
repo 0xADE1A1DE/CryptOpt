@@ -360,16 +360,22 @@ export class RegisterAllocator {
       const freeXmm = RegisterAllocator._options?.xmm && this.getFreeXmmRegister();
       // we cant always spill to xmms
 
-      const choice =
-        this.canXmm &&
-        // second we need a free xmm
-        freeXmm &&
-        // then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
-        matchXD(spareVariableName)
-          ? // then we may ask Paul.
-            Paul.chooseSpillLocation(Model.operationByName(spareVariableName))
-          : // fallback to
-            C_DI_SPILL_LOCATION.C_DI_MEM;
+      let choice = C_DI_SPILL_LOCATION.C_DI_MEM; // fallback
+
+      // if we can and have a free xmm
+      if (this.canXmm && freeXmm) {
+        // consider XMMs.
+
+        // we always want xmms if we prefer
+        if (RegisterAllocator._options?.preferXmm) {
+          choice = C_DI_SPILL_LOCATION.C_DI_XMM_REG;
+          this.addToPreInstructions(`; spilling ${spareVariableName} to xmm because we prefer that`);
+        } else if (matchXD(spareVariableName)) {
+          // if we dont prefer, we want to ask Paul, but then we need to be xdd (cuz they are 'nodes', where we can save the decision to)
+          choice = Paul.chooseSpillLocation(Model.operationByName(spareVariableName));
+          this.addToPreInstructions(`; spilling of ${spareVariableName} is decided by Paul`);
+        }
+      }
 
       if (choice == C_DI_SPILL_LOCATION.C_DI_MEM) {
         // if its worth to save, save it to mem.
@@ -390,9 +396,7 @@ export class RegisterAllocator {
           this.addToPreInstructions(inst);
           spilling_reg = reg;
         }
-        this.addToPreInstructions(
-          `movq ${freeXmm}, ${spilling_reg}; spilling ${spareVariableName} to xmm (Paul said so.)`,
-        );
+        this.addToPreInstructions(`movq ${freeXmm}, ${spilling_reg}; spilling ${spareVariableName} to xmm`);
 
         this._allocations[spareVariableName].store = freeXmm as XmmRegister;
       }
@@ -1438,32 +1442,31 @@ export class RegisterAllocator {
 
     const pre = [] as asm[];
     const post = ["ret"] as asm[];
-    if (stacklength > 0) {
-      // CALLER SAVE REGS must be placed at the end.
+    // CALLER SAVE REGS must be placed at the end.
 
-      // basically if we have any mov [ rsp + ...] (rather than [rsp - ...])
-      if (stacklength > STACK_OFFSET_IN_ELEMENTS) {
-        const stacksizeInBytes = stacklength * 8;
+    // basically if we have any mov [ rsp + ...] (rather than [rsp - ...])
+    if (stacklength > STACK_OFFSET_IN_ELEMENTS) {
+      const stacksizeInBytes = stacklength * 8;
 
-        pre.push(`sub rsp, ${stacksizeInBytes}`);
+      pre.push(`sub rsp, ${stacksizeInBytes}`);
 
-        post.unshift(`add rsp, ${stacksizeInBytes}`);
-      }
-      post.unshift(
-        ...this.entriesAllocations
-          .filter(([name]) => isCallerSave(name))
-          .map(([name, allo]) => {
-            const dest = name.split(CALLER_SAVE_PREFIX)[1]; // like rbp
-            const src = allo.store; // like xmm0 or [rsp + 0x08]
-            const instr = isXmmRegister(src) ? "movq" : "mov";
-            if (dest !== src) {
-              return `${instr} ${dest}, ${src}; pop`;
-            } else {
-              return `; ${src} is untouched.`;
-            }
-          }),
-      );
+      post.unshift(`add rsp, ${stacksizeInBytes}`);
     }
+    post.unshift(
+      ...this.entriesAllocations
+        .filter(([name]) => isCallerSave(name))
+        .map(([name, allo]) => {
+          const dest = name.split(CALLER_SAVE_PREFIX)[1]; // like rbp
+          const src = allo.store; // like xmm0 or [rsp + 0x08]
+          const instr = isXmmRegister(src) ? "movq" : "mov";
+          if (dest !== src) {
+            return `${instr} ${dest}, ${src}; pop`;
+          } else {
+            return `; ${src} is untouched.`;
+          }
+        }),
+    );
+
     return {
       stacklength,
       pre,
