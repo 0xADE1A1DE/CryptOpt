@@ -18,7 +18,7 @@ type Err = { exitCode: number; msg: string };
 export const ERRORS: { [k: string]: Err } = {
   measureGeneric: {
     exitCode: 20,
-    msg: "measuresuite.measure should return a result but didn't.",
+    msg: "measuresuite.measure should return a result but didn't. RES/generic_error_{A,B}.asm as been written for debug.",
   },
   measureIncorrect: {
     exitCode: 21,

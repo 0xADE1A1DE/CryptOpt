@@ -243,6 +243,8 @@ export class Optimizer {
             if (isInvalid) {
               errorOut(ERRORS.measureInvalid);
             }
+            writeString(join(this.args.resultDir, "generic_error_A.asm"), this.asmStrings[FUNCTIONS.F_A]);
+            writeString(join(this.args.resultDir, "generic_error_B.asm"), this.asmStrings[FUNCTIONS.F_B]);
             errorOut(ERRORS.measureGeneric);
           }
 
