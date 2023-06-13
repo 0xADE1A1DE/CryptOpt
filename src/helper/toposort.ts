@@ -54,7 +54,7 @@ export function toposort(_nodes: Readonly<Readonly<CryptOpt.StringOperation>[]>)
         .join(", ");
       throw new Error(`i cant schedule anything, but I want need to sort in ... ${unsorted} `);
     }
-    // then pic a node from the available at random
+    // then pick a node from the available at random
     const choice = Paul.pick(canScheduleNow);
     // add it to sorted
     l = sorted.push(choice);
