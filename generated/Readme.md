@@ -37,3 +37,11 @@ Average speedup over *AMD Ryzen Theadripper 1900X*, *AMD Ryzen 7 5800X*, *AMD Ry
 | BLS12-381 p | 1.80        | 2.52       | 1.73           | 2.46         |
 
 X-Validation Matrix [here](./bls12/xval.pdf) and average Cycle Mean - count per file [here](./bls12/Readme.md).
+
+## Fiat Cryptography
+
+Basically a mirror of mit-plv/fiat-crypto: fiat-amd64
+Average Speedup: tbd.
+
+
+

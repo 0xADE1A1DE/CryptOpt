@@ -34,14 +34,16 @@ The CryptOpt optimizer can also be used with non-Fiat Cryptography input. For mo
 ## Research Paper
 
 A preprint of the CryptOpt paper titled *CryptOpt: Verified Compilation with Random Program Search for Cryptographic Primitives* [is available here](./papers/CryptOpt-preprint.pdf). The BibTex citation is [here](./papers/CryptOpt-preprint.bib).
+The ICSE'23 DEMO paper titled [*CryptOpt: Automatic Optimization of Straightline Code*](https://conf.researchr.org/track/icse-2023/icse-2023-demonstrations) [is available here](./papers/KuepperEWGCSTCCGWY23-ICSE23-demo.pdf), which epxlains the technical engineeding effort in more detail.
 
 
 ## Tracking usage of CryptOpt
 
 We have used CryptOpt to generate code for:
 
-1. `libsecp256k1`-compatible code (`./CryptOpt --curve secp256k1_dettman`)
+1. `libsecp256k1`-compatible code (`./CryptOpt --curve secp256k1_dettman`) (PR #1329)
 1. BLS12-381 Curves (`./CryptOpt --curve bls12_381_p`, `./CryptOpt --curve bls12_381_q`)
+1. Curve25519 (solinas, i.e. saturated) code is integrated into BoringSSL [with this commit](https://boringssl.googlesource.com/boringssl/+/43f88915f97d1f7df489b4b706afdfa556ba2050) (slight manual adaptions needed, because BoringSSL requires rbp to point to the stack. See issue #144 in this repo.)
 
 ## Acknowledgements
 #### This project was supported by:  
