@@ -99,10 +99,6 @@ describe("RegisterAllocator:", () => {
               0,
               [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
             ],
-            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
-              0,
-              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
-            ],
             [DECISION_IDENTIFIER.DI_CHOOSE_ARG]: [0, ["arg1[4]"]],
           },
           decisionsHot: [] as string[],
@@ -113,10 +109,6 @@ describe("RegisterAllocator:", () => {
           operation: "zext",
           arguments: ["x1"],
           decisions: {
-            [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
-              0,
-              [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
-            ],
             [DECISION_IDENTIFIER.DI_SPILL_LOCATION]: [
               0,
               [C_DI_SPILL_LOCATION.C_DI_MEM, C_DI_SPILL_LOCATION.C_DI_XMM_REG],
