@@ -33,6 +33,7 @@ describe("default argParse", () => {
     logComment: "",
     cyclegoal: 10000,
     evals: 10000,
+    framePointer: "omit",
   };
   Object.entries(defaultArgs).forEach(([key, value]) => {
     it("should have correct defaults", () => {

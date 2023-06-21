@@ -25,6 +25,7 @@ import {
 } from "@/bridge/fiat-bridge/constants";
 import { errorOut, ERRORS } from "@/errors";
 
+import { FRAME_POINTER_OPTIONS } from "../types";
 const y = await yargs(process.argv.slice(2));
 
 export const parsedArgs = y
@@ -176,6 +177,13 @@ export const parsedArgs = y
       }
     }
     return true;
+  })
+  .option("framePointer", {
+    default: "omit",
+    string: true,
+    describe:
+      "Defines how `rbp` is used. 'omit' (default) will spill the value when needed, use the registers as a GP register, and unspill in the function epilogue (similar to '-fomit-frame-pointer'). 'save' will save the old value on stack, then save the old value of `rsp` in `bbp`. In the function epilogue, will restore rbp (similar to -fno-omit-frame-pointer). 'constant' pretend `rbp` does not exist.",
+    choices: FRAME_POINTER_OPTIONS,
   })
   .help("help")
   .alias("h", "help")

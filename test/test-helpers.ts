@@ -47,6 +47,7 @@ export function getTestArgs(filename: string): OptimizerArgs {
     method,
     verbose: false,
     resultDir,
+    framePointer: "omit",
   };
 }
 
