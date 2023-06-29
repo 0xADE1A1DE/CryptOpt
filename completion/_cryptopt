@@ -34,6 +34,7 @@ _arguments -S -s \
     '(-v --verbose)'{-v,--verbose}'[Write a lot of log messages (if compiled with DEBUG=1)]:verbose' \
     '(-x --xmm)'{-x,--xmm}'[Enable spilling to xmm]:xmm' \
     '(-s --seed)'{-s,--seed=}'[Seed to start the randomness with\[number\]]:seed' \
+    '(--framePointer)--framePointer=[Specify how the register for the frame pointer (rbp) is used]:framepointer:->framepointeroptions' \
     '(-h,--help)'{-h,--help}'[Help]:get help prompt' \
     '(--version)'{-v,--version}'[Version]:Version information' \
     && ret=0
@@ -66,6 +67,12 @@ case "$state" in
   			'secp256k1_montgomery[p=2^256 - 2^32 - 977;                Wbw Montgomery]' \
   			'secp256k1_dettman[p=2^256 - 4294968273;                Unsaturated Dettman]' \
 		;;
+    framepointeroptions)
+        _values 'framepointer' \
+            'omit[(default) will spill the value when needed, use the registers as a GP register, and unspill in the function epilogue (similar to "-fomit-frame-pointer").]' \
+            'save[will save the old value on stack, then save the old value of `rsp` in `bbp`. In the function epilogue, will restore rbp (similar to "-fno-omit-frame-pointer").]' \
+            'constant[pretends `rbp` does not exist.]' \
+        ;;
 esac
 
 

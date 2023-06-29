@@ -26,6 +26,9 @@ import { parsedArgs } from "@/helper";
 
 import { Fiat } from "./fiat.namespace";
 
+export const FRAME_POINTER_OPTIONS = ["omit", "save", "constant"];
+export type FRAME_POINTER_OPTIONS_T = (typeof FRAME_POINTER_OPTIONS)[number];
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CryptOpt {
   export type StateFile = {
