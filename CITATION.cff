@@ -61,7 +61,7 @@ preferred-citation:
   journal: "Proc. ACM Program. Lang."
   month: 6
   year: 2023
-  issue: PLDI
+  conference: PLDI
   volume: 7
   publisher:
    name: "Association for Computing Machinery"
