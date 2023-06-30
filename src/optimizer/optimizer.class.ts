@@ -386,7 +386,9 @@ export class Optimizer {
             }
             Logger.log("done with that current price of assembly code.");
             this.cleanLibcheckfunctions();
-            Logger.log("Wonderful. Done with my work. Time for lunch.");
+            const v = this.measuresuite.destroy();
+            Logger.log(`Wonderful. Done with my work. Destroyed measuresuite (${v}). Time for lunch.`);
+
             resolve(0);
           }
         }
