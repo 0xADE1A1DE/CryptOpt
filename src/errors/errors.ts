@@ -52,6 +52,10 @@ export const ERRORS: { [k: string]: Err } = {
     exitCode: 50,
     msg: `Could not prove correct. Aborting mission. I repeat: Abort mission now.`,
   },
+  fiatReadJSONFail: {
+    exitCode: 61,
+    msg: `When reading the fiat JSON, the 'body' parameter is not present. Please double check the cache file.`,
+  },
 };
 
 export function errorOut(e: Err): never {

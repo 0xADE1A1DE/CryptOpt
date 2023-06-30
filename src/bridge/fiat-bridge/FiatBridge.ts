@@ -34,6 +34,8 @@ import {
   SHA256SUMS,
 } from "./constants";
 import { BINS } from "./enums";
+import { exit } from "process";
+import { errorOut, ERRORS } from "@/errors";
 
 const cwd = resolve(datadir, "fiat-bridge");
 
@@ -89,6 +91,10 @@ export class FiatBridge implements Bridge {
     Logger.log(`json-fiat-Buffer length: ${jsonBuffer.length}b`);
     const jsonString = jsonBuffer.toString();
     const fiat = JSON.parse(jsonString) as Fiat.FiatFunction;
+    if (!fiat || !("body" in fiat)) {
+      console.error(`Cache File: >>${jsonCacheFilename}<<`);
+      errorOut(ERRORS.fiatReadJSONFail);
+    }
     const cryptOpt = preprocessFunction(fiat);
     return cryptOpt;
   }
