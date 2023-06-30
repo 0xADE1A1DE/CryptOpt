@@ -22,7 +22,7 @@ _arguments -S -s \
     '(-j --jsonFile -c --curve -m --method)'{-j,--jsonFile=}'[JSON-CODE, must --bridge manual]:json:_files -g \*.json' \
     '(-f --cFile -c --curve -m --method)'{-f,--cFile=}'[C-CODE must --bridge manual]:cfile:_files -g \*.c' \
     '--readState=[Continue from this State file]:statejson:_files -g \*.json' \
-    '--startFromBestJson=[Scan for the best of all current state files and continue for from the best one.' \
+    '--startFromBestJson=[Scan for the best of all current state files and continue for from the best one.]:statefile:_files -g \*.json' \
     '--resultDir=[Where to safe the result-files (assembly, pdfs, ...)]:directory:_path_files -/' \
     '(-e --evals)'{-e=,--evals=}'[Budget, in # of mutations to evaluate]:evals:' \
     '(-b --bets -r --betRatio)--single[no bets. Short for --bets=1 --betRatio=1]:single:' \
@@ -34,7 +34,7 @@ _arguments -S -s \
     '(-v --verbose)'{-v,--verbose}'[Write a lot of log messages (if compiled with DEBUG=1)]:verbose' \
     '(-x --xmm)'{-x,--xmm}'[Enable spilling to xmm]:xmm' \
     '(-s --seed)'{-s,--seed=}'[Seed to start the randomness with\[number\]]:seed' \
-    '(--framePointer)--framePointer=[Specify how the register for the frame pointer (rbp) is used]:framepointer:->framepointeroptions' \
+    '--framePointer=[Specify how the register for the frame pointer (rbp) is used]:framepointer:->framepointeroptions' \
     '(-h,--help)'{-h,--help}'[Help]:get help prompt' \
     '(--version)'{-v,--version}'[Version]:Version information' \
     && ret=0
