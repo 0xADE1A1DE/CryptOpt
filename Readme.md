@@ -33,9 +33,10 @@ The CryptOpt optimizer can also be used with non-Fiat Cryptography input. For mo
 
 ## Research Papers
 
-The paper has been published in PLDI 2023, and is available [online here](https://dl.acm.org/doi/pdf/10.1145/3591272) and [here](./papers/KuepperEWGCSTCCGWY23-PLDI23.pdf) [BibTex here](CITATION.bib).
-The full version of the paper, featuring the appendix with detailed performance measurements, is available [online on arXiv here](https://arxiv.org/abs/2211.10665) and [here](./papers/KuepperEWGCSTCCGWY23-PLDI23-full.pdf.pdf).
-The ICSE'23 DEMO paper titled [*CryptOpt: Automatic Optimization of Straightline Code*](https://conf.researchr.org/track/icse-2023/icse-2023-demonstrations) [is available online here](https://arxiv.org/abs/2305.19586) and [here](./papers/KuepperEWGCSTCCGWY23-ICSE23-demo.pdf) [BibTex here](./papers/KuepperEWGCSTCCGWY23-ICSE23-demo.bib), which explains the technical engineering effort in more detail.
+The paper has been published in PLDI 2023, and is available [online here](https://dl.acm.org/doi/pdf/10.1145/3591272) and [here](./papers/KuepperEWGCSTCCGWY23-PLDI23.pdf), the [BibTeX here](CITATION.bib).
+The full version of the paper, featuring the appendix with detailed performance measurements, is available [online on arXiv here](https://arxiv.org/abs/2211.10665) and [here](./papers/KuepperEWGCSTCCGWY23-PLDI23-full.pdf).
+
+The ICSE'23 DEMO paper titled [*CryptOpt: Automatic Optimization of Straightline Code*](https://conf.researchr.org/track/icse-2023/icse-2023-demonstrations), which explains the technical engineering effort in more detail [is available online here](https://arxiv.org/abs/2305.19586) and [here](./papers/KuepperEWGCSTCCGWY23-ICSE23-demo.pdf), the [BibTeX here](./papers/KuepperEWGCSTCCGWY23-ICSE23-demo.bib).
 
 ## Tracking usage of CryptOpt
 
