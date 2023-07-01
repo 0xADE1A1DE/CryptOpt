@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { FRAME_POINTER_OPTIONS_T } from "@/types";
+
 export type OptimizerArgs = {
   evals: number;
   seed: number;
@@ -29,4 +31,5 @@ export type OptimizerArgs = {
   jsonFile?: string;
   resultDir: string;
   xmm?: boolean;
+  framePointer: FRAME_POINTER_OPTIONS_T;
 };

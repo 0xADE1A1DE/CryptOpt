@@ -122,9 +122,15 @@ export class RegisterAllocator {
       [Flags.CF]: FlagState.KILLED,
       [Flags.OF]: FlagState.KILLED,
     };
+    const _CALLER_SAVE_REGISTERS =
+      // pretend that rbp does not exist, and handle special in pre/post instruction in finalize().
+      this._options?.framePointer !== "omit"
+        ? CALLER_SAVE_REGISTERS.filter((r) => r !== Register.rbp)
+        : CALLER_SAVE_REGISTERS;
+
     ra._ALL_REGISTERS = [Register.rax, Register.r10, Register.r11]
       .concat(...CALLING_CONVENTION_REGISTER_ORDER)
-      .concat(...CALLER_SAVE_REGISTERS);
+      .concat(..._CALLER_SAVE_REGISTERS);
     const _CALLING_CONVENTION_REGISTER_ORDER = [
       ...CALLING_CONVENTION_REGISTER_ORDER, // working copy
     ];
@@ -146,7 +152,7 @@ export class RegisterAllocator {
       ra._preInstructions.push(`; ${reg} contains ${name}`);
     });
     Logger.log("setting up callersaves");
-    CALLER_SAVE_REGISTERS.map((register) => {
+    _CALLER_SAVE_REGISTERS.forEach((register) => {
       ra._allocations[`${CALLER_SAVE_PREFIX}${register}`] = { datatype: "u64", store: register };
     });
     // treat remaining registes are free registers
@@ -1425,6 +1431,14 @@ export class RegisterAllocator {
 
     const pre = [] as asm[];
     const post = ["ret"] as asm[];
+
+    // if "omit" or "constant" we dont need to do anything speical
+    if (RegisterAllocator._options?.framePointer === "save") {
+      pre.push("push rbp");
+      pre.push("mov rbp, rsp");
+      post.unshift("pop rbp");
+    }
+
     if (stacklength > 0) {
       // CALLER SAVE REGS must be placed at the end.
 
