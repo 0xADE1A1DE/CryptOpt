@@ -92,12 +92,14 @@ export function genStatistics(a: {
   acc: number;
   numRevert: { [k: string]: number };
   numMut: { [k: string]: number };
+  counter: string;
 }): string[] {
   return [
     `; cpu ${cpus()[0].model}`,
     `; ratio ${a.ratioString}`,
     `; seed ${a.paddedSeed} `,
     `; CC / CFLAGS ${CC} / ${CFLAGS} `,
+    `; using counter; ${a.counter}`,
     `; time needed: ${a.elapsed} ms on ${a.evals} evaluations.`,
     `; Time spent for assembling and measuring (initial batch_size=${a.batchSize}, initial num_batches=${a.numBatches}): ${a.acc} ms`,
     `; number of used evaluations: ${a.evals}`,
