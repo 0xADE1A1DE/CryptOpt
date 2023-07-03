@@ -31,8 +31,11 @@ export function printStartInfo({
   cyclegoal,
   proof,
   symbolname,
-}: Pick<OptimizerArgs, "resultDir" | "bridge" | "seed" | "evals" | "cyclegoal" | "proof"> & {
+  counter,
+  framePointer,
+}: Pick<OptimizerArgs, "resultDir" | "bridge" | "seed" | "evals" | "cyclegoal" | "proof" | "framePointer"> & {
   symbolname: string;
+  counter: string;
 }) {
   process.stdout.write(
     [
@@ -47,6 +50,8 @@ export function printStartInfo({
       `with cycle goal>>${cy}${cyclegoal}${re}<< for each measurement`,
       `on host>>${cy}${os.hostname()}${re}<<`,
       `with pid>>${cy}${process.pid}${re}<<`,
+      `using counter>>${cy}${counter}${re}<<`,
+      `framePointer=>>${cy}${framePointer}${re}<<`,
       `starting @>>${cy}${new Date().toISOString()}${re}<<\n`,
     ].join(" "),
   );

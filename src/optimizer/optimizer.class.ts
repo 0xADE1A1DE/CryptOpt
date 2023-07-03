@@ -138,6 +138,7 @@ export class Optimizer {
       printStartInfo({
         ...this.args,
         symbolname: this.symbolname,
+        counter: this.measuresuite.timer,
       });
       let batchSize = 200;
       const numBatches = 31;
@@ -346,6 +347,7 @@ export class Optimizer {
               acc: accumulatedTimeSpentByMeasuring,
               numRevert: this.numRevert,
               numMut: this.numMut,
+              counter: this.measuresuite.timer,
             });
             Logger.log(statistics);
 
