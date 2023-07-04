@@ -150,7 +150,7 @@ export class FiatBridge implements Bridge {
     method: METHOD_T,
     lang: "C" | "JSON",
   ): { cmd: string; methodname: string; hash: string } {
-    const { last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { last_reduction, last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
 
     const binWithPath = resolve(cwd, binary);
     FiatBridge.check(curve, method, binWithPath, lang);
@@ -173,14 +173,14 @@ export class FiatBridge implements Bridge {
     let cmd = "";
     switch (binary) {
       case BINS.dettman:
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${prime}'  ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${last_reduction}' '${prime}'  ${required_function}`;
         break;
       case BINS.unsaturated:
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}'                     '${prime}'  ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}'                                         '${prime}'  ${required_function}`;
         break;
       case BINS.wbw_montgomery:
       case BINS.solinas:
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'                                   '${prime}'  ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'                                                       '${prime}'  ${required_function}`;
         break;
     }
 
@@ -194,7 +194,7 @@ export class FiatBridge implements Bridge {
    */
 
   public static buildProofCommand(curve: CURVE_T, method: METHOD_T, hintsFilename: string): string {
-    const { last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { last_reduction, last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
     const binWithPath = resolve(cwd, binary);
 
     FiatBridge.check(curve, method, binWithPath);
@@ -209,32 +209,17 @@ export class FiatBridge implements Bridge {
       "--output-asm /dev/null",
     ].join(" ");
 
-    const stackoffsets = readFileSync(hintsFilename)
-      .toString()
-      .split("\n")
-      .map((line) => /mov .*, \[ rsp \+ ([0-9x]+) \].*/.exec(line)?.[1])
-      .filter((match) => typeof match !== undefined)
-      .map(Number)
-      .filter((nu) => !isNaN(nu));
-
-    // those are the 'rsp - ...' and mov [rsp], rbx
-    let stacksize = (STACK_OFFSET_IN_ELEMENTS + 1) * 8;
-    if (stackoffsets.length > 0) {
-      stacksize += Math.max(...stackoffsets);
-    }
-
-    const stack = `--asm-stack-size ${stacksize ?? 0}`;
     const hint = `--hints-file ${hintsFilename}`;
 
     switch (binary) {
       case BINS.dettman:
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${prime}' ${required_function} ${hint} ${stack}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${last_reduction}' '${prime}' ${required_function} ${hint}`;
       case BINS.unsaturated:
         CODE_PROOF_ARGS += ` --tight-bounds-mul-by 1.000001`;
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}'                     '${prime}' ${required_function} ${hint} ${stack}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}'                                         '${prime}' ${required_function} ${hint}`;
       case BINS.wbw_montgomery:
       case BINS.solinas:
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'                                   '${prime}' ${required_function} ${hint} ${stack}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'                                                       '${prime}' ${required_function} ${hint}`;
     }
   }
 
