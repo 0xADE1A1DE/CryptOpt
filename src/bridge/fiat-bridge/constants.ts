@@ -97,6 +97,7 @@ export const CURVE_DETAILS: {
     binary: BINS;
     bounds: string[];
     last_limbwidth?: number; // only used in dettman
+    last_reduction?: number; // only used in dettman
   };
 } = {
   // https://github.com/zkcrypto/bls12_381#curve-description
@@ -242,6 +243,7 @@ export const CURVE_DETAILS: {
     argwidth: 5,
     bitwidth: 64,
     last_limbwidth: 48,
+    last_reduction: 2,
     prime: "2^256 - 4294968273",
     binary: BINS.dettman,
     bounds: [
