@@ -48,7 +48,6 @@ describe("check usage of rbp (framepointer)", () => {
               .filter((filename) => filename.endsWith(".asm"))
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => line.includes("rbp"));
-            console.warn(asmlinesWithRbp);
 
             expect(asmlinesWithRbp.length).toBeGreaterThan(0);
             expect(
@@ -83,7 +82,6 @@ describe("check usage of rbp (framepointer)", () => {
               .filter((filename) => filename.endsWith(".asm"))
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => line.includes("rbp"));
-            console.warn(asmlinesWithRbp);
 
             expect(asmlinesWithRbp.length).toBeGreaterThan(0);
             expect(
@@ -119,7 +117,6 @@ describe("check usage of rbp (framepointer)", () => {
               .filter((filename) => filename.endsWith(".asm"))
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => line.includes("rbp"));
-            console.warn(asmlinesWithRbp);
 
             expect(asmlinesWithRbp.length).toBe(0);
 
@@ -153,7 +150,6 @@ describe("check usage of rbp (framepointer)", () => {
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => !(line.startsWith(".") || line.startsWith(";")))
               .filter((line) => line.includes("rbp"));
-            console.warn(asmlinesWithRbp);
             expect(asmlinesWithRbp).toHaveLength(3);
 
             expect(asmlinesWithRbp[0]).toBe("push rbp");
