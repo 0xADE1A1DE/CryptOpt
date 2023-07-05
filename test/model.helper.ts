@@ -60,26 +60,7 @@ describe("model.helpers", () => {
 
   describe("createDependencyRelation", () => {
     const map = nodeLookupMap(nodes);
-    const { needs, neededBy } = createDependencyRelation(nodes, map);
-    it.skip(/*skippeded because needs is not used.*/ "needs", () => {
-      expect(needs.get("x1")?.size).toBe(1);
-      expect(needs.get("x1")?.has("arg1[0]")).toBe(true);
-      // nah ... if arg1[0] is already in a register, no-one cares about arg1
-      expect(needs.get("x1")?.has("arg1")).toBe(false);
-
-      expect(needs.get("x2")?.size).toBe(1);
-      expect(needs.get("x2")?.has("arg1[1]")).toBe(true);
-
-      expect(needs.get("x3")?.size).toBe(2);
-      expect(needs.get("x3")?.has("x1")).toBe(true);
-      expect(needs.get("x3")?.has("x2")).toBe(true);
-
-      expect(needs.get("x4")?.size).toBe(2);
-
-      expect(needs.get("x4")?.has("x102_0")).toBe(true);
-      expect(needs.get("x4")?.has("x102_1")).toBe(false);
-      expect(needs.get("x4")?.has("0xffffffffffffffff")).toBe(false);
-    });
+    const neededBy = createDependencyRelation(nodes, map);
 
     describe("neededBy", () => {
       it("arg1[0]", () => {

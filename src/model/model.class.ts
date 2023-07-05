@@ -132,7 +132,7 @@ export class Model {
 
     Model._nodes = options.json.body as CryptOpt.StringOperation[];
     Model._nodeLookupMap = nodeLookupMap(Model._nodes);
-    Model._neededBy = createDependencyRelation(Model._nodes, Model._nodeLookupMap).neededBy;
+    Model._neededBy = createDependencyRelation(Model._nodes, Model._nodeLookupMap);
     Model._order = toposort(Model._nodes, Model._neededBy);
     Logger.log(Model._order.join(" @ "));
     Logger.log(

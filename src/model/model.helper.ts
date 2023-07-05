@@ -50,15 +50,14 @@ export function nodeLookupMap(nodes: Nodes): Map<string, number> {
 }
 
 /**
- * @returns two maps neededby and needs. Each mapping from a name (x1_0) to a
- * set of names, which x1_0 is either needed by, or which x1_0 needs.
+ * @returns map neededby: Mapping from a name (x1_0) to a
+ * set of names, which x1_0 is either needed by.
  *
  * E.g. u64 x11 = arg1[3] + arg1[2]
  *      u64 x12 = arg1[3] * x11
  *     u128 x13 = x11 * x12
  *
  * then neededBy.get(x11) === Set(x12, x13_0, x13_1)
- *      needs.get(x11) === Set(arg1[3], arg1[2])
  *
  * TODO:
  * It also employs more logic depending on the operation and the destination data type
@@ -68,18 +67,15 @@ export function nodeLookupMap(nodes: Nodes): Map<string, number> {
  * results in neededBy.get("x1")   === undefined
  *            neededBy.get("x1_0") === undefined
  *            neededBy.get("x1_1") === Set(x2)
- *            needs.get(x2)        === Set(x1_1)
  *
  *
- * The needs    is used for creating the dependency tree and creating the topological order
  * The neededBy is used for determining if a current value can be overwritten
  *
  */
 export function createDependencyRelation(
   nodes: Nodes,
   lookupMap: Map<string, number>,
-): { neededBy: Map<string, Set<string>>; needs: Map<string, Set<string>> } {
-  const needs = new Map<string, Set<string>>();
+): Map<string, Set<string>> {
   const neededBy = new Map<string, Set<string>>();
 
   nodes.forEach((node) => {
@@ -97,7 +93,6 @@ export function createDependencyRelation(
       if (n == "_") {
         return;
       }
-      const needsSet = needs.get(n) ?? new Set<string>();
       node.arguments.forEach((arg: string) => {
         // depending on the operation and data types, we need the arguments and/or different limbs
 
@@ -110,7 +105,6 @@ export function createDependencyRelation(
           isReadOnlyMemory(arg)
         ) {
           // 2.1 which means, arg is xN/0xff/argN[n], which is needed in its entirety for calculating n
-          needsSet.add(arg); // n needs arg
           const neededBySet = neededBy.get(arg) ?? new Set<string>();
           neededBySet.add(n); // arg is needed by n
           neededBy.set(arg, neededBySet);
@@ -125,7 +119,6 @@ export function createDependencyRelation(
           const d = groupDepLimbs(node.operation, node.arguments);
 
           const needed_limbs = d[limbno];
-          needsSet.add(arg);
           needed_limbs.forEach((nl) => {
             const neededBySet = neededBy.get(nl) ?? new Set<string>();
             neededBySet.add(n);
@@ -133,12 +126,11 @@ export function createDependencyRelation(
           });
         }
       });
-      needs.set(n, needsSet);
     });
   });
   neededBy.delete("_");
   neededBy.delete("");
-  return { needs, neededBy };
+  return neededBy;
 }
 
 /**

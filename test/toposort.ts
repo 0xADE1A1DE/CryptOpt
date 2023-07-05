@@ -27,7 +27,7 @@ describe("toposort", () => {
   describe("general", () => {
     const { nodes } = createModelHelpers();
     const map = nodeLookupMap(nodes);
-    const { neededBy } = createDependencyRelation(nodes, map);
+    const neededBy = createDependencyRelation(nodes, map);
     const order = toposort(nodes, neededBy);
     it("should emit valid numbers", () => {
       // actual numbers
@@ -59,7 +59,7 @@ describe("toposort", () => {
     const nodes = f.body;
 
     const map = nodeLookupMap(nodes);
-    const { neededBy } = createDependencyRelation(nodes, map);
+    const neededBy = createDependencyRelation(nodes, map);
     const order = toposort(nodes, neededBy);
 
     const node_0 = nodes[order[0]];
@@ -79,7 +79,7 @@ describe("toposort", () => {
   describe("node Dependence: 'isADependentOnB'", () => {
     const { nodes } = createModelHelpers();
     const map = nodeLookupMap(nodes);
-    const { neededBy } = createDependencyRelation(nodes, map);
+    const neededBy = createDependencyRelation(nodes, map);
     it("is x1 dependent on x2", () => {
       const a = nodes.findIndex((n) => n.name[0] === "x1");
       const b = nodes.findIndex((n) => n.name[0] === "x2");
