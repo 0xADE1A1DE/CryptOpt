@@ -35,8 +35,8 @@ export const AVAILABLE_CURVES = [
   "poly1305",
   "secp256k1_montgomery",
   "secp256k1_dettman",
-];
-export const AVAILABLE_METHODS = ["square", "mul" /* currently unsupported "mul2", */, "add", "sub"];
+] as const;
+export const AVAILABLE_METHODS = ["square", "mul" /* currently unsupported "mul2", , "add", "sub"*/] as const;
 
 export const METHOD_DETAILS: {
   [f in METHOD_T]: {
@@ -45,22 +45,6 @@ export const METHOD_DETAILS: {
     };
   };
 } = {
-  add: {
-    name: {
-      [BINS.unsaturated]: "carry_add",
-      [BINS.wbw_montgomery]: "add",
-      [BINS.solinas]: "",
-      [BINS.dettman]: "",
-    },
-  },
-  sub: {
-    name: {
-      [BINS.unsaturated]: "carry_sub",
-      [BINS.wbw_montgomery]: "sub",
-      [BINS.solinas]: "",
-      [BINS.dettman]: "",
-    },
-  },
   mul: {
     // the operation 'multiply' is called carry_mul if the bin is unsaturated; mul if it is wbw_montgomery
     name: {
@@ -78,7 +62,24 @@ export const METHOD_DETAILS: {
       [BINS.solinas]: "mul2",
       [BINS.dettman]: "",
     },
-  },*/
+  },
+  add: {
+    name: {
+      [BINS.unsaturated]: "carry_add",
+      [BINS.wbw_montgomery]: "add",
+      [BINS.solinas]: "",
+      [BINS.dettman]: "",
+    },
+  },
+  sub: {
+    name: {
+      [BINS.unsaturated]: "carry_sub",
+      [BINS.wbw_montgomery]: "sub",
+      [BINS.solinas]: "",
+      [BINS.dettman]: "",
+    },
+  },
+  */
   square: {
     name: {
       [BINS.unsaturated]: "carry_square",

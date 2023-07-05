@@ -30,6 +30,7 @@ it("optimise", () => {
   return new Promise((resolve, reject) => {
     const filename = basename(import.meta.url);
     const args = getTestArgs(filename);
+    args.memoryConstraints = "out1-arg1";
     const opt = new Optimizer(args);
 
     try {

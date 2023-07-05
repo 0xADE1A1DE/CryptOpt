@@ -17,7 +17,8 @@
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
-import { datadir, env, preprocessFunction, STACK_OFFSET_IN_ELEMENTS } from "@/helper";
+import { errorOut, ERRORS } from "@/errors";
+import { datadir, env, preprocessFunction } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { sha256Hash } from "@/paul";
 import type { CryptOpt, Fiat } from "@/types";
@@ -34,8 +35,6 @@ import {
   SHA256SUMS,
 } from "./constants";
 import { BINS } from "./enums";
-import { exit } from "process";
-import { errorOut, ERRORS } from "@/errors";
 
 const cwd = resolve(datadir, "fiat-bridge");
 
@@ -47,14 +46,14 @@ export class FiatBridge implements Bridge {
     if (!AVAILABLE_METHODS.includes(m)) {
       throw new Error(`unsupported method ${m}`);
     }
-    if (m === "mul2") return 4;
+    // if (m === "mul2") return 4;
     if (m === "square") return 1;
     // add, sub, mul
     return 2;
   }
 
-  public argnumout(m: METHOD_T): number {
-    if (m === "mul2") return 2;
+  public argnumout(_m: METHOD_T): number {
+    // if (_m === "mul2") return 2;
     return 1;
   }
 

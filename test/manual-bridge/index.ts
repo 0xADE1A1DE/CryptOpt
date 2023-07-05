@@ -17,6 +17,7 @@
 import { rm, writeFileSync } from "fs";
 import { afterAll, describe, expect, it, vi } from "vitest";
 
+import { CURVE_T } from "@/bridge/fiat-bridge";
 import { Optimizer } from "@/optimizer";
 import type { Fiat, OptimizerArgs } from "@/types";
 
@@ -35,7 +36,7 @@ describe("manualBridge", () => {
   it("should throw if the file does not exist", () => {
     const args: OptimizerArgs = getTestArgs("");
     args.bridge = "manual";
-    args.curve = "";
+    args.curve = "" as CURVE_T;
     args.cFile = "does not exist";
     args.jsonFile = someJsonFilename;
     args.evals = 1000;
@@ -48,7 +49,7 @@ describe("manualBridge", () => {
     return new Promise((resolve, reject) => {
       const args: OptimizerArgs = getTestArgs("");
       args.bridge = "manual";
-      args.curve = "";
+      args.curve = "" as CURVE_T;
       args.cFile = someCFilename;
       args.jsonFile = someJsonFilename;
       args.evals = 1000;

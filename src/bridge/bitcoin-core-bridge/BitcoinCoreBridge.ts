@@ -89,15 +89,11 @@ export class BitcoinCoreBridge implements Bridge {
   public argnumin(m: METHOD_T): number {
     switch (m) {
       case "square":
-      case "reduce":
         return 1;
 
       case "mul":
-      case "scmul":
         return 2;
     }
-
-    throw new Error(`unsupported method ${m}`);
   }
 
   public argnumout(_m: METHOD_T): number {
@@ -110,11 +106,10 @@ export class BitcoinCoreBridge implements Bridge {
       case "square":
         return 5;
 
-      case "scmul": // more like out:8, in0:8
-      case "reduce": // more like out:8, in0:4, in1:4
-        return 8;
+      // case "scmul": // more like out:8, in0:8
+      // case "reduce": // more like out:8, in0:4, in1:4
+      // return 8;
     }
-    throw new Error(`unsupported method ${m}`);
   }
   public bounds(_c: string, m: METHOD_T): CryptOpt.HexConstant[] {
     // from https://github.com/bitcoin-core/secp256k1/blob/423b6d19d373f1224fd671a982584d7e7900bc93/src/field_5x52_int128_impl.h#L162

@@ -18,6 +18,8 @@ import { mkdirSync } from "fs";
 import { tmpdir as osTmpdir } from "os";
 import { basename, join } from "path";
 
+import { METHOD_T } from "@/bridge/bitcoin-core-bridge";
+import { CURVE_T } from "@/bridge/fiat-bridge";
 import { sha1Hash } from "@/paul";
 import type { CryptOpt, OptimizerArgs } from "@/types";
 
@@ -26,13 +28,13 @@ import type { CryptOpt, OptimizerArgs } from "@/types";
  * If that filename does not match, curve and method are empty string""
  */
 export function getTestArgs(filename: string): OptimizerArgs {
-  let curve = "";
-  let method = "";
+  let curve: CURVE_T = "curve25519";
+  let method: METHOD_T = "mul";
   const groups = basename(filename).match(/(?<curve>.*)-(?<method>.*)\.ts/)?.groups;
 
   if (groups) {
-    curve = groups.curve;
-    method = groups.method;
+    curve = groups.curve as CURVE_T;
+    method = groups.method as METHOD_T;
   }
   const resultDir = getTestResultsPath();
 
@@ -48,6 +50,7 @@ export function getTestArgs(filename: string): OptimizerArgs {
     verbose: false,
     resultDir,
     framePointer: "omit",
+    memoryConstraints: "none",
   };
 }
 
@@ -92,9 +95,11 @@ export function createModelHelpers(): {
     "u1 x27 = >> x8 43 // shr, happens in poly1305-sq",
     "u64 x28 = + x27 x4 ",
     "u64 x29 = + x6 x9 ",
+    "u64 x30 = + arg1[1] x3 ", // to check for memory contraints.
     "u64 out1[0] = = x5 ",
-    "u64 out1[1] = = x28 ",
+    "u64 out1[1] = = x28 ", // with 'out1-arg1' cannot be scheduled before x30, because x30 reads arg1[1], which out1[1] would overwrite
     "u64 out1[2] = = x29 ",
+    "u64 out1[3] = = x30 ",
     //TODO: maybe, when the limb-based dependency is implemented, we may need to add an example where one u128 is split up into two u46 limbs via >> 64 and & 0xffffffffffffffff
     // "u64 x10 = * x100 x101  // mulx", skipped for now, probably never going to happen... maybe with if 101 was zext'ed
   ];

@@ -15,7 +15,7 @@
  */
 
 import { Paul } from "@/paul";
-import type { Nodes, CryptOpt } from "@/types";
+import type { CryptOpt, Nodes } from "@/types";
 
 import { assertStringArguments, assertStringNames, makeU64NameLimbs } from "./lamdas";
 

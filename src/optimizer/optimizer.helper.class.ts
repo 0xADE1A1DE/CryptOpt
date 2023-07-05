@@ -18,17 +18,14 @@ import { mkdirSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { resolve } from "path";
 
-import { BRIDGES } from "@/bridge";
-import { AVAILABLE_METHODS, BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
+import { BitcoinCoreBridge, METHOD_T as BITCOIN_CORE_METHOD_T } from "@/bridge/bitcoin-core-bridge";
 import { CURVE_DETAILS, CURVE_T, FiatBridge, METHOD_T } from "@/bridge/fiat-bridge";
 import { JasminBridge } from "@/bridge/jasmin-bridge";
 import { ManualBridge } from "@/bridge/manual-bridge";
 import { Model } from "@/model";
+import { OptimizerArgs } from "@/types";
 
-interface needComms {
-  bridge: (typeof BRIDGES)[number];
-  seed: number;
-}
+type needComms = Pick<OptimizerArgs, "bridge" | "seed" | "memoryConstraints">;
 interface needJasmin extends needComms {
   bridge: "jasmin";
 }
@@ -44,7 +41,7 @@ interface needManual extends needComms {
 }
 interface needBitcoinCore extends needComms {
   bridge: "bitcoin-core";
-  method: (typeof AVAILABLE_METHODS)[number];
+  method: BITCOIN_CORE_METHOD_T;
 }
 
 type neededArgs = needJasmin | needFiat | needManual | needBitcoinCore;
@@ -61,6 +58,7 @@ type ret = {
 function initFiat(sharedObjectFilename: string, args: needFiat): ret {
   const bridge = new FiatBridge();
   Model.init({
+    memoryConstraints: args.memoryConstraints,
     json: bridge.getCryptOptFunction(args.method, args.curve),
   });
 
@@ -77,6 +75,7 @@ function initFiat(sharedObjectFilename: string, args: needFiat): ret {
 function initBitcoinCore(sharedObjectFilename: string, args: needBitcoinCore): ret {
   const bridge = new BitcoinCoreBridge();
   Model.init({
+    memoryConstraints: args.memoryConstraints,
     json: bridge.getCryptOptFunction(args.method),
   });
 
@@ -90,10 +89,11 @@ function initBitcoinCore(sharedObjectFilename: string, args: needBitcoinCore): r
   return { symbolname, chunksize, argwidth, argnumin, argnumout, bounds };
 }
 
-function initJasmin(sharedObjectFilename: string, _args: needJasmin): ret {
+function initJasmin(sharedObjectFilename: string, args: needJasmin): ret {
   const bridge = new JasminBridge();
   bridge;
   Model.init({
+    memoryConstraints: args.memoryConstraints,
     json: bridge.getCryptOptFunction(),
   });
 
@@ -116,6 +116,7 @@ function initManual(sharedObjectFilename: string, args: needManual): ret {
   const bridge = new ManualBridge(args.jsonFile, args.cFile);
   // manual
   Model.init({
+    memoryConstraints: args.memoryConstraints,
     json: bridge.getCryptOptFunction(),
   });
   const symbolname = bridge.machinecode(sharedObjectFilename);

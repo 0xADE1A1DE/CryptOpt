@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { basename } from "path";
-import { afterAll, expect, it, describe, vi } from "vitest";
-import { readFileSync, readdirSync, existsSync } from "fs";
-import { resolve as pathResolve } from "path";
+import { existsSync, readdirSync, readFileSync } from "fs";
+import { basename, resolve as pathResolve } from "path";
+import { afterAll, describe, expect, it, vi } from "vitest";
 
 import { Optimizer } from "@/optimizer";
 

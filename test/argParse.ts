@@ -17,6 +17,7 @@
 import { describe, expect, it } from "vitest";
 
 import { parsedArgs } from "@/helper";
+import { ParsedArgsT } from "@/types";
 
 describe("default argParse", () => {
   const defaultArgs = {
@@ -34,11 +35,12 @@ describe("default argParse", () => {
     cyclegoal: 10000,
     evals: 10000,
     framePointer: "omit",
+    memoryConstraints: "none",
   };
   Object.entries(defaultArgs).forEach(([key, value]) => {
     it("should have correct defaults", () => {
       expect(parsedArgs).toHaveProperty(key);
-      expect(parsedArgs[key]).toBe(value);
+      expect(parsedArgs[key as keyof ParsedArgsT]).toBe(value);
     });
   });
 });

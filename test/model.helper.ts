@@ -52,9 +52,11 @@ describe("model.helpers", () => {
       expect(map.get("x27")).toBe(11);
       expect(map.get("x28")).toBe(12);
       expect(map.get("x29")).toBe(13);
-      expect(map.get("out1[0]")).toBe(14);
-      expect(map.get("out1[1]")).toBe(15);
-      expect(map.get("out1[2]")).toBe(16);
+      expect(map.get("x30")).toBe(14);
+      expect(map.get("out1[0]")).toBe(15);
+      expect(map.get("out1[1]")).toBe(16);
+      expect(map.get("out1[2]")).toBe(17);
+      expect(map.get("out1[3]")).toBe(18);
     });
   });
 
@@ -72,8 +74,9 @@ describe("model.helpers", () => {
       it("arg1[1]", () => {
         const n = neededBy.get("arg1[1]");
         expect(n).toBeTruthy();
-        expect(n!.size).toBe(1);
+        expect(n!.size).toBe(2);
         expect(n!.has("x2")).toBe(true);
+        expect(n!.has("x30")).toBe(true);
       });
       it("x1", () => {
         const n = neededBy.get("x1");
@@ -105,10 +108,11 @@ describe("model.helpers", () => {
       it("x3", () => {
         const n = neededBy.get("x3");
         expect(n).toBeTruthy();
-        expect(n!.size).toBe(2);
+        expect(n!.size).toBe(3);
         expect(n!.has("x101")).toBe(false);
         expect(n!.has("x101_0")).toBe(true);
         expect(n!.has("x101_1")).toBe(true);
+        expect(n!.has("x30")).toBe(true);
       });
       it("x4", () => {
         const n = neededBy.get("x4");

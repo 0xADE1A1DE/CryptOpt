@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-import { isImm, isReadOnlyMemory, limbify, limbifyImm, makeU64NameLimbs } from "@/helper";
-import type { CryptOpt, Node, Nodes } from "@/types";
+import {
+  ARG_PREFIX,
+  isImm,
+  isReadOnlyMemory,
+  limbify,
+  limbifyImm,
+  makeU64NameLimbs,
+  OUT_PREFIX,
+} from "@/helper";
+import type { CryptOpt, MEMORY_CONSTRAINTS_OPTIONS_T, Nodes } from "@/types";
 
 /**
  * @param nodes: Array of nodes
@@ -71,10 +79,12 @@ export function nodeLookupMap(nodes: Nodes): Map<string, number> {
  *
  * The neededBy is used for determining if a current value can be overwritten
  *
+ * @param memoryConstraints: see description in `argParse`.
  */
 export function createDependencyRelation(
   nodes: Nodes,
   lookupMap: Map<string, number>,
+  memoryConstraints: MEMORY_CONSTRAINTS_OPTIONS_T = "none",
 ): Map<string, Set<string>> {
   const neededBy = new Map<string, Set<string>>();
 
@@ -83,7 +93,14 @@ export function createDependencyRelation(
     // E.g. u64  x11,x12 = arg1[3] * arg1[2]
     // E.g. u128 x1      = arg1[3] * x11
     // E.g. u128 x2      = x1      + x12
+    // E.g. u64  x4      = x3      + arg1[3]
+    // E.g. out1[2]      = x11
     //
+    // with memoryConstraints == out1-arg1
+    // (all neededBy(out1[2]) == Set(x3,x11,x12))
+    //
+    // with memoryConstraints == all
+    // (all neededBy(out1[2]) == Set(x3,x11,x12,x1_0,x1_1))
 
     // 'names' is for a u128 x1 its the limbs [x1_0, x1_1] and for u64 its just [x2] or [x11,x12]
     const names = makeU64NameLimbs(node);
@@ -93,6 +110,34 @@ export function createDependencyRelation(
       if (n == "_") {
         return;
       }
+      // If we have memoryConstraints and the current limb is an out-node
+      if (memoryConstraints !== "none" && n.startsWith(OUT_PREFIX)) {
+        // we need to find the nodes, which read memory, that the current out-node overwrites
+
+        // this filterLambda is used to find all the nodes which potentially need to be scheduled before the current out-node
+        let filterLambda: (c: CryptOpt.StringOperation) => boolean;
+
+        // if we only care about the same slot of out1 vs arg1
+        if (memoryConstraints === "out1-arg1") {
+          // the lamba needs to only filter those which have the same slot
+          const correspondingArgElement = n.replaceAll(OUT_PREFIX, ARG_PREFIX) as `arg${number}[${number}]`;
+          filterLambda = ({ arguments: args }) => args.includes(correspondingArgElement);
+        } else {
+          // otherwise we generalise to all the argN[*]
+          filterLambda = ({ arguments: args }) => args.some((a) => a.startsWith(ARG_PREFIX));
+        }
+
+        // once we've filtered them, we want to add all the limbs to the set
+        nodes
+          .filter(filterLambda)
+          .flatMap(makeU64NameLimbs)
+          .forEach((l) => {
+            const neededBySet = neededBy.get(l) ?? new Set<string>();
+            neededBySet.add(n);
+            neededBy.set(l, neededBySet);
+          });
+      }
+
       node.arguments.forEach((arg: string) => {
         // depending on the operation and data types, we need the arguments and/or different limbs
 

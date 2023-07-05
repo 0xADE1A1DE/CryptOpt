@@ -17,11 +17,11 @@
 import { describe, expect, it } from "vitest";
 
 import { BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
-import { matchXD, toposort, isADependentOnB } from "@/helper";
+import { isADependentOnB, matchXD, toposort } from "@/helper";
+import { createDependencyRelation, nodeLookupMap } from "@/model";
 
 import { createModelHelpers } from "./test-helpers";
 import { fiat_curve25519_carry_square } from "./toposort-helper";
-import { createDependencyRelation, nodeLookupMap } from "@/model";
 
 describe("toposort", () => {
   describe("general", () => {
@@ -74,7 +74,7 @@ describe("toposort", () => {
   });
 
   it("should throw for  secp256k1-reduce", () => {
-    expect(() => new BitcoinCoreBridge().getCryptOptFunction("reduce")).toThrow();
+    expect(() => new BitcoinCoreBridge().getCryptOptFunction("reduce" as "mul")).toThrow();
   });
   describe("node Dependence: 'isADependentOnB'", () => {
     const { nodes } = createModelHelpers();
@@ -165,6 +165,51 @@ describe("toposort", () => {
     });
   });
 
+  describe("node Dependence with Memory contraints", () => {
+    const { nodes } = createModelHelpers();
+    const map = nodeLookupMap(nodes);
+    describe("none", () => {
+      it("is out1[1] is not dependent on x30", () => {
+        const neededBy = createDependencyRelation(nodes, map, "none");
+        const a = nodes.findIndex((n) => n.name[0] === "out1[1]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+      });
+      it("is out1[0] is not dependent on x30", () => {
+        const neededBy = createDependencyRelation(nodes, map, "none");
+        const a = nodes.findIndex((n) => n.name[0] === "out1[0]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+      });
+    });
+    describe("out1-arg1", () => {
+      const neededBy = createDependencyRelation(nodes, map, "out1-arg1");
+      it("is out1[1] is dependent on x30 (", () => {
+        const a = nodes.findIndex((n) => n.name[0] === "out1[1]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+      });
+
+      it("is out1[0] is not dependent on x30", () => {
+        const a = nodes.findIndex((n) => n.name[0] === "out1[0]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+      });
+    });
+    describe("all", () => {
+      const neededBy = createDependencyRelation(nodes, map, "all");
+      it("is out1[1] is dependent on x30", () => {
+        const a = nodes.findIndex((n) => n.name[0] === "out1[1]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+      });
+      it("is out1[0] is dependent on x30", () => {
+        const a = nodes.findIndex((n) => n.name[0] === "out1[0]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+      });
+    });
+  });
   // removed because reduce is disabled for now
   // describe("should make correct order for secp256k1-reduce", () => {
   //   const f = new BitcoinCoreBridge().getCryptOptFunction("reduce");

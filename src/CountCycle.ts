@@ -163,6 +163,7 @@ function createMS(
     return init(cacheDir, {
       ...KNOWN_SYMBOLS[symbol],
       seed,
+      memoryConstraints: "none",
     }).measuresuite;
   }
 
@@ -179,6 +180,7 @@ function createMS(
     jsonFile: jsonFilename,
     cFile: cFilename,
     seed,
+    memoryConstraints: "none",
   }).measuresuite;
 }
 

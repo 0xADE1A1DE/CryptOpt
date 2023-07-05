@@ -18,6 +18,7 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { afterAll, expect, it, vi } from "vitest";
 
+import { CURVE_T } from "@/bridge/fiat-bridge";
 import { Optimizer } from "@/optimizer";
 import type { OptimizerArgs } from "@/types";
 
@@ -44,7 +45,7 @@ it("optimise", () => {
   return new Promise((resolve, reject) => {
     const args: OptimizerArgs = getTestArgs("");
     args.bridge = "manual";
-    args.curve = "";
+    args.curve = "" as CURVE_T;
     args.cFile = someCFilename;
     args.jsonFile = someJsonFilename;
     args.evals = 10;

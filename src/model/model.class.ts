@@ -17,27 +17,27 @@
 import fs from "fs";
 import { cloneDeep } from "lodash-es";
 
-import { CURVE_T } from "@/bridge/fiat-bridge/constants";
 import { DECISION_IDENTIFIER } from "@/enums";
 import {
   assertStringArguments,
   bl,
   cy,
   DI_ABBRV,
+  isADependentOnB,
   isCallerSave,
   limbify,
   matchArg,
   matchArgPrefix,
+  OUT_PREFIX,
   rd,
   re,
   TEMP_VARNAME,
   toposort,
-  isADependentOnB,
 } from "@/helper";
 import globals from "@/helper/globals";
 import Logger from "@/helper/Logger.class";
 import { BIAS, Paul } from "@/paul";
-import type { CryptOpt } from "@/types";
+import type { CryptOpt, MEMORY_CONSTRAINTS_OPTIONS_T } from "@/types";
 
 import { createDependencyRelation, nodeLookupMap } from "./model.helper";
 
@@ -115,13 +115,19 @@ export class Model {
     m.backupbody();
   }
 
-  public static init(options: { json: CryptOpt.Function }): void {
-    Model._methodParameters = options.json.returns;
-    Model._methodParameters = Model._methodParameters.concat(options.json.arguments);
+  public static init({
+    json,
+    memoryConstraints,
+  }: {
+    json: CryptOpt.Function;
+    memoryConstraints: MEMORY_CONSTRAINTS_OPTIONS_T;
+  }): void {
+    Model._methodParameters = json.returns;
+    Model._methodParameters = Model._methodParameters.concat(json.arguments);
 
     // double check that hierarchical has been flattened
     try {
-      options.json.body.forEach((e) => {
+      json.body.forEach((e) => {
         assertStringArguments(e);
       });
     } catch (err) {
@@ -130,9 +136,9 @@ export class Model {
       throw new Error("Illegal Argument (json)");
     }
 
-    Model._nodes = options.json.body as CryptOpt.StringOperation[];
+    Model._nodes = json.body as CryptOpt.StringOperation[];
     Model._nodeLookupMap = nodeLookupMap(Model._nodes);
-    Model._neededBy = createDependencyRelation(Model._nodes, Model._nodeLookupMap);
+    Model._neededBy = createDependencyRelation(Model._nodes, Model._nodeLookupMap, memoryConstraints);
     Model._order = toposort(Model._nodes, Model._neededBy);
     Logger.log(Model._order.join(" @ "));
     Logger.log(
@@ -397,8 +403,9 @@ export class Model {
   /**
    * has always Dependents: argN[x], callersave's
    * never has dependanats: TEMP_VARNAME.
-   * Rest, as in the graph.
+   * Rest, as in the graph, but it will disregard dependants that only exist for the ordering (for out nodes with memoryConstraints)
    * @param varname shall be the limb. so not x100, if x100 is a u128
+   * This function shall be used for spill decisions
    */
   public static hasDependants(varname: string, namely?: Set<string>): boolean {
     if (varname === TEMP_VARNAME) {
@@ -415,13 +422,25 @@ export class Model {
     // if all of those are already computed, varname can be overwritten
     let result = false;
     dependants?.forEach((dep) => {
-      namely?.add(dep);
-
       // dep is calculated at node i;
       const i = Model._nodeLookupMap.get(dep);
       if (typeof i == "undefined") {
         throw new Error(`dep "${dep}" is never calculted. TSNH.`);
       }
+
+      // we do need to be careful or out-nodes here: because of the memoryConstraints, the dependencies may only be present for reordering purposes.
+      // Hence, we check if the current depentant is an out-node,
+      if (dep.startsWith(OUT_PREFIX)) {
+        // and if it is; then we only need to check the calculated position, if our current varname is the one that actually sets the out.
+        // in other words: x2 = arg1[2]; out1[2] = x10; then, depNode may be out1[2]
+        const depNode = Model._nodes[i];
+        // and if the current varname is not x10, then we dont need to check and can essentially skip this dependant
+        if (varname !== depNode.arguments[0]) {
+          return;
+        }
+      }
+      namely?.add(dep);
+
       const indexOfDependencyInOrderArray = Model._order.indexOf(i);
       const hasNotBeenFullyCalculated = indexOfDependencyInOrderArray > Model._currentInstIdx;
       // as soon as we find one `dep` which has not been calculated

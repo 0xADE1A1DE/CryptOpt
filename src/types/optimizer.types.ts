@@ -14,23 +14,33 @@
  * limitations under the License.
  */
 
-import { FRAME_POINTER_OPTIONS_T } from "@/types";
+import { BRIDGES_T } from "@/bridge";
+import { METHOD_T } from "@/bridge/bitcoin-core-bridge";
+import { CURVE_T } from "@/bridge/fiat-bridge";
+import { FRAME_POINTER_OPTIONS_T, MEMORY_CONSTRAINTS_OPTIONS_T } from "@/types";
 
 export type OptimizerArgs = {
   evals: number;
   seed: number;
-  curve: string;
-  method: string;
+  curve: CURVE_T;
+  method: METHOD_T;
   cyclegoal: number;
   readState?: string; // filename
   logComment: string;
   proof: boolean;
   verbose: boolean;
-  bridge: "fiat" | "manual" | "bitcoin-core";
+  bridge: BRIDGES_T;
   cFile?: string;
   jsonFile?: string;
   resultDir: string;
   xmm?: boolean;
   preferXmm?: boolean;
   framePointer: FRAME_POINTER_OPTIONS_T;
+  memoryConstraints: MEMORY_CONSTRAINTS_OPTIONS_T;
+};
+export type ParsedArgsT = OptimizerArgs & {
+  startFromBestJson: boolean;
+  single: boolean;
+  bets: number;
+  betRatio: number;
 };

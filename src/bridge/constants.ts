@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-export const BRIDGES = ["fiat", "jasmin", "bitcoin-core", "manual"];
+import { CURVE_T, METHOD_T } from "./fiat-bridge";
+
+export const BRIDGES = ["fiat", "jasmin", "bitcoin-core", "manual"] as const;
+export type BRIDGES_T = (typeof BRIDGES)[number];
 
 // currently used only in src/CountCycle
 export const KNOWN_SYMBOLS: {
-  [symbol: string]: { bridge: "fiat" | "bitcoin-core"; method: string; curve: string };
+  [symbol: string]: { bridge: "fiat" | "bitcoin-core"; method: METHOD_T; curve: CURVE_T };
 } = {
   // fiat generated bls curves
   fiat_bls12_381_p_mul: { bridge: "fiat", method: "mul", curve: "bls12_381_p" },
@@ -54,6 +57,6 @@ export const KNOWN_SYMBOLS: {
   fiat_secp256k1_dettman_square: { bridge: "fiat", method: "square", curve: "secp256k1_dettman" },
 
   // bitcoin curve
-  secp256k1_fe_mul_inner: { bridge: "bitcoin-core", method: "mul", curve: "secp256k1" },
-  secp256k1_fe_sqr_inner: { bridge: "bitcoin-core", method: "square", curve: "secp256k1" },
+  secp256k1_fe_mul_inner: { bridge: "bitcoin-core", method: "mul", curve: "secp256k1_dettman" },
+  secp256k1_fe_sqr_inner: { bridge: "bitcoin-core", method: "square", curve: "secp256k1_dettman" },
 };

@@ -161,7 +161,7 @@ describe("RegisterAllocator:", () => {
         },
       ] as CryptOpt.StringOperation[],
     },
-    curve: "curve25519",
+    memoryConstraints: "none",
   });
   const ra = RegisterAllocator.getInstance();
   expect(ra).toBeTruthy();

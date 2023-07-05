@@ -24,7 +24,7 @@ import { createModelHelpers } from "./test-helpers";
 describe("Model.class", () => {
   const body = createModelHelpers().nodes;
   Model.init({
-    curve: "mock",
+    memoryConstraints: "none",
     json: {
       operation: "mul",
       arguments: [
@@ -62,7 +62,7 @@ describe("Model.class", () => {
     it("should mutate only at correct spots", () => {
       Paul.seed = 12;
       expect(Model.nodesInTopologicalOrder.map((n) => n.name).join("--")).toBe(
-        "x1--x2--x8,x9--x6,_--x29--x27--x100--x3--out1[2]--x101--x102--x4--x28--out1[1]--x103--x5--out1[0]",
+        "x1--x2--x8,x9--x6,_--x29--x27--x100--x3--out1[2]--x30--out1[3]--x101--x102--x4--x28--out1[1]--x103--x5--out1[0]",
       );
 
       Model.mutatePermutation();
@@ -79,9 +79,7 @@ describe("Model.class", () => {
        *
        */
       expect(Model.nodesInTopologicalOrder.map((n) => n.name).join("--")).toBe(
-        "x1--x2--x8,x9--x6,_--x29--x27--x100--x3--out1[2]--x101--x102--x4--x28--out1[1]--x103--x5--out1[0]",
-        // "x1--x2--x3--x101--x6,_--x100--x102--x4--x103--x5--out1[0]--x8,x9--x29--x27--x28--out1[1]--out1[2]",
-        // "x2--x1--x8,x9--x27--x6,x7--x100--x3--x101--x102--x5--x4--x28--x103",
+        "x1--x2--x8,x9--x6,_--x29--x27--x100--x3--out1[2]--x30--out1[3]--x101--x102--x4--x28--out1[1]--x103--x5--out1[0]",
       );
 
       // the order of this is the order of the 'nodesInTopologicalOrder'
@@ -96,7 +94,9 @@ describe("Model.class", () => {
         x100_0: true,
         x100_1: true,
         x3: true,
-        "out1[2]": false, //never has
+        "out1[2]": false, // never has
+        x30: true,
+        "out1[3]": false, // never has
         x101_0: true,
         x101_1: true,
         x102_0: true,
@@ -121,6 +121,8 @@ describe("Model.class", () => {
         /*    x100 = x1 * x2                     */ {},
         /*      x3 = x1 + x2                     */ { x2: false },
         /* out1[2] = x29                         */ { x29: false },
+        /*     x30 = arg1[1] + x3                */ {},
+        /* out1[3] = x30                         */ { x30: false },
         /*    x101 = x1 * x3                     */ { x3: false, x1: false },
         /*    x102 = x100 * x101                 */ { x101_0: false, x101_1: false },
         /*      x4 = x102 & 0xffffffffffffffff   */ { x102_0: false },
