@@ -113,7 +113,7 @@ export function createModelHelpers(): {
     } as CryptOpt.StringOperation;
   });
   if (rawNodes.length !== nodes.length) {
-    throw new Error("integrety failed.");
+    throw new Error("integrity failed.");
   }
   return { nodes, rex };
 }
