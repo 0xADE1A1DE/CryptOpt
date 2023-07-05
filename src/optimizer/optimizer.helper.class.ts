@@ -61,7 +61,6 @@ type ret = {
 function initFiat(sharedObjectFilename: string, args: needFiat): ret {
   const bridge = new FiatBridge();
   Model.init({
-    curve: args.curve,
     json: bridge.getCryptOptFunction(args.method, args.curve),
   });
 
@@ -78,7 +77,6 @@ function initFiat(sharedObjectFilename: string, args: needFiat): ret {
 function initBitcoinCore(sharedObjectFilename: string, args: needBitcoinCore): ret {
   const bridge = new BitcoinCoreBridge();
   Model.init({
-    curve: "secp256k1",
     json: bridge.getCryptOptFunction(args.method),
   });
 
@@ -96,7 +94,6 @@ function initJasmin(sharedObjectFilename: string, _args: needJasmin): ret {
   const bridge = new JasminBridge();
   bridge;
   Model.init({
-    curve: bridge.curve, //
     json: bridge.getCryptOptFunction(),
   });
 
@@ -119,7 +116,6 @@ function initManual(sharedObjectFilename: string, args: needManual): ret {
   const bridge = new ManualBridge(args.jsonFile, args.cFile);
   // manual
   Model.init({
-    curve: "",
     json: bridge.getCryptOptFunction(),
   });
   const symbolname = bridge.machinecode(sharedObjectFilename);

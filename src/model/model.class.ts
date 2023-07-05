@@ -115,7 +115,7 @@ export class Model {
     m.backupbody();
   }
 
-  public static init(options: { curve: CURVE_T; json: CryptOpt.Function }): void {
+  public static init(options: { json: CryptOpt.Function }): void {
     Model._methodParameters = options.json.returns;
     Model._methodParameters = Model._methodParameters.concat(options.json.arguments);
 
