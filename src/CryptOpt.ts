@@ -123,7 +123,7 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
   Logger.log(
     [
       `Done finding good SEEEDs.`,
-      `Starting final optimization now.`,
+      `Starting final optimisation now.`,
       `Starting with a ratio of: ${cy}${runRes[0].ratio}${re}`,
     ].join(" "),
   );

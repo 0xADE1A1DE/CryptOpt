@@ -61,7 +61,7 @@ export class Model {
 
   public static getInstance(): Model {
     if (Model._methodParameters.length == 0) {
-      console.error("no instance if we have no nodes. Call Model._method= first.");
+      console.error("no instance if we have no nodes. call Model.init()/Model.import() first.");
       process.exit(7);
     }
     if (!Model._instance) {
