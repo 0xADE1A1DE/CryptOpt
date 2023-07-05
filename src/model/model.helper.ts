@@ -15,10 +15,7 @@
  */
 
 import { isImm, isReadOnlyMemory, limbify, limbifyImm, makeU64NameLimbs } from "@/helper";
-import type { CryptOpt } from "@/types";
-
-export type Node = CryptOpt.StringOperation;
-export type Nodes = Node[];
+import type { CryptOpt, Node, Nodes } from "@/types";
 
 /**
  * @param nodes: Array of nodes
@@ -264,33 +261,4 @@ function groupDepLimbs(
       return [[...workaround], [...workaround]];
     }
   }
-}
-
-export function isADependentOnB(
-  a: number,
-  b: number,
-  nodes: Nodes,
-  neededBy: Map<string, Set<string>>,
-): boolean {
-  if (isNaN(a) || isNaN(b)) {
-    throw new Error("only support number numbers");
-  }
-  const A = nodes[a];
-  const B = nodes[b];
-  if (typeof A === "undefined" || typeof B === "undefined") {
-    throw new Error("only supports indexes, which result in non-undefined nodes. ");
-  }
-  const setOfDeps = makeU64NameLimbs(B).reduce((acc: Set<string>, limb) => {
-    const set = neededBy.get(limb);
-    if (set) {
-      set.forEach((s) => acc.add(s));
-    }
-    return acc;
-  }, new Set<string>());
-  // setOfDeps may be empty (if no one wants B... like outN[n])
-
-  // in the setOfDeps we only have the limbs
-  const needles = makeU64NameLimbs(A);
-  // needles are the 64-bit versions like x1,x2 or x100_1
-  return needles.some((n) => setOfDeps.has(n));
 }

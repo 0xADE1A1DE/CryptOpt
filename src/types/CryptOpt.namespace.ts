@@ -121,3 +121,5 @@ export namespace CryptOpt {
     extends Omit<ArgumentWithStringNames, "arguments">,
       Omit<ArgumentWithStringArguments, "name"> {}
 }
+export type Node = CryptOpt.StringOperation;
+export type Nodes = Node[];

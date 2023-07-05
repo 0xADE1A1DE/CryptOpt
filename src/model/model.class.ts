@@ -32,13 +32,14 @@ import {
   re,
   TEMP_VARNAME,
   toposort,
+  isADependentOnB,
 } from "@/helper";
 import globals from "@/helper/globals";
 import Logger from "@/helper/Logger.class";
 import { BIAS, Paul } from "@/paul";
 import type { CryptOpt } from "@/types";
 
-import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "./model.helper";
+import { createDependencyRelation, nodeLookupMap } from "./model.helper";
 
 type methodParam = CryptOpt.Function["arguments"][number] | CryptOpt.Function["returns"][number];
 export class Model {
@@ -132,7 +133,7 @@ export class Model {
     Model._nodes = options.json.body as CryptOpt.StringOperation[];
     Model._nodeLookupMap = nodeLookupMap(Model._nodes);
     Model._neededBy = createDependencyRelation(Model._nodes, Model._nodeLookupMap).neededBy;
-    Model._order = toposort(Model._nodes);
+    Model._order = toposort(Model._nodes, Model._neededBy);
     Logger.log(Model._order.join(" @ "));
     Logger.log(
       Model.nodesInTopologicalOrder
