@@ -11,4 +11,5 @@ bundle.tar.gz
 demo
 src/bridge/fiat-bridge/data/sha256sums
 src/bridge/jasmin-bridge/data-libjade/
+.gdb_history
 
