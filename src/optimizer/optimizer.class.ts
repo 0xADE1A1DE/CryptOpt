@@ -30,7 +30,6 @@ import {
   LOG_EVERY,
   padSeed,
   PRINT_EVERY,
-  printStartInfo,
   shouldProof,
   toggleFUNCTIONS,
   writeString,
@@ -42,7 +41,7 @@ import { Paul, sha1Hash } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { AnalyseResult, OptimizerArgs } from "@/types";
 
-import { genStatistics, genStatusLine, logMutation } from "./optimizer.helper";
+import { genStatistics, genStatusLine, logMutation, printStartInfo } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
 
 let choice: CHOICE;
@@ -348,6 +347,8 @@ export class Optimizer {
               numRevert: this.numRevert,
               numMut: this.numMut,
               counter: this.measuresuite.timer,
+              framePointer: this.args.framePointer,
+              memoryConstraints: this.args.memoryConstraints,
             });
             Logger.log(statistics);
 
