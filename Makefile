@@ -1,4 +1,4 @@
-# Copyright 2022 University of Adelaide
+# Copyright 2023 University of Adelaide
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -75,3 +75,9 @@ jasmin: $(BUILT_CRYPTOPT)
 
 watch: $(NODE) node_modules
 	@PATH=$(PATH) DEBUG=1 npm run bundle-w
+
+update-copyright: FILES=$(shell grep -e 'Copyright 2022' --files-with-matches --no-messages --recursive --exclude=results* --exclude=node_modules/* --exclude=.git/* --exclude=modules/*)
+update-copyright: deepclean
+	@printf "Before: %d\n" $(words $(FILES))
+	@echo $(FILES)
+	sed -e '1,20{s/Copyright 2022/Copyright 2023/}' -i $(FILES)
