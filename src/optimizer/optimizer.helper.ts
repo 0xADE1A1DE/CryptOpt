@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { hostname, cpus } from "os";
+import { cpus, hostname } from "os";
 
 import { CHOICE } from "@/enums";
 import { bl, cy, env, gn, pu, rd, re, shouldProof, SI, yl } from "@/helper";

@@ -57,9 +57,8 @@ export class JasminBridge {
   constructor() {
     const rawLines = readFileSync(resolve(cwd, "makeref")).toString().split("\n");
 
-    const matchGroups = rawLines[0].match(
-      /fn (?<name>\w+) \((?<params>(reg u64 [\w.]+,? ?)+)\) -> \(\) {/,
-    )?.groups;
+    const matchGroups = rawLines[0].match(/fn (?<name>\w+) \((?<params>(reg u64 [\w.]+,? ?)+)\) -> \(\) {/)
+      ?.groups;
     if (!matchGroups) {
       throw new Error("unsupported function signature");
     }

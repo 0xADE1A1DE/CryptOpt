@@ -167,7 +167,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.KILLED,
           [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -207,7 +207,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.KILLED,
           [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -244,7 +244,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.KILLED,
           [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -284,7 +284,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.KILLED,
           [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -331,7 +331,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.KILLED,
           [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -370,7 +370,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.KILLED,
           [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -438,7 +438,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.KILLED,
           [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -478,7 +478,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.KILLED,
           [Flags.OF]: FlagState.KILLED,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -520,7 +520,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.ALIVE,
           [Flags.OF]: FlagState.ALIVE,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
@@ -565,7 +565,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.ALIVE,
           [Flags.OF]: FlagState.ALIVE,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const myLovelyReg = Register.rsi;
@@ -618,7 +618,7 @@ describe("instructionGeneration:add", () => {
         ({
           [Flags.CF]: FlagState.ALIVE,
           [Flags.OF]: FlagState.ALIVE,
-        } as { [f in Flags]: FlagState }),
+        }) as { [f in Flags]: FlagState },
     );
 
     const c: CryptOpt.StringOperation = {
