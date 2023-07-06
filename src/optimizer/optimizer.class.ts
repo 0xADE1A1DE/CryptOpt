@@ -349,6 +349,7 @@ export class Optimizer {
               counter: this.measuresuite.timer,
               framePointer: this.args.framePointer,
               memoryConstraints: this.args.memoryConstraints,
+              cyclegoal: this.args.cyclegoal,
             });
             Logger.log(statistics);
 

@@ -95,12 +95,14 @@ export function genStatistics(a: {
   counter: string;
   framePointer: string;
   memoryConstraints: string;
+  cyclegoal: number;
 }): string[] {
   return [
     `; cpu ${cpus()[0].model}`,
     `; ratio ${a.ratioString}`,
     `; seed ${a.paddedSeed} `,
     `; CC / CFLAGS ${CC} / ${CFLAGS} `,
+    `; cyclecoal; ${a.cyclegoal}`,
     `; using counter; ${a.counter}`,
     `; framePointer ${a.framePointer}`,
     `; memoryConstraints ${a.memoryConstraints}`,
