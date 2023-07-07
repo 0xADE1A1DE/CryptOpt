@@ -102,7 +102,7 @@ export function genStatistics(a: {
     `; ratio ${a.ratioString}`,
     `; seed ${a.paddedSeed} `,
     `; CC / CFLAGS ${CC} / ${CFLAGS} `,
-    `; cyclecoal; ${a.cyclegoal}`,
+    `; cyclegoal; ${a.cyclegoal}`,
     `; using counter; ${a.counter}`,
     `; framePointer ${a.framePointer}`,
     `; memoryConstraints ${a.memoryConstraints}`,
