@@ -104,14 +104,18 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
 
   let derivedSeed = parsedArgs.seed;
 
+  const min = 1000;
+  const max = 1000000;
   for (let i = 1; i <= bets; i++) {
     derivedSeed = sha1Hash(derivedSeed);
+    const cg = Math.round(min * Math.pow(max / min, i / bets));
 
     const args = {
       ...parsedArgs,
       evals,
       logComment: `${parsedArgs.logComment} ${i}/${bets}`,
       seed: derivedSeed,
+      cyclegoal: cg,
     };
     Logger.log("running a bet with " + JSON.stringify(args, undefined, 2));
     const runResult = await run(args);
@@ -146,7 +150,7 @@ async function run(args: OptimizerArgs): Promise<RunResult> {
   }
 
   const [statefile] = generateResultFilename({ ...args, symbolname: optimizer.getSymbolname() });
-  Model.persist(statefile, parsedArgs);
+  Model.persist(statefile, { ...parsedArgs, ...args });
   const { ratio, convergence } = Model.getState();
   return { statefile, ratio, convergence };
 }
@@ -166,12 +170,16 @@ if (single) {
 } else {
   runResults = await allBets(offspringEvals, bets);
   const [bestRun] = runResults;
+  const sf = JSON.parse(readFileSync(bestRun.statefile).toString()) as CryptOpt.StateFile;
+
   const fullArgs = {
     ...parsedArgs,
+    ...sf.parsedArgs,
     logComment: `${parsedArgs.logComment} run`,
     evals: parsedArgs.evals - allocatedToPopulation,
     readState: bestRun.statefile,
   };
+  // console.warn({ sf, fullArgs });
   const lastRun = await run(fullArgs);
   runResults.push(lastRun);
 }
@@ -190,7 +198,7 @@ if ("time" in parsed) {
   times.generateCryptopt += generateCryptopt;
 }
 
-const lastConvergence = runResults[runResults.length - 1].convergence;
+const lastConvergence = runResults.at(-1)!.convergence;
 const longestDataRow = lastConvergence.length;
 
 const spaceSeparated = runResults.reduce((arr, { convergence }) => {
@@ -210,6 +218,7 @@ const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename({ ...parse
 writeString(datFileFull, spaceSeparated.join("\n"));
 process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);
 
+const sf = JSON.parse(readFileSync(runResults.at(-1)!.statefile).toString()) as CryptOpt.StateFile;
 Logger.log(JSON.stringify(times));
 const title = [
   `${curve.replace("_", "\\\\_")}-${method}`,
@@ -218,6 +227,7 @@ const title = [
   new Date().toISOString(),
   hostname(),
   Object.entries(times).map((k, v) => `Time for ${k}: ${(v / 60).toFixed(2)}min`),
+  `CycleGoal:${sf.parsedArgs.cyclegoal}`,
 ].join(", ");
 
 writeString(
