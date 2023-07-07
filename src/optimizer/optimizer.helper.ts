@@ -42,6 +42,7 @@ export function genStatusLine(a: {
   evals: number;
   ratioString: string;
   show_per_second: string;
+  cyclegoal: number;
 }): string {
   const cyclDeltaR = Math.abs(a.analyseResult.rawMedian[0] - a.analyseResult.rawMedian[1])
     .toString()
@@ -51,8 +52,9 @@ export function genStatusLine(a: {
     // general
     `${a.writeout ? "\n" : "\r"}${a.symbolname}`,
     `${a.logComment ?? "-"}`,
+    `${yl}cg ${a.cyclegoal.toString().padStart(7)}${re}`,
     `${bl}${a.stacklength.toString().padStart(3)}${re}`,
-    `${cy}bs${a.batchSize.toString().padStart(5)}${re}`,
+    `${cy}bs${a.batchSize.toString().padStart(6)}${re}`,
     `#inst:${cy}${a.no_of_instructions.toString().padStart(4)}${re}`,
     `cyclΔ ${gn}${cyclDeltaR}${re}`,
 
