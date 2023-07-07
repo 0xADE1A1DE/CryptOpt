@@ -252,8 +252,8 @@ export class Optimizer {
 
           batchSize = Math.ceil((Number(this.args.cyclegoal) / meanrawCheck) * batchSize);
           // We want to limit for some corner cases.
-          batchSize = Math.min(batchSize, 10000);
-          batchSize = Math.max(batchSize, 5);
+          batchSize = Math.min(batchSize, 100000);
+          batchSize = Math.max(batchSize, 1);
 
           const currentFunctionIsA = () => currentNameOfTheFunctionThatHasTheMutation === FUNCTIONS.F_A;
 
