@@ -26,6 +26,7 @@ import {
 import { errorOut, ERRORS } from "@/errors";
 
 import { FRAME_POINTER_OPTIONS } from "../types";
+
 const y = await yargs(process.argv.slice(2));
 
 export const parsedArgs = y

@@ -27,7 +27,10 @@ const { CC, CFLAGS } = env;
 
 export class ManualBridge implements Bridge {
   private _coFunction: CryptOpt.Function;
-  constructor(filepathJSON: string, private filepathC: string) {
+  constructor(
+    filepathJSON: string,
+    private filepathC: string,
+  ) {
     if (!existsSync(filepathJSON)) {
       throw new Error(`cannot find '${filepathJSON}' as a JSON file.`);
     }

@@ -17,7 +17,7 @@
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
-import { datadir, env, preprocessFunction, STACK_OFFSET_IN_ELEMENTS } from "@/helper";
+import { datadir, env, preprocessFunction } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { sha256Hash } from "@/paul";
 import type { CryptOpt, Fiat } from "@/types";

@@ -218,11 +218,14 @@ export class Model {
     const r = m.currentReadOrder;
     const fromIdx = Model._currentInstIdx;
 
-    const map = candidates.reduce((map, candidate) => {
-      const idx = r.indexOf(candidate, fromIdx);
-      map[candidate] = idx == -1 ? Infinity : idx;
-      return map;
-    }, {} as { [varname: string]: number });
+    const map = candidates.reduce(
+      (map, candidate) => {
+        const idx = r.indexOf(candidate, fromIdx);
+        map[candidate] = idx == -1 ? Infinity : idx;
+        return map;
+      },
+      {} as { [varname: string]: number },
+    );
 
     // find the varname with the biggest index
     const lastRead = Object.entries(map).reduce((currentBest, current) => {

@@ -1259,10 +1259,13 @@ export class RegisterAllocator {
   private get _flags(): { [k in Flags]: string } {
     return this.entriesAllocations
       .filter(([_varname, allocation]) => isFlag(allocation.store))
-      .reduce((prev, [varname, allocation]) => {
-        prev[allocation.store as Flags] = varname;
-        return prev;
-      }, {} as { [k in Flags]: string });
+      .reduce(
+        (prev, [varname, allocation]) => {
+          prev[allocation.store as Flags] = varname;
+          return prev;
+        },
+        {} as { [k in Flags]: string },
+      );
   }
 
   public flagStateString(): string {
