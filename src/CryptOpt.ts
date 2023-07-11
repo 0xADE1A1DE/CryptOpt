@@ -107,7 +107,7 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
   const min = 1000;
   const max = 1000000;
   for (let i = 1; i <= bets; i++) {
-    derivedSeed = sha1Hash(derivedSeed);
+    // derivedSeed = sha1Hash(derivedSeed);
     const cg = Math.round(min * Math.pow(max / min, i / bets));
 
     const args = {
