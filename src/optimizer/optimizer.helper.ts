@@ -43,6 +43,7 @@ export function genStatusLine(a: {
   ratioString: string;
   show_per_second: string;
   cyclegoal: number;
+  numBatches: number;
 }): string {
   const cyclDeltaR = Math.abs(a.analyseResult.rawMedian[0] - a.analyseResult.rawMedian[1])
     .toString()
@@ -62,14 +63,14 @@ export function genStatusLine(a: {
     `${yl}G ${a.analyseResult.batchSizeScaledrawMedian[a.indexGood].toFixed(0).padStart(3)} cycl` +
       // ` cnks${a.goodChunks.toString().padStart(3)}` +
       ` ${cy}σ${a.analyseResult.batchSizeScaledrawStddev[a.indexGood].toFixed(0).padStart(3)}${yl}`,
-    // ` o${a.analyseResult.numOutliers[a.indexGood].toString().padStart(2)}/nb${ a.analyseResult.numBatches[a.indexGood] }${re}`,
+    ` o${a.analyseResult.numOutliers[a.indexGood].toString().padStart(2)}/nb${a.numBatches}${re}`,
     // `${analyseResult.rawResult.stats.virtualAddressA}${re}`,
 
     // bad
     `${rd}B ${a.analyseResult.batchSizeScaledrawMedian[a.indexBad].toFixed(0).padStart(3)} cycl` +
       // ` cnks${a.badChunks.toString().padStart(3)}` +
       ` ${cy}σ${a.analyseResult.batchSizeScaledrawStddev[a.indexBad].toFixed(0).padStart(3)}${rd}`,
-    // ` o${a.analyseResult.numOutliers[a.indexBad].toString().padStart(2)}/nb${ a.analyseResult.numBatches[a.indexBad] }${re}`,
+    ` o${a.analyseResult.numOutliers[a.indexBad].toString().padStart(2)}/nb${a.numBatches}${re}`,
     // `${analyseResult.rawResult.stats.virtualAddressB}${re}`,
 
     // lib

@@ -84,7 +84,7 @@ export const parsedArgs = y
   .option("bets", {
     number: true,
     alias: "b",
-    default: 10,
+    default: 50,
     describe:
       "It describes how many seeds should be derived from the initial @param seed. For each of those seeds a part (refer to @param betRatio) of the total @param evals will be used to find best seeds. For the best one, the rest of evaluation budget will be used to optimzie.",
     min: 1,

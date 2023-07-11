@@ -317,6 +317,7 @@ export class Optimizer {
               stacklength,
               symbolname: this.symbolname,
               writeout,
+              numBatches,
             });
             process.stdout.write(statusline);
 

@@ -63,7 +63,7 @@ if (parsedArgs.startFromBestJson) {
     parsedArgs.seed = parsedArgsFromCli.seed;
 
     process.stdout.write(
-      `Found ${cy}${parsedArgs.readState}${re} with ratio ${cy}${bestState.ratio}${re}. Will continue from there with ${cy}${parsedArgs.evals}${re} evals, one single run from new seed ${cy}${parsedArgs.seed}${re}`,
+      `\nFound ${cy}${parsedArgs.readState}${re} with ratio ${cy}${bestState.ratio}${re}. Will continue from there with ${cy}${parsedArgs.evals}${re} evals, one single run from new seed ${cy}${parsedArgs.seed}${re}`,
     );
   }
 }
@@ -104,22 +104,28 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
 
   let derivedSeed = parsedArgs.seed;
 
-  const min = 1000;
-  const max = 1000000;
-  for (let i = 1; i <= bets; i++) {
-    // derivedSeed = sha1Hash(derivedSeed);
-    const cg = Math.round(min * Math.pow(max / min, i / bets));
+  const minCycles = 1000;
+  const maxCycles = 4000000;
 
-    const args = {
-      ...parsedArgs,
-      evals,
-      logComment: `${parsedArgs.logComment} ${i}/${bets}`,
-      seed: derivedSeed,
-      cyclegoal: cg,
-    };
-    Logger.log("running a bet with " + JSON.stringify(args, undefined, 2));
-    const runResult = await run(args);
-    runRes.push(runResult);
+  const seedsPerCG = 5;
+  const thisManyDifferentCgs = bets / seedsPerCG;
+
+  for (let i = 1; i <= thisManyDifferentCgs; i++) {
+    const cg = Math.round(minCycles * Math.pow(maxCycles / minCycles, i / thisManyDifferentCgs));
+
+    for (let n = 1; n <= seedsPerCG; n++) {
+      derivedSeed = sha1Hash(derivedSeed);
+      const args = {
+        ...parsedArgs,
+        evals,
+        logComment: `${parsedArgs.logComment} ${i}/${thisManyDifferentCgs}(s:${n})`,
+        seed: derivedSeed,
+        cyclegoal: cg,
+      };
+      Logger.log("running a bet with " + JSON.stringify(args, undefined, 2));
+      const runResult = await run(args);
+      runRes.push(runResult);
+    }
   }
 
   runRes.sort((a, b) => b.ratio - a.ratio); // note: reverse sort
@@ -169,6 +175,17 @@ if (single) {
   runResults = [singleRun];
 } else {
   runResults = await allBets(offspringEvals, bets);
+  process.stdout.write(
+    runResults
+      .map((rr) => {
+        const sf = JSON.parse(readFileSync(rr.statefile).toString()) as CryptOpt.StateFile;
+        const cg = sf.parsedArgs.cyclegoal;
+        const ratio = rr.ratio;
+        const seed = sf.seed;
+        return `cg ${cg.toString().padStart(10)} rat ${ratio.toFixed(5).padStart(6)} seed ${seed}`;
+      })
+      .join("\n"),
+  );
   const [bestRun] = runResults;
   const sf = JSON.parse(readFileSync(bestRun.statefile).toString()) as CryptOpt.StateFile;
 
