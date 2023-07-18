@@ -37,8 +37,9 @@ It will require internet access to download the (Node.js) runtime and dependenci
 1. Install dependencies (will install globally) (c.f. Dockerfile `apt install` command(s))
 1. Install [AssemblyLine](https://0xADE1A1DE.github.io/Assemblyline) (will install globally)
 1. Clone the repo with `--recurse-submodules` to also clone submodules for a bunch of useful scripts.
-1. Enable performance counters `echo "1" | sudo tee /proc/sys/kernel/perf_event_paranoid` (MeasureSuite will otherwise fall back to use `RDTSCP` to count cycles)
+1. Enable performance counters `echo "1" | sudo tee /proc/sys/kernel/perf_event_paranoid` ([MeasureSuite](https://0xADE1A1DE.github.io/MeasureSuite) will otherwise fall back to use `RDTSCP` to count cycles)
 1. Build CryptOpt with `make all`. (or `DEBUG=1 make all` if you want debug info and `--verbose` Will slow down execution by around 50%)
 CryptOpt already contains pre-built binaries for fiat-crypto.
 If you want to build them fresh, too, follow the build instructions in [the Dockerfile](./Dockerfile) or [on Fiat-Cryptography's GitHub](https://github.com/mit-plv/fiat-crypto).
-Then copy the standalone-ocaml binaries from `./src/ExtractionOCaml/{unsaturated_solinas, word_by_word_montgomery}` to `./src/bridge/fiat-bridge/data` and create their checksums
+Then copy the standalone-ocaml binaries from `./src/ExtractionOCaml/{dettman_multiplication,solinas_reduction,unsaturated_solinas,word_by_word_montgomery}` to `./src/bridge/fiat-bridge/data`
+
