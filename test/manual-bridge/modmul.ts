@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { afterAll, expect, it, vi } from "vitest";
 
+import { CURVE_T } from "@/bridge/fiat-bridge";
 import { Optimizer } from "@/optimizer";
 import type { OptimizerArgs } from "@/types";
 
@@ -44,7 +45,7 @@ it("optimise", () => {
   return new Promise((resolve, reject) => {
     const args: OptimizerArgs = getTestArgs("");
     args.bridge = "manual";
-    args.curve = "";
+    args.curve = "" as CURVE_T;
     args.cFile = someCFilename;
     args.jsonFile = someJsonFilename;
     args.evals = 10;

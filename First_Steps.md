@@ -64,6 +64,7 @@ Parameter    | default     | possible / typical values | description
 --betRatio   | 0.2         | 0.1, 0.3                  | The share from parameter `--evals`, which are spent for all bets, in per cent (i.e. 0.2 means 20% of --evals will be used for the bet part, and 80% for the final run-part)
 --resultDir  | ./results   | /tmp/myresults            | The directory under which `<BRIDGE>/<SYMBOL>` will be created and the result files will be stored
 --no-proof   |             | --no-proof, --proof       | [dis\|en]ables the Fiat-Proofing system. It is enabled by default for `fiat`-bridge, disabled for the rest.
+--memoryConstraints| none  | none, all, out1-arg1      | none: any argN[n] can be read after any outN[n] as been written. That is okay, if all memoy is distinct. 'out1-arg1' specifies that arg1[n] cannnot be read, if out1[n] has been written. It may read arg1[n+m] after out1[n] has been written. Use that if you want to call `mul(r,r,x)` or `sq(a,a)`. all: no argN[n] can be read if any outN[n] has been written. Use that if memory can be overlapping and unaligned.
 
 For more information check `./CryptOpt --help`
 

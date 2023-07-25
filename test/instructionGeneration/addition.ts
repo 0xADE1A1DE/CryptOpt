@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import { Paul } from "@/paul";
 import type { Allocations, CryptOpt, MemoryAllocation, RegisterAllocation, ValueAllocation } from "@/types";
 
 // this not consistent in within itself (multiple vars in one single reg).
-// Certain vars but is only used certain test
+// but certain vars are only used in certain tests
 const allocs = {
   out1: { datatype: "u64[n]", store: "rdi" },
   arg1: { datatype: "u64[n]", store: "rsi" },
@@ -160,7 +160,7 @@ describe("instructionGeneration:add", () => {
     },
   );
 
-  it("shold add two u128 to one u128 using provided flag-choice", () => {
+  it("should add two u128 to one u128 using provided flag-choice", () => {
     getCurrentAllocations.mockClear();
     flagState.mockImplementation(
       () =>

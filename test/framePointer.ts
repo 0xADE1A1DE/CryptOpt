@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,6 @@ describe("check usage of rbp (framepointer)", () => {
               .filter((filename) => filename.endsWith(".asm"))
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => line.includes("rbp"));
-            console.warn(asmlinesWithRbp);
 
             expect(asmlinesWithRbp.length).toBeGreaterThan(0);
             expect(
@@ -82,7 +81,6 @@ describe("check usage of rbp (framepointer)", () => {
               .filter((filename) => filename.endsWith(".asm"))
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => line.includes("rbp"));
-            console.warn(asmlinesWithRbp);
 
             expect(asmlinesWithRbp.length).toBeGreaterThan(0);
             expect(
@@ -118,7 +116,6 @@ describe("check usage of rbp (framepointer)", () => {
               .filter((filename) => filename.endsWith(".asm"))
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => line.includes("rbp"));
-            console.warn(asmlinesWithRbp);
 
             expect(asmlinesWithRbp.length).toBe(0);
 
@@ -152,7 +149,6 @@ describe("check usage of rbp (framepointer)", () => {
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => !(line.startsWith(".") || line.startsWith(";")))
               .filter((line) => line.includes("rbp"));
-            console.warn(asmlinesWithRbp);
             expect(asmlinesWithRbp).toHaveLength(3);
 
             expect(asmlinesWithRbp[0]).toBe("push rbp");

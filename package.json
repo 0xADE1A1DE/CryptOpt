@@ -1,0 +1,120 @@
+{
+  "name": "cryptopt",
+  "version": "1.0.2",
+  "description": "Generates high performance ASM from JSON-specified Arithmetic",
+  "main": "dist/CryptOpt.js",
+  "type": "module",
+  "files": [
+    "./dist/CryptOpt.js",
+    "./dist/data/*"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "os": [
+    "linux"
+  ],
+  "repository": {
+    "type": "git",
+    "homepage": "https://github.com/0xADE1AIDE/CryptOpt.git"
+  },
+  "author": "joel.kuepper@adelaide.edu.au",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/0xADE1AIDE/CryptOpt#readme",
+  "scripts": {
+    "test": "vitest",
+    "test-no-watch": "vitest --watch false",
+    "test-cov": " vitest --coverage",
+    "lint-check": "eslint .",
+    "lint-fix": "eslint --fix .",
+    "format-check": "npx prettier --check \"./**/*.ts\" \"!./dist\"",
+    "format-fix": "npx prettier -w \"./**/*.ts\" \"!./dist\"",
+    "bundle-debug": "DEBUG=1 rollup --config rollup.config.js",
+    "bundle": "rollup --config rollup.config.js",
+    "bundle-w": "rollup --config rollup.config.js -w"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "printWidth": 110
+  },
+  "dependencies": {
+    "@vitest/coverage-v8": "^0.32.4",
+    "lodash-es": "^4.17.21",
+    "measuresuite": "^2.2.1",
+    "proper-lockfile": "^4.1.2",
+    "simple-statistics": "^7.8.3",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-strip": "^3.0.2",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.2",
+    "@types/fs-extra": "^11.0.1",
+    "@types/lodash-es": "^4.17.7",
+    "@types/node": "^20.4.0",
+    "@types/proper-lockfile": "^4.1.2",
+    "@types/yargs": "^17.0.24",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
+    "c8": "^8.0.0",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "prettier": "^3.0.0",
+    "rollup": "^3.26.1",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-shell": "^1.0.9",
+    "tslib": "^2.6.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.3.9",
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.32.4"
+  },
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "simple-import-sort",
+      "import",
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier"
+    ],
+    "ignorePatterns": [
+      "*.js",
+      "dist",
+      "coverage"
+    ],
+    "rules": {
+      "simple-import-sort/imports": "warn",
+      "simple-import-sort/exports": "warn",
+      "import/first": "warn",
+      "import/newline-after-import": "warn",
+      "import/no-duplicates": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        1,
+        {
+          "argsIgnorePattern": "^_"
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.ts"
+        ],
+        "rules": {
+          "simple-import-sort/imports": [
+            "warn",
+            {}
+          ]
+        }
+      }
+    ]
+  }
+}

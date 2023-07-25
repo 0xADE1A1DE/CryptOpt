@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 export type METHOD_T = (typeof AVAILABLE_METHODS)[number];
 
-export const AVAILABLE_METHODS = ["square", "mul"];
+export const AVAILABLE_METHODS = ["square", "mul"] as const;
 
 export const METHOD_DETAILS: {
   [f in METHOD_T]: {

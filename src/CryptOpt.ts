@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import { exec } from "child_process";
-import { readFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync } from "fs";
 import { hostname } from "os";
 import { resolve } from "path";
 
@@ -39,9 +39,37 @@ import type { CryptOpt, CryptoptGlobals, OptimizerArgs } from "@/types";
 
 import Logger from "./helper/Logger.class";
 
-// overwrite every parsed arg if we shall do so
 let parsedArgs = parsedArgsFromCli;
-if (parsedArgsFromCli.readState) {
+if (parsedArgs.startFromBestJson) {
+  const symbolname = new Optimizer(parsedArgs).getSymbolname(true);
+  const dir = resolve(parsedArgs.resultDir, parsedArgs.bridge, symbolname);
+  if (parsedArgs.verbose) {
+    console.log(`Checking '${dir}' for the abosulte bestestest Statefile.`);
+  }
+  const [bestStateFileName, bestState] = readdirSync(dir)
+    .filter((file) => file.match(/seed\d+\.json/))
+    .map((f) => resolve(dir, f))
+    .map((f) => [f, JSON.parse(readFileSync(f).toString())] as [string, CryptOpt.StateFile])
+    .sort(([_, a], [_2, b]) => b.ratio - a.ratio)[0]; // note reverse sort, because we want the biggest one
+
+  if (existsSync(bestStateFileName)) {
+    // overwrite all args
+    parsedArgs = bestState.parsedArgs;
+
+    // restore some
+    parsedArgs.readState = bestStateFileName;
+    parsedArgs.single = true;
+    parsedArgs.evals = parsedArgsFromCli.evals;
+    parsedArgs.seed = parsedArgsFromCli.seed;
+
+    process.stdout.write(
+      `Found ${cy}${parsedArgs.readState}${re} with ratio ${cy}${bestState.ratio}${re}. Will continue from there with ${cy}${parsedArgs.evals}${re} evals, one single run from new seed ${cy}${parsedArgs.seed}${re}`,
+    );
+  }
+}
+// if we only have readState, w/o looking for the best one
+else if (parsedArgsFromCli.readState) {
+  // overwrite every parsed arg if we shall do so
   const stateFile: CryptOpt.StateFile = JSON.parse(readFileSync(parsedArgsFromCli.readState).toString());
   if (stateFile.parsedArgs) {
     parsedArgs = stateFile.parsedArgs;
@@ -95,7 +123,7 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
   Logger.log(
     [
       `Done finding good SEEEDs.`,
-      `Starting final optimization now.`,
+      `Starting final optimisation now.`,
       `Starting with a ratio of: ${cy}${runRes[0].ratio}${re}`,
     ].join(" "),
   );

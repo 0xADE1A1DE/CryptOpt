@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,34 @@
  * limitations under the License.
  */
 
-import { isImm, toImm } from "@/helper";
+import { Flags, FlagState } from "@/enums";
+import { getByteRegFromQwReg, isByteRegister, isImm, isMem, isSafeImm32 } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt, imm, U1Allocation, U64Allocation, ValueAllocation } from "@/types";
-
-import { f__rfm_rm_rmi, fr__frm_rmi, fr__rfm_rm_rmi } from "./subtractionhelpers/subtraction_helpers";
+import type { asm, CryptOpt } from "@/types";
 
 export function sub(c: CryptOpt.StringOperation): asm[] {
   if (c.datatype !== "u64") {
-    throw new Error(" op + is only supported, if datatype is u64. Abort.");
+    throw new Error(" op - is only supported, if datatype is u64. Abort.");
   }
+
+  if (c.operation === "-") {
+    if (c.name.length != 1) {
+      throw new Error(`- needs one name-symbol. It has not. Abort.`);
+    }
+    if (c.arguments.length != 2) {
+      throw new Error(`- needs two arguments-symbol. It has not. Abort.`);
+    }
+  }
+
+  if (c.operation === "subborrowx") {
+    if (c.name.length != 2) {
+      throw new Error(`Subborrowx needs two name-symbols. It has not. Abort.`);
+    }
+    if (c.arguments.length != 3) {
+      throw new Error(`- needs three arguments-symbol. It has not. Abort.`);
+    }
+  }
+
   // static void fiat_p384_subborrowx_u64(uint64_t* out1, fiat_p384_uint1* out2, fiat_p384_uint1 arg1, uint64_t arg2, uint64_t arg3) {
   //   x1 = ((arg2 - (fiat_p384_int128)arg1) - arg3);
   //   *out1 = (uint64_t)(x1 & UINT64_C(0xffffffffffffffff));
@@ -37,47 +55,74 @@ export function sub(c: CryptOpt.StringOperation): asm[] {
   // minuend − subtrahend = difference Example: in 8 − 3 = 5, 8 is the minuend.
   //
 
-  // Step 1 Find out, what to do and get allcoations: highlevel
-  if (c.operation !== "subborrowx") {
-    throw new Error(`operation must be subborrowx, instead it is : ${c.operation}`);
-  }
-  if (c.name.length != 2) {
-    throw new Error(`Subborrowx needs two name-symbols. It has not. Abort.`);
-  }
+  const [resVarname, carryoutVarname] = c.operation == "subborrowx" ? c.name : [c.name[0], "_"];
+  const [carryinVarname, minuendVarname, subtrahend] =
+    c.operation == "subborrowx" ? c.arguments : (["0x0", ...c.arguments] as string[]);
 
   const ra = RegisterAllocator.getInstance();
-  // ra.initNewInstruction moved to ./InstructionGenerator to have the comment right.
-  const allocations = ra.getCurrentAllocations();
-  // sort the var names
-  const [resVarname, carryoutVarname] = c.name;
-  const [carryinVarname, minuendVarname, subtrahend] = c.arguments as string[];
+  ra.spillFlag(Flags.OF); // because they will be destroyed after in any case.
+  ra.spillFlag(Flags.CF);
 
-  let a_subtrahend: imm | ValueAllocation | null;
-  if (isImm(subtrahend)) {
-    // make all numbers at least imm32 if we use subtraction with the subtrahend being immediate
-    const countNibblesFor32bit = 8;
-    const num =
-      subtrahend.length <= countNibblesFor32bit + 2
-        ? subtrahend
-            .split("0x")[1]
-            .padStart(countNibblesFor32bit, "0")
-            .padStart(countNibblesFor32bit + 2, "0x")
-        : subtrahend;
-    a_subtrahend = toImm(num);
-  } else {
-    a_subtrahend = allocations[subtrahend] as U64Allocation | U1Allocation;
-  }
-  // get the allocations
-  const a_minuend = allocations[minuendVarname] as U64Allocation | U1Allocation;
-
+  let instr: "sub" | "sbb";
   if (carryinVarname === "0x0") {
-    return fr__frm_rmi(carryoutVarname, resVarname, a_minuend, a_subtrahend);
+    instr = "sub";
   } else {
-    const a_cin = allocations[carryinVarname] as U1Allocation;
-    if (carryoutVarname === "_") {
-      return f__rfm_rm_rmi(carryoutVarname, a_cin, a_minuend, a_subtrahend);
-    } else {
-      return fr__rfm_rm_rmi(carryoutVarname, resVarname, a_cin, a_minuend, a_subtrahend);
+    // we do have a carry in
+    instr = "sbb";
+
+    // if cin is not in CF, mov to CF
+
+    const allocations = ra.getCurrentAllocations();
+    let cin = allocations[carryinVarname]?.store;
+
+    if (cin == Flags.OF) {
+      cin = ra.loadVarToReg(carryinVarname);
+      allocations[carryinVarname].store = cin;
+    }
+
+    if (cin !== Flags.CF) {
+      ra.spillFlag(Flags.CF); // if there was one before, should be saved
+
+      // load cin to CF
+      const r = ra.loadImmToReg64("-0x1");
+
+      if (isMem(cin)) {
+        ra.addToPreInstructions(`add ${getByteRegFromQwReg(r)}, byte ${cin}; load to CF<-${carryinVarname}`);
+      } else if (isByteRegister(cin)) {
+        ra.addToPreInstructions(`add ${getByteRegFromQwReg(r)}, ${cin}; load to CF<-${carryinVarname}`);
+      } else {
+        ra.addToPreInstructions(`add ${r}, ${cin}; load to CF<-${carryinVarname}`);
+      }
+      ra.declareHavoc(r);
     }
   }
+
+  // MINUEND MUST BE IN REGISTER
+  if (isImm(minuendVarname)) {
+    ra.loadImmToReg64(minuendVarname);
+  } else {
+    ra.loadVarToReg(minuendVarname, "movzx");
+  }
+
+  const allocations = ra.getCurrentAllocations();
+  let sub = allocations[subtrahend]?.store;
+  if (!sub) {
+    // subtrahend could be imm
+    if (isImm(subtrahend)) {
+      if (!isSafeImm32(subtrahend)) {
+        sub = ra.loadImmToReg64(subtrahend);
+      } else {
+        sub = subtrahend; // safe imm
+      }
+    }
+  }
+
+  if (typeof carryoutVarname !== "undefined" && carryoutVarname !== "_") {
+    ra.declareVarForFlag(Flags.CF, carryoutVarname);
+  } else {
+    ra.declareFlagState(Flags.CF, FlagState.KILLED);
+  }
+  const min = ra.backupIfVarHasDependencies(minuendVarname, resVarname);
+
+  return [`${instr} ${min}, ${sub}`];
 }

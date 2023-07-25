@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,20 @@
 import { uniq } from "lodash-es";
 import yargs from "yargs";
 
-import { AVAILABLE_METHODS as BITCOIN_CORE_METHODS } from "@/bridge/bitcoin-core-bridge/constants";
+import {
+  AVAILABLE_METHODS as BITCOIN_CORE_METHODS,
+  type METHOD_T as BITCOIN_CORE_METHOD_T,
+} from "@/bridge/bitcoin-core-bridge/constants";
 import { BRIDGES } from "@/bridge/constants";
 import {
   AVAILABLE_CURVES as FIAT_CURVES,
   AVAILABLE_METHODS as FIAT_METHODS,
+  type CURVE_T as FIAT_CURVE_T,
+  type METHOD_T as FIAT_METHOD_T,
 } from "@/bridge/fiat-bridge/constants";
 import { errorOut, ERRORS } from "@/errors";
 
-import { FRAME_POINTER_OPTIONS } from "../types";
+import { FRAME_POINTER_OPTIONS, MEMORY_CONSTRAINTS_OPTIONS, ParsedArgsT } from "../types";
 
 const y = await yargs(process.argv.slice(2));
 
@@ -51,7 +56,6 @@ export const parsedArgs = y
     default: "fiat",
     describe: `If --bridge gets assigned 'manual', one must specify --cFile and --jsonFile, rather than curve/method.`,
     choices: BRIDGES,
-    coerce: (s: string) => s as "fiat" | "manual" | "bitcoin-core",
   })
   .option("jsonFile", {
     string: true,
@@ -116,13 +120,25 @@ export const parsedArgs = y
     alias: "x",
     default: false,
     describe:
-      "If this is set, CryptOpt will optimize with spilling into vector registers rather than spilling solely into memory.",
+      "If this is set, CryptOpt will optimize considering to spill into vector registers rather than spilling solely into memory.",
+    boolean: true,
+  })
+  .option("preferXmm", {
+    alias: "X",
+    default: false,
+    describe:
+      "If this is set, CryptOpt will prefer spilling into vector registers as long as they are available, then start spilling into memory. Must specify --xmm switch, too. It will not try to optimize on it. (i.e. The first 16 values to be spilled will be spilled into XMMs, the rest into memory.)",
     boolean: true,
   })
   .option("readState", {
     string: true,
     describe: "this must be a filename to a JSON, which has a state (to, body).",
     demandOption: false,
+  })
+  .option("startFromBestJson", {
+    boolean: true,
+    default: false,
+    describe: "Will check the given/current resultDir for the best JSON-file and continues from there.",
   })
   .option("logComment", {
     string: true,
@@ -164,16 +180,16 @@ export const parsedArgs = y
       throw new Error("Bridge is set to manual, but either json or c file is not specified.");
     }
     if (["", "fiat"].includes(bridge)) {
-      if (!FIAT_METHODS.includes(method)) {
+      if (!FIAT_METHODS.includes(method as FIAT_METHOD_T)) {
         throw new Error(`Bridge is Fiat; the specified method '${method}' is not available.`);
       }
 
-      if (!FIAT_CURVES.includes(curve)) {
+      if (!FIAT_CURVES.includes(curve as FIAT_CURVE_T)) {
         throw new Error(`Bridge is Fiat; the specified curve '${curve}' is not available.`);
       }
     }
     if (bridge == "bitcoin-core") {
-      if (!BITCOIN_CORE_METHODS.includes(method)) {
+      if (!BITCOIN_CORE_METHODS.includes(method as BITCOIN_CORE_METHOD_T)) {
         throw new Error(`Bridge is bitcoin-core. The specified method '${method}' not available.`);
       }
     }
@@ -186,7 +202,14 @@ export const parsedArgs = y
       "Defines how `rbp` is used. 'omit' (default) will spill the value when needed, use the registers as a GP register, and unspill in the function epilogue (similar to '-fomit-frame-pointer'). 'save' will save the old value on stack, then save the old value of `rsp` in `bbp`. In the function epilogue, will restore rbp (similar to -fno-omit-frame-pointer). 'constant' pretend `rbp` does not exist.",
     choices: FRAME_POINTER_OPTIONS,
   })
+  .option("memoryConstraints", {
+    default: "none",
+    string: true,
+    describe:
+      "Defines if memory reads are contraint. 'none' will not enforce anything. All reads are permitted at any time. 'all' enforces that no read from any `argN[n]` happens after any write to `outN[n]`. 'out1-arg1' enforces that no read from arg1[n] is permitted after `out1[n]` has been written (essentially permits mul(r,r,x) and sq(a,a); but not if elemets overlap but not align. (e.g. mul(r+1,r,x)))",
+    choices: MEMORY_CONSTRAINTS_OPTIONS,
+  })
   .help("help")
   .alias("h", "help")
   .wrap(Math.min(160, y.terminalWidth()))
-  .parseSync();
+  .parseSync() as ParsedArgsT;

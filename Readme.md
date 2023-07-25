@@ -42,7 +42,7 @@ The ICSE'23 DEMO paper titled [*CryptOpt: Automatic Optimization of Straightline
 
 We have used CryptOpt to generate code for:
 
-1. `libsecp256k1`-compatible code (`./CryptOpt --curve secp256k1_dettman`) (PR #1329)
+1. `libsecp256k1`-compatible code (`./CryptOpt --curve secp256k1_dettman --memoryConstraints out1-arg1`) (PR #1329)
 1. BLS12-381 Curves (`./CryptOpt --curve bls12_381_p`, `./CryptOpt --curve bls12_381_q`)
 1. Curve25519 (solinas, i.e. saturated) code is integrated into BoringSSL [with this commit](https://boringssl.googlesource.com/boringssl/+/43f88915f97d1f7df489b4b706afdfa556ba2050) (slight manual adaptions needed, because BoringSSL requires `rbp` to point to the stack. See issue #144 in this repo.)
 

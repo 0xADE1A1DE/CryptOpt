@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,11 @@ import { parsedArgs } from "@/helper";
 
 import { Fiat } from "./fiat.namespace";
 
-export const FRAME_POINTER_OPTIONS = ["omit", "save", "constant"];
+export const FRAME_POINTER_OPTIONS = ["omit", "save", "constant"] as const;
 export type FRAME_POINTER_OPTIONS_T = (typeof FRAME_POINTER_OPTIONS)[number];
+
+export const MEMORY_CONSTRAINTS_OPTIONS = ["none", "all", "out1-arg1"] as const;
+export type MEMORY_CONSTRAINTS_OPTIONS_T = (typeof MEMORY_CONSTRAINTS_OPTIONS)[number];
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CryptOpt {
@@ -66,7 +69,8 @@ export namespace CryptOpt {
   export type ConstArgument =
     | Exclude<Fiat.ConstArgument, Fiat.HexConstant | Fiat.VarName>
     | HexConstant //-0xabc, 0xabe
-    | Varname; // extends Fiat Types to x1_1
+    | Varname // extends Fiat Types to x1_1
+    | Fiat.OutName;
   export type Argument = ConstArgument | DynArgument;
 
   /**
@@ -120,3 +124,5 @@ export namespace CryptOpt {
     extends Omit<ArgumentWithStringNames, "arguments">,
       Omit<ArgumentWithStringArguments, "name"> {}
 }
+export type Node = CryptOpt.StringOperation;
+export type Nodes = Node[];

@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,6 +163,7 @@ function createMS(
     return init(cacheDir, {
       ...KNOWN_SYMBOLS[symbol],
       seed,
+      memoryConstraints: "none",
     }).measuresuite;
   }
 
@@ -179,6 +180,7 @@ function createMS(
     jsonFile: jsonFilename,
     cFile: cFilename,
     seed,
+    memoryConstraints: "none",
   }).measuresuite;
 }
 

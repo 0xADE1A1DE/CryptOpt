@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import {
   LOG_EVERY,
   padSeed,
   PRINT_EVERY,
-  printStartInfo,
   shouldProof,
   toggleFUNCTIONS,
   writeString,
@@ -42,7 +41,7 @@ import { Paul, sha1Hash } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { AnalyseResult, OptimizerArgs } from "@/types";
 
-import { genStatistics, genStatusLine, logMutation } from "./optimizer.helper";
+import { genStatistics, genStatusLine, logMutation, printStartInfo } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
 
 let choice: CHOICE;
@@ -244,6 +243,8 @@ export class Optimizer {
             if (isInvalid) {
               errorOut(ERRORS.measureInvalid);
             }
+            writeString(join(this.args.resultDir, "generic_error_A.asm"), this.asmStrings[FUNCTIONS.F_A]);
+            writeString(join(this.args.resultDir, "generic_error_B.asm"), this.asmStrings[FUNCTIONS.F_B]);
             errorOut(ERRORS.measureGeneric);
           }
 
@@ -346,6 +347,9 @@ export class Optimizer {
               numRevert: this.numRevert,
               numMut: this.numMut,
               counter: this.measuresuite.timer,
+              framePointer: this.args.framePointer,
+              memoryConstraints: this.args.memoryConstraints,
+              cyclegoal: this.args.cyclegoal,
             });
             Logger.log(statistics);
 
@@ -386,7 +390,9 @@ export class Optimizer {
             }
             Logger.log("done with that current price of assembly code.");
             this.cleanLibcheckfunctions();
-            Logger.log("Wonderful. Done with my work. Time for lunch.");
+            const v = this.measuresuite.destroy();
+            Logger.log(`Wonderful. Done with my work. Destroyed measuresuite (${v}). Time for lunch.`);
+
             resolve(0);
           }
         }

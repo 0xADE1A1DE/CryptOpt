@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ it("optimise", () => {
   return new Promise((resolve, reject) => {
     const args: OptimizerArgs = getTestArgs("");
     args.bridge = "manual";
-    args.curve = "";
+    args.curve = "secp256k1_dettman";
     args.cFile = someCFilename;
     args.jsonFile = someJsonFilename;
     args.evals = 10;

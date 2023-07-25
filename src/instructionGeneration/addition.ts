@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { omit } from "lodash-es";
 
 import { delimbify, isFlag, isImm, isU1, isXmmRegister, limbify, TEMP_VARNAME } from "@/helper";
 import { Model } from "@/model";
@@ -246,9 +248,16 @@ function add64(c: CryptOpt.StringOperation): asm[] {
         throw new Error("addcarryx was called with an cin of 0x0 and has no cout. Makes no sense. Abort.");
       }
       if (isU1(a_arg2)) {
-        throw new Error(
-          "thats weired. looking for u1 + u64/u1 but not using it as carry in... TSNH. Reorder those args and/or call different method",
-        );
+        ra.addToPreInstructions("; reordering 0x0 (cin) + arg + u1 to -> u1 (cin) + arg + 0x0");
+        const [arg, cin] =
+          a_arg2 === allocations[c.arguments[2]]
+            ? [c.arguments[1], c.arguments[2]]
+            : [c.arguments[2], c.arguments[1]];
+        const immediate = "0x0";
+        return add64({
+          ...omit(c, "arguments"),
+          arguments: [cin, arg, immediate],
+        });
       }
 
       return [";fr__rm_rm", ...fr__rm_rm(c.name[1] /* COUT */, c.name[0], a_arg1, a_arg2)];
