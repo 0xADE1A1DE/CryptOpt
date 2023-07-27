@@ -118,8 +118,9 @@ function roboustMean(data: number[]): number {
   const data2 = [] as number[];
   // there is a bit of wierd thing going on.
   // on the 12th gen, sometimes only 0's are returned.
-  if (data.every((d) => d == 0)) {
+  if (data.every((d) => d === 0)) {
     // then we'll try again.
+    console.warn("only zeroes");
     return -1;
   }
 
