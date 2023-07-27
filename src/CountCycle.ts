@@ -122,6 +122,8 @@ function roboustMean(data: number[]): number {
     // then we'll try again.
     console.warn("only zeroes");
     return -1;
+  } else {
+    console.warn("not only zeroes", data);
   }
 
   if (data.length < MAX_SAMLPESIZE) {
