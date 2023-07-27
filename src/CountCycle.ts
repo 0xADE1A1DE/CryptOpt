@@ -96,7 +96,7 @@ function main() {
         result = checkMean.toString();
       }
     } else {
-      const { asm, check } = doSampleAsm(ms, MAX_SAMLPESIZE, asmString);
+      const { asm, check } = doSampleAsm(ms, MAX_SAMLPESIZE, asmString, param_one);
       const checkMean = roboustMean(check);
       const asmMean = roboustMean(asm);
       if (checkMean !== -1 && asmMean !== -1) {
@@ -202,7 +202,12 @@ function createCache(): string {
   return join(tmpdir(), "CryptOpt.CountCycle.cache", randomString);
 }
 
-function doSampleAsm(ms: Measuresuite, size: number, asmstring: string): { asm: number[]; check: number[] } {
+function doSampleAsm(
+  ms: Measuresuite,
+  size: number,
+  asmstring: string,
+  asmfilename: string,
+): { asm: number[]; check: number[] } {
   const resultCycleMedians = { asm: [] as number[], check: [] as number[] };
 
   for (let i = 0; i < size; i++) {
@@ -219,7 +224,7 @@ function doSampleAsm(ms: Measuresuite, size: number, asmstring: string): { asm: 
       const medianC = analyseRow(result.cycles[0]).post.median;
       resultCycleMedians.check.push(medianC);
     } catch (e) {
-      console.error("execution of measure failed.", e);
+      console.error(`execution of measure (${asmfilename}) failed.`, e);
     }
   }
 
