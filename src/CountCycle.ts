@@ -117,8 +117,13 @@ function main() {
 function roboustMean(data: number[]): number {
   const data2 = [] as number[];
   if (data.length < MAX_SAMLPESIZE) {
-    console.error(`There is not enough samples in the data ${data.length}<${MAX_SAMLPESIZE}`);
-    process.exit(1);
+    throw new Error(`There is not enough samples in the data ${data.length}<${MAX_SAMLPESIZE}`);
+  }
+  // there is a bit of wierd thing going on.
+  // on the 12th gen, sometimes only 0's are returned.
+  if (data.every((d) => d == 0)) {
+    // then we'll try again.
+    return -1;
   }
 
   for (let i = 0; i < data.length / 2; i++) {
@@ -129,8 +134,7 @@ function roboustMean(data: number[]): number {
 
   const tvalue = Stats.tTestTwoSample(data, data2);
   if (tvalue == null) {
-    console.error("t-value shall not be null.");
-    process.exit(1);
+    throw new Error("t-value shall not be null.");
   }
 
   // check the stats
