@@ -116,14 +116,15 @@ function main() {
 
 function roboustMean(data: number[]): number {
   const data2 = [] as number[];
-  if (data.length < MAX_SAMLPESIZE) {
-    throw new Error(`There is not enough samples in the data ${data.length}<${MAX_SAMLPESIZE}`);
-  }
   // there is a bit of wierd thing going on.
   // on the 12th gen, sometimes only 0's are returned.
   if (data.every((d) => d == 0)) {
     // then we'll try again.
     return -1;
+  }
+
+  if (data.length < MAX_SAMLPESIZE) {
+    throw new Error(`There is not enough samples in the data ${data.length}<${MAX_SAMLPESIZE}`);
   }
 
   for (let i = 0; i < data.length / 2; i++) {
