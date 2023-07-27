@@ -116,6 +116,11 @@ function main() {
 
 function roboustMean(data: number[]): number {
   const data2 = [] as number[];
+  if (data.length < MAX_SAMLPESIZE) {
+    console.error(`There is not enough samples in the data ${data.length}<${MAX_SAMLPESIZE}`);
+    process.exit(1);
+  }
+
   for (let i = 0; i < data.length / 2; i++) {
     const randomIndex = Math.floor(Math.random() * data.length);
     const [randomSample] = data.splice(randomIndex, 1);
