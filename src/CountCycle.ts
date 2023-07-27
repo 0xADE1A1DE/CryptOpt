@@ -211,8 +211,9 @@ function doSampleAsm(
   const resultCycleMedians = { asm: [] as number[], check: [] as number[] };
 
   for (let i = 0; i < size; i++) {
+    let result;
     try {
-      const result = ms.measure(BATCH_SIZE, NUMBER_OF_BATCHES, [asmstring]);
+      result = ms.measure(BATCH_SIZE, NUMBER_OF_BATCHES, [asmstring]);
       if (result?.stats.incorrect !== 0) {
         console.error("No / Wrong result");
         process.exit(-1);
@@ -224,7 +225,7 @@ function doSampleAsm(
       const medianC = analyseRow(result.cycles[0]).post.median;
       resultCycleMedians.check.push(medianC);
     } catch (e) {
-      console.error(`execution of measure (${asmfilename}) failed.`, e);
+      console.error(`execution of measure (${asmfilename}) failed.`, result, e);
     }
   }
 
