@@ -214,8 +214,8 @@ function doSampleAsm(
         process.exit(-1);
       }
       // there is a bit of wierd thing going on.
-      // on the 12th gen, sometimes only 0's are returned, or only for some it worked.
-      if (result.cycles.some((rs) => rs.every((d) => d === 0))) {
+      // on the 12th gen, sometimes 0's are returned for some measurements.
+      if (result.cycles.some((rs) => rs.filter((d) => d > 0).length < NUMBER_OF_BATCHES)) {
         // then we'll try again.
         console.warn("try again ", result);
         i--;
