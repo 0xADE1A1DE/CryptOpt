@@ -117,17 +117,12 @@ function main() {
 function roboustMean(data: number[]): number {
   const data2 = [] as number[];
   // there is a bit of wierd thing going on.
-  // on the 12th gen, sometimes only 0's are returned.
-  if (data.every((d) => d === 0)) {
+  // on the 12th gen, sometimes only 0's are returned, or only for some it worked.
+  if (data.every((d) => d === 0) || data.length < MAX_SAMLPESIZE) {
     // then we'll try again.
-    console.warn("only zeroes");
     return -1;
   } else {
     console.warn("not only zeroes", data);
-  }
-
-  if (data.length < MAX_SAMLPESIZE) {
-    throw new Error(`There is not enough samples in the data ${data.length}<${MAX_SAMLPESIZE}`);
   }
 
   for (let i = 0; i < data.length / 2; i++) {
