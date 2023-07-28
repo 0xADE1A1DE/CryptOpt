@@ -116,14 +116,6 @@ function main() {
 
 function roboustMean(data: number[]): number {
   const data2 = [] as number[];
-  // there is a bit of wierd thing going on.
-  // on the 12th gen, sometimes only 0's are returned, or only for some it worked.
-  if (data.every((d) => d === 0) || data.length < MAX_SAMLPESIZE) {
-    // then we'll try again.
-
-    console.warn("try again zeroes", data);
-    return -1;
-  }
 
   for (let i = 0; i < data.length / 2; i++) {
     const randomIndex = Math.floor(Math.random() * data.length);
@@ -220,6 +212,14 @@ function doSampleAsm(
       if (result?.stats.incorrect !== 0) {
         console.error("No / Wrong result");
         process.exit(-1);
+      }
+      // there is a bit of wierd thing going on.
+      // on the 12th gen, sometimes only 0's are returned, or only for some it worked.
+      if (result.cycles.some((rs) => rs.every((d) => d === 0))) {
+        // then we'll try again.
+        console.warn("try again ", result);
+        i--;
+        continue;
       }
 
       const medianA = analyseRow(result.cycles[1]).post.median;
