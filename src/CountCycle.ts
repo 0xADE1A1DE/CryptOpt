@@ -120,9 +120,9 @@ function roboustMean(data: number[]): number {
   // on the 12th gen, sometimes only 0's are returned, or only for some it worked.
   if (data.every((d) => d === 0) || data.length < MAX_SAMLPESIZE) {
     // then we'll try again.
+
+    console.warn("try again zeroes", data);
     return -1;
-  } else {
-    console.warn("not only zeroes", data);
   }
 
   for (let i = 0; i < data.length / 2; i++) {
