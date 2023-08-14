@@ -38,7 +38,7 @@
     "printWidth": 110
   },
   "dependencies": {
-    "@vitest/coverage-v8": "^0.33.0",
+    "@vitest/coverage-v8": "^0.34.1",
     "lodash-es": "^4.17.21",
     "measuresuite": "^2.2.1",
     "proper-lockfile": "^4.1.2",
@@ -54,23 +54,23 @@
     "@types/node": "^20.4.4",
     "@types/proper-lockfile": "^4.1.2",
     "@types/yargs": "^17.0.24",
-    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.2.0",
     "c8": "^8.0.0",
-    "eslint": "^8.45.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.5",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "prettier": "^3.0.0",
-    "rollup": "^3.26.3",
+    "rollup": "^3.27.2",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-shell": "^1.0.9",
     "tslib": "^2.6.1",
     "typescript": "^5.1.6",
     "vite": "^4.4.7",
     "vite-tsconfig-paths": "^4.2.0",
-    "vitest": "^0.33.0"
+    "vitest": "^0.34.1"
   },
   "eslintConfig": {
     "root": true,
