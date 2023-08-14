@@ -134,8 +134,8 @@ function roboustMean(data: number[]): number {
     //  Distribution are not significantly different For conf. interval 99.5%
     //  which is what we want, so we can trust the measurement.
 
-    // calculate the mean of both samples and return
-    return Stats.mean(data.concat(data2));
+    // calculate the median of both samples and return
+    return Stats.median(data.concat(data2));
   }
   return -1;
 }
