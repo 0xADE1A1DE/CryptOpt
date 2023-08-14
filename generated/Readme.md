@@ -40,8 +40,18 @@ X-Validation Matrix [here](./bls12/xval.pdf) and average Cycle Mean - count per 
 
 ## Fiat Cryptography
 
-Basically a mirror of mit-plv/fiat-crypto: fiat-amd64
-Average Speedup: tbd.
+X-Validation Matrix [here](./fiat-amd64/xval.pdf) and average Cycle Mean - count per file [here](./fiat-amd64/Readme.md).
 
-
-
+| Primitive          | Mul (Clang) | Mul (GCC)  | Square (Clang) | Square (GCC) |
+| -------------------|-------------|------------|----------------|--------------|
+|         Curve25519 | 1.25        | 1.15       |   1.22         | 1.16         |
+| Curve25519-Solinas | 1.61        | 2.52       |   1.43         | 2.74         |
+|              P-224 | 1.56        | 2.53       |   1.42         | 2.58         |
+|              P-256 | 1.69        | 2.60       |   1.64         | 2.58         |
+|              P-384 | 1.47        | 2.48       |   1.38         | 2.53         |
+|           SIKEp434 | 1.91        | 2.74       |   1.81         | 2.55         |
+|           Curve448 | 1.19        | 0.99       |   1.08         | 1.04         |
+|              P-521 | 1.32        | 1.00       |   1.36         | 1.06         |
+|           Poly1305 | 1.16        | 1.23       |   1.14         | 1.27         |
+|  secp256k1-Dettman | 1.08        | 1.22       |   1.05         | 1.14         |
+|          secp256k1 | 1.85        | 2.66       |   1.76         | 2.59         |
