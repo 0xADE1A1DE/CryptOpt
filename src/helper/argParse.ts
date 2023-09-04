@@ -75,6 +75,13 @@ export const parsedArgs = y
     default: false,
     describe: "Print debug info. (Compile with `DEBUG=1 make`)",
   })
+  .option("redzone", {
+    boolean: true,
+    alias: "z",
+    default: true,
+    describe:
+      "If true, will use the red zone (stack starts at '[ rsp - 0x80 ]'); if false, will start stack at '[ rsp + 0x0 ]'",
+  })
   .option("seed", {
     number: true,
     alias: "s",

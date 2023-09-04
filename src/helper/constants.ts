@@ -76,7 +76,7 @@ export const SETX = {
   [Flags.OF]: "seto",
 };
 // results in [rsp-16*8]
-export const STACK_OFFSET_IN_ELEMENTS = 16;
+export const RED_ZONE_SIZE_IN_ELEMENTS = 16;
 
 // Colors
 export const rd = "\x1b[31m";

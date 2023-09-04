@@ -34,7 +34,7 @@ import {
   IMM_VAL_PREFIX,
   LSB_MAPPING,
   SETX,
-  STACK_OFFSET_IN_ELEMENTS,
+  RED_ZONE_SIZE_IN_ELEMENTS,
   TEMP_VARNAME,
 } from "@/helper/constants";
 import {
@@ -105,6 +105,9 @@ export class RegisterAllocator {
     [Flags.CF]: FlagState.KILLED,
     [Flags.OF]: FlagState.KILLED,
   };
+  private get availableRedzoneSize(): number {
+    return RegisterAllocator._options?.redzone ? RED_ZONE_SIZE_IN_ELEMENTS : 0;
+  }
 
   public static getInstance(): RegisterAllocator {
     if (RegisterAllocator._instance) {
@@ -1316,22 +1319,21 @@ export class RegisterAllocator {
           }) - 1;
         this.addToPreInstructions(`; stacking up for ${varname}`);
       }
-      varname_index -= STACK_OFFSET_IN_ELEMENTS;
+      varname_index -= this.availableRedzoneSize;
       return { isNew, targetMem: toMem(varname_index, Register.rsp) };
-    } else {
-      // not of the form of a 'variable', so maybe its argument as in arg1[3]
-      // then the result must be mov rax, &arg1; [rax + 3 * 0x08]
-      const match = matchArg(varname);
-      if (match) {
-        const arg_reg = this.loadVarToReg(match[1]);
-
-        if (isByteRegister(arg_reg)) {
-          throw new Error("TSNH, since 'arg' cannot be u1, thus should not be in Byte reg");
-        }
-        return { isNew: false, targetMem: toMem(Number(match[2]), arg_reg) };
-      }
+    }
+    // not of the form of a 'variable', so maybe its argument as in arg1[3]
+    // then the result must be mov rax, &arg1; [rax + 3 * 0x08]
+    const match = matchArg(varname);
+    if (!match) {
       throw new Error(`Cannot handle ${varname} `);
     }
+    const arg_reg = this.loadVarToReg(match[1]);
+
+    if (isByteRegister(arg_reg)) {
+      throw new Error("TSNH, since 'arg' cannot be u1, thus should not be in Byte reg");
+    }
+    return { isNew: false, targetMem: toMem(Number(match[2]), arg_reg) };
   }
 
   // for debugging only
@@ -1452,16 +1454,16 @@ export class RegisterAllocator {
     const pre = [] as asm[];
     const post = ["ret"] as asm[];
 
-    // if "omit" or "constant" we dont need to do anything speical
-    if (RegisterAllocator._options?.framePointer === "save") {
-      pre.push("push rbp");
-      pre.push("mov rbp, rsp");
-      post.unshift("pop rbp");
-    }
-
     // basically if we have any mov [ rsp + ...] (rather than [rsp - ...])
-    if (stacklength > STACK_OFFSET_IN_ELEMENTS) {
+    if (stacklength > this.availableRedzoneSize) {
       const stacksizeInBytes = stacklength * 8;
+
+      // if "omit" or "constant" we dont need to do anything speical
+      if (RegisterAllocator._options?.framePointer === "save") {
+        pre.push("push rbp");
+        pre.push("mov rbp, rsp");
+        post.unshift("pop rbp");
+      }
 
       pre.push(`sub rsp, ${stacksizeInBytes}`);
 

@@ -34,6 +34,7 @@ describe("default argParse", () => {
     logComment: "",
     cyclegoal: 10000,
     evals: 10000,
+    redzone: true,
     framePointer: "omit",
     memoryConstraints: "none",
   };

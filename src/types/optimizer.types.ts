@@ -34,6 +34,7 @@ export type OptimizerArgs = {
   jsonFile?: string;
   resultDir: string;
   xmm?: boolean;
+  redzone: boolean;
   preferXmm?: boolean;
   framePointer: FRAME_POINTER_OPTIONS_T;
   memoryConstraints: MEMORY_CONSTRAINTS_OPTIONS_T;
