@@ -1457,13 +1457,13 @@ export class RegisterAllocator {
     // basically if we have any mov [ rsp + ...] (rather than [rsp - ...])
     if (stacklength > this.availableRedzoneSize) {
       const stacksizeInBytes = stacklength * 8;
-        
+
       // if "omit" or "constant" we dont need to do anything speical
       if (RegisterAllocator._options?.framePointer === "save") {
         pre.push("push rbp");
         pre.push("mov rbp, rsp");
         post.unshift("pop rbp");
-      }   
+      }
 
       pre.push(`sub rsp, ${stacksizeInBytes}`);
 
