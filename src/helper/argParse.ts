@@ -206,7 +206,7 @@ export const parsedArgs = y
     default: "omit",
     string: true,
     describe:
-      "Defines how `rbp` is used. 'omit' (default) will spill the value when needed, use the registers as a GP register, and unspill in the function epilogue (similar to '-fomit-frame-pointer'). 'save' will save the old value on stack, then save the old value of `rsp` in `bbp`. In the function epilogue, will restore rbp (similar to -fno-omit-frame-pointer). 'constant' pretend `rbp` does not exist.",
+      "Defines how `rbp` is used. 'omit' (default) will spill the value when needed, use the registers as a GP register, and unspill in the function epilogue (similar to '-fomit-frame-pointer'). 'save' will save the old value on stack, then save the old value of `rsp` in `rbp`. In the function epilogue, will restore rbp (similar to -fno-omit-frame-pointer). 'constant' pretend `rbp` does not exist.",
     choices: FRAME_POINTER_OPTIONS,
   })
   .option("memoryConstraints", {
