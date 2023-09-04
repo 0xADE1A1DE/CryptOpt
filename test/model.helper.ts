@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it } from "vitest";
 
-import { createDependencyRelation, isADependentOnB, nodeLookupMap } from "@/model";
+import { createDependencyRelation, nodeLookupMap } from "@/model";
 
 import { createModelHelpers } from "./test-helpers";
 
@@ -52,34 +52,17 @@ describe("model.helpers", () => {
       expect(map.get("x27")).toBe(11);
       expect(map.get("x28")).toBe(12);
       expect(map.get("x29")).toBe(13);
-      expect(map.get("out1[0]")).toBe(14);
-      expect(map.get("out1[1]")).toBe(15);
-      expect(map.get("out1[2]")).toBe(16);
+      expect(map.get("x30")).toBe(14);
+      expect(map.get("out1[0]")).toBe(15);
+      expect(map.get("out1[1]")).toBe(16);
+      expect(map.get("out1[2]")).toBe(17);
+      expect(map.get("out1[3]")).toBe(18);
     });
   });
 
   describe("createDependencyRelation", () => {
     const map = nodeLookupMap(nodes);
-    const { needs, neededBy } = createDependencyRelation(nodes, map);
-    it.skip(/*skippeded because needs is not used.*/ "needs", () => {
-      expect(needs.get("x1")?.size).toBe(1);
-      expect(needs.get("x1")?.has("arg1[0]")).toBe(true);
-      // nah ... if arg1[0] is already in a register, no-one cares about arg1
-      expect(needs.get("x1")?.has("arg1")).toBe(false);
-
-      expect(needs.get("x2")?.size).toBe(1);
-      expect(needs.get("x2")?.has("arg1[1]")).toBe(true);
-
-      expect(needs.get("x3")?.size).toBe(2);
-      expect(needs.get("x3")?.has("x1")).toBe(true);
-      expect(needs.get("x3")?.has("x2")).toBe(true);
-
-      expect(needs.get("x4")?.size).toBe(2);
-
-      expect(needs.get("x4")?.has("x102_0")).toBe(true);
-      expect(needs.get("x4")?.has("x102_1")).toBe(false);
-      expect(needs.get("x4")?.has("0xffffffffffffffff")).toBe(false);
-    });
+    const neededBy = createDependencyRelation(nodes, map);
 
     describe("neededBy", () => {
       it("arg1[0]", () => {
@@ -91,8 +74,9 @@ describe("model.helpers", () => {
       it("arg1[1]", () => {
         const n = neededBy.get("arg1[1]");
         expect(n).toBeTruthy();
-        expect(n!.size).toBe(1);
+        expect(n!.size).toBe(2);
         expect(n!.has("x2")).toBe(true);
+        expect(n!.has("x30")).toBe(true);
       });
       it("x1", () => {
         const n = neededBy.get("x1");
@@ -124,10 +108,11 @@ describe("model.helpers", () => {
       it("x3", () => {
         const n = neededBy.get("x3");
         expect(n).toBeTruthy();
-        expect(n!.size).toBe(2);
+        expect(n!.size).toBe(3);
         expect(n!.has("x101")).toBe(false);
         expect(n!.has("x101_0")).toBe(true);
         expect(n!.has("x101_1")).toBe(true);
+        expect(n!.has("x30")).toBe(true);
       });
       it("x4", () => {
         const n = neededBy.get("x4");
@@ -267,91 +252,6 @@ describe("model.helpers", () => {
         expect(n).toBeTruthy();
         expect(n!.size).toBe(1);
         expect(n!.has("x5")).toBe(true);
-      });
-    });
-    describe("node Dependence: 'isADependentOnB'", () => {
-      it("is x1 dependent on x2", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x1");
-        const b = nodes.findIndex((n) => n.name[0] === "x2");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
-      });
-      it("is x3 dependent on x2", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x3");
-        const b = nodes.findIndex((n) => n.name[0] === "x2");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
-      });
-      it("is x3 dependent on x1", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x3");
-        const b = nodes.findIndex((n) => n.name[0] === "x1");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
-      });
-      it("is x2 dependent on x3", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x2");
-        const b = nodes.findIndex((n) => n.name[0] === "x3");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
-      });
-      it("is x1 dependent on x100", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x1");
-        const b = nodes.findIndex((n) => n.name[0] === "x100");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
-      });
-      it("is x100 dependent on x1", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x100");
-        const b = nodes.findIndex((n) => n.name[0] === "x1");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
-      });
-      it("is anything dependent on out1[0]", () => {
-        const b = nodes.findIndex((n) => n.name[0] === "out1[0]");
-        nodes.forEach((n, i) => {
-          if (n.name[0] === "out1[0]") return;
-          expect(isADependentOnB(i, b, nodes, neededBy)).toBe(false);
-        });
-      });
-      it("is x100 dependent on x2", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x100");
-        const b = nodes.findIndex((n) => n.name[0] === "x2");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
-      });
-      it("is x100 dependent on x3", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x100");
-        const b = nodes.findIndex((n) => n.name[0] === "x3");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
-      });
-      it("is x4 dependent on 0xffffffffffffffff, ... not really supported, cuz imms are not nodes", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x4");
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const b = nodes.findIndex((n) => n.name[0] === ("0xffffffffffffffff" as any));
-        expect(b).toBe(-1);
-        expect(() => isADependentOnB(a, b, nodes, neededBy)).toThrow();
-      });
-      it("is x100_1 dependent (shall error cuz x100_1 is no node)", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x100_1"); // a shall be undefined
-        expect(a).toBe(-1);
-        const b = nodes.findIndex((n) => n.name[0] === "x3");
-        expect(() => isADependentOnB(a, b, nodes, neededBy)).toThrow();
-      });
-      it("error if NaNs are provided", () => {
-        expect(() => isADependentOnB(Number.NaN, Number.NaN, nodes, neededBy)).toThrow();
-      });
-      it("is x27 dependent on x8", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x27");
-        const b = nodes.findIndex((n) => n.name[0] === "x8");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
-      });
-      it("is x8 dependent on x27", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x8");
-        const b = nodes.findIndex((n) => n.name[0] === "x27");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
-      });
-      it("is x28 dependent on x27", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x28");
-        const b = nodes.findIndex((n) => n.name[0] === "x27");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
-      });
-      it("is x27 dependent on x28", () => {
-        const a = nodes.findIndex((n) => n.name[0] === "x27");
-        const b = nodes.findIndex((n) => n.name[0] === "x28");
-        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
       });
     });
   });

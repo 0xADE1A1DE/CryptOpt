@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,10 @@ const { CC, CFLAGS } = env;
 
 export class ManualBridge implements Bridge {
   private _coFunction: CryptOpt.Function;
-  constructor(filepathJSON: string, private filepathC: string) {
+  constructor(
+    filepathJSON: string,
+    private filepathC: string,
+  ) {
     if (!existsSync(filepathJSON)) {
       throw new Error(`cannot find '${filepathJSON}' as a JSON file.`);
     }

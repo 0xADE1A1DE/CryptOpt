@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@ export const AVAILABLE_CURVES = [
   "poly1305",
   "secp256k1_montgomery",
   "secp256k1_dettman",
-];
-export const AVAILABLE_METHODS = ["square", "mul" /* currently unsupported "mul2", */, "add", "sub"];
+] as const;
+export const AVAILABLE_METHODS = ["square", "mul" /* currently unsupported "mul2", , "add", "sub"*/] as const;
 
 export const METHOD_DETAILS: {
   [f in METHOD_T]: {
@@ -45,22 +45,6 @@ export const METHOD_DETAILS: {
     };
   };
 } = {
-  add: {
-    name: {
-      [BINS.unsaturated]: "carry_add",
-      [BINS.wbw_montgomery]: "add",
-      [BINS.solinas]: "",
-      [BINS.dettman]: "",
-    },
-  },
-  sub: {
-    name: {
-      [BINS.unsaturated]: "carry_sub",
-      [BINS.wbw_montgomery]: "sub",
-      [BINS.solinas]: "",
-      [BINS.dettman]: "",
-    },
-  },
   mul: {
     // the operation 'multiply' is called carry_mul if the bin is unsaturated; mul if it is wbw_montgomery
     name: {
@@ -78,7 +62,24 @@ export const METHOD_DETAILS: {
       [BINS.solinas]: "mul2",
       [BINS.dettman]: "",
     },
-  },*/
+  },
+  add: {
+    name: {
+      [BINS.unsaturated]: "carry_add",
+      [BINS.wbw_montgomery]: "add",
+      [BINS.solinas]: "",
+      [BINS.dettman]: "",
+    },
+  },
+  sub: {
+    name: {
+      [BINS.unsaturated]: "carry_sub",
+      [BINS.wbw_montgomery]: "sub",
+      [BINS.solinas]: "",
+      [BINS.dettman]: "",
+    },
+  },
+  */
   square: {
     name: {
       [BINS.unsaturated]: "carry_square",
@@ -97,6 +98,7 @@ export const CURVE_DETAILS: {
     binary: BINS;
     bounds: string[];
     last_limbwidth?: number; // only used in dettman
+    last_reduction?: number; // only used in dettman
   };
 } = {
   // https://github.com/zkcrypto/bls12_381#curve-description
@@ -242,6 +244,7 @@ export const CURVE_DETAILS: {
     argwidth: 5,
     bitwidth: 64,
     last_limbwidth: 48,
+    last_reduction: 2,
     prime: "2^256 - 4294968273",
     binary: BINS.dettman,
     bounds: [

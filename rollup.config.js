@@ -38,6 +38,10 @@ export default [
       copy({
         targets: [
           {
+            src: ["src/bridge/jasmin-bridge/data/*"],
+            dest: "./dist/data/jasmin-bridge",
+          },
+          {
             src: ["src/bridge/fiat-bridge/data/*"],
             dest: "./dist/data/fiat-bridge",
           },

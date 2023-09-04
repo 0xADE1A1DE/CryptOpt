@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
+import { errorOut, ERRORS } from "@/errors";
 import { datadir, env, preprocessFunction } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { sha256Hash } from "@/paul";
@@ -45,14 +46,14 @@ export class FiatBridge implements Bridge {
     if (!AVAILABLE_METHODS.includes(m)) {
       throw new Error(`unsupported method ${m}`);
     }
-    if (m === "mul2") return 4;
+    // if (m === "mul2") return 4;
     if (m === "square") return 1;
     // add, sub, mul
     return 2;
   }
 
-  public argnumout(m: METHOD_T): number {
-    if (m === "mul2") return 2;
+  public argnumout(_m: METHOD_T): number {
+    // if (_m === "mul2") return 2;
     return 1;
   }
 
@@ -89,6 +90,10 @@ export class FiatBridge implements Bridge {
     Logger.log(`json-fiat-Buffer length: ${jsonBuffer.length}b`);
     const jsonString = jsonBuffer.toString();
     const fiat = JSON.parse(jsonString) as Fiat.FiatFunction;
+    if (!fiat || !("body" in fiat)) {
+      console.error(`Cache File: >>${jsonCacheFilename}<<`);
+      errorOut(ERRORS.fiatReadJSONFail);
+    }
     const cryptOpt = preprocessFunction(fiat);
     return cryptOpt;
   }
@@ -144,7 +149,7 @@ export class FiatBridge implements Bridge {
     method: METHOD_T,
     lang: "C" | "JSON",
   ): { cmd: string; methodname: string; hash: string } {
-    const { last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { last_reduction, last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
 
     const binWithPath = resolve(cwd, binary);
     FiatBridge.check(curve, method, binWithPath, lang);
@@ -167,14 +172,14 @@ export class FiatBridge implements Bridge {
     let cmd = "";
     switch (binary) {
       case BINS.dettman:
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${prime}'  ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${last_reduction}' '${prime}'  ${required_function}`;
         break;
       case BINS.unsaturated:
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}'                     '${prime}'  ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}' '${argwidth}'                                         '${prime}'  ${required_function}`;
         break;
       case BINS.wbw_montgomery:
       case BINS.solinas:
-        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'                                   '${prime}'  ${required_function}`;
+        cmd = `${binWithPath} --lang ${lang} ${CODE_GENERATION_ARGS[lang]} '${curve}' '${bitwidth}'                                                       '${prime}'  ${required_function}`;
         break;
     }
 
@@ -188,7 +193,7 @@ export class FiatBridge implements Bridge {
    */
 
   public static buildProofCommand(curve: CURVE_T, method: METHOD_T, hintsFilename: string): string {
-    const { last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
+    const { last_reduction, last_limbwidth, binary, prime, bitwidth, argwidth } = CURVE_DETAILS[curve];
     const binWithPath = resolve(cwd, binary);
 
     FiatBridge.check(curve, method, binWithPath);
@@ -207,13 +212,13 @@ export class FiatBridge implements Bridge {
 
     switch (binary) {
       case BINS.dettman:
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${prime}' ${required_function} ${hint}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}' '${last_limbwidth}' '${last_reduction}' '${prime}' ${required_function} ${hint}`;
       case BINS.unsaturated:
         CODE_PROOF_ARGS += ` --tight-bounds-mul-by 1.000001`;
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}'                     '${prime}' ${required_function} ${hint}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}' '${argwidth}'                                         '${prime}' ${required_function} ${hint}`;
       case BINS.wbw_montgomery:
       case BINS.solinas:
-        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'                                   '${prime}' ${required_function} ${hint}`;
+        return `${binWithPath}  ${CODE_PROOF_ARGS} '${curve}' '${bitwidth}'                                                       '${prime}' ${required_function} ${hint}`;
     }
   }
 

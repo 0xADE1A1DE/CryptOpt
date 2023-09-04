@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ type Err = { exitCode: number; msg: string };
 export const ERRORS: { [k: string]: Err } = {
   measureGeneric: {
     exitCode: 20,
-    msg: "measuresuite.measure should return a result but didn't.",
+    msg: "measuresuite.measure should return a result but didn't. RES/generic_error_{A,B}.asm as been written for debug.",
   },
   measureIncorrect: {
     exitCode: 21,
@@ -51,6 +51,10 @@ export const ERRORS: { [k: string]: Err } = {
   proofUnsuccessful: {
     exitCode: 50,
     msg: `Could not prove correct. Aborting mission. I repeat: Abort mission now.`,
+  },
+  fiatReadJSONFail: {
+    exitCode: 61,
+    msg: `When reading the fiat JSON, the 'body' parameter is not present. Please double check the cache file.`,
   },
 };
 

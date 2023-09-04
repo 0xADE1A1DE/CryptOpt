@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,33 +26,36 @@ import type { CryptOpt } from "@/types";
 export function sanityCheckAllocations(c: CryptOpt.DynArgument): void {
   const ra = RegisterAllocator.getInstance();
   const allocations = ra.getCurrentAllocations();
-  Object.entries(allocations).reduce((byReg, [varname, { store }]) => {
-    let r64 = null;
-    if (isRegister(store)) {
-      r64 = store;
-    }
-    if (isByteRegister(store)) {
-      r64 = getQwRegFromByteReg(store);
-    }
-    if (isFlag(store)) {
-      r64 = store;
-    }
-    if (isXmmRegister(store)) {
-      r64 = store;
-    }
-    if (r64) {
-      if (byReg[r64]) {
-        throw new Error(
-          `@calculating ${c.name.join("--")}, ${r64} is used twice. ${
-            byReg[r64]
-          } and for ${varname}. Allocations: ${ra.allocationString()}`,
-        );
+  Object.entries(allocations).reduce(
+    (byReg, [varname, { store }]) => {
+      let r64 = null;
+      if (isRegister(store)) {
+        r64 = store;
       }
-      byReg[r64] = varname;
-    }
-    if (matchArg(varname)) {
-      throw new Error("should not be allocated.");
-    }
-    return byReg;
-  }, {} as { [k in Register | Flags | XmmRegister]: string });
+      if (isByteRegister(store)) {
+        r64 = getQwRegFromByteReg(store);
+      }
+      if (isFlag(store)) {
+        r64 = store;
+      }
+      if (isXmmRegister(store)) {
+        r64 = store;
+      }
+      if (r64) {
+        if (byReg[r64]) {
+          throw new Error(
+            `@calculating ${c.name.join("--")}, ${r64} is used twice. ${
+              byReg[r64]
+            } and for ${varname}. Allocations: ${ra.allocationString()}`,
+          );
+        }
+        byReg[r64] = varname;
+      }
+      if (matchArg(varname)) {
+        throw new Error("should not be allocated.");
+      }
+      return byReg;
+    },
+    {} as { [k in Register | Flags | XmmRegister]: string },
+  );
 }

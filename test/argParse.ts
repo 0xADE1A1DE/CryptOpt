@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 import { describe, expect, it } from "vitest";
 
 import { parsedArgs } from "@/helper";
+import { ParsedArgsT } from "@/types";
 
 describe("default argParse", () => {
   const defaultArgs = {
@@ -34,11 +35,13 @@ describe("default argParse", () => {
     cyclegoal: 10000,
     evals: 10000,
     redzone: true,
+    framePointer: "omit",
+    memoryConstraints: "none",
   };
   Object.entries(defaultArgs).forEach(([key, value]) => {
     it("should have correct defaults", () => {
       expect(parsedArgs).toHaveProperty(key);
-      expect(parsedArgs[key]).toBe(value);
+      expect(parsedArgs[key as keyof ParsedArgsT]).toBe(value);
     });
   });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-import { isImm, isReadOnlyMemory, limbify, limbifyImm, makeU64NameLimbs } from "@/helper";
-import type { CryptOpt } from "@/types";
-
-export type Node = CryptOpt.StringOperation;
-export type Nodes = Node[];
+import {
+  ARG_PREFIX,
+  isImm,
+  isReadOnlyMemory,
+  limbify,
+  limbifyImm,
+  makeU64NameLimbs,
+  OUT_PREFIX,
+} from "@/helper";
+import type { CryptOpt, MEMORY_CONSTRAINTS_OPTIONS_T, Nodes } from "@/types";
 
 /**
  * @param nodes: Array of nodes
@@ -53,15 +58,14 @@ export function nodeLookupMap(nodes: Nodes): Map<string, number> {
 }
 
 /**
- * @returns two maps neededby and needs. Each mapping from a name (x1_0) to a
- * set of names, which x1_0 is either needed by, or which x1_0 needs.
+ * @returns map neededby: Mapping from a name (x1_0) to a
+ * set of names, which x1_0 is either needed by.
  *
  * E.g. u64 x11 = arg1[3] + arg1[2]
  *      u64 x12 = arg1[3] * x11
  *     u128 x13 = x11 * x12
  *
  * then neededBy.get(x11) === Set(x12, x13_0, x13_1)
- *      needs.get(x11) === Set(arg1[3], arg1[2])
  *
  * TODO:
  * It also employs more logic depending on the operation and the destination data type
@@ -71,18 +75,17 @@ export function nodeLookupMap(nodes: Nodes): Map<string, number> {
  * results in neededBy.get("x1")   === undefined
  *            neededBy.get("x1_0") === undefined
  *            neededBy.get("x1_1") === Set(x2)
- *            needs.get(x2)        === Set(x1_1)
  *
  *
- * The needs    is used for creating the dependency tree and creating the topological order
  * The neededBy is used for determining if a current value can be overwritten
  *
+ * @param memoryConstraints: see description in `argParse`.
  */
 export function createDependencyRelation(
   nodes: Nodes,
   lookupMap: Map<string, number>,
-): { neededBy: Map<string, Set<string>>; needs: Map<string, Set<string>> } {
-  const needs = new Map<string, Set<string>>();
+  memoryConstraints: MEMORY_CONSTRAINTS_OPTIONS_T = "none",
+): Map<string, Set<string>> {
   const neededBy = new Map<string, Set<string>>();
 
   nodes.forEach((node) => {
@@ -90,7 +93,14 @@ export function createDependencyRelation(
     // E.g. u64  x11,x12 = arg1[3] * arg1[2]
     // E.g. u128 x1      = arg1[3] * x11
     // E.g. u128 x2      = x1      + x12
+    // E.g. u64  x4      = x3      + arg1[3]
+    // E.g. out1[2]      = x11
     //
+    // with memoryConstraints == out1-arg1
+    // (all neededBy(out1[2]) == Set(x3,x11,x12))
+    //
+    // with memoryConstraints == all
+    // (all neededBy(out1[2]) == Set(x3,x11,x12,x1_0,x1_1))
 
     // 'names' is for a u128 x1 its the limbs [x1_0, x1_1] and for u64 its just [x2] or [x11,x12]
     const names = makeU64NameLimbs(node);
@@ -100,7 +110,34 @@ export function createDependencyRelation(
       if (n == "_") {
         return;
       }
-      const needsSet = needs.get(n) ?? new Set<string>();
+      // If we have memoryConstraints and the current limb is an out-node
+      if (memoryConstraints !== "none" && n.startsWith(OUT_PREFIX)) {
+        // we need to find the nodes, which read memory, that the current out-node overwrites
+
+        // this filterLambda is used to find all the nodes which potentially need to be scheduled before the current out-node
+        let filterLambda: (c: CryptOpt.StringOperation) => boolean;
+
+        // if we only care about the same slot of out1 vs arg1
+        if (memoryConstraints === "out1-arg1") {
+          // the lamba needs to only filter those which have the same slot
+          const correspondingArgElement = n.replaceAll(OUT_PREFIX, ARG_PREFIX) as `arg${number}[${number}]`;
+          filterLambda = ({ arguments: args }) => args.includes(correspondingArgElement);
+        } else {
+          // otherwise we generalise to all the argN[*]
+          filterLambda = ({ arguments: args }) => args.some((a) => a.startsWith(ARG_PREFIX));
+        }
+
+        // once we've filtered them, we want to add all the limbs to the set
+        nodes
+          .filter(filterLambda)
+          .flatMap(makeU64NameLimbs)
+          .forEach((l) => {
+            const neededBySet = neededBy.get(l) ?? new Set<string>();
+            neededBySet.add(n);
+            neededBy.set(l, neededBySet);
+          });
+      }
+
       node.arguments.forEach((arg: string) => {
         // depending on the operation and data types, we need the arguments and/or different limbs
 
@@ -113,7 +150,6 @@ export function createDependencyRelation(
           isReadOnlyMemory(arg)
         ) {
           // 2.1 which means, arg is xN/0xff/argN[n], which is needed in its entirety for calculating n
-          needsSet.add(arg); // n needs arg
           const neededBySet = neededBy.get(arg) ?? new Set<string>();
           neededBySet.add(n); // arg is needed by n
           neededBy.set(arg, neededBySet);
@@ -128,7 +164,6 @@ export function createDependencyRelation(
           const d = groupDepLimbs(node.operation, node.arguments);
 
           const needed_limbs = d[limbno];
-          needsSet.add(arg);
           needed_limbs.forEach((nl) => {
             const neededBySet = neededBy.get(nl) ?? new Set<string>();
             neededBySet.add(n);
@@ -136,12 +171,11 @@ export function createDependencyRelation(
           });
         }
       });
-      needs.set(n, needsSet);
     });
   });
   neededBy.delete("_");
   neededBy.delete("");
-  return { needs, neededBy };
+  return neededBy;
 }
 
 /**
@@ -264,33 +298,4 @@ function groupDepLimbs(
       return [[...workaround], [...workaround]];
     }
   }
-}
-
-export function isADependentOnB(
-  a: number,
-  b: number,
-  nodes: Nodes,
-  neededBy: Map<string, Set<string>>,
-): boolean {
-  if (isNaN(a) || isNaN(b)) {
-    throw new Error("only support number numbers");
-  }
-  const A = nodes[a];
-  const B = nodes[b];
-  if (typeof A === "undefined" || typeof B === "undefined") {
-    throw new Error("only supports indexes, which result in non-undefined nodes. ");
-  }
-  const setOfDeps = makeU64NameLimbs(B).reduce((acc: Set<string>, limb) => {
-    const set = neededBy.get(limb);
-    if (set) {
-      set.forEach((s) => acc.add(s));
-    }
-    return acc;
-  }, new Set<string>());
-  // setOfDeps may be empty (if no one wants B... like outN[n])
-
-  // in the setOfDeps we only have the limbs
-  const needles = makeU64NameLimbs(A);
-  // needles are the 64-bit versions like x1,x2 or x100_1
-  return needles.some((n) => setOfDeps.has(n));
 }

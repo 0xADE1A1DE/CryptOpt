@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,9 +51,10 @@ export function mov(c: CryptOpt.StringOperation): asm[] {
     } else {
       // cause mov cannot take m64, m64, we may need to use a tmp register.
 
+      const instr = isXmmRegister(allocation.in[0]) ? "movq" : "mov";
       return [
         ...ra.pres,
-        `mov ${memOut}, ${allocation.in[0]}; ${outMemAddr} = ${read}`, // and then this will put the data to the destination memory
+        `${instr} ${memOut}, ${allocation.in[0]}; ${outMemAddr} = ${read}`, // and then this will put the data to the destination memory
       ];
     }
   } else {

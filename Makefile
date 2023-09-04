@@ -1,4 +1,4 @@
-# Copyright 2022 University of Adelaide
+# Copyright 2023 University of Adelaide
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@ ROOT           := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 NODE_DIR       := $(ROOT)/bins/node
 NODE           := $(ROOT)/bins/node/bin/node
-NODE_VERSION   := 18.13.0
+NODE_VERSION   := 20.5.1
 
 PATH           := $(NODE_DIR)/bin:$(PATH)
 
 BUILT_CRYPTOPT := $(ROOT)/dist/CryptOpt.js
 
-.PHONY: all build check clean deepclean
+.PHONY: all build check clean deepclean jasmin
 
 all: clean $(BUILT_CRYPTOPT)
 build: $(BUILT_CRYPTOPT)
@@ -68,3 +68,16 @@ bundle.tar.gz: $(BUNDLE_FILES)
 
 bundle.zip: $(BUNDLE_FILES)
 	zip ${@} $(^)
+
+jasmin: $(BUILT_CRYPTOPT)
+	clear
+	./CryptOpt --bridge jasmin --verbose  --seed 123456
+
+watch: $(NODE) node_modules
+	@PATH=$(PATH) DEBUG=1 npm run bundle-w
+
+update-copyright: FILES=$(shell grep -e 'Copyright 2022' --files-with-matches --no-messages --recursive --exclude=results* --exclude=node_modules/* --exclude=.git/* --exclude=modules/*)
+update-copyright: deepclean
+	@printf "Before: %d\n" $(words $(FILES))
+	@echo $(FILES)
+	sed -e '1,20{s/Copyright 2022/Copyright 2023/}' -i $(FILES)

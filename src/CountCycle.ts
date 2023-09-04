@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ function main() {
         result = checkMean.toString();
       }
     } else {
-      const { asm, check } = doSampleAsm(ms, MAX_SAMLPESIZE, asmString);
+      const { asm, check } = doSampleAsm(ms, MAX_SAMLPESIZE, asmString, param_one);
       const checkMean = roboustMean(check);
       const asmMean = roboustMean(asm);
       if (checkMean !== -1 && asmMean !== -1) {
@@ -116,6 +116,7 @@ function main() {
 
 function roboustMean(data: number[]): number {
   const data2 = [] as number[];
+
   for (let i = 0; i < data.length / 2; i++) {
     const randomIndex = Math.floor(Math.random() * data.length);
     const [randomSample] = data.splice(randomIndex, 1);
@@ -124,8 +125,7 @@ function roboustMean(data: number[]): number {
 
   const tvalue = Stats.tTestTwoSample(data, data2);
   if (tvalue == null) {
-    console.error("t-value shall not be null.");
-    process.exit(1);
+    throw new Error("t-value shall not be null.");
   }
 
   // check the stats
@@ -134,8 +134,8 @@ function roboustMean(data: number[]): number {
     //  Distribution are not significantly different For conf. interval 99.5%
     //  which is what we want, so we can trust the measurement.
 
-    // calculate the mean of both samples and return
-    return Stats.mean(data.concat(data2));
+    // calculate the median of both samples and return
+    return Stats.median(data.concat(data2));
   }
   return -1;
 }
@@ -163,6 +163,7 @@ function createMS(
     return init(cacheDir, {
       ...KNOWN_SYMBOLS[symbol],
       seed,
+      memoryConstraints: "none",
     }).measuresuite;
   }
 
@@ -179,6 +180,7 @@ function createMS(
     jsonFile: jsonFilename,
     cFile: cFilename,
     seed,
+    memoryConstraints: "none",
   }).measuresuite;
 }
 
@@ -195,15 +197,28 @@ function createCache(): string {
   return join(tmpdir(), "CryptOpt.CountCycle.cache", randomString);
 }
 
-function doSampleAsm(ms: Measuresuite, size: number, asmstring: string): { asm: number[]; check: number[] } {
+function doSampleAsm(
+  ms: Measuresuite,
+  size: number,
+  asmstring: string,
+  asmfilename: string,
+): { asm: number[]; check: number[] } {
   const resultCycleMedians = { asm: [] as number[], check: [] as number[] };
 
   for (let i = 0; i < size; i++) {
+    let result;
     try {
-      const result = ms.measure(BATCH_SIZE, NUMBER_OF_BATCHES, [asmstring]);
+      result = ms.measure(BATCH_SIZE, NUMBER_OF_BATCHES, [asmstring]);
       if (result?.stats.incorrect !== 0) {
         console.error("No / Wrong result");
         process.exit(-1);
+      }
+      // there is a bit of wierd thing going on.
+      // on the 12th gen, sometimes 0's are returned for some measurements.
+      if (result.cycles.some((rs) => rs.filter((d) => d > 0).length < NUMBER_OF_BATCHES)) {
+        // then we'll try again.
+        i--;
+        continue;
       }
 
       const medianA = analyseRow(result.cycles[1]).post.median;
@@ -212,7 +227,7 @@ function doSampleAsm(ms: Measuresuite, size: number, asmstring: string): { asm: 
       const medianC = analyseRow(result.cycles[0]).post.median;
       resultCycleMedians.check.push(medianC);
     } catch (e) {
-      console.error("execution of measure failed.", e);
+      console.error(`execution of measure (${asmfilename}) failed.`, result, e);
     }
   }
 

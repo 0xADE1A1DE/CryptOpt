@@ -1,0 +1,30 @@
+@inproceedings{KuepperEGCTWCCGWY23,
+    author = {
+              Joel Kuepper and
+              Andres Erbsen and
+              Jason Gross and
+              Owen Conoly and
+              Chuyue Sun and
+              Samuel Tian and
+              David Wu and
+              Adam Chlipala and
+              Chitchanok Chuengsatiansup and
+              Daniel Genkin and
+              Markus Wagner and
+              Yuval Yarom},
+    title = {{CryptOpt}: Verified Compilation with Randomized Program Search for Cryptographic Primitives},
+    year = {2023},
+    issue_date = {June 2023},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    volume = {7},
+    number = {PLDI},
+    url = {https://doi.org/10.1145/3591272},
+    doi = {10.1145/3591272},
+    abstract = {Most software domains rely on compilers to translate high-level code to multiple different machine languages, with performance not too much worse than what developers would have the patience to write directly in assembly language. However, cryptography has been an exception, where many performance-critical routines have been written directly in assembly (sometimes through metaprogramming layers). Some past work has shown how to do formal verification of that assembly, and other work has shown how to generate C code automatically along with formal proof, but with consequent performance penalties vs. the best-known assembly. We present CryptOpt, the first compilation pipeline that specializes high-level cryptographic functional programs into assembly code significantly faster than what GCC or Clang produce, with mechanized proof (in Coq) whose final theorem statement mentions little beyond the input functional program and the operational semantics of x86-64 assembly. On the optimization side, we apply randomized search through the space of assembly programs, with repeated automatic benchmarking on target CPUs. On the formal-verification side, we connect to the Fiat Cryptography framework (which translates functional programs into C-like IR code) and extend it with a new formally verified program-equivalence checker, incorporating a modest subset of known features of SMT solvers and symbolic-execution engines. The overall prototype is quite practical, e.g. producing new fastest-known implementations of finite-field arithmetic for both Curve25519 (part of the TLS standard) and the Bitcoin elliptic curve secp256k1 for the Intel 12𝑡ℎ and 13𝑡ℎ generations.},
+    journal = {Proc. ACM Program. Lang.},
+    month = {jun},
+    articleno = {158},
+    numpages = {25},
+    keywords = {assembly, search-based software engineering, elliptic-curve cryptography}
+}

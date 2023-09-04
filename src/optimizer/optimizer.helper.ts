@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { cpus } from "os";
+import { cpus, hostname } from "os";
 
 import { CHOICE } from "@/enums";
-import { bl, cy, env, gn, pu, rd, re, SI, yl } from "@/helper";
+import { bl, cy, env, gn, pu, rd, re, shouldProof, SI, yl } from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
-import type { AnalyseResult } from "@/types";
+import type { AnalyseResult, OptimizerArgs } from "@/types";
 
 const { CC, CFLAGS } = env;
 
@@ -92,12 +92,20 @@ export function genStatistics(a: {
   acc: number;
   numRevert: { [k: string]: number };
   numMut: { [k: string]: number };
+  counter: string;
+  framePointer: string;
+  memoryConstraints: string;
+  cyclegoal: number;
 }): string[] {
   return [
     `; cpu ${cpus()[0].model}`,
     `; ratio ${a.ratioString}`,
     `; seed ${a.paddedSeed} `,
     `; CC / CFLAGS ${CC} / ${CFLAGS} `,
+    `; cyclegoal; ${a.cyclegoal}`,
+    `; using counter; ${a.counter}`,
+    `; framePointer ${a.framePointer}`,
+    `; memoryConstraints ${a.memoryConstraints}`,
     `; time needed: ${a.elapsed} ms on ${a.evals} evaluations.`,
     `; Time spent for assembling and measuring (initial batch_size=${a.batchSize}, initial num_batches=${a.numBatches}): ${a.acc} ms`,
     `; number of used evaluations: ${a.evals}`,
@@ -121,4 +129,43 @@ export function logMutation({
   const dDetails = choice == "D " ? Model.decisionStats : "             ";
 
   globals.mutationLog.push([numEvals, choice.trim(), kept ? 1 : 0, pDetails, dDetails].join(","));
+}
+
+export function printStartInfo({
+  resultDir,
+  bridge,
+  seed,
+  evals,
+  cyclegoal,
+  proof,
+  symbolname,
+  counter,
+  framePointer,
+  memoryConstraints,
+}: Pick<
+  OptimizerArgs,
+  "resultDir" | "bridge" | "seed" | "evals" | "cyclegoal" | "proof" | "framePointer" | "memoryConstraints"
+> & {
+  symbolname: string;
+  counter: string;
+}) {
+  process.stdout.write(
+    [
+      `\nStart`,
+      `on brg/symbolname>>${cy}${bridge}/${symbolname}${re}<<`,
+      `>>${cy}${shouldProof({ bridge, proof }) ? "with" : "without"} proofing${re} correct<<`,
+      `on cpu >>${cy}${cpus()[0].model}${re}<<`,
+      `writing results to>>${cy}${resultDir}${re}<<`,
+      `with seed >>${cy}${seed}${re}<<`,
+      `for >>${cy}${SI(evals)}${re}<< evaluations`,
+      `against CC>>${cy}${CC} ${CFLAGS}${re}<<`,
+      `with cycle goal>>${cy}${cyclegoal}${re}<< for each measurement`,
+      `on host>>${cy}${hostname()}${re}<<`,
+      `with pid>>${cy}${process.pid}${re}<<`,
+      `using counter>>${cy}${counter}${re}<<`,
+      `framePointer=>>${cy}${framePointer}${re}<<`,
+      `memoryConstraints>>${cy}${memoryConstraints}${re}<<`,
+      `starting @>>${cy}${new Date().toISOString()}${re}<<\n`,
+    ].join(" "),
+  );
 }

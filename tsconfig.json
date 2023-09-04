@@ -16,21 +16,13 @@
       ]
     }
   },
-  "include": [
-    "./",
-    "./src/bridge/fiat-bridge/fiat.c",
-    "./src/bridge/fiat-bridge/fiat.h",
-    "./src/bridge/bitcoin-core-bridge/Makefile",
-    "./src/bridge/bitcoin-core-bridge/llvm2cryptopt.sed",
-    "./src/bridge/bitcoin-core-bridge/*.h",
-    "./src/bridge/bitcoin-core-bridge/*.c",
-    "./src/bridge/bitcoin-core-bridge/*.json"
-  ],
+  "include": [ "./" ],
   "exclude": [
     "./node_modules",
     "./dist"
   ],
   "ts-node": {
-    "transpileOnly": true
+    "transpileOnly": true 
   }
 }
+

@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 University of Adelaide
+ * Copyright 2023 University of Adelaide
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
 import { describe, expect, it } from "vitest";
 
 import { BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
-import { matchXD, toposort } from "@/helper";
+import { isADependentOnB, matchXD, toposort } from "@/helper";
+import { createDependencyRelation, nodeLookupMap } from "@/model";
 
 import { createModelHelpers } from "./test-helpers";
 import { fiat_curve25519_carry_square } from "./toposort-helper";
@@ -25,7 +26,9 @@ import { fiat_curve25519_carry_square } from "./toposort-helper";
 describe("toposort", () => {
   describe("general", () => {
     const { nodes } = createModelHelpers();
-    const order = toposort(nodes);
+    const map = nodeLookupMap(nodes);
+    const neededBy = createDependencyRelation(nodes, map);
+    const order = toposort(nodes, neededBy);
     it("should emit valid numbers", () => {
       // actual numbers
       order.every((i) => {
@@ -55,7 +58,9 @@ describe("toposort", () => {
     const f = fiat_curve25519_carry_square;
     const nodes = f.body;
 
-    const order = toposort(nodes);
+    const map = nodeLookupMap(nodes);
+    const neededBy = createDependencyRelation(nodes, map);
+    const order = toposort(nodes, neededBy);
 
     const node_0 = nodes[order[0]];
     const node_N = nodes[order[order.length - 1]];
@@ -69,9 +74,142 @@ describe("toposort", () => {
   });
 
   it("should throw for  secp256k1-reduce", () => {
-    expect(() => new BitcoinCoreBridge().getCryptOptFunction("reduce")).toThrow();
+    expect(() => new BitcoinCoreBridge().getCryptOptFunction("reduce" as "mul")).toThrow();
+  });
+  describe("node Dependence: 'isADependentOnB'", () => {
+    const { nodes } = createModelHelpers();
+    const map = nodeLookupMap(nodes);
+    const neededBy = createDependencyRelation(nodes, map);
+    it("is x1 dependent on x2", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x1");
+      const b = nodes.findIndex((n) => n.name[0] === "x2");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+    });
+    it("is x3 dependent on x2", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x3");
+      const b = nodes.findIndex((n) => n.name[0] === "x2");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+    });
+    it("is x3 dependent on x1", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x3");
+      const b = nodes.findIndex((n) => n.name[0] === "x1");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+    });
+    it("is x2 dependent on x3", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x2");
+      const b = nodes.findIndex((n) => n.name[0] === "x3");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+    });
+    it("is x1 dependent on x100", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x1");
+      const b = nodes.findIndex((n) => n.name[0] === "x100");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+    });
+    it("is x100 dependent on x1", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x100");
+      const b = nodes.findIndex((n) => n.name[0] === "x1");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+    });
+    it("is anything dependent on out1[0]", () => {
+      const b = nodes.findIndex((n) => n.name[0] === "out1[0]");
+      nodes.forEach((n, i) => {
+        if (n.name[0] === "out1[0]") return;
+        expect(isADependentOnB(i, b, nodes, neededBy)).toBe(false);
+      });
+    });
+    it("is x100 dependent on x2", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x100");
+      const b = nodes.findIndex((n) => n.name[0] === "x2");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+    });
+    it("is x100 dependent on x3", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x100");
+      const b = nodes.findIndex((n) => n.name[0] === "x3");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+    });
+    it("is x4 dependent on 0xffffffffffffffff, ... not really supported, cuz imms are not nodes", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x4");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const b = nodes.findIndex((n) => n.name[0] === ("0xffffffffffffffff" as any));
+      expect(b).toBe(-1);
+      expect(() => isADependentOnB(a, b, nodes, neededBy)).toThrow();
+    });
+    it("is x100_1 dependent (shall error cuz x100_1 is no node)", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x100_1"); // a shall be undefined
+      expect(a).toBe(-1);
+      const b = nodes.findIndex((n) => n.name[0] === "x3");
+      expect(() => isADependentOnB(a, b, nodes, neededBy)).toThrow();
+    });
+    it("error if NaNs are provided", () => {
+      expect(() => isADependentOnB(Number.NaN, Number.NaN, nodes, neededBy)).toThrow();
+    });
+    it("is x27 dependent on x8", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x27");
+      const b = nodes.findIndex((n) => n.name[0] === "x8");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+    });
+    it("is x8 dependent on x27", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x8");
+      const b = nodes.findIndex((n) => n.name[0] === "x27");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+    });
+    it("is x28 dependent on x27", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x28");
+      const b = nodes.findIndex((n) => n.name[0] === "x27");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+    });
+    it("is x27 dependent on x28", () => {
+      const a = nodes.findIndex((n) => n.name[0] === "x27");
+      const b = nodes.findIndex((n) => n.name[0] === "x28");
+      expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+    });
   });
 
+  describe("node Dependence with Memory contraints", () => {
+    const { nodes } = createModelHelpers();
+    const map = nodeLookupMap(nodes);
+    describe("none", () => {
+      it("is out1[1] is not dependent on x30", () => {
+        const neededBy = createDependencyRelation(nodes, map, "none");
+        const a = nodes.findIndex((n) => n.name[0] === "out1[1]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+      });
+      it("is out1[0] is not dependent on x30", () => {
+        const neededBy = createDependencyRelation(nodes, map, "none");
+        const a = nodes.findIndex((n) => n.name[0] === "out1[0]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+      });
+    });
+    describe("out1-arg1", () => {
+      const neededBy = createDependencyRelation(nodes, map, "out1-arg1");
+      it("is out1[1] is dependent on x30 (", () => {
+        const a = nodes.findIndex((n) => n.name[0] === "out1[1]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+      });
+
+      it("is out1[0] is not dependent on x30", () => {
+        const a = nodes.findIndex((n) => n.name[0] === "out1[0]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(false);
+      });
+    });
+    describe("all", () => {
+      const neededBy = createDependencyRelation(nodes, map, "all");
+      it("is out1[1] is dependent on x30", () => {
+        const a = nodes.findIndex((n) => n.name[0] === "out1[1]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+      });
+      it("is out1[0] is dependent on x30", () => {
+        const a = nodes.findIndex((n) => n.name[0] === "out1[0]");
+        const b = nodes.findIndex((n) => n.name[0] === "x30");
+        expect(isADependentOnB(a, b, nodes, neededBy)).toBe(true);
+      });
+    });
+  });
   // removed because reduce is disabled for now
   // describe("should make correct order for secp256k1-reduce", () => {
   //   const f = new BitcoinCoreBridge().getCryptOptFunction("reduce");

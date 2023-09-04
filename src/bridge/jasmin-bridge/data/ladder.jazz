@@ -1,0 +1,100 @@
+from Jade require "crypto_scalarmult/curve25519/amd64/common/bit.jinc"
+from Jade require "crypto_scalarmult/curve25519/amd64/common/decode.jinc"
+
+from Jade require "crypto_scalarmult/curve25519/amd64/common/64/add4.jinc"
+from Jade require "crypto_scalarmult/curve25519/amd64/common/64/sub4.jinc"
+from Jade require "crypto_scalarmult/curve25519/amd64/common/64/cswap4.jinc"
+from Jade require "crypto_scalarmult/curve25519/amd64/common/64/load4.jinc"
+from Jade require "crypto_scalarmult/curve25519/amd64/common/64/tobytes4.jinc"
+
+require "mul4.jinc"
+require "sqr4.jinc"
+require "invert4.jinc"
+
+inline fn __add_and_double4(
+  stack u64[4] init,
+  stack u64[4] x2,
+  reg   u64[4] z2r,
+  stack u64[4] x3,
+  stack u64[4] z3)
+  ->
+  stack u64[4],
+  reg   u64[4],
+  stack u64[4],
+  stack u64[4]
+{
+  stack u64[4] z2 t0 t1 t2;
+  reg u64[4] t1r;
+
+  t0  = __sub4_ssr(x2, z2r);
+  x2  = __add4_ssr(x2, z2r);
+
+  t1  = __sub4_sss(x3, z3);
+  z2  = __add4_sss(x3, z3);
+
+  z3  = __mul4_sss(x2, t1);
+  z2  = __mul4_sss(z2, t0);
+
+  t2  = __sqr4_ss(x2);
+  t1r = __sqr4_rs(t0);
+
+  x3  = __add4_sss(z3, z2);
+  z2  = __sub4_sss(z3, z2);
+
+  t0  = __sub4_ssr(t2, t1r);
+  x2  = __mul4_ssr(t2, t1r);
+
+  z2  = __sqr4_ss(z2);
+  z3  = __mul4_a24_ss(t0, 121665);
+  x3  = __sqr4_ss(x3);
+
+  t2  = __add4_sss(t2, z3);
+  z3  = __mul4_sss(init, z2);
+  z2r = __mul4_rss(t0, t2);
+
+  return x2, z2r, x3, z3;
+}
+
+export fn add_doubl4(reg u64 pr pinit px2 pz2 px3 pz3)
+{
+  inline int i;
+  // input
+  stack u64[4] i_init;
+  stack u64[4] i_x2;
+  reg   u64[4] i_z2r;
+  stack u64[4] i_x3;
+  stack u64[4] i_z3;
+
+  stack u64 pr_s;
+  pr_s = pr;
+
+  for i=0 to 4
+  {
+	 i_init[i] = [pinit + 8 * i];
+	   i_x2[i] = [px2   + 8 * i];
+	  i_z2r[i] = [pz2   + 8 * i];
+	   i_x3[i] = [px3   + 8 * i];
+	   i_z3[i] = [pz3   + 8 * i];
+  }
+
+  
+  // output
+  stack u64[4] o_x2;
+  reg   u64[4] o_z2r;
+  stack u64[4] o_x3;
+  stack u64[4] o_z3;
+
+  o_x2, o_z2r, o_x3, o_z3 = __add_and_double4(i_init, i_x2, i_z2r, i_x3, i_z3);
+
+  pr = pr_s;
+  for i=0 to 4
+  {
+          // byte indexing here
+	  [pr + 0 * 32 + 8 * i] =  o_x2[i];
+	  [pr + 1 * 32 + 8 * i] = o_z2r[i];
+	  [pr + 2 * 32 + 8 * i] =  o_x3[i];
+	  [pr + 3 * 32 + 8 * i] =  o_z3[i];
+  }
+
+}
+

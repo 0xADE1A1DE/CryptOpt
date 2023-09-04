@@ -1,6 +1,6 @@
 #compdef co cryptopt CryptOpt
 
-# Copyright 2022 University of Adelaide
+# Copyright 2023 University of Adelaide
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ _arguments -S -s \
     '(-j --jsonFile -c --curve -m --method)'{-j,--jsonFile=}'[JSON-CODE, must --bridge manual]:json:_files -g \*.json' \
     '(-f --cFile -c --curve -m --method)'{-f,--cFile=}'[C-CODE must --bridge manual]:cfile:_files -g \*.c' \
     '--readState=[Continue from this State file]:statejson:_files -g \*.json' \
+    '--startFromBestJson=[Scan for the best of all current state files and continue for from the best one.]:statefile:_files -g \*.json' \
     '--resultDir=[Where to safe the result-files (assembly, pdfs, ...)]:directory:_path_files -/' \
     '(-e --evals)'{-e=,--evals=}'[Budget, in # of mutations to evaluate]:evals:' \
     '(-b --bets -r --betRatio)--single[no bets. Short for --bets=1 --betRatio=1]:single:' \
@@ -34,6 +35,8 @@ _arguments -S -s \
     '(-z --redzone --no-redzone)'{-z,--redzone,--no-redzone}'[Specify if the redzone should be used at stack spilling]:redzone' \
     '(-x --xmm)'{-x,--xmm}'[Enable spilling to xmm]:xmm' \
     '(-s --seed)'{-s,--seed=}'[Seed to start the randomness with\[number\]]:seed' \
+    '--framePointer=[Specify how the register for the frame pointer (rbp) is used]:framepointer:->framepointeroptions' \
+    '--memoryConstraints=[Specify any memory contraints. No contraints, all, or out1--arg1 may be aliased]:memorycontraints:->memorycontraintoptions' \
     '(-h,--help)'{-h,--help}'[Help]:get help prompt' \
     '(--version)'{-v,--version}'[Version]:Version information' \
     && ret=0
@@ -42,6 +45,7 @@ case "$state" in
 		_values  'bridge' \
 			'fiat[Fiat Bridge]' \
 			'bitcoin-core[Bitcoin Core Bridge (must specify -c secp256k1)]' \
+			'jasmin[Jasmin Bridge, experimental and currenly only supports the curve25519-add_double4 method]' \
 			'manual[Manual Bridge (must specify -j and -f)]' \
 		;;
 	methods)
@@ -65,6 +69,18 @@ case "$state" in
   			'secp256k1_montgomery[p=2^256 - 2^32 - 977;                Wbw Montgomery]' \
   			'secp256k1_dettman[p=2^256 - 4294968273;                Unsaturated Dettman]' \
 		;;
+    framepointeroptions)
+        _values 'framepointer' \
+            'omit[(default) will spill the value when needed, use the registers as a GP register, and unspill in the function epilogue (similar to "-fomit-frame-pointer").]' \
+            'save[will save the old value on stack, then save the old value of `rsp` in `bbp`. In the function epilogue, will restore rbp (similar to "-fno-omit-frame-pointer").]' \
+            'constant[pretends `rbp` does not exist.]' \
+        ;;
+    memorycontraintoptions)
+        _values 'memorycontraints' \
+            'none[No contraints. Assumes all memory from arguments is distinct.]' \
+            'all[will read all memroy from arguments (argN\[n\]) before writing any values to outN\[n\]]' \
+            'out1-arg1[will not read arg1\[n\] after out1\[n\] has been written]' \
+        ;;
 esac
 
 
