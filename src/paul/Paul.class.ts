@@ -175,6 +175,8 @@ export class Paul {
       return Math.floor(stateBasedFactor * delta) + start;
     }
 
+    // https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
+    // and https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve
     const randn_bm = (min: number, max: number, skew: number): number => {
       let u = 0,
         v = 0;

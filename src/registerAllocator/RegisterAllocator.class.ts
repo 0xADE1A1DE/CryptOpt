@@ -605,8 +605,17 @@ export class RegisterAllocator {
 
       // we want now change any of those inAllocations with rdx.
 
-      // Paul chooses an element, which we'll move to rdx.
-      const element = Paul.chooseArg(allocationReq.in);
+      // try to be sophisticated in choosing the mulx Load value
+      const { msg, candidate } = Model.chooseMulxLoadValue(allocationReq.in);
+      this.addToPreInstructions(msg);
+      let element = "";
+      if (candidate != null) {
+        element = candidate;
+      } else {
+        // if this didn't work (none is clearly preferrable)
+        // let Paul choose an element, which we'll move to rdx.
+        element = Paul.chooseArg(allocationReq.in);
+      }
       const idx = allocationReq.in.indexOf(element);
       //TODO: refactor that a lil bit
 
