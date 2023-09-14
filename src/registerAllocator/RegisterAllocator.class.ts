@@ -1463,20 +1463,24 @@ export class RegisterAllocator {
     const pre = [] as asm[];
     const post = ["ret"] as asm[];
 
+    // if "omit" or "constant" we dont need to do anything special
+    if (RegisterAllocator._options?.framePointer === "save") {
+      pre.push("push rbp");
+      pre.push("mov rbp, rsp");
+      post.unshift("pop rbp");
+    }
     // basically if we have any mov [ rsp + ...] (rather than [rsp - ...])
     if (stacklength > this.availableRedzoneSize) {
       const stacksizeInBytes = stacklength * 8;
 
-      // if "omit" or "constant" we dont need to do anything speical
-      if (RegisterAllocator._options?.framePointer === "save") {
-        pre.push("push rbp");
-        pre.push("mov rbp, rsp");
-        post.unshift("pop rbp");
-      }
-
       pre.push(`sub rsp, ${stacksizeInBytes}`);
 
-      post.unshift(`add rsp, ${stacksizeInBytes}`);
+      // Because if we have it saved, then we can read it from rbp
+      if (RegisterAllocator._options?.framePointer === "save") {
+        post.unshift("mov rsp, rbp");
+      } else {
+        post.unshift(`add rsp, ${stacksizeInBytes}`);
+      }
     }
     // CALLER SAVE REGS must be placed at the end.
     post.unshift(

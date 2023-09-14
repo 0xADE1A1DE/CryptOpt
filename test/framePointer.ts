@@ -149,6 +149,43 @@ describe("check usage of rbp (framepointer)", () => {
               .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
               .filter((line) => !(line.startsWith(".") || line.startsWith(";")))
               .filter((line) => line.includes("rbp"));
+            expect(asmlinesWithRbp).toHaveLength(4);
+
+            expect(asmlinesWithRbp[0]).toBe("push rbp");
+            expect(asmlinesWithRbp[1]).toBe("mov rbp, rsp");
+            expect(asmlinesWithRbp[2]).toBe("mov rsp, rbp");
+            expect(asmlinesWithRbp[3]).toBe("pop rbp");
+
+            resolve(0);
+          }),
+        ).not.toThrow();
+        vi.runAllTimers();
+      } catch (e) {
+        console.error(e);
+        reject(e);
+      }
+    });
+  });
+  it("save; save rbp to stack, save rsp to rbp, even when stack is not used", () => {
+    return new Promise((resolve, reject) => {
+      const filename = basename("poly1305-mul.ts"); // just to have a short function
+      const args = getTestArgs(filename);
+      args.framePointer = "save";
+      args.resultDir = pathResolve(args.resultDir, `${Date.now().toString()}-${args.framePointer}-short`);
+      const opt = new Optimizer(args);
+
+      try {
+        expect(() =>
+          opt.optimise().then((code) => {
+            expect(code).toEqual(0);
+            expect(existsSync(args.resultDir)).toBe(true);
+            const resultDir = pathResolve(args.resultDir, "fiat", "fiat_poly1305_carry_mul");
+
+            const asmlinesWithRbp = readdirSync(resultDir)
+              .filter((filename) => filename.endsWith(".asm"))
+              .flatMap((filename) => readFileSync(pathResolve(resultDir, filename)).toString().split("\n"))
+              .filter((line) => !(line.startsWith(".") || line.startsWith(";")))
+              .filter((line) => line.includes("rbp"));
             expect(asmlinesWithRbp).toHaveLength(3);
 
             expect(asmlinesWithRbp[0]).toBe("push rbp");
