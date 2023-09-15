@@ -24,7 +24,7 @@
   "scripts": {
     "test": "vitest",
     "test-no-watch": "vitest --watch false",
-    "test-cov": " vitest --coverage --singleThread",
+    "test-cov": " vitest --coverage",
     "lint-check": "eslint .",
     "lint-fix": "eslint --fix .",
     "format-check": "npx prettier --check \"./**/*.ts\" \"!./dist\"",
