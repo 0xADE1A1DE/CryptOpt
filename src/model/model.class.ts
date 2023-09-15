@@ -219,7 +219,7 @@ export class Model {
     }
 
     // Idea is:
-    // for each candidate, count how many times it is used as an argument in the upcoming mulx operations
+    // for each candidate, count how many consecutive upcoming mulx operations use it
 
     // initalise counters:
     const counters: { [candidateName: string]: number } = candidates.reduce(
@@ -231,11 +231,11 @@ export class Model {
       .filter((op) => op.operation == "mulx");
     msg += ` upcoming mulxs: ${upcomingMulxOps.map((m) => m.name.join("-")).join(", ")}`;
 
-    upcomingMulxOps.forEach((op) => {
-      op.arguments.forEach((arg) => {
-        if (arg in counters) {
-          counters[arg]++;
-        }
+    candidates.forEach((arg) => {
+      upcomingMulxOps.every((op) => {
+	if (!op.arguments.includes(arg)) { return false; }
+	counters[arg]++;
+	return true;
       });
     });
     msg += ` counters ${JSON.stringify(counters)}`;
