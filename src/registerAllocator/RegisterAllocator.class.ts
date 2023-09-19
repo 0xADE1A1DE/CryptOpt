@@ -606,7 +606,7 @@ export class RegisterAllocator {
       // we want now change any of those inAllocations with rdx.
 
       // try to be sophisticated in choosing the mulx Load value
-      const { msg, candidate } = Model.chooseMulxLoadValue(allocationReq.in);
+      const { msg, candidate } = Model.chooseMulxLoadValue(allocationReq.in as CryptOpt.ConstArgument[]);
       this.addToPreInstructions(msg);
       let element = "";
       if (candidate != null) {

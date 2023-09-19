@@ -25,7 +25,6 @@ import {
   DI_ABBRV,
   isADependentOnB,
   isCallerSave,
-  isXD,
   limbify,
   matchArg,
   matchArgPrefix,
@@ -207,7 +206,10 @@ export class Model {
    * @param candidates is a list of variable names like xNN, argNN, that are arguments to the curernt mulx
    * returns the one that is loaded most in upcoming mulxs, and also returns a bit of debug inforamtion
    */
-  public static chooseMulxLoadValue(candidates: string[]): { msg: string; candidate: string | null } {
+  public static chooseMulxLoadValue(candidates: CryptOpt.ConstArgument[]): {
+    msg: string;
+    candidate: string | null;
+  } {
     let msg = "; chooseMulxLoadValue";
     if (candidates.length < 1) {
       throw new Error("cannot choose from nothing, mate");
@@ -219,7 +221,7 @@ export class Model {
     }
 
     // Idea is:
-    // for each candidate, count how many times it is used as an argument in the upcoming mulx operations
+    // for each candidate, count how many consecutive upcoming mulx operations use it
 
     // initalise counters:
     const counters: { [candidateName: string]: number } = candidates.reduce(
@@ -231,11 +233,16 @@ export class Model {
       .filter((op) => op.operation == "mulx");
     msg += ` upcoming mulxs: ${upcomingMulxOps.map((m) => m.name.join("-")).join(", ")}`;
 
-    upcomingMulxOps.forEach((op) => {
-      op.arguments.forEach((arg) => {
-        if (arg in counters) {
-          counters[arg]++;
+    candidates.forEach((arg) => {
+      // using every here
+      upcomingMulxOps.every((op) => {
+        if (!op.arguments.includes(arg)) {
+          // to break on the first op, which does not have arg in any of its arguments.
+          // ie. stop counting
+          return false;
         }
+        counters[arg]++;
+        return true;
       });
     });
     msg += ` counters ${JSON.stringify(counters)}`;
