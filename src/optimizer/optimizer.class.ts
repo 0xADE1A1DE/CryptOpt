@@ -27,7 +27,6 @@ import { errorOut, ERRORS } from "@/errors";
 import {
   analyseMeasureResult,
   generateResultFilename,
-  LOG_EVERY,
   padSeed,
   PRINT_EVERY,
   shouldProof,
@@ -152,7 +151,8 @@ export class Optimizer {
       let show_per_second = "many/s";
       let per_second_counter = 0;
       const intervalHandle = setInterval(() => {
-        if (numEvals > 0) {
+        // Increase  Number of evaluations taken.
+        if (numEvals !== 0) {
           // not first eval, thus we want to mutate.
           this.mutate();
         }
@@ -295,11 +295,18 @@ export class Optimizer {
           }
 
           logMutation({ choice, kept, numEvals });
-          if (numEvals % PRINT_EVERY == 0) {
-            // print every 10th eval
-            // a line every 5% (also to logfile) also write the asm when
-            const writeout = numEvals % (this.args.evals / LOG_EVERY) === 0;
+          const [asmFile, mutationsCsvFile] = generateResultFilename(
+            { ...this.args, symbolname: this.symbolname },
+            [`_ratio${ratioString.replace(".", "")}.asm`, `.csv`],
+          );
 
+          const writeout =
+            // print every whatever percent;
+            ((100 * numEvals) / this.args.evals) % this.args.logEvery === 0 ||
+            // or at the end
+            numEvals == this.args.evals;
+
+          if (numEvals % PRINT_EVERY === 0 || writeout) {
             const statusline = genStatusLine({
               ...this.args,
               analyseResult,
@@ -321,16 +328,6 @@ export class Optimizer {
             process.stdout.write(statusline);
 
             globals.convergence.push(ratioString);
-          }
-
-          // Increase  Number of evaluations taken.
-          numEvals++;
-
-          if (numEvals >= this.args.evals) {
-            // DONE WITH OPTIMISING WRITE EVERYTHING TO DISK AND EXIT.
-            globals.time.generateCryptopt =
-              (Date.now() - optimistaionStartDate) / 1000 - globals.time.validate;
-            clearInterval(intervalHandle);
 
             Logger.log("writing current asm");
             const elapsed = Date.now() - optimistaionStartDate;
@@ -340,6 +337,7 @@ export class Optimizer {
               paddedSeed,
               ratioString,
               evals: this.args.evals,
+              numEvals,
               elapsed,
               batchSize,
               numBatches,
@@ -353,25 +351,28 @@ export class Optimizer {
             });
             Logger.log(statistics);
 
-            const [asmFile, mutationsCsvFile] = generateResultFilename(
-              { ...this.args, symbolname: this.symbolname },
-              [`_ratio${ratioString.replace(".", "")}.asm`, `.csv`],
-            );
+            if (writeout) {
+              // write best found solution with headers
+              // flip, because we want the last accepted, not the last mutated.
+              const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
 
-            // write best found solution with headers
-            // flip, because we want the last accepted, not the last mutated.
-            const flipped = toggleFUNCTIONS(currentNameOfTheFunctionThatHasTheMutation);
+              writeString(
+                asmFile,
+                ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
+                  .concat(this.asmStrings[flipped])
+                  .concat(statistics)
+                  .join("\n"),
+              );
 
-            writeString(
-              asmFile,
-              ["SECTION .text", `\tGLOBAL ${this.symbolname}`, `${this.symbolname}:`]
-                .concat(this.asmStrings[flipped])
-                .concat(statistics)
-                .join("\n"),
-            );
-
-            // writing the CSV
-            writeString(mutationsCsvFile, globals.mutationLog.join("\n"));
+              // writing the CSV
+              writeString(mutationsCsvFile, globals.mutationLog.join("\n"));
+            }
+          }
+          if (numEvals >= this.args.evals) {
+            // DONE WITH OPTIMISING WRITE EVERYTHING TO DISK AND EXIT.
+            globals.time.generateCryptopt =
+              (Date.now() - optimistaionStartDate) / 1000 - globals.time.validate;
+            clearInterval(intervalHandle);
 
             if (shouldProof(this.args)) {
               // and proof correct
@@ -395,6 +396,7 @@ export class Optimizer {
 
             resolve(0);
           }
+          numEvals++;
         }
       }, 0);
     });

@@ -27,6 +27,7 @@ export type OptimizerArgs = {
   cyclegoal: number;
   readState?: string; // filename
   logComment: string;
+  logEvery: number; // log line and write asm file every this much per cent. set to 5 to write every 5 per cent.
   proof: boolean;
   verbose: boolean;
   bridge: BRIDGES_T;

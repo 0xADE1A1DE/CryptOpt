@@ -28,6 +28,7 @@ _arguments -S -s \
     '(-b --bets -r --betRatio)--single[no bets. Short for --bets=1 --betRatio=1]:single:' \
     '(-b --bets)'{-b,--bets=}'[number of Bets]:bets:' \
     '(-r --betRatio)'{-r,--betRatio=}'[Ratio of how many evals to spend on bets.]:br:' \
+    '(--logEvery)'--logEvery='[In per cent; a line is logged during the run-optimisation and an Assembly File written.]:logEvery:' \
     '--cyclegoal=[Number of cycles to measure, adjusts batch size dynamically]:cg:' \
     '--logComment=[Hint displayed during optimization]:lc:' \
     '(--no-proof --proof)'{--no-proof,--proof}'[Dis-/En ables proofing. Default on with fiat, default off elsewhere]:proof:' \

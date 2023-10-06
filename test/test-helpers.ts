@@ -43,6 +43,7 @@ export function getTestArgs(filename: string): OptimizerArgs {
     seed: 11, //Date.now(),
     cyclegoal: 100,
     logComment: "",
+    logEvery: 5,
     proof: false,
     bridge: "fiat",
     curve,

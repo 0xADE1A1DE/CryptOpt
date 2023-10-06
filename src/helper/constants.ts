@@ -62,9 +62,7 @@ export const DONT_CARE_IMM_VALS = [
 
 export const TEMP_VAR_START_NUM = 10000;
 export const TEMP_VAR_END_NUM = 99999;
-export const PRINT_EVERY = 10; // this is to have the correct scaling in the graph
-export const LOG_EVERY = 20; // log line (to screen and file) every 20 percent, if this var it set to 20, I guess must be a multple of PRINTevery
-// the higher that number, the mire logs.
+export const PRINT_EVERY = 10; // this is to have the correct scaling in the graph; every this much mutations, a line is updated on the screen, and an entry in the csv.
 
 export const ADX = {
   [Flags.CF]: "adcx",

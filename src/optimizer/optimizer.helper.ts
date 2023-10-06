@@ -49,7 +49,6 @@ export function genStatusLine(a: {
 
   return [
     // general
-    `${a.writeout ? "\n" : "\r"}${a.symbolname}`,
     `${a.logComment ?? "-"}`,
     `${bl}${a.stacklength.toString().padStart(3)}${re}`,
     `${cy}bs${a.batchSize.toString().padStart(5)}${re}`,
@@ -79,6 +78,7 @@ export function genStatusLine(a: {
     `${cy}${Model.decisionStats}${re}`,
     `${a.kept ? gn : rd}${SI(a.numEvals)}(${((100 * a.numEvals) / a.evals).toFixed(0).padStart(2)}%)` +
       `${pu}${a.show_per_second}${re}`,
+    `${a.writeout ? "\n" : "\r"}${a.symbolname}`,
   ].join("|");
 }
 
@@ -86,6 +86,7 @@ export function genStatistics(a: {
   paddedSeed: string;
   ratioString: string;
   evals: number;
+  numEvals: number;
   elapsed: number;
   batchSize: number;
   numBatches: number;
@@ -106,10 +107,10 @@ export function genStatistics(a: {
     `; using counter; ${a.counter}`,
     `; framePointer ${a.framePointer}`,
     `; memoryConstraints ${a.memoryConstraints}`,
-    `; time needed: ${a.elapsed} ms on ${a.evals} evaluations.`,
+    `; time needed: ${a.elapsed} ms on ${a.numEvals} evaluations.`,
     `; Time spent for assembling and measuring (initial batch_size=${a.batchSize}, initial num_batches=${a.numBatches}): ${a.acc} ms`,
-    `; number of used evaluations: ${a.evals}`,
-    `; Ratio (time for assembling + measure)/(total runtime for ${a.evals} evals): ${a.acc / a.elapsed}`,
+    `; number of used evaluations: ${a.numEvals}/${a.evals}`,
+    `; Ratio (time for assembling + measure)/(total runtime for ${a.numEvals} evals): ${a.acc / a.elapsed}`,
     ...["permutation", "decision"].map((key) => {
       const r = ((a.numRevert[key] / a.numMut[key]) * 100).toFixed(3);
       return `; number reverted ${key} / tried ${key}: ${a.numRevert[key]} / ${a.numMut[key]} =${r}%`;

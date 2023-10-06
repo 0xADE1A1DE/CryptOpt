@@ -152,6 +152,11 @@ export const parsedArgs = y
     default: "",
     describe: "May provide a hint of any kind to be printed on the status line",
   })
+  .option("logEvery", {
+    number: true,
+    default: 5,
+    describe: "Print out a line break and write out an asm to the results folder. In Per Cent.",
+  })
   .option("cyclegoal", {
     number: true,
     default: 10000,

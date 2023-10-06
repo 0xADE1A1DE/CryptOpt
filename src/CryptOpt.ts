@@ -111,6 +111,7 @@ async function allBets(evals: number, bets: number): Promise<RunResult[]> {
       ...parsedArgs,
       evals,
       logComment: `${parsedArgs.logComment} ${i}/${bets}`,
+      logEvery: 50,
       seed: derivedSeed,
     };
     Logger.log("running a bet with " + JSON.stringify(args, undefined, 2));
