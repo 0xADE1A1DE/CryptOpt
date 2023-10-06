@@ -35,7 +35,7 @@ it("optimise", () => {
     // Commented out, because currently mul2 not supported
     // const statefile = pathResolve(dir, "./seed0000000688561254.json");
 
-    const statefile = pathResolve(dir, "./seed0001673572829616.json");
+    const statefile = pathResolve(dir, "./seed0001696550611081.json");
     const args = JSON.parse(readFileSync(statefile).toString()).parsedArgs;
     args.resultDir = getTestResultsPath();
     args.readState = statefile;
