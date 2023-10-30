@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{c+c1}{; $    \ t_0 \leftarrow \fadd_1(Y,\ Z)$}
+\PYG{n+nf}{mov}\PYG{+w}{  }\PYG{n+no}{rdx}\PYG{p}{,}\PYG{+w}{    }\PYG{p}{[}\PYG{n+no}{Y}\PYG{p}{]}
+
+\PYG{n+nf}{add}\PYG{+w}{  }\PYG{n+no}{rdx}\PYG{p}{,}\PYG{+w}{    }\PYG{p}{[}\PYG{n+no}{Z}\PYG{p}{]}
+
+\PYG{c+c1}{; $t_4,\ t_3 \leftarrow \fmul_2(t_0,\ X)$}
+\PYG{n+nf}{mulx}\PYG{+w}{ }\PYG{n+no}{r8}\PYG{p}{,}\PYG{+w}{ }\PYG{n+no}{r9}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{[}\PYG{n+no}{X}\PYG{p}{]}
+
+\PYG{c+c1}{; $t_2,\ t_1 \leftarrow \fmul_1(Z,\ Z)$}
+\PYG{n+nf}{mov}\PYG{+w}{  }\PYG{n+no}{rdx}\PYG{p}{,}\PYG{+w}{    }\PYG{p}{[}\PYG{n+no}{Z}\PYG{p}{]}
+\PYG{n+nf}{mov}\PYG{+w}{ }\PYG{p}{[}\PYG{n+no}{rsp}\PYG{p}{],}\PYG{+w}{ }\PYG{n+no}{r9}\PYG{c+c1}{; spill}
+\PYG{n+nf}{mulx}\PYG{+w}{ }\PYG{n+no}{rdx}\PYG{p}{,}\PYG{+w}{ }\PYG{n+no}{r9}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{[}\PYG{n+no}{Z}\PYG{p}{]}
+
+\PYG{c+c1}{; $c  ,\ O_0 \leftarrow \fadd_2(t_3,\ t_1)$}
+\PYG{n+nf}{add}\PYG{+w}{  }\PYG{n+no}{r9}\PYG{p}{,}\PYG{+w}{    }\PYG{p}{[}\PYG{n+no}{rsp}\PYG{p}{]}
+\PYG{n+nf}{mov}\PYG{+w}{  }\PYG{p}{[}\PYG{n+no}{O\PYGZus{}0}\PYG{p}{],}\PYG{+w}{ }\PYG{n+no}{r9}
+
+\PYG{c+c1}{; $   ,\ O_1 \leftarrow \fadd_3(t_4,\ t_2,\ c)$}
+\PYG{n+nf}{adc}\PYG{+w}{  }\PYG{n+no}{rdx}\PYG{p}{,}\PYG{+w}{   }\PYG{n+no}{r8}
+\PYG{n+nf}{mov}\PYG{+w}{  }\PYG{p}{[}\PYG{n+no}{O\PYGZus{}1}\PYG{p}{],}\PYG{+w}{ }\PYG{n+no}{rdx}
+\end{Verbatim}
