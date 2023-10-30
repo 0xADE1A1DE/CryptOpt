@@ -12,7 +12,7 @@ DATE = $(shell date +%Y%m%d)
 GnuPlot	   = gnuplot
 Eps2Pdf	   = epspdf
 Gnuplot_Sources = $(wildcard figures/*.gnuplot)
-Figures = $(Gnuplot_Sources:.gnuplot=.pdf) $(wildcard figures/tex/*.tex)
+Figures = $(Gnuplot_Sources:.gnuplot=.pdf)
 
 .SECONDARY: $(Gnuplot_Sources:.gnuplot=.eps) $(Figures)
 
