@@ -10,7 +10,7 @@ CryptOpt has appeared in the press several times. This is an overview in the ord
 
 - Most recently, the work received the _Human-Competitive (HUMIES) GOLD Award_.
   The competition is held as part of _The Genetic and Evolutionary Computation Conference (GECCO)_.
-  All the winners of _GECCO 2023_ in Lisbon, are shown on the [SIGEVO website](https://gecco-2023.sigevo.org/Humies-Awards), [slides here](./presentations/gecco2023/Gecco Humies.pptx).
+  All the winners of _GECCO 2023_ in Lisbon, are shown on the [SIGEVO website](https://gecco-2023.sigevo.org/Humies-Awards), [slides here](./presentations/gecco2023/Gecco_Humies.pptx).
 
 - The _Real World Crypto Symposium (RWC) 2023_ was held in Tokyo.
   CryptOpt’s first public appearance was at _RWC’23_ – the entry can be found [here](https://rwc.iacr.org/2023/program.php), and the talk is [here](https://youtu.be/lahO3de3k_0?t=2790), [slides here](./presentations/rwc23/presentation.pdf).
