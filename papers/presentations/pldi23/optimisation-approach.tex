@@ -1,0 +1,26 @@
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+\begin{tikzpicture}[-latex, yscale=.7,xscale=.7]
+    \scriptsize
+    \tikzstyle{codeblock} = [draw=black, inner sep=.4em, text width=3.5em, minimum height=3em, align=center];
+
+    \pause
+    \node[codeblock] (in) at (7,7) {Write Code};
+
+    \pause
+    \node[codeblock] (code) [below=1.5em of in] {Modify Code};
+    \draw[-latex] (in.south) -- (code.north){};
+
+    \pause
+    \node[diamond, draw, below=1.5em of code, text width=4em, align=center] (worse) {Faster?};
+    \draw[-latex] (code.south) -- (worse.north){};
+
+    \pause
+    \draw[-latex] (worse.east) -- ++(1,0) node[yshift=.6em,midway] {Yes} |- (code.east){};
+
+    \pause
+    \node[codeblock] (revert) [below=1.5em of worse] {Undo};
+    \draw[-latex] (worse.south) --  node[xshift=0.9em] {No}  (revert.north){};
+    \draw[-latex] (revert.south) |- ++(-2,-1.5em) |-  (code.west){};
+
+    \onslide<1-> %% workaround to have the footline
+\end{tikzpicture}

@@ -1,0 +1,49 @@
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+\begin{tikzpicture}[-latex, yscale=.7,xscale=.7]
+    \scriptsize
+    \tikzstyle{codeblock} = [draw=black, inner sep=.4em, text width=3.5em, minimum height=3em, align=center];
+
+    \node[text width=5em] (input) [left=2em of fiat] {Functional Program};
+    \draw[-latex] (input.east) -- (fiat.west);
+
+    \node[text width=14em] (fiat) at (0,0) {\fiat\newline [Erbsen et al. 2019, IEEE S\&P]};
+
+    \node[codeblock, right=10em of fiat] (in)  {Write Code};
+
+    % Code
+    \node[codeblock] (code) [below=1.5em of in] {Modify Code};
+    \draw[-latex] (in.south) -- (code.north){};
+
+    \node[diamond, draw, below=1.5em of code, text width=4em, align=center] (worse) {Faster?};
+    \draw[-latex] (code.south) -- (worse.north){};
+    
+    \draw[-latex] (worse.east) -- ++(1,0) node[yshift=.6em,midway] {Yes} |- (code.east){};
+
+    \node[codeblock] (revert) [below=1.5em of worse] {Undo};
+    \draw[-latex] (worse.south) --  node[xshift=0.9em] {No}  (revert.north){};
+    \draw[-latex] (revert.south) |- ++(-2,-1.5em) |-  (code.west){};
+
+    \node[rectangle,  inner ysep=11em, inner xsep=2em, below=-5pt of in.north ] (co) {\quad\quad\quad\quad\quad\quad\quad\quad\quad};
+
+    \draw[-latex] (fiat.east) -- node[fill=white, midway]{\fiatir} (in.west);
+
+    \draw[-latex] (co.west)+(0,-1) -- node[fill=white,midway]{Assembly} ++(-4,-1); %fiat2.south);
+    \pause
+    \node [anchor=east, below=9em of fiat](fiat2)   {Checker};
+    \draw[-latex] (fiat.south) -- node[fill=white,near end]{\fiatir} (fiat2.north);
+    \pause
+
+    \tikzset{decoration={snake,amplitude=.4mm,segment length=2mm, post length=0mm,pre length=0mm}}
+    \draw[decorate,-] (fiat2.south west) -- ++(0,-2);
+    \pause
+    \draw[decorate,-] (fiat2.south east) -- ++(0,-2);
+    \pause
+    \node[below=1.2 of fiat2, text width=3em, align=center](equal)  {$\stackrel{?}{=}$};
+
+
+
+    \onslide<1-> %% workaround to have the footline
+
+
+\end{tikzpicture}

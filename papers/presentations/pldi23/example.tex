@@ -1,0 +1,86 @@
+\begin{tikzpicture}[-latex, yscale=.7,xscale=.5, line width=.75pt]
+    \scriptsize
+    \pause
+    \tikzstyle{codeblock} = [draw=black, inner sep=.4em, text width=3.5em, minimum height=3em, align=center];
+    \tikzstyle{instr} = [rounded rectangle, draw=black, fill=white, minimum width=1cm, xshift=-.3cm,yshift=-.2cm];
+    \tikzstyle{ordermut} = [very thick, dashed, stealth-stealth, red];
+    \tikzstyle{highlight} = [fill=red!30];
+
+
+    \node[codeblock, onslide={<3-12>       {highlight}}] (in) at (7,7)              {Write Code};
+    \node[codeblock, onslide={<13-17,20-22>{highlight}}] (code) [below=1.5em of in] {Modify Code};
+
+    \draw[-latex] (in.south) -- (code.north){};
+    \only<14->   \node[above right=-.3 and .9 of code.north east, onslide=<15-17>{highlight}, text width=4.4em, align=center] {Instr. scheduling};
+    \only<14->   \node[below right=-.3 and .9 of code.south east, onslide=<20-22>{highlight}, text width=4.4em, align=center] {Instr. selection};
+
+    \node[diamond, draw, below=1.5em of code, text width=4em, align=center, onslide={<18,23>{highlight}}] (worse) {Faster?};
+    \draw[-latex] (code.south) -- (worse.north){};
+
+    \draw[-latex, temporal=<19>{}{red}{}] (worse.east) -- ++(1,0) node[yshift=.6em,midway] {Yes} |- (code.east){};
+
+    \node[codeblock] (revert) [below=1.5em of worse] {Undo};
+    \draw[-latex] (worse.south) --  node[xshift=0.9em] {No}  (revert.north){};
+    \draw[-latex] (revert.south) |- ++(-2,-1.5em) |-  (code.west){};
+
+
+    \pause
+    \tikzstyle{operation} = [rounded rectangle, draw=black, minimum width=1cm];
+    \tikzstyle{input} = [rounded rectangle, draw=black, fill=white, minimum width=.5cm];
+    \tikzstyle{code}  = [text width=4cm, align=left];
+    \tikzstyle{ar}    = [-latex, lightgray];
+
+    \pause
+    \node [input                ] (Y) at (15,8) {$Y$};
+    \node [input, left =4em of Y] (X)           {$X$};
+    \node [input, right=4em of Y] (Z)           {$Z$};
+
+    \pause
+    \node [operation, \colA, onslide=<21>{highlight}] (A1) at (15, 6) {$\fadd$};
+    \draw[ar] (X.south)     -- (A1.north west);
+    \draw[ar] (Y.south)     -- (A1.north);
+
+    \pause
+    \node [operation, below=4em of A1,  \colB, onslide=<17->{below=9em of A1}] (M1)           {$\fmul$};
+    \draw[ar, bend right] (A1.south west)  to node[very near start, xshift=-.2cm] {} (M1.north west);
+    \draw[ar] (Z.south)     -- (M1.north east);
+
+    \pause
+    \node [operation, below=9em of A1,  \colC, onslide=<17->{below=4em of A1}] (M2)           {$\fmul$};
+    \draw[ar] (Z.south) -- (M2.north);
+    \draw[ar] (Z.south) -- (M2.north east);
+
+    \pause
+    \node [operation, below=14em of A1, \colE] (A2)           {$\fadd$};
+    \draw[ar, bend right] (M1.south west)  to node[very near start, xshift=-.2cm] {} (A2.north west);
+    \draw[ar, bend right] (M2.south west)  to node[very near start, xshift=-.2cm] {} (A2.north west);
+
+
+    \pause
+    \node [instr, right of=A1, onslide=<21>{highlight}] (iA1) {\only<-21>{\instr{adcx}}\only<22->{\instr{add}}};
+    \node [instr, right of=M2] (iM2) {\instr{mulx}};
+    \node [instr, right of=M1] (iM1) {\instr{mulx}};
+    \node [instr, right of=A2] (iA2) {\instr{add}};
+
+    \pause
+    \node [code,        right=  6em of A1] (i1)  {\texttt{mov  rax, [X]}};
+    \node [code,        below=.05em of i1] (i2)  {\only<-21>{\texttt{clc          }}\only<22->{\sout{\color{black!60}{\texttt{clc         }}}}};
+    \node [code, \colA, below=.05em of i2] (i3)  {\only<-21>{\texttt{adcx rax, [Y]}}\only<22->{\texttt                       {add $\ \,$rax, [Y]}  }};
+
+    \pause
+    \node [code,        right=  6em of M1] (i4)  {\textcolor<17->{white}{\texttt{mov  rdx, [Z]}}};
+    \node [code, \colB, below=.05em of i4] (i5)  {\texttt{mulx r8, r9, rax}};
+
+    \pause
+    \node [code,        right=  6em of M2] (i6)  {\only<17->{\texttt{mov  rdx, [Z]}}};
+    \node [code, \colC, below=.05em of i6] (i7)  {\texttt{mulx r10, r11, [Z]}};
+
+    \node [code, \colE, right=  6em of A2] (i8)  {\texttt{add  r11, r9}};
+    \node [code,        below=.05em of i8] (i9)  {\texttt{mov  [out], r11}};
+
+    \pause
+    \only<16> \draw [ordermut, bend right] (M1.south) to node[midway, xshift=-.3cm] {\quad} (M2.north);
+
+
+    \onslide<1-> %% workaround to have the footline
+\end{tikzpicture}

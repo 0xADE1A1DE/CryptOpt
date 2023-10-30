@@ -1,0 +1,34 @@
+    \begin{tikzpicture}[anchor=mid west, mark size=.5em, ball color=black!80]
+
+        \pause
+        \draw [latex-latex,thick] (0,6)
+            -- (0,0) node[rotate=90, midway, above, align=center] {Performance}
+            -- (6,0) node[           midway, below, align=center] {Ease of Reusability};
+
+        \draw [draw=black!60] (0.5,5.5) to[out=-20, in=110]
+            coordinate[pos=0] (p-4)
+            coordinate[pos=1/3] (p-3)
+            coordinate[pos=2/3] (p-2)
+            coordinate[pos=1] (p-1)
+            (5.5,0.5);
+
+
+        \pause
+   
+        \draw[mark options={fill=red}] plot[mark=ball, onslide=<4->{ball color=red!80}    ] coordinates {(p-1)} node[xshift=1em] {\small Generic C};
+    
+        \draw[mark options={fill=red}] plot[mark=ball, onslide=<4->{ball color=red!80}    ] coordinates {(p-2)} node[xshift=1em] {\small Parameter-Specific C};
+  
+        \draw[mark options={fill=red}] plot[mark=ball, onslide=<4->{ball color=red!80}    ] coordinates {(p-3)} node[xshift=1em] {\small CPU-Specific};
+ 
+        \draw[mark options={fill=red}] plot[mark=ball, onslide=<4->{ball color=green!80}  ] coordinates {(p-4)} node[xshift=1em] {\small Hand-Written Assembly};
+
+        \pause
+        \pause
+        \node [single arrow, rotate=40, draw=blue] at (4.5,3.5) {\quad\quad\quad\quad\quad};
+        \pause
+        \draw[mark options={fill=red}] plot[mark=ball, onslide=<4->{ball color=green!80}  ] coordinates {(5,5.5)} node[xshift=.5em] {\small \cryptopt};
+
+        \onslide<1-> %% workaround to have the footline
+    \end{tikzpicture}
+

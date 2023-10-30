@@ -1,0 +1,18 @@
+\newcommand{\resavgwidth}{2em}
+\begin{tabular}{@{}lm{\resavgwidth}m{\resavgwidth}cm{\resavgwidth}m{\resavgwidth}}
+    \toprule
+                &                                                                    \multicolumn{2}{c}{Multiply}                           &  &                                                         \multicolumn{2}{c}{Square}\\
+                                                                                             \cmidrule{2-3}                                                                                                        \cmidrule{5-6} 
+    Curve       &                                                    Clang    &                                                     GCC     &  &                                                  Clang      &                                                     GCC \\
+    \midrule
+    Curve25519  & \only<2->{ \cellcolor{     blue!100}\color{white}{$1.19$} } & \only<2->{ \cellcolor{     blue!100}\color{white}{$1.14$} } &  & \only<2->{ \cellcolor{     blue!100}\color{white}{$1.14$} } & \only<2->{ \cellcolor{     blue!100}\color{white}{$1.18$}} \\
+    P-224       & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.31$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.87$} } &  & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.24$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.84$}} \\
+    P-256       & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.27$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.79$} } &  & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.30$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.85$}} \\
+    P-384       & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.12$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.66$} } &  & \only<3->{ \cellcolor{     blue!76 }\color{white}{$1.08$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.60$}} \\
+    SIKEp434    & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.30$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.70$} } &  & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.29$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.83$}} \\
+    Curve448    & \only<3->{ \cellcolor{     blue!22 }\color{black}{$1.02$} } & \only<3->{ \cellcolor{   orange!52 }\color{black}{$0.95$} } &  & \only<3->{ \cellcolor{   orange!4  }\color{black}{$1.00$} } & \only<3->{ \cellcolor{   orange!8  }\color{black}{$0.99$}} \\
+    P-521       & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.20$} } & \only<3->{ \cellcolor{     blue!58 }\color{white}{$1.06$} } &  & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.25$} } & \only<3->{ \cellcolor{     blue!95 }\color{white}{$1.11$}} \\
+    Poly1305    & \only<3->{ \cellcolor{     blue!94 }\color{white}{$1.10$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.15$} } &  & \only<3->{ \cellcolor{     blue!79 }\color{white}{$1.09$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.16$}} \\
+    secp256k1   & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.34$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.73$} } &  & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.32$} } & \only<3->{ \cellcolor{     blue!100}\color{white}{$1.74$}} \\
+    \bottomrule
+\end{tabular}

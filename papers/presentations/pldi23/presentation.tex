@@ -1,0 +1,387 @@
+%dvipsnames are for the xcolor package to include colors like RubineRed
+\documentclass[dvipsnames,table,aspectratio=169]{beamer}
+\usepackage{scalerel}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{animate}
+\usepackage{xlop}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage[ruled]{algorithm2e}
+\usepackage{float}
+\usepackage[normalem]{ulem} % sout
+\usepackage{bm} % bold plus in math
+\usepackage{tabu}
+\usepackage{fancyvrb}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usetikzlibrary{shadows,shapes,calc,snakes,positioning,plotmarks}
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}} % \pgfkeysalso doesn't change the path
+}}
+
+\tikzset{temporal/.code args={<#1>#2#3#4}{%
+  \temporal<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}{\pgfkeysalso{#4}} % \pgfkeysalso doesn't change the path
+}}
+
+
+\definecolor{darkgreen}{rgb}{0.0,0.2,0.13}
+\newcommand{\cf}{\texttt{CF}}
+\newcommand{\fadd}{\textsc{Add}\xspace}
+\newcommand{\fmul}{\textsc{Mul}\xspace}
+%comments in algorithm code
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+\newcommand{\colA}{blue} % A1
+\newcommand{\colB}{red} % M1
+\newcommand{\colC}{darkgreen} %M2
+\newcommand{\colD}{orange} %A3
+\newcommand{\colE}{violet} %A2
+\newcommand{\colF}{cyan} %A4
+\newcommand{\colG}{olive} %A5
+\newcommand{\instr}[1]{\texttt{#1}}
+
+\newcommand{\assembly}{assembly\xspace}
+\newcommand{\xassembly}{x86-64~\assembly}
+\newcommand{\fiat}{\textsf{Fiat Cryptography}\xspace}
+\newcommand{\fiatir}{\textsf{Fiat~IR}\xspace}
+%Workarounds 
+\makeatletter
+% will move footnotes up, so they dont overlap with navigation controls
+\beamertemplatenavigationsymbolsempty 
+\addtobeamertemplate{footnote}{\vspace{-6pt}\advance\hsize-0.5cm}{\vspace{6pt}} 
+\renewcommand*{\footnoterule}{\kern -3pt \hrule \@width 2in \kern 8.6pt}
+
+% miniframehack will remove the dot in the header panel for outlines at section starts
+\let\beamer@writeslidentry@miniframeson=\beamer@writeslidentry
+\def\beamer@writeslidentry@miniframesoff{%
+    \expandafter\beamer@ifempty\expandafter{\beamer@framestartpage}{}% does not happen normally
+    {%else
+        % removed \addtocontents commands
+        \clearpage\beamer@notesactions%
+    }
+}
+\newcommand*{\miniframeson}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframeson}
+\newcommand*{\miniframesoff}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframesoff}
+\makeatother
+
+% will add the Outline to each section start
+% \AtBeginSection[]
+% {
+%     \miniframesoff%
+%     \begin{frame}{Outline}
+%         \tableofcontents[currentsection]
+%     \end{frame}
+%     \miniframeson%
+% }
+\setbeamerfont{title}{size=\fontsize{35}{40}\selectfont}
+\setbeamerfont{subtitle}{size=\Large}
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{date}{size=\small}
+
+% \defbeamertemplate*{title page}{customized}[1][]
+% {
+%
+%   Title\usebeamerfont{title}\inserttitle\par
+%   \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
+%   \bigskip
+%   \usebeamerfont{author}\insertauthor\par
+%   \usebeamerfont{institute}\insertinstitute\par
+%   \usebeamerfont{date}\insertdate\par
+%   \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+%
+% }
+% those are the settings for the footline; title + Initials + UoA + pagenumber
+\setbeamertemplate{footline}
+{%
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=.73\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.2cm,rightskip=.2cm]{footlinecolor}%
+            \insertshorttitle: \insertshortsubtitle
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.15\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.2cm,rightskip=.2cm plus1fil]{footlinecolor}%
+            \usebeamerfont{} Joel Kuepper
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.08\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.2cm,rightskip=.2cm plus1fil]{footlinecolor}%
+            \usebeamerfont{}PLDI'23
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.04\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.2cm,rightskip=.2cm plus1fil]{footlinecolor}%
+            \usebeamerfont{}\hfill\insertpagenumber
+        \end{beamercolorbox}%
+    }%
+    \vskip0pt%
+}
+
+%Theme settings
+\usetheme[compress]{Singapore}
+\setbeamercolor{footlinecolor}{bg=black!70,fg=white}
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+\setbeamerfont{framesubtitle}{size=\small}
+
+%Presentation Settings
+\usepackage{xspace} % adds/removes spaces in/arount puntuation.
+\newcommand{\cryptopt}{\textsf{CryptOpt}\xspace}
+\title{\cryptopt}
+\subtitle{Verified Compilation with Randomized Program Search for Cryptographic Primitives\vspace{-2em}}
+
+
+% \newcommand{\aff}[1]{$^#1$}
+\newcommand{\aff}[1]{}
+
+\author{
+\underline{\vspace{-16em}Joel Kuepper\aff{1}},
+Andres Erbsen\aff{2},
+Jason Gross\aff{2},
+Owen Conoly\aff{2},
+Chuyue Sun\aff{3},
+Samuel Tian\aff{2},\\
+David Wu\aff{1},
+Adam Chlipala\aff{2},
+Chitchanok Chuengsatiansup\aff{4},
+Daniel Genkin\aff{5},
+Markus Wagner\aff{6},
+Yuval Yarom\aff{7}\vspace{-5em}
+  % \underline{J. Kuepper\aff{1}},
+  % A. Erbsen\aff{2},
+  % J. Gross\aff{2},
+  % O. Conoly\aff{2},
+  % C. Sun\aff{3},\\
+  % S. Tian\aff{2},
+  % D. Wu\aff{1},
+  % A. Chlipala\aff{2},
+  % C. Chuengsatiansup\aff{4},\\
+  % D. Genkin\aff{5},
+  % M. Wagner\aff{6},
+  % Y. Yarom\aff{7}\\\vspace{3em}
+}
+\newcommand{\logoi}[1]{$\vcenter{\hbox{\includegraphics[width=.13\textwidth]{#1}}}$}
+% \includegraphics[width=.14\textwidth]{aff/uoa.png}
+\titlegraphic{
+\logoi{aff/uoa.png}\hspace{3em}
+\logoi{aff/mit.png}\hspace{3em}
+\logoi{aff/stanford.png}\\\vspace{-1.5em}
+\logoi{aff/unimelb.png}\hspace{3em}
+\logoi{aff/gatech.png}\hspace{3em}
+\logoi{aff/monash.png}\hspace{3em}
+\logoi{aff/rub.png}
+
+  % \aff{1}\,University of Adelaide,
+  % \aff{2}\,Massachusetts Institute of Technology,
+  % \aff{3}\,Stanford University,
+  % \aff{4}\,University of Melbourne,
+  % \aff{5}\,Georgia Tech,
+  % \aff{6}\,Monash University,
+  % \aff{7}\,Ruhr University Bochum\\\vspace{1em}
+% Real World Crypto Symposium 2023, Tokyo
+}
+
+
+\date{March $29^{th}$, 2023}
+\date{}
+
+
+%begin of presentation 
+\begin{document}
+
+%titlepage
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+\section{State of the Art}
+\subsection{Motivation}
+\begin{frame}
+    \frametitle{\insertsubsection}
+
+    \centering
+    \begin{tikzpicture}[very thick]
+        % \node[inner sep=0pt] (gcc) at (0,0) {\includegraphics[width=.25\textwidth]{figures/gcc.png}};
+        \node[inner sep=0pt] (llvm) at (0,0) {\includegraphics[width=.25\textwidth]{figures/llvm.png}};
+        \node[inner sep=0pt, below=1em of llvm] (llvmt) {LLVM};
+
+        \pause
+        \node[left=3em of llvm] (openssl){\includegraphics[width=.25\textwidth]{figures/openssl.png}};
+        \draw[-latex] (openssl.east) -- (llvm.west);
+
+        \pause
+        \node[right=3em of llvm] (framework){\includegraphics[width=.25\textwidth]{figures/laptop.jpg}};
+        \draw[-latex] (llvm.east) -- (framework.west);
+
+        \pause
+        \node[below right=-4em and -4.5em of framework] (bug) {\includegraphics[width=.1\textwidth]{figures/bug.png}};
+        \node[above right=-2em and -2em of framework] (snail) {\includegraphics[width=.1\textwidth]{figures/snail.png}};
+
+        \pause
+        \node[above=1em of openssl] (tux){\includegraphics[width=.15\textwidth]{figures/tux.png}};
+        \draw[-latex] (tux.east) -- ++ (1.5,-1);
+
+        \node[below=1em of openssl] (opencv){\includegraphics[width=.15\textwidth]{figures/opencv.jpg}};
+        \draw[-latex] (opencv.east) -- ++ (1.5,+1);
+
+        \pause
+        \node[above=1em of framework] (phone){\includegraphics[width=.15\textwidth]{figures/phone.png}};
+        \draw[-latex] (llvm.north east) -- (phone.west);
+
+        \node[below=.1em of framework] (bulb){\includegraphics[width=.15\textwidth]{figures/bulb.png}};
+        \draw[-latex] (llvm.south east) -- (bulb.west);
+    \onslide<1-> %% workaround to have the footline
+    \end{tikzpicture}
+
+
+
+\end{frame}
+
+\subsection{Code}
+\begin{frame}
+    \frametitle{\insertsubsection}
+    \centering
+    \include{cryptooverview}
+\end{frame}
+
+\section{Method}
+\subsection{Idea}
+\begin{frame}
+    \centering
+    \frametitle{\insertsubsection}
+    \begin{itemize}
+        \item Observations:
+        \item[1.] Compilers are general-purpose.
+        \item<2->[2.] Some code is ``\only<2>{special}\only<3->{\sout{special} \alert<3>{simpler}}''\only<3->{$(X \boldsymbol{+} Y) \boldsymbol{\cdot} Z \boldsymbol{+}Z^2$}.
+    \end{itemize}
+
+    \vspace{.5em}
+    \onslide<4->{
+        \begin{center}
+            \emph{(How) can we exploit this?}
+        \end{center}
+    }
+    \vspace{.5em}
+    \onslide<5->{
+        \begin{itemize}
+            \item So\dots
+            \item[1.] \sout{Compiling to} $\rightarrow$ \alert<5>{search for} a fast implementation.
+            \item<6->[2.] Prove it \alert{correct}.
+        \end{itemize}
+    }
+\end{frame}
+
+\subsection{Search for Fast Implementation}
+\begin{frame}[t]{}
+    \centering
+    \frametitle{\insertsubsection}
+    \begin{columns}
+        \column{.5\textwidth}
+        \centering
+        \input{optimisation-approach.tex}
+
+        \column{.45\textwidth}
+        \onslide<7->{\LARGE ``Random Local Search''}
+    \end{columns}
+\end{frame}
+
+\newcommand{\cnothing}{c_{\scaleto{\varnothing}{4pt}}}
+\newcommand{\ali}[2]{\makebox[#1][r]{#2}}
+\subsection{Example}
+\begin{frame}[t]{}
+    \frametitle{\insertsubsection: $\alert<5>{(X \boldsymbol{+} Y)} \alert<6>{\boldsymbol{\cdot} Z} \alert<8>{\boldsymbol{+}} \alert<7>{Z^2}$}
+    \centering
+
+    \vspace{-1em}
+    \include{example}
+\end{frame}
+
+\begin{frame}[c]{}
+    \frametitle{Performance}
+    \centering
+    \include{figures/10710Urun1}
+
+\end{frame}
+
+\section{\fiat}
+\subsection{Performance}
+\begin{frame}[c]{}
+    \frametitle{\insertsection}
+    \centering
+    \vspace{-1em}
+    \include{extend}
+
+\end{frame}
+
+\begin{frame}[c]{}
+    \centering
+    \frametitle{\insertsubsection: Field Arithmetic}
+
+    Geometric Mean (10 $\mu$-Architectures)\\
+    \input{res-avg.tex}
+
+\end{frame}
+
+\newcommand{\hil}{\cellcolor{lightgray}}
+\begin{frame}[c]{}
+    \centering
+    \frametitle{\insertsubsection: Scalar Multiplication}
+    \vspace{-1em}
+    \only<2> {\include{figures/scmul}}
+    \only<3> {\include{figures/scmul13}}
+
+\end{frame}
+
+\subsection{Correctness}
+\begin{frame}[c]{}
+    \centering
+    \frametitle{\insertsubsection}
+
+    \include{extend_equiv}
+
+\end{frame}
+
+
+
+\section{Summary}
+\subsection{Summary}
+\begin{frame}[c]{}
+    \centering
+    \frametitle{\insertsubsection}
+
+    \pause
+    \begin{columns}
+        \column{0.6\textwidth}
+        \begin{itemize}
+            \item Compilation of cryptographic code \\$\implies$ Search \pause
+            \item Random Local Search + Runtime \pause %to find the best implementation code
+                % \item Exploit Hardware Properties \pause %Thereby exploit hardware uncertainties (randomly turn those setscrews)\\
+            \item \alert<4-5>{Proven-correct} assembly for field arithmetic by \fiat \pause
+            with \alert<5>{on-par performance} to hand-optimized assembly. \pause
+            \item \alert<6>{Curve25519} assembly in \alert<6>{BoringSSL}.\\
+                  \alert<6>{PR \#1329} at \alert<6>{bitcoin-core/secp256k1}.
+        \end{itemize}
+
+        \column{0.29\textwidth}
+        \centering
+
+        \pause
+        GitHub Project
+        \includegraphics[width=10em]{qr.png}
+    \end{columns}
+    \vskip.5em
+    \centerline{\texttt{https://0xade1a1de.github.io/CryptOpt}}
+
+
+\end{frame}
+
+\appendix
+
+\section{Extras}
+
+\subsection{Bet and Run}
+\begin{frame}[c]{}
+    \centering
+    \frametitle{\insertsubsection}
+    \include{figures/10710U}
+\end{frame}
+
+\end{document}
