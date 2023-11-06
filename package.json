@@ -63,7 +63,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "prettier": "^3.0.1",
-    "rollup": "^3.29.1",
+    "rollup": "^4.3.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-shell": "^1.0.9",
     "tslib": "^2.6.1",
