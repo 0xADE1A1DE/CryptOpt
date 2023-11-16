@@ -27,7 +27,7 @@ If you want to optimize on your own machine, or a different primitive you can
 1. Follow the instructions [in the INSTALL document](./INSTALL.md).
 1. Run `./CryptOpt --help` to check if the installation worked.
 1. Run `./CryptOpt` to see an optimization in action.
-1. Follow the instructions [in the Frist Steps document](./First_Steps.md) to get a feeling of what is going on.
+1. Follow the instructions [in the First Steps document](./First_Steps.md) to get a feeling of what is going on.
 
 The CryptOpt optimizer can also be used with non-Fiat Cryptography input. For more information see the `./test/manual-bridge/`
 
