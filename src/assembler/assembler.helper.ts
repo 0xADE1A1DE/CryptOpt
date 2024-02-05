@@ -15,7 +15,7 @@
  */
 
 import { Flags, Register, XmmRegister } from "@/enums";
-import { getQwRegFromByteReg, isByteRegister, isFlag, isRegister, isXmmRegister, matchArg } from "@/helper";
+import { getQwRegFromByteReg, isByteRegister, isFlag, isRegister, isMem, isXmmRegister, matchArg } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { CryptOpt } from "@/types";
 
@@ -51,7 +51,7 @@ export function sanityCheckAllocations(c: CryptOpt.DynArgument): void {
         }
         byReg[r64] = varname;
       }
-      if (matchArg(varname)) {
+      if (matchArg(varname) && isMem(store)) {
         throw new Error("should not be allocated.");
       }
       return byReg;

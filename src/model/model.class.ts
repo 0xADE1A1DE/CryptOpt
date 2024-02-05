@@ -25,6 +25,7 @@ import {
   DI_ABBRV,
   isADependentOnB,
   isCallerSave,
+  isXD,
   limbify,
   matchArg,
   matchArgPrefix,
@@ -203,9 +204,54 @@ export class Model {
   }
 
   /*
-   * @param candidates is a list of variable names like xNN, argNN, ...
-   * returns the one that we, in the current ordering, read last.
+   * @param candidates is a list of variable names like xNN, argNN, that are arguments to the curernt mulx
+   * returns the one that is loaded most in upcoming mulxs, and also returns a bit of debug inforamtion
    */
+  public static chooseMulxLoadValue(candidates: string[]): { msg: string; candidate: string | null } {
+    let msg = "; chooseMulxLoadValue";
+    if (candidates.length < 1) {
+      throw new Error("cannot choose from nothing, mate");
+    }
+    // well, not much to choose from, right?
+    if (candidates.length === 1) {
+      const [candidate] = candidates;
+      return { candidate, msg };
+    }
+
+    // Idea is:
+    // for each candidate, count how many consecutive upcoming mulx operations use it
+
+    // initalise counters:
+    const counters: { [candidateName: string]: number } = candidates.reduce(
+      (acc, candidate) => Object.assign(acc, { [candidate]: 0 }),
+      {},
+    );
+    const upcomingMulxOps = Model.nodesInTopologicalOrder
+      .slice(this._currentInstIdx)
+      .filter((op) => op.operation == "mulx");
+    msg += ` upcoming mulxs: ${upcomingMulxOps.map((m) => m.name.join("-")).join(", ")}`;
+
+    candidates.forEach((arg) => {
+      upcomingMulxOps.every((op) => {
+	if (!op.arguments.includes(arg)) { return false; }
+	counters[arg]++;
+	return true;
+      });
+    });
+    msg += ` counters ${JSON.stringify(counters)}`;
+
+    const sortedCounters = Object.entries(counters)
+      .sort(([, a], [, b]) => a - b)
+      .reverse();
+    // and return it's name
+    // if there is only two, and they are the same
+    if (sortedCounters.length == 2 && sortedCounters[0][1] == sortedCounters[1][1]) {
+      msg += ` only two candidates, and they both have the same count value of ${sortedCounters[0][1]}. returning null.`;
+      return { candidate: null, msg };
+    }
+    msg += ` choosing ${sortedCounters[0][0]} because of its higher count value of ${sortedCounters[0][1]}`;
+    return { candidate: sortedCounters[0][0], msg };
+  }
   public static chooseSpillValue(candidates: string[]): string {
     if (candidates.length < 1) {
       throw new Error("cannot choose from nothing, mate");

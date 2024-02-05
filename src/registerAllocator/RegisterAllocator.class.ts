@@ -463,6 +463,9 @@ export class RegisterAllocator {
     const caf = (flagToCheck: AllocationFlags): boolean =>
       ((allocationReq.allocationFlags ?? AllocationFlags.NONE) & flagToCheck) === flagToCheck;
     const inAllocationsTemp = allocationReq.in.map((readVariable) => {
+      const currentLocation = this._allocations[readVariable];
+      if (currentLocation && isRegister(currentLocation.store)) return currentLocation.store;
+
       const argMatchRes = matchArg(readVariable);
       if (argMatchRes) {
         // if we read from an argument such as arg1[3], we actually want to find arg1 in the allocations.
@@ -474,7 +477,6 @@ export class RegisterAllocator {
           throw new Error(`${readVariable} matched ~arg, but has no baseVar? wtf. Giving up.`);
         }
       }
-      const currentLocation = this._allocations[readVariable];
       if (!currentLocation) {
         // if is it not already allocated, it must be an immval, cause 'arg1' is always somewhere
         if (caf(AllocationFlags.DISALLOW_IMM)) {
@@ -593,7 +595,7 @@ export class RegisterAllocator {
       }
     }
 
-    if (caf(AllocationFlags.ONE_IN_MUST_BE_IN_RDX) && !inAllocations.includes(Register.rdx)) {
+    if (caf(AllocationFlags.ONE_IN_MUST_BE_IN_RDX) && !allocationReq.in.some((i) => this._allocations[i].store === Register.rdx)) {
       // since in inAllocations there is no rdx (otherwise we wont be in this branch)
       // we need to move one of inAllocations to rdx
 
@@ -605,8 +607,17 @@ export class RegisterAllocator {
 
       // we want now change any of those inAllocations with rdx.
 
-      // Paul chooses an element, which we'll move to rdx.
-      const element = Paul.chooseArg(allocationReq.in);
+      // try to be sophisticated in choosing the mulx Load value
+      const { msg, candidate } = Model.chooseMulxLoadValue(allocationReq.in);
+      this.addToPreInstructions(msg);
+      let element = "";
+      if (candidate != null) {
+        element = candidate;
+      } else {
+        // if this didn't work (none is clearly preferrable)
+        // let Paul choose an element, which we'll move to rdx.
+        element = Paul.chooseArg(allocationReq.in);
+      }
       const idx = allocationReq.in.indexOf(element);
       //TODO: refactor that a lil bit
 
@@ -1500,7 +1511,9 @@ export class RegisterAllocator {
     Object.keys(this._allocations)
       .filter(matchArg)
       .forEach((v) => {
-        delete this._allocations[v];
+        if (isMem(this._allocations[v].store)) {
+          delete this._allocations[v];
+        }
       });
 
     // empty and get current pres

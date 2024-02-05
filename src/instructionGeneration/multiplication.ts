@@ -148,9 +148,11 @@ function mulx64(ra: RegisterAllocator, c: CryptOpt.StringOperation): asm[] {
   });
 
   const [resLoR, resHiR] = allocation.oReg;
-  const [arg0R, arg1R] = allocation.in;
-  let argR = arg0R !== Register.rdx ? arg0R : arg1R;
-
+  const explicitArgs = allocation.in.filter(r => r !== Register.rdx);
+  if (explicitArgs.length !== 1) {
+    throw new Error("TSNH. mulx can only take one argument besides rdx");
+  }
+  let [argR] = explicitArgs;
   argR = makeArgRanR64(argR, ra);
 
   // if can use mulx
