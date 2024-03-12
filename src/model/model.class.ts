@@ -285,6 +285,9 @@ export class Model {
 
     let partner = min + 1 == max ? min : Paul.chooseBetween(max, min, BIAS.REVERSE_BELL);
     while (chosen == partner) {
+      // if chosen is same as partner
+      // randomize until it isn't
+      // this will work on condition: there are more than two choices in range.
       partner = Paul.chooseBetween(max, min, BIAS.REVERSE_BELL);
     }
 
