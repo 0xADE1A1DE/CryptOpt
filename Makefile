@@ -16,6 +16,7 @@ ROOT           := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 NODE_DIR       := $(ROOT)/bins/node
 NODE           := $(ROOT)/bins/node/bin/node
+UICA           := $(ROOT)/bins/uiCA
 NODE_VERSION   := 22.3.0
 
 PATH           := $(NODE_DIR)/bin:$(PATH)
@@ -26,6 +27,11 @@ BUILT_CRYPTOPT := $(ROOT)/dist/CryptOpt.js
 
 all: clean $(BUILT_CRYPTOPT)
 build: $(BUILT_CRYPTOPT)
+
+$(UICA):
+	mkdir -p ./bins
+	git clone https://github.com/andreas-abel/uiCA.git bins/uiCA
+	cd bins/uiCA && ./setup.sh
 
 $(NODE):
 	mkdir -p ./bins
@@ -42,7 +48,7 @@ FIAT_BINARIES=unsaturated_solinas word_by_word_montgomery dettman_multiplication
 $(FIAT_CHECKSUMS): $(addprefix $(FIAT_DATA_DIR)/, $(FIAT_BINARIES))
 	cd $(FIAT_DATA_DIR) && sha256sum $(FIAT_BINARIES) > $(notdir $(FIAT_CHECKSUMS))
 
-$(BUILT_CRYPTOPT): $(NODE) node_modules $(shell find ./src -type f -name '*ts') $(FIAT_CHECKSUMS)
+$(BUILT_CRYPTOPT): $(NODE) $(UICA)  node_modules $(shell find ./src -type f -name '*ts') $(FIAT_CHECKSUMS)
 	@echo "Building CryptOpt"
 	@PATH=$(PATH) npm run bundle
 	@test -e "$(@)" && touch $(@) && echo "Successfully built CryptOpt. :)"

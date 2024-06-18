@@ -164,7 +164,7 @@ export default class MeasureUtil {
 
         // call uiCA
         const uiCAArgs = ["-TPonly", "-arch", this.timer, "-raw", join(tmpDir, "binary.bin")];
-        const r = spawnSync("./uiCA", uiCAArgs);
+        const r = spawnSync("./bins/uiCA/uiCA.py", uiCAArgs);
         if (r.status != 0) {
           throw new Error(
             `uiCA command failed. STDERR:${r.stderr}, STDOUT: ${r.stdout}. May be because ./uiCA is not in the cwd.`,
