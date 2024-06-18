@@ -41,10 +41,12 @@ export function genStatusLine(a: {
   numEvals: number;
   evals: number;
   ratioString: string;
+  metricString: string;
   show_per_second: string;
+  objectiveFunction: string;
 }): string {
   const cyclDeltaR = Math.abs(a.analyseResult.rawMedian[0] - a.analyseResult.rawMedian[1])
-    .toString()
+    .toPrecision(3)
     .padStart(6);
 
   return [
@@ -54,7 +56,7 @@ export function genStatusLine(a: {
     `${bl}${a.stacklength.toString().padStart(3)}${re}`,
     `${cy}bs${a.batchSize.toString().padStart(5)}${re}`,
     `#inst:${cy}${a.no_of_instructions.toString().padStart(4)}${re}`,
-    `cyclΔ ${gn}${cyclDeltaR}${re}`,
+    `${a.objectiveFunction.substring(0, 4)}Δ ${gn}${cyclDeltaR}${re}`,
 
     // good
     `${yl}G ${a.analyseResult.batchSizeScaledrawMedian[a.indexGood].toFixed(0).padStart(3)} cycl` +
@@ -73,6 +75,7 @@ export function genStatusLine(a: {
     // lib
     `${pu}L ${a.analyseResult.batchSizeScaledrawMedian[2].toFixed(0).padStart(3)}${re}`,
     `${a.ratioString[0] === "0" ? rd : gn}l/g ${bl}${a.ratioString.padStart(6)}${re}`,
+    `${pu}met${a.metricString.padStart(6)}${re}`,
 
     `${bl}${a.choice}${re}`,
     `${cy}${Model.permutationStats}${re}`,
@@ -85,6 +88,9 @@ export function genStatusLine(a: {
 export function genStatistics(a: {
   paddedSeed: string;
   ratioString: string;
+  metricString: string;
+  objectiveFunction: string;
+  uicaarch: string;
   evals: number;
   elapsed: number;
   batchSize: number;
@@ -100,6 +106,7 @@ export function genStatistics(a: {
   return [
     `; cpu ${cpus()[0].model}`,
     `; ratio ${a.ratioString}`,
+    `; metric ${a.metricString} (${a.objectiveFunction}, ${a.uicaarch})`,
     `; seed ${a.paddedSeed} `,
     `; CC / CFLAGS ${CC} / ${CFLAGS} `,
     `; cyclegoal; ${a.cyclegoal}`,

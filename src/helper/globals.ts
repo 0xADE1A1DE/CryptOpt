@@ -19,6 +19,7 @@ import type { CryptoptGlobals } from "@/types";
 const globals: CryptoptGlobals = {
   currentRatio: Infinity,
   convergence: [] as string[], // numbers, but .toFixed(4)
+  convergenceMetric: [] as string[], // see interface
   time: {
     // in seconds
     validate: 0,

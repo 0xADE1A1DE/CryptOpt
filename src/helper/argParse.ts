@@ -30,7 +30,13 @@ import {
 } from "@/bridge/fiat-bridge/constants";
 import { errorOut, ERRORS } from "@/errors";
 
-import { FRAME_POINTER_OPTIONS, MEMORY_CONSTRAINTS_OPTIONS, ParsedArgsT } from "../types";
+import {
+  FRAME_POINTER_OPTIONS,
+  UICA_OPTIONS,
+  MEMORY_CONSTRAINTS_OPTIONS,
+  ParsedArgsT,
+  OBJECTIVE_FUNCTION_OPTIONS,
+} from "../types";
 
 const y = await yargs(process.argv.slice(2));
 
@@ -215,6 +221,21 @@ export const parsedArgs = y
     describe:
       "Defines if memory reads are contraint. 'none' will not enforce anything. All reads are permitted at any time. 'all' enforces that no read from any `argN[n]` happens after any write to `outN[n]`. 'out1-arg1' enforces that no read from arg1[n] is permitted after `out1[n]` has been written (essentially permits mul(r,r,x) and sq(a,a); but not if elemets overlap but not align. (e.g. mul(r+1,r,x)))",
     choices: MEMORY_CONSTRAINTS_OPTIONS,
+  })
+  .option("uicaarch", {
+    default: "SKL",
+    string: true,
+    describe:
+      "Requires --objectiveFunction=uiCA. Then, CryptOpt uses estimation of uiCA instead of running the code natively. This option specifies the simulated architecture. Ensure uiCA is available in the CryptOpt directory. See INSTALL.md for details.",
+    choices: UICA_OPTIONS,
+  })
+  .option("objectiveFunction", {
+    default: "cycles",
+    string: true,
+    describe:
+      "The opjective function which describes which mutation should be kept or discarded. Options: 'cycles' run on hardware, use cycles; stack: size of the used stack slots; length: purely optimise for fewer instructions; uiCA: use uiCA's estimation. Everything but cycles effectively disables monkey-testing becuase the code is not executed.",
+
+    choices: OBJECTIVE_FUNCTION_OPTIONS,
   })
   .help("help")
   .alias("h", "help")

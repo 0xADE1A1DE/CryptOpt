@@ -76,6 +76,7 @@ export class Model {
       body: Model._nodes,
       ratio: globals.currentRatio,
       convergence: globals.convergence,
+      convergenceMetric: globals.convergenceMetric,
       seed: Paul.state,
       time: {
         validate: globals.time.validate,
@@ -102,12 +103,13 @@ export class Model {
 
   public static import(filename: fs.PathLike) {
     const parsed = JSON.parse(fs.readFileSync(filename).toString());
-    const { to, body, seed, convergence } = parsed;
+    const { to, body, seed, convergence, convergenceMetric } = parsed;
     const m = Model.getInstance();
     Model._order = to;
     Model._nodes = body;
     Paul.seed = seed;
     globals.convergence = convergence;
+    globals.convergenceMetric = convergenceMetric;
     if ("time" in parsed) {
       globals.time = parsed.time;
     }

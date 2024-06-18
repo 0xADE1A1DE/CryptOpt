@@ -37,6 +37,8 @@ _arguments -S -s \
     '(-s --seed)'{-s,--seed=}'[Seed to start the randomness with\[number\]]:seed' \
     '--framePointer=[Specify how the register for the frame pointer (rbp) is used]:framepointer:->framepointeroptions' \
     '--memoryConstraints=[Specify any memory contraints. No contraints, all, or out1--arg1 may be aliased]:memorycontraints:->memorycontraintoptions' \
+    '--uicaarch=[use uiCA estimation instead of running on hardware.]:uiCAConstraints:->uiCAOptions' \
+    '--objectiveFunction=[use objective Function instead of running on hardware.]:objectiveFunctionConstraints:->objectiveFunctionOptions' \
     '(-h,--help)'{-h,--help}'[Help]:get help prompt' \
     '(--version)'{-v,--version}'[Version]:Version information' \
     && ret=0
@@ -81,6 +83,28 @@ case "$state" in
             'all[will read all memroy from arguments (argN\[n\]) before writing any values to outN\[n\]]' \
             'out1-arg1[will not read arg1\[n\] after out1\[n\] has been written]' \
         ;;
+    uiCAOptions)
+        _values 'uiCAConstraints' \
+            'SNB[Sandy Bridge]' \
+            'IVB[Ivy Bridge]' \
+            'HSW[Haswell]' \
+            'BDW[Broadwell]' \
+            'SKL[Skylake]' \
+            'SKX[Skylake-X]' \
+            'KBL[Kaby Lake]' \
+            'CFL[Coffee Lake]' \
+            'CLX[Coffee Lake-X]' \
+            'ICL[Ice Lake]' \
+            'TGL[Tiger Lake]' \
+            'RKL[Rocket Lake]' \
+            ;;
+    objectiveFunctionOptions)
+        _values 'objectiveFunctionConstraints' \
+            'cycles[run on hardware]' \
+            'stack[used stack slots (# `mov \[rsp + off\], riz` instructions)]' \
+            'length[length of the function (# instructions)]' \
+            'uiCA[throughput estimation from uiCA. Speicfy arch with --uicaarch]' \
+            ;;
 esac
 
 

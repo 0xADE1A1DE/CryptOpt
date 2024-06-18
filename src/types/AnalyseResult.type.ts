@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { MeasureResult } from "measuresuite";
+import type { CryptOptMeasureResult } from "@/optimizer/measure.class";
 
 export type numTripel = [cyclesA: number, cyclesB: number, cyclesC: number];
 
@@ -39,7 +39,7 @@ export interface AnalyseResult {
   chunks: [chunksA: number, chunksB: number];
 
   correct: boolean;
-  rawResult: MeasureResult; // hopefully just for debug/dev purposes
+  rawResult: CryptOptMeasureResult; // hopefully just for debug/dev purposes
 }
 
 export interface AnalyseMeasureResultOptions {

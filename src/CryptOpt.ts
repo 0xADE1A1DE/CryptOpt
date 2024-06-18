@@ -76,7 +76,7 @@ else if (parsedArgsFromCli.readState) {
   }
 }
 
-const { single, bets, betRatio, curve, method, verbose } = parsedArgs;
+const { single, bets, betRatio, curve, method, verbose, objectiveFunction, uicaarch } = parsedArgs;
 if (parsedArgs.resultDir == "") {
   parsedArgs.resultDir = resolve(process.cwd(), "results");
 }
@@ -97,7 +97,7 @@ if (!verbose) {
 const symbolname = new Optimizer(parsedArgs).getSymbolname(true);
 registerExitHooks({ ...parsedArgs, symbolname });
 
-type RunResult = { statefile: string; ratio: number; convergence: string[] };
+type RunResult = { statefile: string; ratio: number; convergenceMetric: string[]; convergence: string[] };
 
 async function allBets(evals: number, bets: number): Promise<RunResult[]> {
   const runRes = [] as RunResult[];
@@ -147,8 +147,8 @@ async function run(args: OptimizerArgs): Promise<RunResult> {
 
   const [statefile] = generateResultFilename({ ...args, symbolname: optimizer.getSymbolname() });
   Model.persist(statefile, parsedArgs);
-  const { ratio, convergence } = Model.getState();
-  return { statefile, ratio, convergence };
+  const { ratio, convergence, convergenceMetric } = Model.getState();
+  return { statefile, ratio, convergence, convergenceMetric };
 }
 
 let runResults: RunResult[];
@@ -193,22 +193,28 @@ if ("time" in parsed) {
 const lastConvergence = runResults[runResults.length - 1].convergence;
 const longestDataRow = lastConvergence.length;
 
-const spaceSeparated = runResults.reduce((arr, { convergence }) => {
-  // in order to create a matrix for gnuplot, we need to pad with " ?"
-  const paddingAmount = longestDataRow - convergence.length;
-  const paddingArray = new Array(paddingAmount).fill("  ?   ");
-  arr.push(convergence.concat(paddingArray).join(" "));
-  return arr;
-}, [] as string[]);
+const spaceSeparated = runResults.reduce(
+  (arr, { convergence, convergenceMetric }) => {
+    // in order to create a matrix for gnuplot, we need to pad with " ?"
+    const paddingAmount = longestDataRow - convergence.length;
+    const paddingArray = new Array(paddingAmount).fill("  ?   ");
+    arr.conv.push(convergence.concat(paddingArray).join(" "));
+    arr.metric.push(convergenceMetric.concat(paddingArray).join(" "));
+    return arr;
+  },
+  { conv: [], metric: [] } as { conv: string[]; metric: string[] },
+);
 
-const [datFileFull, gpFileFull, pdfFileFull] = generateResultFilename({ ...parsedArgs, symbolname }, [
-  ".dat",
-  ".gp",
-  ".pdf",
-]);
+const [datFileFull, datMetricFileFull, gpFileFull, pdfFileFull] = generateResultFilename(
+  { ...parsedArgs, symbolname },
+  [".dat", "_metric.dat", ".gp", ".pdf"],
+);
 
-writeString(datFileFull, spaceSeparated.join("\n"));
-process.stdout.write(`Wrote ${cy}${datFileFull}${re} ${spaceSeparated.length}x${longestDataRow}`);
+writeString(datFileFull, spaceSeparated.conv.join("\n"));
+writeString(datMetricFileFull, spaceSeparated.metric.join("\n"));
+process.stdout.write(
+  `Wrote ${cy}${datFileFull},${datMetricFileFull}${re} ${spaceSeparated.conv.length}x${longestDataRow}`,
+);
 
 Logger.log(JSON.stringify(times));
 const title = [
@@ -218,30 +224,46 @@ const title = [
   new Date().toISOString(),
   hostname(),
   Object.entries(times).map((k, v) => `Time for ${k}: ${(v / 60).toFixed(2)}min`),
-].join(", ");
+  objectiveFunction,
+  objectiveFunction === "uiCA" ? uicaarch : null,
+]
+  .filter((f) => f)
+  .join(", ");
 
-writeString(
-  gpFileFull,
-  [
-    `#!/usr/bin/env gnuplot\n`,
-    `set title "${title}"`,
-    "# missing values are the ones from earlier-finished seed-searching evaluations",
-    `set datafile missing "?"\n`,
-    "# setting output sizes and filename",
-    "set terminal pdf size 80cm,20cm",
-    `set output '${pdfFileFull}'\n`,
-    "# set x",
-    'set xlabel "Mutation"',
-    "set logscale x 10\n",
-    "# set y",
-    // "set yrange [0:2]\n",
-    `set ylabel "ratio: '${env.CC}-compiled cycle lib'/'cycle good' "\n`,
-    "# remove legend",
-    "unset key\n",
-    "# and plot the matrix with line colors, and a line at y=1 with color 0 (gre)",
-    `plot "${datFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 linecolor variable with lines, 1 lc 0`,
-  ].join("\n"),
-);
+const common = [
+  `#!/usr/bin/env gnuplot\n`,
+  `set title "${title}"`,
+  "# missing values are the ones from earlier-finished seed-searching evaluations",
+  `set datafile missing "?"\n`,
+  "# setting output sizes and filename",
+  "set terminal pdf size 80cm,20cm",
+  `set output '${pdfFileFull}'\n`,
+  "# set x",
+  'set xlabel "Mutation"',
+  "set logscale x 10\n",
+  "# remove legend",
+  "unset key\n",
+  "# set y",
+  // "set yrange [0:2]\n",
+  `set ylabel "ratio: '${env.CC}-compiled cycle lib'/'cycle good' "\n`,
+];
+
+const plots = [
+  `"${datFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 with lines linecolor variable`,
+  "1 lc 0",
+];
+if (objectiveFunction !== "cycles") {
+  common.push("set y2tics", `set y2label "${objectiveFunction}"`);
+  plots.push(
+    `"${datMetricFileFull}" matrix using ($1*${PRINT_EVERY}):3:2 with lines linecolor variable dt 3 axes x1y2`,
+  );
+}
+
+const plot = [
+  "# and plot the matrix with line colors, and a line at y=1 with color 0 (gre)",
+  `plot ${plots.join(", ")}`,
+];
+writeString(gpFileFull, common.concat(plot).join("\n"));
 
 process.stdout.write(" Gen Pdf...");
 const d = (chunk: Buffer | string) => {

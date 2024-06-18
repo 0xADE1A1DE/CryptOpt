@@ -18,23 +18,23 @@ type Err = { exitCode: number; msg: string };
 export const ERRORS: { [k: string]: Err } = {
   measureGeneric: {
     exitCode: 20,
-    msg: "measuresuite.measure should return a result but didn't. RES/generic_error_{A,B}.asm as been written for debug.",
+    msg: "measureUtil.measure should return a result but didn't. RES/generic_error_{A,B}.asm as been written for debug.",
   },
   measureIncorrect: {
     exitCode: 21,
-    msg: `measuresuite.measure should return a result but didn't, because the result is not the same as per measureCheck. RES/tested_incorrect{_A.asm,_B.asm,.json} haven been written for debug.`,
+    msg: `measureUtil.measure should return a result but didn't, because the result is not the same as per measureCheck. RES/tested_incorrect{_A.asm,_B.asm,.json} haven been written for debug.`,
   },
   measureInvalid: {
     exitCode: 22,
-    msg: `measuresuite.measure should return a result but didn't, because the ASM string could not be assembled. RES/tested_incorrect{_A.asm,_B.asm,.json} haven been written for debug.`,
+    msg: `measureUtil.measure should return a result but didn't, because the ASM string could not be assembled. RES/tested_incorrect{_A.asm,_B.asm,.json} haven been written for debug.`,
   },
   measureInsufficientData: {
     exitCode: 23,
-    msg: "measuresuite.measure did not yield even one data point.",
+    msg: "measureUtil.measure did not yield even one data point.",
   },
   measureCannotAnalyze: {
     exitCode: 24,
-    msg: "measuresuite.measure did yield data points, but could not be analyzed.",
+    msg: "measureUtil.measure did yield data points, but could not be analyzed.",
   },
   bcbMakeFail: {
     exitCode: 30,

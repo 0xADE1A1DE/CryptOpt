@@ -16,7 +16,6 @@
 
 import { execSync } from "child_process";
 import { appendFileSync, existsSync, rmSync } from "fs";
-import { Measuresuite } from "measuresuite";
 import { tmpdir } from "os";
 import { join, resolve as pathResolve } from "path";
 
@@ -30,6 +29,7 @@ import {
   LOG_EVERY,
   padSeed,
   PRINT_EVERY,
+  re,
   shouldProof,
   toggleFUNCTIONS,
   writeString,
@@ -43,11 +43,12 @@ import type { AnalyseResult, OptimizerArgs } from "@/types";
 
 import { genStatistics, genStatusLine, logMutation, printStartInfo } from "./optimizer.helper";
 import { init } from "./optimizer.helper.class";
+import MeasureUtil from "./measure.class";
 
 let choice: CHOICE;
 
 export class Optimizer {
-  private measuresuite: Measuresuite;
+  private measureutil: MeasureUtil;
   private libcheckfunctionDirectory: string; // aka. /tmp/CryptOpt.cache/yolo123
   private symbolname: string;
   public getSymbolname(deleteCache = false): string {
@@ -55,6 +56,9 @@ export class Optimizer {
       this.cleanLibcheckfunctions();
     }
     return this.symbolname;
+  }
+  private get isMeasuringDefaultCycles(): boolean {
+    return this.args.objectiveFunction == "cycles";
   }
 
   public constructor(private args: OptimizerArgs) {
@@ -65,10 +69,11 @@ export class Optimizer {
 
     const { measuresuite, symbolname } = init(this.libcheckfunctionDirectory, args);
 
-    this.measuresuite = measuresuite;
+    this.measureutil = new MeasureUtil(measuresuite, args);
     this.symbolname = symbolname;
 
     globals.convergence = [];
+    globals.convergenceMetric = [];
     globals.mutationLog = [
       "evaluation,choice,kept,PdetailsBackForwardChosenstepsWaled,DdetailsKindNumhotNumall",
     ];
@@ -137,11 +142,12 @@ export class Optimizer {
       printStartInfo({
         ...this.args,
         symbolname: this.symbolname,
-        counter: this.measuresuite.timer,
+        counter: this.measureutil.timer,
       });
       let batchSize = 200;
       const numBatches = 31;
       let ratioString = "";
+      let metricString = "";
       let numEvals = 0;
 
       const optimistaionStartDate = Date.now();
@@ -204,8 +210,8 @@ export class Optimizer {
                 this.asmStrings[FUNCTIONS.F_B],
               );
             }
-            // here we need the barriers
-            const results = this.measuresuite.measure(batchSize, numBatches, [
+
+            const results = this.measureutil.measureMeasuresuite(batchSize, numBatches, [
               this.asmStrings[FUNCTIONS.F_A],
               this.asmStrings[FUNCTIONS.F_B],
             ]);
@@ -245,10 +251,28 @@ export class Optimizer {
             }
             writeString(join(this.args.resultDir, "generic_error_A.asm"), this.asmStrings[FUNCTIONS.F_A]);
             writeString(join(this.args.resultDir, "generic_error_B.asm"), this.asmStrings[FUNCTIONS.F_B]);
+            console.error(e);
             errorOut(ERRORS.measureGeneric);
           }
 
           const [meanrawA, meanrawB, meanrawCheck] = analyseResult.rawMedian;
+
+          let metricA = meanrawA;
+          let metricB = meanrawB;
+
+          // and additionally, if necessary, measure other metrics to base decision on
+          if (!this.isMeasuringDefaultCycles) {
+            const resultsMetric = this.measureutil.measure(1, 1, [
+              this.asmStrings[FUNCTIONS.F_A],
+              this.asmStrings[FUNCTIONS.F_B],
+            ]);
+
+            if (!resultsMetric) {
+              throw new Error(`Cannot use metric ${this.measureutil.timer}. Abort. `);
+            }
+            metricA = resultsMetric.cycles[0][0];
+            metricB = resultsMetric.cycles[1][0];
+          }
 
           batchSize = Math.ceil((Number(this.args.cyclegoal) / meanrawCheck) * batchSize);
           // We want to limit for some corner cases.
@@ -263,9 +287,9 @@ export class Optimizer {
 
           if (
             // A is not worse and A is new
-            (meanrawA <= meanrawB && currentFunctionIsA()) ||
+            (metricA <= metricB && currentFunctionIsA()) ||
             // or B is not worse and B is new
-            (meanrawA >= meanrawB && !currentFunctionIsA())
+            (metricA >= metricB && !currentFunctionIsA())
           ) {
             Logger.log("kept    mutation");
             kept = true;
@@ -277,7 +301,7 @@ export class Optimizer {
             kept = false;
             this.revertFunction();
           }
-          const indexGood = Number(meanrawA > meanrawB);
+          const indexGood = Number(metricA > metricB);
           const indexBad = 1 - indexGood;
           globals.currentRatio = meanrawCheck / Math.min(meanrawB, meanrawA);
 
@@ -286,6 +310,9 @@ export class Optimizer {
 
           ratioString = globals.currentRatio /*aka: new ratio*/
             .toFixed(4);
+          metricString = this.isMeasuringDefaultCycles
+            ? ratioString
+            : Math.min(metricA, metricB).toPrecision(4);
 
           per_second_counter++;
           if (Date.now() - time > 1000) {
@@ -313,6 +340,7 @@ export class Optimizer {
               no_of_instructions: this.no_of_instructions,
               numEvals,
               ratioString,
+              metricString,
               show_per_second,
               stacklength,
               symbolname: this.symbolname,
@@ -321,6 +349,7 @@ export class Optimizer {
             process.stdout.write(statusline);
 
             globals.convergence.push(ratioString);
+            globals.convergenceMetric.push(metricString);
           }
 
           // Increase  Number of evaluations taken.
@@ -339,6 +368,9 @@ export class Optimizer {
             const statistics = genStatistics({
               paddedSeed,
               ratioString,
+              metricString,
+              objectiveFunction: this.args.objectiveFunction,
+              uicaarch: this.args.uicaarch,
               evals: this.args.evals,
               elapsed,
               batchSize,
@@ -346,7 +378,7 @@ export class Optimizer {
               acc: accumulatedTimeSpentByMeasuring,
               numRevert: this.numRevert,
               numMut: this.numMut,
-              counter: this.measuresuite.timer,
+              counter: this.measureutil.timer,
               framePointer: this.args.framePointer,
               memoryConstraints: this.args.memoryConstraints,
               cyclegoal: this.args.cyclegoal,
@@ -390,7 +422,7 @@ export class Optimizer {
             }
             Logger.log("done with that current price of assembly code.");
             this.cleanLibcheckfunctions();
-            const v = this.measuresuite.destroy();
+            const v = this.measureutil.destroy();
             Logger.log(`Wonderful. Done with my work. Destroyed measuresuite (${v}). Time for lunch.`);
 
             resolve(0);

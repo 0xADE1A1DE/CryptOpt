@@ -30,7 +30,29 @@ export const FRAME_POINTER_OPTIONS = ["omit", "save", "constant"] as const;
 export type FRAME_POINTER_OPTIONS_T = (typeof FRAME_POINTER_OPTIONS)[number];
 
 export const MEMORY_CONSTRAINTS_OPTIONS = ["none", "all", "out1-arg1"] as const;
+export const UICA_OPTIONS = [
+  "SNB",
+  "IVB",
+  "HSW",
+  "BDW",
+  "SKL",
+  "SKX",
+  "KBL",
+  "CFL",
+  "CLX",
+  "ICL",
+  "TGL",
+  "RKL",
+] as const;
+export const OBJECTIVE_FUNCTION_OPTIONS = [
+  "cycles", // default, run on hardware, use cycles
+  "stack", // size of the used stack slots
+  "length", // purely optimise for fewer instructions
+  "uiCA", // use uiCA's estimation
+] as const;
 export type MEMORY_CONSTRAINTS_OPTIONS_T = (typeof MEMORY_CONSTRAINTS_OPTIONS)[number];
+export type UICA_OPTIONS_T = (typeof UICA_OPTIONS)[number];
+export type OBJECTIVE_FUNCTION_OPTIONS_T = (typeof OBJECTIVE_FUNCTION_OPTIONS)[number];
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CryptOpt {

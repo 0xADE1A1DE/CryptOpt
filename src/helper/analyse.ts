@@ -19,13 +19,8 @@ import type { AsmFunctionSummary } from "measuresuite";
 import * as Stats from "simple-statistics";
 
 import { errorOut, ERRORS } from "@/errors";
-import type {
-  AnalyseMeasureResultOptions,
-  AnalyseResult,
-  MeasureResult,
-  numTripel,
-  QuickStats,
-} from "@/types";
+import type { AnalyseMeasureResultOptions, AnalyseResult, numTripel, QuickStats } from "@/types";
+import type { CryptOptMeasureResult } from "@/optimizer/measure.class";
 
 /**
  * @param result - the result to analyse
@@ -34,7 +29,7 @@ import type {
  * @param options.checkCorrectness // throws if not correct; if this options-switch is correct
  */
 export function analyseMeasureResult(
-  result: MeasureResult | null,
+  result: CryptOptMeasureResult | null,
   options: AnalyseMeasureResultOptions,
 ): AnalyseResult {
   // assign default values
@@ -59,18 +54,28 @@ export function analyseMeasureResult(
     errorOut(ERRORS.measureInsufficientData);
   }
 
-  const [cc, ca, cb] = result.cycles.map(analyseRow);
-  const rawMedian: numTripel = [ca.pre.median, cb.pre.median, cc.pre.median];
+  let ca: { pre: QuickStats; post: QuickStats };
+  let cb: { pre: QuickStats; post: QuickStats };
+  let cc: { pre: QuickStats; post: QuickStats } | null = null;
+  if (result.cycles.length == 3) {
+    // e.g. assuming its cc ca cb, the default when running the code on the hardware
+    [cc, ca, cb] = result.cycles.map(analyseRow);
+  } else {
+    // e.g. if using estimates rather than execution data
+    [ca, cb] = result.cycles.map(analyseRow);
+    cc = null;
+  }
+  const rawMedian: numTripel = [ca.pre.median, cb.pre.median, cc?.pre.median ?? -1];
 
   if (rawMedian.some(isNaN)) {
     console.error("TSNH. Some mean is NaN." + JSON.stringify(result));
     process.exit(4);
   }
 
-  const rawStddev: numTripel = [ca.pre.stddev, cb.pre.stddev, cc.pre.stddev];
-  const noOutlierMedian: numTripel = [ca.post.median, cb.post.median, cc.post.median];
+  const rawStddev: numTripel = [ca.pre.stddev, cb.pre.stddev, cc?.pre.stddev ?? -1];
+  const noOutlierMedian: numTripel = [ca.post.median, cb.post.median, cc?.post.median ?? -1];
 
-  const noOutlierStddev: numTripel = [ca.post.stddev, cb.post.stddev, cc.post.stddev];
+  const noOutlierStddev: numTripel = [ca.post.stddev, cb.post.stddev, cc?.post.stddev ?? -1];
 
   const scale = (cyc: number): number => cyc / options.batchSize;
 
@@ -105,9 +110,22 @@ function cleanRow(arr: Array<number | undefined>, thres = 0): number[] {
 //helpers -getmedian
 export function analyseRow(arr: Array<number | undefined>): { pre: QuickStats; post: QuickStats } {
   const cleaned = cleanRow(arr);
-  // which data to consider;
-  const [pre, post] = createStatistics(cleaned);
 
+  // if we only have one datapoint, no need for statistics.
+  if (cleaned.length == 1) {
+    const p = {
+      median: cleaned[0],
+      stddev: -1,
+      n: 1,
+    };
+    return {
+      pre: p,
+      post: p,
+    };
+  }
+
+  // which data to consider; i.e remove outliers
+  const [pre, post] = createStatistics(cleaned);
   return {
     pre: {
       median: Stats.median(pre),

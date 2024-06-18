@@ -52,6 +52,8 @@ export function getTestArgs(filename: string): OptimizerArgs {
     redzone: true,
     framePointer: "omit",
     memoryConstraints: "none",
+    objectiveFunction: "cycles",
+    uicaarch: "RKL",
   };
 }
 

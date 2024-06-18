@@ -17,6 +17,7 @@
 export interface CryptoptGlobals {
   currentRatio: number;
   convergence: string[]; // numbers, but .toFixed(4)
+  convergenceMetric: string[]; // numbers, but .toFixed(4) on which co decides to keep. may be cycles or uica or #instr., ...
   time: {
     // in seconds
     validate: number;
