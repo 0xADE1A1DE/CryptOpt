@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
- 
 import { defaults } from "lodash-es";
 import { describe, expect, it, vi } from "vitest";
 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
- 
 import { describe, expect, it } from "vitest";
 
 import { createDependencyRelation, nodeLookupMap } from "@/model";

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
- 
 import { describe, expect, it } from "vitest";
 
 import { getArguments, getScalarsAndImmMappedAsConstArg } from "@/bridge/bitcoin-core-bridge/helpers";

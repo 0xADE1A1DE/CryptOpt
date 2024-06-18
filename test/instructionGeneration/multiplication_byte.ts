@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
- 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AllocationFlags, ByteRegister, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Register } from "@/enums";

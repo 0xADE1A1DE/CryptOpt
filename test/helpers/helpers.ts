@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
- 
 import { describe, expect, it } from "vitest";
 
 import { C_DI_SPILL_LOCATION, DECISION_IDENTIFIER } from "@/enums";
