@@ -5,7 +5,7 @@ updates:
     target-branch: "main"
     schedule:
       interval: "weekly"
-    ignore: 
+    ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
   - package-ecosystem: "gitsubmodule"
@@ -14,4 +14,3 @@ updates:
       interval: "daily"
     labels:
       - "submodules"
-
