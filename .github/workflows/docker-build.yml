@@ -10,12 +10,10 @@ on:
 jobs:
   build:
     name: Build and test inside of the Docker image
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
-
-    - name: Build and push Docker images (always main branch)
-      uses: docker/build-push-action@v4
-      with:
-        push: false
-
+      - name: Build and push Docker images (always main branch)
+        uses: docker/build-push-action@v4
+        with:
+          push: false

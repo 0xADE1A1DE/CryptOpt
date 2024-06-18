@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
       - uses: actions/checkout@v3
 
       - name: Check Format
@@ -27,12 +27,12 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: npm clean-install --ignore-scripts
-        
+
       - name: Check Lint
         run: npm run lint-check

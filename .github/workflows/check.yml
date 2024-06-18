@@ -4,47 +4,46 @@ on:
   pull_request:
   push:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   build:
     name: Build and test CryptOpt
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: 0xADE1A1DE/AssemblyLine@main
+      - uses: 0xADE1A1DE/AssemblyLine@main
 
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-    - name: TS build
-      run: make build
+      - name: TS build
+        run: make build
 
-    - name: TS checks
-      run: npm run test-cov
+      - name: TS checks
+        run: npm run test-cov
 
-    - name: Code Coverage Summary
-      if: ${{ github.actor != 'dependabot[bot]' }}
-      uses: irongut/CodeCoverageSummary@v1.2.0
-      with:
-        badge: true
-        format: markdown
-        output: both
-        filename: ./coverage/cobertura-coverage.xml
+      - name: Code Coverage Summary
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: irongut/CodeCoverageSummary@v1.2.0
+        with:
+          badge: true
+          format: markdown
+          output: both
+          filename: ./coverage/cobertura-coverage.xml
 
-    - uses: jwalton/gh-find-current-pr@v1
-      if: ${{ github.actor != 'dependabot[bot]' }}
-      id: finder
-    - name: Add Coverage PR Comment
-      if: ${{ github.actor != 'dependabot[bot]' }}
-      uses: marocchino/sticky-pull-request-comment@v2
-      with:
-        number: ${{ steps.finder.outputs.pr }}
-        recreate: true
-        path: code-coverage-results.md
-
+      - uses: jwalton/gh-find-current-pr@v1
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        id: finder
+      - name: Add Coverage PR Comment
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          number: ${{ steps.finder.outputs.pr }}
+          recreate: true
+          path: code-coverage-results.md
