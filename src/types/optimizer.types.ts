@@ -21,6 +21,7 @@ import {
   FRAME_POINTER_OPTIONS_T,
   MEMORY_CONSTRAINTS_OPTIONS_T,
   OBJECTIVE_FUNCTION_OPTIONS_T,
+  SPILLING_T,
   UICA_OPTIONS_T,
 } from "@/types";
 
@@ -45,6 +46,7 @@ export type OptimizerArgs = {
   memoryConstraints: MEMORY_CONSTRAINTS_OPTIONS_T;
   uicaarch: UICA_OPTIONS_T;
   objectiveFunction: OBJECTIVE_FUNCTION_OPTIONS_T;
+  spilling: SPILLING_T;
 };
 export type ParsedArgsT = OptimizerArgs & {
   startFromBestJson: boolean;

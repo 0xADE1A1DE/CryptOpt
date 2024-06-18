@@ -37,7 +37,7 @@ import {
 import globals from "@/helper/globals";
 import Logger from "@/helper/Logger.class";
 import { Model } from "@/model";
-import { Paul, sha1Hash } from "@/paul";
+import { BIAS, Paul, sha1Hash } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
 import type { AnalyseResult, OptimizerArgs } from "@/types";
 
@@ -110,7 +110,7 @@ export class Optimizer {
     Logger.log("Mutationalita");
     switch (choice) {
       case CHOICE.PERMUTE: {
-        Model.mutatePermutation();
+        Model.mutatePermutation(this.args.spilling == "uniform" ? BIAS.UNIFORM : BIAS.REVERSE_BELL);
         this.revertFunction = () => {
           this.numRevert.permutation++;
           Model.revertLastMutation();

@@ -50,9 +50,15 @@ export const OBJECTIVE_FUNCTION_OPTIONS = [
   "length", // purely optimise for fewer instructions
   "uiCA", // use uiCA's estimation
 ] as const;
+export const SPILLING = [
+  "reversebell", // default, prefers ends (close to the operation that consumes a value)
+  "uniform", // 'uniform' uniformly selects in the possible interval.
+] as const;
+
 export type MEMORY_CONSTRAINTS_OPTIONS_T = (typeof MEMORY_CONSTRAINTS_OPTIONS)[number];
 export type UICA_OPTIONS_T = (typeof UICA_OPTIONS)[number];
 export type OBJECTIVE_FUNCTION_OPTIONS_T = (typeof OBJECTIVE_FUNCTION_OPTIONS)[number];
+export type SPILLING_T = (typeof SPILLING)[number];
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CryptOpt {

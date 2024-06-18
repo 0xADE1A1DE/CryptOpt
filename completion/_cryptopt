@@ -39,6 +39,7 @@ _arguments -S -s \
     '--memoryConstraints=[Specify any memory contraints. No contraints, all, or out1--arg1 may be aliased]:memorycontraints:->memorycontraintoptions' \
     '--uicaarch=[use uiCA estimation instead of running on hardware.]:uiCAConstraints:->uiCAOptions' \
     '--objectiveFunction=[use objective Function instead of running on hardware.]:objectiveFunctionConstraints:->objectiveFunctionOptions' \
+    '--spilling=[use uniform or biased scheduling mutations]:spillingConstraints:->spillingOptions' \
     '(-h,--help)'{-h,--help}'[Help]:get help prompt' \
     '(--version)'{-v,--version}'[Version]:Version information' \
     && ret=0
@@ -104,6 +105,11 @@ case "$state" in
             'stack[used stack slots (# `mov \[rsp + off\], riz` instructions)]' \
             'length[length of the function (# instructions)]' \
             'uiCA[throughput estimation from uiCA. Speicfy arch with --uicaarch]' \
+            ;;
+    spillingOptions)
+        _values 'spillingConstraints' \
+            'reversebell[bias towards ends of interval]' \
+            'uniform[uniformly at random select from interval]' \
             ;;
 esac
 

@@ -245,7 +245,7 @@ export class Model {
     return lastRead[0];
   }
 
-  public static mutatePermutation(): void {
+  public static mutatePermutation(bias = BIAS.REVERSE_BELL): void {
     const m = Model.getInstance();
     m.backupbody();
 
@@ -285,7 +285,7 @@ export class Model {
       return this.mutatePermutation();
     }
 
-    const partner = min + 1 == max ? min : Paul.chooseBetween(max, min, BIAS.REVERSE_BELL);
+    const partner = min + 1 == max ? min : Paul.chooseBetween(max, min, bias);
     if (chosen == partner) {
       // would that ever happen ?
       return this.mutatePermutation();

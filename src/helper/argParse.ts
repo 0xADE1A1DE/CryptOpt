@@ -36,6 +36,7 @@ import {
   MEMORY_CONSTRAINTS_OPTIONS,
   ParsedArgsT,
   OBJECTIVE_FUNCTION_OPTIONS,
+  SPILLING,
 } from "../types";
 
 const y = await yargs(process.argv.slice(2));
@@ -233,9 +234,16 @@ export const parsedArgs = y
     default: "cycles",
     string: true,
     describe:
-      "The opjective function which describes which mutation should be kept or discarded. Options: 'cycles' run on hardware, use cycles; stack: size of the used stack slots; length: purely optimise for fewer instructions; uiCA: use uiCA's estimation. Everything but cycles effectively disables monkey-testing becuase the code is not executed.",
+      "The objective function which describes which mutation should be kept or discarded. Options: 'cycles' run on hardware, use cycles; stack: size of the used stack slots; length: purely optimise for fewer instructions; uiCA: use uiCA's estimation. Everything but cycles effectively disables monkey-testing becuase the code is not executed.",
 
     choices: OBJECTIVE_FUNCTION_OPTIONS,
+  })
+  .option("spilling", {
+    default: "reversebell",
+    string: true,
+    describe:
+      "How to bias where to place an operation during the scheduling mutation. 'reversebell' , 'uniform' uniformly selects in the possible interval.",
+    choices: SPILLING,
   })
   .help("help")
   .alias("h", "help")
