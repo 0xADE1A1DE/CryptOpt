@@ -23,7 +23,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # general deps, fiat deps, cryptopt deps
 RUN apt install -y jq git make vim tar zsh \
-        autoconf clang curl g++ gcc gnuplot-nox libtool nasm pkg-config poppler-utils tmux
+        autoconf clang curl g++ gcc gnuplot-nox libtool nasm pkg-config poppler-utils tmux 
+
+# uiCA deps
+RUN apt install -y j python3 python3-pip graphviz && pip3 install plotly
 
 ENV asmlineversion 1.3.2
 RUN curl -L https://github.com/0xADE1A1DE/AssemblyLine/releases/download/v${asmlineversion}/assemblyline-${asmlineversion}.tar.gz |\
