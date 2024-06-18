@@ -54,6 +54,7 @@ export function getTestArgs(filename: string): OptimizerArgs {
     memoryConstraints: "none",
     objectiveFunction: "cycles",
     uicaarch: "RKL",
+    spilling: "reversebell",
   };
 }
 

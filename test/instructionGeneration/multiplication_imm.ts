@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import { describe, expect, it, vi } from "vitest";
 
 import {
   AllocationFlags,
   C_DI_SPILL_LOCATION,
   DECISION_IDENTIFIER,
-  Flags,
   FlagState,
+  Flags,
   Register,
 } from "@/enums";
 import { IMM_MUL_DI_MAP } from "@/helper";
 import { mul } from "@/instructionGeneration/multiplication";
 import { Paul } from "@/paul";
-import type { AllocationReq, AllocationRes, Allocations, asm, CryptOpt } from "@/types";
+import type { AllocationReq, AllocationRes, Allocations, CryptOpt, asm } from "@/types";
 
 const allocate = vi.fn();
 const getCurrentAllocations = vi.fn();

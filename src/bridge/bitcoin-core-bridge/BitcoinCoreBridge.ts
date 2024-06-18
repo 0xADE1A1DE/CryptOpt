@@ -17,7 +17,7 @@ import { execSync } from "child_process";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 
-import { errorOut, ERRORS } from "@/errors";
+import { ERRORS, errorOut } from "@/errors";
 import { datadir, env, preprocessFunction } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import type { CryptOpt } from "@/types";

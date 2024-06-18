@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import { describe, expect, it, vi } from "vitest";
 
 import { AllocationFlags, C_DI_SPILL_LOCATION, DECISION_IDENTIFIER, Register, XmmRegister } from "@/enums";

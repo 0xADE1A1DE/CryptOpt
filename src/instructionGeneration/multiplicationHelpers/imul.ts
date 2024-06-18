@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { AllocationFlags, Flags, FlagState } from "@/enums";
+import { AllocationFlags, FlagState, Flags } from "@/enums";
 import Logger from "@/helper/Logger.class";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 export function mul_imm_imul(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();

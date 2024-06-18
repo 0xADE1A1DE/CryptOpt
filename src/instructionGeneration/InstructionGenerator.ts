@@ -18,7 +18,7 @@ import { assertStringNames } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 import { add } from "./addition";
 import { bitwiseOp } from "./bitwiseOps";

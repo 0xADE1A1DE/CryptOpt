@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { accessSync, chmodSync, constants as FS_CONSTANTS, existsSync, mkdirSync, readFileSync } from "fs";
+import { constants as FS_CONSTANTS, accessSync, chmodSync, existsSync, mkdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 
-import { errorOut, ERRORS } from "@/errors";
+import { ERRORS, errorOut } from "@/errors";
 import { datadir, env, preprocessFunction } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { sha256Hash } from "@/paul";

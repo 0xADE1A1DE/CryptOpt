@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import { describe, expect, it } from "vitest";
 
 import { C_DI_SPILL_LOCATION, DECISION_IDENTIFIER } from "@/enums";
 import {
   CALLER_SAVE_PREFIX,
-  delimbify,
   IMM_64_BIT_IMM,
+  delimbify,
   isCallerSave,
   isReadOnlyMemory,
   isWriteOnlyMemory,

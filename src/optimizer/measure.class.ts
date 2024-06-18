@@ -23,8 +23,7 @@ import { join } from "path";
 import { tmpdir } from "os";
 import { spawnSync } from "child_process";
 import Logger from "@/helper/Logger.class";
-import { rmdir, rmdirSync } from "fs";
-import { nothing } from "test/test-helpers";
+import { rmdir } from "fs";
 
 export type CryptOptMeasureResult = Omit<MeasureResult, "stats"> & {
   stats: Omit<MeasureResult["stats"], "timer"> & {

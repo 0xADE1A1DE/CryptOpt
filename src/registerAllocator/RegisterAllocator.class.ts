@@ -21,8 +21,8 @@ import {
   ByteRegister,
   C_DI_IMM,
   C_DI_SPILL_LOCATION,
-  Flags,
   FlagState,
+  Flags,
   Register,
   XmmRegister,
 } from "@/enums";
@@ -33,8 +33,8 @@ import {
   CALLING_CONVENTION_REGISTER_ORDER,
   IMM_VAL_PREFIX,
   LSB_MAPPING,
-  SETX,
   RED_ZONE_SIZE_IN_ELEMENTS,
+  SETX,
   TEMP_VARNAME,
 } from "@/helper/constants";
 import {
@@ -69,15 +69,15 @@ import type {
   AllocationReq,
   AllocationRes,
   Allocations,
-  asm,
   CryptOpt,
-  imm,
-  mem,
   OptimizerArgs,
   PointerAllocation,
   RegisterAllocation,
   U1FlagAllocation,
   ValueAllocation,
+  asm,
+  imm,
+  mem,
 } from "@/types";
 
 import { populateClobbers } from "./RegisterAllocator.helper";

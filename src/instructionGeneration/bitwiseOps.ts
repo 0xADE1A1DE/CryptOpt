@@ -16,19 +16,19 @@
 
 import { cloneDeep } from "lodash-es";
 
-import { AllocationFlags, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, Flags, FlagState } from "@/enums";
+import { AllocationFlags, C_DI_INSTRUCTION_AND, DECISION_IDENTIFIER, FlagState, Flags } from "@/enums";
 import {
-  getByteRegFromQwReg,
   IMM_64_BIT_IMM,
+  LSB_MAPPING,
+  getByteRegFromQwReg,
   limbify,
   limbifyImm,
-  LSB_MAPPING,
   matchIMM,
   matchXD,
 } from "@/helper";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 export function bitwiseOp(c: CryptOpt.StringOperation): asm[] {
   switch (c.operation) {

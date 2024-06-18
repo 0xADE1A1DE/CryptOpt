@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import { defaults } from "lodash-es";
 import { describe, expect, it, vi } from "vitest";
 
@@ -22,8 +22,8 @@ import {
   AllocationFlags,
   C_DI_SPILL_LOCATION,
   DECISION_IDENTIFIER,
-  Flags,
   FlagState,
+  Flags,
   Register,
 } from "@/enums";
 import { llvm2CC } from "@/helper";

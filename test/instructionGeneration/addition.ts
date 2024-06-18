@@ -22,8 +22,8 @@ import {
   C_DI_HANDLE_FLAGS_KK,
   C_DI_SPILL_LOCATION,
   DECISION_IDENTIFIER,
-  Flags,
   FlagState,
+  Flags,
   Register,
 } from "@/enums";
 import { add } from "@/instructionGeneration/addition";

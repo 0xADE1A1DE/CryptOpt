@@ -19,7 +19,7 @@ import Logger from "@/helper/Logger.class";
 import { getInstruction } from "@/instructionGeneration/InstructionGenerator";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 import { sanityCheckAllocations } from "./assembler.helper";
 

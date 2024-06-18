@@ -32,7 +32,6 @@
 import { isByteRegister, isFlag, isMem, isNotNoU, isRegister, isXmmRegister } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
 import type {
-  asm,
   MemoryAllocation,
   RegisterAllocation,
   U1Allocation,
@@ -42,6 +41,7 @@ import type {
   U64Allocation,
   U64RegisterAllocation,
   ValueAllocation,
+  asm,
 } from "@/types";
 
 import { fr__m_m, fr__r_m, fr__r_r } from "./fr__rm_rm";

@@ -17,7 +17,7 @@
 import { cpus, hostname } from "os";
 
 import { CHOICE } from "@/enums";
-import { bl, cy, env, gn, pu, rd, re, shouldProof, SI, yl } from "@/helper";
+import { SI, bl, cy, env, gn, pu, rd, re, shouldProof, yl } from "@/helper";
 import globals from "@/helper/globals";
 import { Model } from "@/model";
 import type { AnalyseResult, OptimizerArgs } from "@/types";

@@ -18,8 +18,8 @@ import { defaults } from "lodash-es";
 import type { AsmFunctionSummary } from "measuresuite";
 import * as Stats from "simple-statistics";
 
-import { errorOut, ERRORS } from "@/errors";
-import type { AnalyseMeasureResultOptions, AnalyseResult, numTripel, QuickStats } from "@/types";
+import { ERRORS, errorOut } from "@/errors";
+import type { AnalyseMeasureResultOptions, AnalyseResult, QuickStats, numTripel } from "@/types";
 import type { CryptOptMeasureResult } from "@/optimizer/measure.class";
 
 /**

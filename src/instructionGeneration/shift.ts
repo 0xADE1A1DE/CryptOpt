@@ -16,10 +16,10 @@
 
 import { defaults } from "lodash-es";
 
-import { AllocationFlags, Flags, FlagState } from "@/enums";
+import { AllocationFlags, FlagState, Flags } from "@/enums";
 import { limbify, matchIMM, matchXD } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import { AllocationRes, asm, CryptOpt } from "@/types";
+import { AllocationRes, CryptOpt, asm } from "@/types";
 
 // assumes, that arg[2] is always val_imm
 export function shiftLeft(c: CryptOpt.StringOperation): asm[] {

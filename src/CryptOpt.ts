@@ -15,20 +15,20 @@
  */
 
 import { exec } from "child_process";
-import { existsSync, readdirSync, readFileSync } from "fs";
-import { hostname } from "os";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import { resolve } from "path";
+import { hostname } from "os";
 
 import {
+  PRINT_EVERY,
+  SI,
   cy,
   env,
   generateResultFilename,
   gn,
   parsedArgs as parsedArgsFromCli,
-  PRINT_EVERY,
   rd,
   re,
-  SI,
   writeString,
 } from "@/helper";
 import { registerExitHooks } from "@/helper/process";
@@ -37,9 +37,8 @@ import { Optimizer } from "@/optimizer";
 import { sha1Hash } from "@/paul";
 import type { CryptOpt, CryptoptGlobals, OptimizerArgs } from "@/types";
 
-import Logger from "./helper/Logger.class";
-
 let parsedArgs = parsedArgsFromCli;
+import Logger from "./helper/Logger.class";
 if (parsedArgs.startFromBestJson) {
   const symbolname = new Optimizer(parsedArgs).getSymbolname(true);
   const dir = resolve(parsedArgs.resultDir, parsedArgs.bridge, symbolname);

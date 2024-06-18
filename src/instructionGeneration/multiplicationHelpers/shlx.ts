@@ -18,7 +18,7 @@ import { AllocationFlags } from "@/enums";
 import { isImm } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 export function mul_imm_shlx(c: CryptOpt.StringOperation): asm[] {
   const ra = RegisterAllocator.getInstance();

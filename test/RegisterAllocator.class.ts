@@ -15,7 +15,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import { afterAll, describe, expect, it, vi } from "vitest";
 
 import {
@@ -23,8 +23,8 @@ import {
   ByteRegister,
   C_DI_SPILL_LOCATION,
   DECISION_IDENTIFIER,
-  Flags,
   FlagState,
+  Flags,
   Register,
   XmmRegister,
 } from "@/enums";

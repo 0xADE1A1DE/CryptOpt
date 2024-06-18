@@ -22,14 +22,13 @@ import { join, resolve as pathResolve } from "path";
 import { assemble } from "@/assembler";
 import { FiatBridge } from "@/bridge/fiat-bridge";
 import { CHOICE, FUNCTIONS } from "@/enums";
-import { errorOut, ERRORS } from "@/errors";
+import { ERRORS, errorOut } from "@/errors";
 import {
+  LOG_EVERY,
+  PRINT_EVERY,
   analyseMeasureResult,
   generateResultFilename,
-  LOG_EVERY,
   padSeed,
-  PRINT_EVERY,
-  re,
   shouldProof,
   toggleFUNCTIONS,
   writeString,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import { describe, expect, it } from "vitest";
 
 import { createDependencyRelation, nodeLookupMap } from "@/model";

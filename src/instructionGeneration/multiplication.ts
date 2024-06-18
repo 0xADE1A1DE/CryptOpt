@@ -18,15 +18,15 @@ import {
   AllocationFlags,
   C_DI_MULTIPLICATION_IMM,
   DECISION_IDENTIFIER,
-  Flags,
   FlagState,
+  Flags,
   Register,
 } from "@/enums";
-import { isByteRegister, isXmmRegister, limbify, matchIMM, TEMP_VARNAME, zx } from "@/helper";
+import { TEMP_VARNAME, isByteRegister, isXmmRegister, limbify, matchIMM, zx } from "@/helper";
 import Logger from "@/helper/Logger.class";
 import { Paul } from "@/paul";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 import { mul_imm_imul, mul_imm_lea, mul_imm_shl, mul_imm_shlx } from "./multiplicationHelpers";
 

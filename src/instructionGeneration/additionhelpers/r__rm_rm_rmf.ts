@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import { Flags, FlagState, Register } from "@/enums";
-import { ADX, isByteRegister, isMem, isU1, SETX, zx } from "@/helper";
+import { FlagState, Flags, Register } from "@/enums";
+import { ADX, SETX, isByteRegister, isMem, isU1, zx } from "@/helper";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
 import type {
-  asm,
   MemoryAllocation,
   RegisterAllocation,
   U1FlagAllocation,
@@ -27,6 +26,7 @@ import type {
   U1RegisterAllocation,
   U64Allocation,
   U64RegisterAllocation,
+  asm,
 } from "@/types";
 
 export function r__rm_f_f(out: string, arg0: U64Allocation): asm[] {

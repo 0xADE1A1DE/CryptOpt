@@ -21,7 +21,7 @@ import Logger from "@/helper/Logger.class";
 import type { Fiat } from "@/types";
 
 import { getArguments } from "./helpers";
-import type { raw_T, SSA } from "./raw.type";
+import type { SSA, raw_T } from "./raw.type";
 import {
   transformAdd,
   transformAnd,

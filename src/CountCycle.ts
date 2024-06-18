@@ -41,7 +41,7 @@ import { basename, join } from "path";
 import * as Stats from "simple-statistics";
 
 import { KNOWN_SYMBOLS } from "@/bridge";
-import { analyseRow, CONF_IDX, ttable } from "@/helper";
+import { CONF_IDX, analyseRow, ttable } from "@/helper";
 import { init } from "@/optimizer/optimizer.helper.class";
 import { sha1Hash } from "@/paul";
 

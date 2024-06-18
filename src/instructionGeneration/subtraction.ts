@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Flags, FlagState } from "@/enums";
+import { FlagState, Flags } from "@/enums";
 import { getByteRegFromQwReg, isByteRegister, isImm, isMem, isSafeImm32 } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 export function sub(c: CryptOpt.StringOperation): asm[] {
   if (c.datatype !== "u64") {

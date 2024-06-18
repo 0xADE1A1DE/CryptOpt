@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { existsSync, readdirSync, readFileSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import { basename, resolve as pathResolve } from "path";
 import { afterAll, describe, expect, it, vi } from "vitest";
 

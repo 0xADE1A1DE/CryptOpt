@@ -15,9 +15,9 @@
  */
 
 import { AllocationFlags, Flags, Register } from "@/enums";
-import { isFlag, isXmmRegister, matchArg, SETX, toMem } from "@/helper";
+import { SETX, isFlag, isXmmRegister, matchArg, toMem } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt, ValueAllocation } from "@/types";
+import type { CryptOpt, ValueAllocation, asm } from "@/types";
 
 export function mov(c: CryptOpt.StringOperation): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 1) {

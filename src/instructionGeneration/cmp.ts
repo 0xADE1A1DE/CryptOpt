@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { AllocationFlags, Flags, FlagState } from "@/enums";
+import { AllocationFlags, FlagState, Flags } from "@/enums";
 import { isByteRegister, isImm, llvm2CC } from "@/helper";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 export function cmp(c: CryptOpt.StringOperation): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 3) {

@@ -18,7 +18,7 @@ import { mkdirSync } from "fs";
 import { Measuresuite } from "measuresuite";
 import { resolve } from "path";
 
-import { BitcoinCoreBridge, METHOD_T as BITCOIN_CORE_METHOD_T } from "@/bridge/bitcoin-core-bridge";
+import { METHOD_T as BITCOIN_CORE_METHOD_T, BitcoinCoreBridge } from "@/bridge/bitcoin-core-bridge";
 import { CURVE_DETAILS, CURVE_T, FiatBridge, METHOD_T } from "@/bridge/fiat-bridge";
 import { JasminBridge } from "@/bridge/jasmin-bridge";
 import { ManualBridge } from "@/bridge/manual-bridge";

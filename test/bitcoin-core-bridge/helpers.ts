@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, expect, it } from "vitest";
 
 import { getArguments, getScalarsAndImmMappedAsConstArg } from "@/bridge/bitcoin-core-bridge/helpers";

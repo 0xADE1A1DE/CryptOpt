@@ -17,9 +17,9 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { dirname } from "path";
 
-import { ByteRegister, Flags, FUNCTIONS, Register, XmmRegister } from "@/enums";
+import { ByteRegister, FUNCTIONS, Flags, Register, XmmRegister } from "@/enums";
 import Logger from "@/helper/Logger.class";
-import type { Allocation, asm, CryptOpt, imm, mem, U1Allocation, U64Allocation } from "@/types";
+import type { Allocation, CryptOpt, U1Allocation, U64Allocation, asm, imm, mem } from "@/types";
 
 import {
   ARG_PREFIX,

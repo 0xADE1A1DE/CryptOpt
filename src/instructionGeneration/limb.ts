@@ -16,7 +16,7 @@
 
 import { AllocationFlags } from "@/enums";
 import { RegisterAllocator } from "@/registerAllocator";
-import type { asm, CryptOpt } from "@/types";
+import type { CryptOpt, asm } from "@/types";
 
 export function limb(c: CryptOpt.StringOperation): asm[] {
   if (c.name.length !== 1 || c.arguments.length !== 2) {

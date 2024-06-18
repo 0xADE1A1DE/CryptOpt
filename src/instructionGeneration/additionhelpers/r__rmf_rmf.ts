@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { Flags, FlagState } from "@/enums";
+import { FlagState, Flags } from "@/enums";
 import { ADX, isByteRegister, isU1, zx } from "@/helper";
 import { Model } from "@/model";
 import { RegisterAllocator } from "@/registerAllocator";
 import type {
-  asm,
   MemoryAllocation,
   RegisterAllocation,
   U1FlagAllocation,
   U1RegisterAllocation,
   U64RegisterAllocation,
+  asm,
 } from "@/types";
 
 const getRa = () => RegisterAllocator.getInstance();

@@ -24,19 +24,19 @@ import {
 import { BRIDGES } from "@/bridge/constants";
 import {
   AVAILABLE_CURVES as FIAT_CURVES,
-  AVAILABLE_METHODS as FIAT_METHODS,
   type CURVE_T as FIAT_CURVE_T,
+  AVAILABLE_METHODS as FIAT_METHODS,
   type METHOD_T as FIAT_METHOD_T,
 } from "@/bridge/fiat-bridge/constants";
-import { errorOut, ERRORS } from "@/errors";
+import { ERRORS, errorOut } from "@/errors";
 
 import {
   FRAME_POINTER_OPTIONS,
-  UICA_OPTIONS,
   MEMORY_CONSTRAINTS_OPTIONS,
-  ParsedArgsT,
   OBJECTIVE_FUNCTION_OPTIONS,
+  ParsedArgsT,
   SPILLING,
+  UICA_OPTIONS,
 } from "../types";
 
 const y = await yargs(process.argv.slice(2));

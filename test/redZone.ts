@@ -15,8 +15,8 @@
  */
 
 import { basename } from "path";
-import { afterAll, expect, it, describe, vi } from "vitest";
-import { readFileSync, readdirSync, existsSync } from "fs";
+import { afterAll, describe, expect, it, vi } from "vitest";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import { resolve as pathResolve } from "path";
 
 import { Optimizer } from "@/optimizer";
