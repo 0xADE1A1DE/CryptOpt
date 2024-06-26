@@ -245,6 +245,11 @@ export const parsedArgs = y
       "How to bias where to place an operation during the scheduling mutation. 'reversebell' , 'uniform' uniformly selects in the possible interval.",
     choices: SPILLING,
   })
+  .option("threshold", {
+    default: 0,
+    number: true,
+    describe: "How likely is a worse solution to be accepted. -1 for auto, i.e. depening on how bad it is.",
+  })
   .help("help")
   .alias("h", "help")
   .wrap(Math.min(160, y.terminalWidth()))

@@ -41,7 +41,7 @@ import { RegisterAllocator } from "@/registerAllocator";
 import type { AnalyseResult, OptimizerArgs } from "@/types";
 
 import { genStatistics, genStatusLine, logMutation, printStartInfo } from "./optimizer.helper";
-import { init } from "./optimizer.helper.class";
+import { init, acceptWorseWithThres } from "./optimizer.helper.class";
 import MeasureUtil from "./measure.class";
 
 let choice: CHOICE;
@@ -285,10 +285,11 @@ export class Optimizer {
           let kept: boolean;
 
           if (
-            // A is not worse and A is new
-            (metricA <= metricB && currentFunctionIsA()) ||
-            // or B is not worse and B is new
-            (metricA >= metricB && !currentFunctionIsA())
+            acceptWorseWithThres(
+              currentFunctionIsA() ? metricA : metricB,
+              currentFunctionIsA() ? metricB : metricA,
+              this.args.threshold,
+            )
           ) {
             Logger.log("kept    mutation");
             kept = true;

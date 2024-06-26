@@ -186,3 +186,18 @@ export function init(tmpDir: string, args: neededArgs): { symbolname: string; me
   }
   return createMS(r, sharedObjectFilename);
 }
+export function acceptWorseWithThres(new_metric: number, old_metric: number, thres: number): boolean {
+  // if the new one is already better, then accept
+  if (new_metric <= old_metric) {
+    return true;
+  }
+
+  // else acceptance depends on the threshold.
+  // -1 means auto
+  if (thres == -1) {
+    const relation = old_metric / new_metric; // 0<relation<1
+    return Math.random() <= 0.077426 * Math.exp(2.5584 * relation);
+  }
+  // else acceptance is constant and we accept with that probability
+  return Math.random() <= thres;
+}

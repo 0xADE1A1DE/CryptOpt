@@ -47,6 +47,7 @@ export type OptimizerArgs = {
   uicaarch: UICA_OPTIONS_T;
   objectiveFunction: OBJECTIVE_FUNCTION_OPTIONS_T;
   spilling: SPILLING_T;
+  threshold: number;
 };
 export type ParsedArgsT = OptimizerArgs & {
   startFromBestJson: boolean;

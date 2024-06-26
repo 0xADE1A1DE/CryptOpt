@@ -55,6 +55,7 @@ export function getTestArgs(filename: string): OptimizerArgs {
     objectiveFunction: "cycles",
     uicaarch: "RKL",
     spilling: "reversebell",
+    threshold: 0,
   };
 }
 
