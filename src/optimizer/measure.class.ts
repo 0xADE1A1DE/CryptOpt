@@ -164,13 +164,14 @@ export default class MeasureUtil {
 
         // call uiCA
         const uiCAArgs = ["-TPonly", "-arch", this.timer, "-raw", join(tmpDir, "binary.bin")];
-        const r = spawnSync("./bins/uiCA/uiCA.py", uiCAArgs);
+        const r = spawnSync("uiCA.py", uiCAArgs);
         if (r.status != 0) {
           throw new Error(
             `uiCA command failed. STDERR:${r.stderr}, STDOUT: ${r.stdout}. May be because ./uiCA is not in the cwd.`,
           );
         }
-        const tpout = spawnSync("./uiCA", uiCAArgs).stdout.toString();
+        // "uiCA.py" is in PATH, see "./CryptOpt"-wrapper start script
+        const tpout = spawnSync("uiCA.py", uiCAArgs).stdout.toString();
 
         const tp = Number(tpout);
         if (isNaN(tp)) {

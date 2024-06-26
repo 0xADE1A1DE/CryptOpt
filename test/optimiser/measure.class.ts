@@ -120,6 +120,8 @@ describe("lengthMeasure", () => {
 });
 
 describe("uiCAMeasure", () => {
+  // this is what, in production, the ./CryptOpt wrapper script does.
+  vi.stubEnv("PATH", `${process.env.PATH}:${process.env.PWD}/bins/uiCA`);
   it("should use the uica lib and error out if no arch is specified.", () => {
     const mu = new MeasureUtil(
       undefined as unknown as Measuresuite,
